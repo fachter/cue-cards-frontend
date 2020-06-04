@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, ScrollView, StyleSheet } from 'react-native';
-//import logo from '../assets/Logo.png';
+import logo from '../../assets/Logo.png'
 import axios from 'axios';
 
 
@@ -73,7 +73,7 @@ export default class RegistrationScreen extends React.Component {
 
             <ScrollView>
                 <View style={styles.container}>
-                    {/* <Image source={logo} style={styles.logo} /> */}
+                <Image source={logo} style={styles.logo} /> 
 
                     <View>
                         <TextInput

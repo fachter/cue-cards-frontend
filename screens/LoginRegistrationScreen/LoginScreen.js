@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Button, FlatList, StyleSheet } from 'react-native';
-//import logo from '../../assets/';
+import logo from '../../assets/Logo.png';
 import axios from 'axios';
 
 
@@ -32,7 +32,7 @@ export default class LoginScreen extends React.Component {
 
         return (
             <View style={styles.container}>
-                {/* <Image source={logo} style={styles.logo} /> */}
+                <Image source={logo} style={styles.logo} /> 
 
                 <View>
                     <TextInput
