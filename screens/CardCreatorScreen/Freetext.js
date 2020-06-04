@@ -3,7 +3,7 @@ import { View, StyleSheet, TextInput, Dimensions } from 'react-native'
 
 const windowWidth = Dimensions.get('window').width;
 
-export default function Freetext() {
+export default function Vocable() {
 
     return (
         <View style={styles.container}>

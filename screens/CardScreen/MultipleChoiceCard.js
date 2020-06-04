@@ -22,10 +22,12 @@ export default class MulitpleChoiceCard extends React.Component {
 
     componentDidMount() {
         this._createDummyArray()
+
     }
 
     componentWillMount() {
         this._fillWithRandomTopicAnswers()
+
     }
 
 
@@ -127,15 +129,7 @@ export default class MulitpleChoiceCard extends React.Component {
             item: item
         }
         dummyArray[indexOfItem] = answer
-
     }
-
-
-
-
-
-
-
 
 
     render() {
@@ -144,6 +138,7 @@ export default class MulitpleChoiceCard extends React.Component {
                 <View style={styles.container}>
                     <FlatList
                         data={this.state.card.answers}
+                        keyExtractor={item => item.answerID}
                         renderItem={({ item }) => (
                             <AnswerListItem
                                 answerID={item.answerID}
@@ -153,7 +148,6 @@ export default class MulitpleChoiceCard extends React.Component {
                                 getCardState={this._updateAnswerState}
                             />
                         )}
-                        keyExtractor={item => item.answerID}
                         ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
                     />
                     <TouchableOpacity style={styles.saveButton} onPress={() => this._checkChoiceAndSendBack()}>

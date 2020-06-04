@@ -19,6 +19,7 @@ export default class MultipleChoice extends React.Component {
         var copy = answers
         copy.push({
             answerID: answers.length,
+            cardID: this.props.cardID,
             text: '',
         })
         this.setState({ answers: copy })

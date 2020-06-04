@@ -5,13 +5,13 @@ import { View, FlatList, StyleSheet, TouchableOpacity, BackHandler } from 'react
 import { Entypo } from '@expo/vector-icons';
 
 
-
 import ChooseFolderSetWindow from './ChooseFolderSetWindow'
 import FolderListItem from './FolderListItem';
 
 import { ListStructureContext } from './ListStructureProvider'
 
 import SwipeView from '../../components/SwipeView'
+import { useNavigation } from '@react-navigation/native';
 
 
 
@@ -34,13 +34,13 @@ const DataList = () => {
         _getLastFolderStructure,
         currentListStructure,
         setCurrentListStructure,
+        isFolder,
         setIsFolder,
         CreateFileWindowVisible,
         setCreateFileWindowVisible
     } = React.useContext(ListStructureContext)
 
-
-
+    const navigation = useNavigation()
 
 
     function _backButtonPressed() {
@@ -54,8 +54,6 @@ const DataList = () => {
         } else {
             stateOfPrevFolder = true
         }
-
-
         var lastFolderStructure = _getLastFolderStructure()
         setCurrentListStructure(lastFolderStructure)
         setIsFolder(stateOfPrevFolder)
@@ -63,12 +61,10 @@ const DataList = () => {
     }
 
 
-
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
+
     });
-
-
 
 
     function _getClickedSubfolder(item) {
@@ -88,8 +84,12 @@ const DataList = () => {
         }
     }
 
-
-
+    function _navigateToCardScreen() {
+        if (isFolder == false) {
+            // navigation.navigate('CardScreen', { cards: currentListStructure })
+            console.log(currentListStructure)
+        }
+    }
 
 
     return (
@@ -97,11 +97,12 @@ const DataList = () => {
             <SwipeView>
                 <FlatList
                     data={currentListStructure}
-                    //keyExtractor={item => folderarray.name} //key wird für Liste dynamisch erstellt
+                    keyExtractor={item => item.ID}
                     renderItem={({ item }) => (
                         <FolderListItem
                             getSubFolder={_getClickedSubfolder}
-                            item={item}
+                            card={item}
+                            callBackNavigation={_navigateToCardScreen}
                         />
                     )}
                     ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
@@ -110,6 +111,9 @@ const DataList = () => {
                     <ChooseFolderSetWindow
                         visible={CreateFileWindowVisible} />
                 </View>
+                {isFolder ? null : <TouchableOpacity style={styles.startSessionButton} onPress={() => _navigateToCardScreen()} >
+                    <Entypo name="controller-play" size={50} color="black" />
+                </TouchableOpacity>}
                 <TouchableOpacity style={styles.plusButton} onPress={() => setCreateFileWindowVisible(true)} >
                     <Entypo name="plus" size={50} color="black" />
                 </TouchableOpacity>
@@ -132,10 +136,22 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 10,
+
         backgroundColor: 'green',
         position: 'absolute',
         bottom: 10,
+        right: 10
+    },
+    startSessionButton: {
+        height: 60,
+        width: 60,
+        borderRadius: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        backgroundColor: 'blue',
+        position: 'absolute',
+        bottom: 90,
         right: 10
     },
     listSeperator: {

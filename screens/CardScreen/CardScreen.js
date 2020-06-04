@@ -65,9 +65,6 @@ const cards = [
                 checkID: '3'
             },
 
-
-
-
         ]
     },
 
@@ -77,10 +74,9 @@ const cards = [
 
 export default class CardScreen extends React.Component {
     state = {
-        cards: cards,
+        cards: this.props.route.params.cards,
         currentCardindex: 0
     }
-
 
 
 
@@ -138,7 +134,6 @@ export default class CardScreen extends React.Component {
 
 
     _renderTheRightCard = () => {
-
         //Voc und MC wird wsl. zusammen niemals vorkommen, hier nur für Testzwecke angebracht,
         //
         if (this.state.cards[this.state.currentCardindex].cardType == 'MC') {

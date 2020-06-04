@@ -132,13 +132,17 @@ function FileNameWindow() {
     const { setCreateFileWindowVisible, isFolder } = useContext(ListStructureContext)
     const { newFileName, setNewFileName, isNewFileFolder, _save } = useContext(FileContext)
     const [save, setSave] = useState(false)
+    const [readyToRender, setReadyToRender] = useState(false)
 
+    var headingText
 
     useEffect(() => {
         if (save) {
             _saveButtonClicked()
         }
+
     });
+
 
 
     function _saveButtonClicked() {
@@ -151,37 +155,26 @@ function FileNameWindow() {
     }
 
 
-    // async function getHeadingText() {
-    //     var headingText = "ja moin"
-
-    //     if (isFolder == false) {
-    //         headingText = 'Gebe der Karte ein Thema'
-    //         return headingText
-    //     } else if (isNewFileFolder == true) {
-    //         headingText = 'Gebe dem Ordner einen Namen'
-    //         return headingText
-    //     } else if (isNewFileFolder == false) {
-    //         headingText = 'Geb dem Set einen Namen'
-    //         return headingText
-    //     }
-    //     return await headingText
-    // }
 
 
     return (
         <View style={styles.background}>
             <Text
-                style={styles.headingText}>{}</Text>
+                style={styles.headingText}>...</Text>
             <TextInput style={styles.fileNameTextInput} onChangeText={text => setNewFileName(text)} ></TextInput>
             <TouchableOpacity onPress={() => setSave(true)} >
+
                 <View style={styles.saveButton}>
                     <Icon.Feather name="check" size={50} />
                 </View>
             </TouchableOpacity>
         </View>
     )
-
 }
+
+
+
+
 
 
 const styles = StyleSheet.create({

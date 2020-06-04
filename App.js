@@ -9,11 +9,11 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 
-
-//Zwischenablage zum testen
-import CardCreatorScreen from './screens/CardCreatorScreen/CardCreatorScreen'
-
 import HomeScreen from './screens/HomeScreen/HomeScreen';
+import CardCreatorScreen from './screens/CardCreatorScreen/CardCreatorScreen'
+import CardScreen from './screens/CardScreen/CardScreen'
+
+
 import FriendsScreen from './screens/FriendsScreen/FriendsScreen';
 import SettingsScreen from './screens/SettingsScreen/SettingsScreen';
 import StatisticsScreen from './screens/StatisticsScreen/StatisticsScreen';
@@ -108,6 +108,13 @@ function Sidebar() {
             <Icon.Button name="ios-menu" size={25} backgroundColor="black" onPress={() => { navigation.openDrawer() }} />
           )
         }}>
+        </HomeStack.Screen>
+        <HomeStack.Screen name="CardScreen" component={CardScreen} options={{
+          headerRight: () => (
+            <Icon.Button name="ios-menu" size={25} backgroundColor="black" onPress={() => { navigation.openDrawer() }} />
+          )
+        }}>
+
         </HomeStack.Screen>
       </HomeStack.Navigator>
     </ListStructureProvider>

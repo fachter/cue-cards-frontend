@@ -1,10 +1,11 @@
-import React, { useState, createContext, useContext } from 'react'
+import React, { useState, createContext, useContext, useEffect } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native'
 
 import MultipleChoice from './MultipleChoice'
-import Freetext from './Freetext'
+import Vocable from './Vocable'
 
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
+import { useNavigation } from '@react-navigation/native'
 
 const CardCreatorContext = createContext()
 
@@ -16,18 +17,25 @@ export default function CardCreatorScreen() {
     const [questionText, setQuestionText] = useState('')
     const [isVocable, setIsVocable] = useState(false)
     const [solution, setSolution] = useState('') //Lösung des Vocabelkarte
+    const [cardID, setcardID] = useState(null)
+
+    const navigation = useNavigation()
+
+
+    useEffect(() => {
+        setcardID(_determineNewID())
+    });
 
 
     function _determineNewID() {
         return currentListStructure.length
     }
 
-
     function _save(answers) {
         let newCard
         if (isVocable) {
             newCard = {
-                cardID: _determineNewID(),
+                cardID: cardID,
                 cardType: 'Voc',
                 questionText: questionText,
                 cardLevel: 0,
@@ -36,7 +44,7 @@ export default function CardCreatorScreen() {
             }
         } else {
             newCard = {
-                cardID: _determineNewID(),
+                cardID: cardID,
                 cardType: 'MC',
                 questionText: questionText,
                 cardLevel: 0,
@@ -49,31 +57,36 @@ export default function CardCreatorScreen() {
         let copy = currentListStructure
         copy.push(newCard)
         setCurrentListStructure(copy)
-        console.log(copy)
+        navigation.goBack()
     }
 
 
 
     return (
-        <View style={styles.container}>
-            <View style={styles.menu}>
-                <TouchableOpacity style={styles.menuButtons} onPress={() => setIsVocable(false)}>
-                    <Text style={{ textAlign: 'center' }}>Multiplechoice</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuButtons} onPress={() => setIsVocable(true)}>
-                    <Text style={{ textAlign: 'center' }}>Freitext</Text>
-                </TouchableOpacity>
+        <CardCreatorContext.Provider value={{
+            setSolution: setSolution,
+            _save: _save
+        }}>
+            <View style={styles.container}>
+                <View style={styles.menu}>
+                    <TouchableOpacity style={styles.menuButtons} onPress={() => setIsVocable(false)}>
+                        <Text style={{ textAlign: 'center' }}>Multiplechoice</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.menuButtons} onPress={() => setIsVocable(true)}>
+                        <Text style={{ textAlign: 'center' }}>Freitext</Text>
+                    </TouchableOpacity>
+                </View>
+                <TextInput
+                    style={[styles.questionInput, { textAlign: 'center' }]}
+                    multiline={true}
+                    placeholder="Bitte Frage hier eingeben"
+                    onChangeText={text => setQuestionText(text)}>
+                </TextInput>
+                <View style={styles.cardcomponent}>
+                    {isVocable ? <Vocable /> : <MultipleChoice onSave={_save} cardID={cardID} />}
+                </View>
             </View>
-            <TextInput
-                style={[styles.questionInput, { textAlign: 'center' }]}
-                multiline={true}
-                placeholder="Bitte Frage hier eingeben"
-                onChangeText={text => setQuestionText(text)}>
-            </TextInput>
-            <View style={styles.cardcomponent}>
-                {isVocable ? <Freetext /> : <MultipleChoice onSave={_save} />}
-            </View>
-        </View>
+        </CardCreatorContext.Provider>
     )
 }
 
