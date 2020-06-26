@@ -13,7 +13,6 @@ export default class MultipleChoice extends React.Component {
         answers: [],
     }
 
-
     _addItem() {
         const { answers } = this.state
         var copy = answers
@@ -35,7 +34,6 @@ export default class MultipleChoice extends React.Component {
         }
         copy.splice(index, 1)  //schmeißt das Item mit dem Index raus
         this.setState({ answers: copy })
-
     }
 
     _updateAnswerText(text, id) {

@@ -1,4 +1,4 @@
-import React, { useImperativeHandle } from 'react'
+import React, { useImperativeHandle, useState, useContext, useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
 
@@ -6,20 +6,20 @@ import { View, Text, StyleSheet } from 'react-native'
 
 import MultipleChoiceCard from './MultipleChoiceCard'
 import VocableCard from './VocableCard'
+import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 
 
 //Kartentypen:
 //  Multiplechoice = 'MC
-//  VocableCards = 'Voc'
+//  VocablecurrentListStructure = 'Voc'
 
-const cards = [
+const currentListStructure = [
     {
         cardID: '1',
         cardType: 'MC',
         questionText: 'ich bin eine Frage',
         cardLevel: 2,            // Stufe im Karteikasten
         cardTopic: 'Topic',
-        numberOfRightTurns: null,  // wie oft wurde die Karte bereits richtig beantwortet (bsp. ab 3 level up)
         numberOfRightAnswers: 2,
         answers: [
             {
@@ -51,7 +51,6 @@ const cards = [
         questionText: 'ich bin eine Frage',
         cardLevel: 2,            // Stufe im Karteikasten
         cardTopic: 'Topic',
-        numberOfRightTurns: null,  // wie oft wurde die Karte bereits richtig beantwortet (bsp. ab 3 level up)
         numberOfRightAnswers: 2,
         answers: [
             {
@@ -72,28 +71,23 @@ const cards = [
 
 
 
-export default class CardScreen extends React.Component {
-    state = {
-        cards: this.props.route.params.cards,
-        currentCardindex: 0
-    }
+export default function CardScreen({ route }) {
+
+
+    const { currentListStructure } = useContext(ListStructureContext)
+    const [currentCardindex, setCurrentCardindex] = useState(0)
 
 
 
-
-    _getAllAnswersOfSameTopic = (topic) => {
-        const { cards } = this.state;
-
+    function _getAllAnswersOfSameTopic() {
         let answerPool = []
-
-        for (let i = 0; i < cards.length; i++) {    //Druchlaufe alle Karten
-            if (i == this.state.currentCardindex) {   //Überspringt eigenen Antworten der Karte
+        for (let i = 0; i < currentListStructure.length; i++) {    //Druchlaufe alle Karten
+            if (i == currentCardindex) {   //Überspringt eigenen Antworten der Karte
                 continue;
             } else {
-
-                if (cards[i].cardType == 'MC' && cards[i].cardTopic == topic) {  //Filtere nach MultipleChoice Karte und dem Topic
-                    for (let j = 0; j < cards[i].answers.length; j++) { //Durchlaufe alle Antworten der aktuelle durchlaufenden Karte
-                        answerPool.push(cards[i].answers[j])            //Fügt dem Antwortenpool die Antwort hinzu
+                if (currentListStructure[i].cardType == "MC" && currentListStructure[i].cardTopic == currentListStructure[currentCardindex].cardTopic) {  //Filtere nach MultipleChoice Karte und dem Topic
+                    for (let j = 0; j < currentListStructure[i].answers.length; j++) { //Durchlaufe alle Antworten der aktuelle durchlaufenden Karte
+                        answerPool.push(currentListStructure[i].answers[j])            //Fügt dem Antwortenpool die Antwort hinzu
                     }
                 }
             }
@@ -101,72 +95,64 @@ export default class CardScreen extends React.Component {
         return answerPool
     }
 
+    function _updateCardValues(result) {
 
-
-
-    _updateCards = (result) => {
-        if (result) {
-            this._updateNumberofRightTurns()
-            this._checkTheRightTurnsOfCard()
+        if (result == true) {
+            currentListStructure[currentCardindex].cardLevel += +1
+        } else {
+            currentListStructure[currentCardindex].cardLevel += -1
         }
-        this._nextCard()
 
+        _nextCard()
     }
 
-    _nextCard = () => {
-        if (this.state.currentCardindex < this.state.cards.length - 1) {
-            this.setState({ currentCardindex: +1 })
+
+
+    function _nextCard() {
+        var nextCardIndex = currentCardindex + 1
+        if (nextCardIndex <= currentListStructure.length - 1) {
+            setCurrentCardindex(nextCardIndex)
+        } else {
+            alert("Dies war die letzte Karte, hier einen Endscreen einfügen!")
         }
+
     }
 
 
-    _updateNumberofRightTurns = () => {
-        this.state.cards[this.state.currentCardindex].numberOfRightTurns += 1
-    }
-
-    _checkTheRightTurnsOfCard = () => {
-        //Prüft wie oft die Karte schon richtig beantwortet wurde,
-        //bei 3 richtigen Stufen steigt sie ein Level im Karteikartensystem auf
-        if (this.state.cards[this.state.currentCardindex].numberOfRightTurns == 3) {
-            this.state.cards[this.state.currentCardindex].cardLevel += +1
-        }
-    }
 
 
-    _renderTheRightCard = () => {
+    function _renderTheRightCard() {
         //Voc und MC wird wsl. zusammen niemals vorkommen, hier nur für Testzwecke angebracht,
-        //
-        if (this.state.cards[this.state.currentCardindex].cardType == 'MC') {
+        if (currentListStructure[currentCardindex].cardType == 'MC') {
             return (
-                <MultipleChoiceCard card={this.state.cards[this.state.currentCardindex]} getCardBack={this._updateCards} answerPool={this._getAllAnswersOfSameTopic('Topic')} />
+                <MultipleChoiceCard card={currentListStructure[currentCardindex]} getCardBack={_updateCardValues} answerPool={_getAllAnswersOfSameTopic()} />
             )
-        } else if (this.state.cards[this.state.currentCardindex].cardType == 'Voc')
+        } else if (currentListStructure[currentCardindex].cardType == 'Voc')
             return (
-                <VocableCard card={this.state.cards[this.state.currentCardindex]} getCardBack={this._updateCards} />
+                <VocableCard card={currentListStructure[currentCardindex]} getCardBack={_updateCardValues} />
             )
     }
 
 
 
-    render() {
-        return (
 
-            <View style={styles.container}>
-                <View style={styles.questionView}>
-                    <View style={styles.cardInfos}>
-                        <View style={styles.topic}><Text style={{ color: 'white' }}>{this.state.cards[this.state.currentCardindex].cardTopic}</Text></View>
-                        <View style={styles.level}><Text style={{ color: 'white' }}>{this.state.cards[this.state.currentCardindex].cardLevel}</Text></View>
-                    </View>
-                    <Text style={styles.questionText}>{this.state.cards[this.state.currentCardindex].questionText}</Text>
+    return (
+        <View style={styles.container}>
+            <View style={styles.questionView}>
+                <View style={styles.cardInfos}>
+                    {/* <View style={styles.topic}><Text style={{ color: 'white' }}>{currentListStructure[currentCardindex].cardTopic}</Text></View> */}
+                    <View style={styles.level}><Text style={{ color: 'white' }}>{currentListStructure[currentCardindex].cardLevel}</Text></View>
                 </View>
-                <View style={styles.answer}>
-                    {this._renderTheRightCard()}
-                </View>
+                <Text style={styles.questionText}>{currentListStructure[currentCardindex].questionText}</Text>
+            </View>
+            <View style={styles.answer}>
+                {_renderTheRightCard()}
+            </View>
 
-            </View >
+        </View >
 
-        )
-    }
+    )
+
 }
 
 

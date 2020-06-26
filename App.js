@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
+import { AsyncStorage } from 'react-native'
+import axios from 'axios'
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -22,6 +23,8 @@ import LoginRegistrationScreen from './screens/LoginRegistrationScreen/LoginRegi
 //import LoginRegistrationScreen from './screens/LoginRegistrationScreen/LoginRegistrationScreen';
 
 import { ListStructureProvider } from './screens/HomeScreen/ListStructureProvider'
+import { render } from 'react-dom';
+
 
 
 
@@ -33,54 +36,61 @@ const StatisticsStack = createStackNavigator();
 const SendCardsStack = createStackNavigator();
 const LoginRegistrationStack = createStackNavigator();
 
-const listStructure = [
-  {
-    itemID: '1',
-    isFolder: true,
-    itemName: 'WINF',
-    subfolder: [
-      {
-        itemID: '4',
-        isFolder: true,
-        itemName: 'Projektmanagement',
-        subfolder: [
-          {
-            itemID: '7',
-            isFolder: true,
-            itemName: 'Thema 1',
-            subfolder: [],
-          },
-          {
-            itemID: '8',
-            isFolder: true,
-            itemName: 'Thema 2',
-            subfolder: [],
-          },
-        ],
-      },
-      {
-        itemID: '5',
-        isfolder: false,
-        itemName: 'Programmieren SET',
-        cards: []
-      }
-    ],
-  },
-  {
-    itemID: '2',
-    isfolder: false,
-    itemName: 'Mein erstes SET',
-    cards: []
+
+
+
+export default class App extends React.Component {
+
+  state = {
+    jwt: null
   }
 
-]
+  componentDidMount() {
+    this._retrieveToken().then(() => {
+      this._getUserData()
+    })
+  }
 
 
-export default function App() {
-  return (
-    <Sidebar />
-  )
+
+
+
+  _getUserData() {
+    console.log(this.state.jwt)
+    axios.get("http://167.172.170.147:8088/get-users-data", {
+      headers: {
+        'Authorization': "Bearer " + this.state.jwt
+      }
+    }).then(resp => {
+      console.log('test')
+      console.log(resp.data)
+    })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+
+  _retrieveToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken')
+      if (token != null) {
+        this.setState({ jwt: token })
+      }
+    } catch (error) {
+      console.log("Error by retrieve token:" + error)
+    }
+  }
+
+
+  render() {
+    return (
+      <Sidebar />
+    )
+  }
 }
+
+
 
 
 
@@ -114,7 +124,6 @@ function Sidebar() {
             <Icon.Button name="ios-menu" size={25} backgroundColor="black" onPress={() => { navigation.openDrawer() }} />
           )
         }}>
-
         </HomeStack.Screen>
       </HomeStack.Navigator>
     </ListStructureProvider>

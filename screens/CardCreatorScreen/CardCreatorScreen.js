@@ -9,11 +9,10 @@ import { useNavigation } from '@react-navigation/native'
 
 const CardCreatorContext = createContext()
 
-export default function CardCreatorScreen() {
+export default function CardCreatorScreen({ route }) {
 
     const { currentListStructure, setCurrentListStructure } = useContext(ListStructureContext)
 
-    const [topic, setTopic] = useState('')
     const [questionText, setQuestionText] = useState('')
     const [isVocable, setIsVocable] = useState(false)
     const [solution, setSolution] = useState('') //Lösung des Vocabelkarte
@@ -22,20 +21,19 @@ export default function CardCreatorScreen() {
     const navigation = useNavigation()
 
 
-    useEffect(() => {
-        setcardID(_determineNewID())
-    });
 
 
     function _determineNewID() {
-        return currentListStructure.length
+        let CardID = currentListStructure.length
+        setcardID(CardID)
+        return CardID
     }
 
     function _save(answers) {
         let newCard
         if (isVocable) {
             newCard = {
-                cardID: cardID,
+                cardID: _determineNewID(),
                 cardType: 'Voc',
                 questionText: questionText,
                 cardLevel: 0,
@@ -44,13 +42,12 @@ export default function CardCreatorScreen() {
             }
         } else {
             newCard = {
-                cardID: cardID,
+                cardID: _determineNewID(),
                 cardType: 'MC',
                 questionText: questionText,
                 cardLevel: 0,
-                cardTopic: topic,
-                numberOfRightTurns: 0,
-                numberOfRightAnswers: answers.length - 1,
+                cardTopic: route.params.topic,
+                numberOfRightAnswers: answers.length,
                 answers: answers
             }
         }

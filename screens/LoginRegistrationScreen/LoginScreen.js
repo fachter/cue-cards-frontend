@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Button, FlatList, StyleSheet } from 'react-native';
 import logo from '../../assets/Logo.png';
+import { AsyncStorage } from 'react-native'
 import axios from 'axios';
 
 
@@ -11,28 +12,49 @@ const { width: WIDTH } = Dimensions.get('window')
 export default class LoginScreen extends React.Component {
 
 
+    dataIsValid() {
+        return true
+    }
 
-    /*  regNewAcc(){
-         
-     axios.post('http://167.71.57.76:8089/register', {
-     username: this.state.username,
-     password: this.state.password,
-     email: this.state.email,
-     fullName: this.state.fullName
-     })
-     .then((resp) => {
-         console.log(resp)
-     }).catch((error) => (
-         console.log(error)
-     ))
-     } */
+
+
+    _authenticateAcc() {
+        if (this.dataIsValid()) {
+
+            axios.post('http://167.172.170.147:8088/authenticate', {
+                username: 'username',
+                password: 'password',
+            })
+                .then((resp) => {
+                    console.log(resp.data.jwt)
+                    this._storeToken(resp.data.jwt)
+                }).catch((error) => {
+                    console.log(error)
+                })
+        }
+    }
+
+
+
+    _storeToken = async (token) => {
+        try {
+            await AsyncStorage.setItem(
+               ' userToken', token
+            );
+        } catch (error) {
+            console.log("Error by storing token: " + error)
+        }
+    }
+
+
+
 
 
     render() {
 
         return (
             <View style={styles.container}>
-                <Image source={logo} style={styles.logo} /> 
+                <Image source={logo} style={styles.logo} />
 
                 <View>
                     <TextInput
@@ -51,12 +73,15 @@ export default class LoginScreen extends React.Component {
                         secureTextEntry={true}
                     />
                 </View>
-
-                <TouchableOpacity style={styles.btnLogin}
-                /* onPress={() => this.regNewAcc()} */>
-                    <Text style={styles.text}>Login</Text>
-
+                <TouchableOpacity style={styles.btnLogin} onPress={() => this._authenticateAcc()}>
+                    <Text text={styles.text}>Login</Text>
                 </TouchableOpacity>
+                <TouchableOpacity style={styles.btnLogin} onPress={() => this._retrieveData()}>
+                    <Text text={styles.text}>Login</Text>
+                </TouchableOpacity>
+
+
+
             </View>
 
         )

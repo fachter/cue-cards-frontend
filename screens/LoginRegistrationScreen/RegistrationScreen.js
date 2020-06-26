@@ -17,7 +17,6 @@ export default class RegistrationScreen extends React.Component {
         email: null,
         firstName: null,
         secondName: null,
-        jwt: null,
     }
 
     componentDidMount() {
@@ -30,25 +29,20 @@ export default class RegistrationScreen extends React.Component {
         this.setState({ data: resp.data })
     }
 
-    dataIsValid() {
-        return true
-    }
+  
 
-    regNewAcc() {
-        if (this.dataIsValid()) {
-
-            axios.post('http://167.172.170.147:8088/authenticate', {
-                username: 'username',
-                password: 'password',
-            })
-                .then((resp) => {
-                    this.setState({ jwt: resp.data.jwt })
-                    //speichern im lokalcache
-                }).catch((error) => {
-                    console.log(error)
-                })
+     _retrieveData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('userToken')
+            if (value != null) {
+                console.log(value)
+            }
+        } catch (error) {
+            console.log("Error by retrieve token:" + error)
         }
     }
+
+  
 
     testApiCall() {
 
@@ -68,9 +62,7 @@ export default class RegistrationScreen extends React.Component {
 
 
     render() {
-
         return (
-
             <ScrollView>
                 <View style={styles.container}>
                 <Image source={logo} style={styles.logo} /> 
