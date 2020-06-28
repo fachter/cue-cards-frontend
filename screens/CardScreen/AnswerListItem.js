@@ -5,20 +5,20 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 export default class AnswerListItem extends React.Component {
 
     state = {
-        checked: false
+        checkState: false
     }
 
 
     componentDidUpdate() {
-        this.props.getCardState(this.state.checked, this.props.item)
+        this.props.getCardState(this.state.checkState, this.props.item)
     }
 
 
     _checkedUnchecked = () => {
-        if (this.state.checked) {
-            this.setState({ checked: false })
+        if (this.state.checkState) {
+            this.setState({ checkState: false })
         } else {
-            this.setState({ checked: true })
+            this.setState({ checkState: true })
         }
 
     }
@@ -27,8 +27,8 @@ export default class AnswerListItem extends React.Component {
     render() {
         return (
             <TouchableOpacity onPress={() => { this._checkedUnchecked() }}>
-                <View style={[styles.container, { backgroundColor: (this.state.checked == true ? 'green' : '#4b5057') }]}>
-                    <Text style={{ fontSize: 20, color: 'white' }}>{this.props.answerText}</Text>
+                <View style={[styles.container, { backgroundColor: (this.state.checkState == true ? 'green' : '#4b5057') }]}>
+                    <Text style={{ fontSize: 20, color: 'white' }}>{this.props.item.answerValues.text}</Text>
                 </View>
             </TouchableOpacity>
         )

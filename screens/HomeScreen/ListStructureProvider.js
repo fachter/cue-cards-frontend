@@ -5,31 +5,36 @@ const folderarray = [{
     ID: '1',
     name: "Wirtschaftsinformatik",
     isFolder: true,
-    subStructure: [
+    cards: [],
+    subFolder: [
         {
             ID: '1',
             name: "Definitionen",
             isFolder: false,
-            subStructure: []
+            cards: [],
+            subFolder: []
 
         },
         {
             ID: '2',
             name: "Grundlagen",
             isFolder: false,
-            subStructure: []
+            cards: [],
+            subFolder: []
         },
         {
             ID: '3',
             name: "Datenbanken",
             isFolder: false,
-            subStructure: []
+            cards: [],
+            subFolder: []
         },
         {
             ID: '4',
             name: "SQL",
             isFolder: false,
-            subStructure: []
+            cards: [],
+            subFolder: []
         },
 
     ]
@@ -173,8 +178,8 @@ class ListStructureProvider extends React.Component {
     setMainListStructure = (mainlistStructure) => {
         this.setState({ mainlistStructure })
     }
-    setCurrentListStructure = (currentListStructure) => {
-        this.setState({ currentListStructure })
+    setCurrentListStructure = (newListStructure) => {
+        this.setState({ currentListStructure: newListStructure })
     }
 
     updateFolderHistory = () => {

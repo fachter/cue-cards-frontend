@@ -18,17 +18,15 @@ export default function ChooseFolderSetWindow() {
 
 
     function _save() {
-        let newListItem
-        if (isNewFileFolder == null) {
-            newListItem = {
-                name: newFileName
-            }
-        } else {
-            newListItem = {
-                isFolder: isNewFileFolder,
-                name: newFileName
-            }
+
+        //Folder oder Set
+        let newListItem = {
+            isFolder: isNewFileFolder,
+            name: newFileName,
+            subFolder: [],
+            cards: []
         }
+
         _addNewItemToList(newListItem)
         setCreateFileWindowVisible(false)
     }
@@ -88,8 +86,6 @@ export default function ChooseFolderSetWindow() {
 
 
 function CreateFolderOrSet() {
-
-
     const [showFileNameWindow, setShowFileNameWindow] = useState(false)
     const { setIsNewFileFolder } = useContext(FileContext)
 
@@ -128,13 +124,9 @@ function CreateFolderOrSet() {
 function FileNameWindow() {
 
     const navigation = useNavigation()
-
     const { setCreateFileWindowVisible, isFolder } = useContext(ListStructureContext)
     const { newFileName, setNewFileName, isNewFileFolder, _save } = useContext(FileContext)
     const [save, setSave] = useState(false)
-    const [readyToRender, setReadyToRender] = useState(false)
-
-    var headingText
 
     useEffect(() => {
         if (save) {
@@ -143,19 +135,14 @@ function FileNameWindow() {
 
     });
 
-
-
     function _saveButtonClicked() {
         if (isFolder == false) {
             setCreateFileWindowVisible(false)
-            navigation.navigate('CardCreator', { newFileName: newFileName })
+            navigation.navigate('CardCreator', { topic: newFileName })
             return
         }
         _save()
     }
-
-
-
 
     return (
         <View style={styles.background}>

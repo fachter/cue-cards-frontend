@@ -1,0 +1,9 @@
+[0607/195304.982:ERROR:process_reader_win.cc(151)] SuspendThread: Zugriff verweigert (0x5)
+[0607/195305.872:ERROR:process_reader_win.cc(123)] NtOpenThread: Eine unzulässige Clientkennung wurde angegeben. (0xc000000b)
+[0607/195305.924:ERROR:process_reader_win.cc(123)] NtOpenThread: Eine unzulässige Clientkennung wurde angegeben. (0xc000000b)
+[0607/195305.924:ERROR:process_reader_win.cc(123)] NtOpenThread: Eine unzulässige Clientkennung wurde angegeben. (0xc000000b)
+[0607/195305.924:ERROR:process_reader_win.cc(123)] NtOpenThread: Eine unzulässige Clientkennung wurde angegeben. (0xc000000b)
+[0607/195305.924:ERROR:process_reader_win.cc(123)] NtOpenThread: Eine unzulässige Clientkennung wurde angegeben. (0xc000000b)
+[0607/195305.924:ERROR:process_reader_win.cc(123)] NtOpenThread: Eine unzulässige Clientkennung wurde angegeben. (0xc000000b)
+[0607/195305.930:ERROR:exception_snapshot_win.cc(98)] thread ID 7120 not found in process
+[0607/195305.930:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: Es wurde versucht, auf einen Prozess zuzugreifen, der gerade beendet wurde. (0xc000010a)

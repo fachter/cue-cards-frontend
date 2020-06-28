@@ -11,9 +11,9 @@ export default class FolderListItem extends React.Component {
 
 
     _renderRightItem = () => {
-        const { card } = this.props
+        const { item } = this.props
 
-        if (card.isFolder == undefined) {
+        if (item.isFolder == undefined) {
             return (
                 < TouchableOpacity onPress={() => alert('Karte öffnen -> Soll man diese hier nur bearbeiten oder im einzelnen auch beantworten können?')}>
                     <View style={styles.container}>
@@ -21,13 +21,13 @@ export default class FolderListItem extends React.Component {
                             style={styles.folderButton}
                             name="credit-card-multiple-outline"
                             size={25} color="white" />
-                        <Text style={styles.fontStyle}>{card.questionText}</Text>
+                        <Text style={styles.fontStyle}>{item.questionText}</Text>
                     </View>
                 </TouchableOpacity >
             )
-        } else if (card.isFolder == true) {
+        } else if (item.isFolder == true) {
             return (
-                <TouchableOpacity onPress={() => this.props.getSubFolder(card)} >
+                <TouchableOpacity onPress={() => this.props.getSubFolder(item)} >
                     <View style={styles.container}>
                         <Icon.Button
                             style={styles.folderButton}
@@ -35,20 +35,20 @@ export default class FolderListItem extends React.Component {
                             size={25} color="white"
                             backgroundColor="#111111"
                         />
-                        <Text style={styles.fontStyle}>{card.name}</Text>
+                        <Text style={styles.fontStyle}>{item.name}</Text>
                     </View>
                 </TouchableOpacity>
             );
         } else {
             return (
-                < TouchableOpacity onPress={() => this.props.getSubFolder(card)
+                < TouchableOpacity onPress={() => this.props.getSubFolder(item)
                 }>
                     <View style={styles.container}>
                         <MaterialCommunityIcons
                             style={styles.folderButton}
                             name="cards-outline"
                             size={25} color="white" />
-                        <Text style={styles.fontStyle}>{card.name}</Text>
+                        <Text style={styles.fontStyle}>{item.name}</Text>
                     </View>
                 </TouchableOpacity >
             )

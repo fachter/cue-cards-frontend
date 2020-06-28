@@ -5,60 +5,45 @@ import * as Icon from '@expo/vector-icons'
 import AnswerListItem from './AnswerListItem'
 
 
-
-
-const dummyArray = []
-
-
 export default class MulitpleChoiceCard extends React.Component {
 
     state = {
         card: this.props.card,
-        answers: this.props.card.answers,
-
-        choice: null,  // true/false, je nachdem ob richtig oder falsch gewählt wurde
+        sessionAnswers: [],
+        result: false,  // true/false, je nachdem ob richtig oder falsch beantwortet wurde
     }
-
 
     componentDidMount() {
-        this._createDummyArray()
-
+        this._createSessionAnswers()
     }
 
-    componentWillMount() {
-        this._fillWithRandomTopicAnswers()
-
-    }
-
-
-
-
-
-    //Erstelle Array, in der Größe der Antworten der Karte
-    //Dient als Copy zum abgleichen
-    _createDummyArray = () => {
-        let answer = {
-            cardState: false,
-            item: null
-        }
-
-        for (let i = 0; i < this.state.card.answers.length; i++) {
-            dummyArray.push(answer)
-        }
-    }
-
-
-
-
-
-    _fillWithRandomTopicAnswers = () => {
-        let answerPool = this.props.answerPool
+    _createSessionAnswers = () => {
         let maximalAnswers = 4
-        //füllt die Antwortmöglichkeiten bis zur Zahl 4 auf
-        for (let i = this.state.card.numberOfRightAnswers; i < maximalAnswers; i++) {
-            this.state.answers.push(this._getRandomAnswer(answerPool))
+
+        var sessionAnswers = []
+        //fügt die richtigen Antworten der Karte hinzu
+        for (let i = 0; i < this.state.card.answers.length; i++) {
+            let rightAnswer = {
+                answerValues: this.state.card.answers[i],
+                isTrue: true,
+                checkState: false
+            }
+            sessionAnswers.push(rightAnswer)
         }
+        //füllt die Antwortmöglichkeiten bis zur Zahl 4 auf mit zufällig Antworten aus dem Antwortenpool heraus
+        for (let i = this.state.card.numberOfRightAnswers; i < maximalAnswers; i++) {
+            let randomAnswer = this._getRandomAnswer(this.props.answerPool)
+            let wrongAnswer = {
+                answerValues: randomAnswer,
+                isTrue: false,
+                checkState: false
+            }
+            sessionAnswers.push(wrongAnswer) // setate der copy nicht den hauptarray
+        }
+
+        this.setState({ sessionAnswers: sessionAnswers })
     }
+
     _getRandomAnswer = (answerPool) => {
         let min = Math.ceil(0);
         let max = Math.floor(answerPool.length);
@@ -68,102 +53,57 @@ export default class MulitpleChoiceCard extends React.Component {
 
 
 
-
-
-
-
     _checkChoiceAndSendBack = () => {
         this._checkTheChoice()
-        this.props.getCardBack(this.state.choice)
+        this.props.getCardBack(this.state.result)
     }
+
 
     _checkTheChoice = () => {
-        //filtert alle auf true gesetzten Antworten heraus und setzt sie in ein Array
-        let arrayOfChosenAnswers = []
+        const { sessionAnswers } = this.state
+        let numberOfRightSelection = 0
 
-        for (let i = 0; i < dummyArray.length; i++) {
-            if (dummyArray[i].cardState) {
-                arrayOfChosenAnswers.push(dummyArray[i].item)
+        //prüft wie viele Antworten richtig gewählt wurden
+        for (let i = 0; i < sessionAnswers.length; i++) {
+            if (sessionAnswers[i].checkState == true && sessionAnswers[i].isTrue == true) {
+                numberOfRightSelection += 1
             }
         }
 
-        let numberOfChosenAnswers = arrayOfChosenAnswers.length
-
-        //Prüft ob die ausgewählten Antworten, der Karte angehören (checkID = cardID) 
-        //Fügt die Anzahl der übereinstimmungen numerOfConsistenAnswers hinzu
-        var numberOfConsistentAnswers = 0;
-        for (let i = 0; i < arrayOfChosenAnswers.length; i++) {
-            if (arrayOfChosenAnswers[i].checkID == this.state.card.cardID) {
-                numberOfConsistentAnswers += 1
-            }
-        }
-
-
-        //Prüft ob alle richtigen Antworten gewählt wurden
-        if (numberOfConsistentAnswers == this.state.card.numberOfRightAnswers) {
-            //Vergleicht die Anzahl der gewählten Antworten mit der Anzahl die tatsächlich richtig sind
-            if (numberOfChosenAnswers == this.state.card.numberOfRightAnswers) {
-                // this.state.card.numberOfRightTurns += 1
-                this.state.choice = true
-            }
-            else {
-                this.state.choice = false
-            }
-        }
-
-    }
-    _checkTheRightTurnsOfCard = () => {
-        //Prüft wie oft die Karte schon richtig beantwortet wurde,
-        //bei 3 richtigen Stufen steigt sie ein Level im Karteikartensystem auf
-        if (this.state.card.numberOfRightTurns == 3) {
-            this.state.card.cardLevel += +1
+        if (numberOfRightSelection == this.state.card.numberOfRightAnswers) {
+            this.state.result = true
+        } else {
+            this.state.result = false
         }
     }
-    //Hole den Index der aktuell veränderten Antwort, speichere im dummyArray ab
-    //Mit den Attributen  => Antwort(gedrückt oder nicht)  //  die gesamte Antwort als Item
-    _updateAnswerState = (cardState, item) => {
-        let indexOfItem = this.state.card.answers.indexOf(item)
 
-        let answer = {
-            cardState: cardState,
-            item: item
-        }
-        dummyArray[indexOfItem] = answer
+
+    _updateCheckState = (checkState, item) => {
+        item.checkState = checkState
     }
 
 
     render() {
-        if (this.state.card.length != 0) {
-            return (
-                <View style={styles.container}>
-                    <FlatList
-                        data={this.state.card.answers}
-                        keyExtractor={item => item.answerID}
-                        renderItem={({ item }) => (
-                            <AnswerListItem
-                                answerID={item.answerID}
-                                answerText={item.answerText}
-                                checkID={item.checkID}
-                                item={item}
-                                getCardState={this._updateAnswerState}
-                            />
-                        )}
-                        ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
-                    />
-                    <TouchableOpacity style={styles.saveButton} onPress={() => this._checkChoiceAndSendBack()}>
-                        <Icon.Feather name="check" size={50} />
-                    </TouchableOpacity>
-                </View >
+        return (
+            <View style={styles.container}>
+                <FlatList
+                    data={this.state.sessionAnswers}
+                    keyExtractor={item => item.answerID}
+                    renderItem={({ item }) => (
+                        <AnswerListItem
 
-            )
-        }
-        else {
-            return (
-                <View>
-                    <Text>keine Karte geladen</Text>
-                </View>
-            )
-        }
+                            item={item}
+                            getCardState={this._updateCheckState}
+                        />
+                    )}
+                    ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
+                />
+                <TouchableOpacity style={styles.saveButton} onPress={() => this._checkChoiceAndSendBack()}>
+                    <Icon.Feather name="check" size={50} />
+                </TouchableOpacity>
+            </View >
+
+        )
     }
 }
 

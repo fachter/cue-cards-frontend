@@ -83,17 +83,25 @@ const DataList = () => {
 
 
     useEffect(() => {
+        console.log(currentListStructure)
         BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
-
     });
 
 
     function _getClickedSubfolder(item) {
         updateFolderHistory()
-        //durchsucht das Array nach dem Item und ruft die OrdnerStruktur auf
-        let indexOfItem = currentListStructure.indexOf(item)
-        let subStructure = currentListStructure[indexOfItem].subStructure
-        setCurrentListStructure(subStructure)
+        if (item.isFolder) {
+            //durchsucht das Array nach dem Item und ruft die OrdnerStruktur auf
+            let indexOfItem = currentListStructure.indexOf(item)
+            let subStructure = currentListStructure[indexOfItem].subFolder
+            setCurrentListStructure(subStructure)
+        } else {
+            //durchsucht das Array nach dem Item und ruft die OrdnerStruktur auf
+            let indexOfItem = currentListStructure.indexOf(item)
+            let subStructure = currentListStructure[indexOfItem].cards
+            setCurrentListStructure(subStructure)
+        }
+
 
 
         if (item.isFolder == undefined) {
@@ -107,8 +115,12 @@ const DataList = () => {
 
     function _navigateToCardScreen() {
         if (isFolder == false) {
-            // navigation.navigate('CardScreen', { cards: currentListStructure })
-            console.log(currentListStructure)
+            if (currentListStructure.length > 0) {
+                navigation.navigate('CardScreen', { cards: currentListStructure })
+            } else {
+                alert('Füge deinem Set Karten hinzu um eine Session zu starten')
+            }
+
         }
     }
 
@@ -151,7 +163,7 @@ const DataList = () => {
                     renderItem={({ item }) => (
                         <FolderListItem
                             getSubFolder={_getClickedSubfolder}
-                            card={item}
+                            item={item}
                             callBackNavigation={_navigateToCardScreen}
                         />
                     )}
@@ -161,7 +173,7 @@ const DataList = () => {
                     <ChooseFolderSetWindow
                         visible={CreateFileWindowVisible} />
                 </View>
-                {isFolder ? null : <TouchableOpacity style={styles.startSessionButton} onPress={() => _navigateToCardScreen()} >
+                {(isFolder) ? null : <TouchableOpacity style={styles.startSessionButton} onPress={() => _navigateToCardScreen()} >
                     <Entypo name="controller-play" size={50} color="black" />
                 </TouchableOpacity>}
                 <TouchableOpacity style={styles.plusButton} onPress={() => setCreateFileWindowVisible(true)} >
