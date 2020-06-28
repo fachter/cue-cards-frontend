@@ -165,7 +165,9 @@ class ListStructureProvider extends React.Component {
         listHistoryArray: [],
         currentListStructure: folderarray,
         isFolder: true,
-        CreateFileWindowVisible: false  //PopupFenster um neue Datei anzuulegen
+        CreateFileWindowVisible: false,  //PopupFenster um neue Datei anzuulegen
+        query: "",
+        fullData: []
     }
 
     setMainListStructure = (mainlistStructure) => {
@@ -191,11 +193,22 @@ class ListStructureProvider extends React.Component {
         this.setState({ CreateFileWindowVisible })
     }
 
+    setQuery = (query) => {
+        this.setState({query})
+    }
 
+    setFullDat = (fullData) => {
+        this.setState({fullData})
+    }
+
+    getQuery = (query) => {
+        return this.state.query
+    }
 
 
     render() {
         return (
+            
             <ListStructureContext.Provider value={{
                 mainlistStructure: this.state.mainlistStructure,
                 setMainListStructure: this.setMainListStructure,
@@ -207,10 +220,16 @@ class ListStructureProvider extends React.Component {
                 isFolder: this.state.isFolder,
                 setIsFolder: this.setIsFolder,
                 CreateFileWindowVisible: this.state.CreateFileWindowVisible,
-                setCreateFileWindowVisible: this.setCreateFileWindowVisible
+                setCreateFileWindowVisible: this.setCreateFileWindowVisible,
+                query: this.state.query,
+                setQuery: this.setQuery,
+                fullData: this.state.fullData,
+                setFullData: this.setFullData,
+                getQuery: this.getQuery
             }}>
                 {this.props.children}
             </ListStructureContext.Provider>
+            
         )
     }
 }

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, FlatList, StyleSheet, TouchableOpacity, BackHandler } from 'react-native';
+import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, BackHandler } from 'react-native';
 
 
 import { Entypo } from '@expo/vector-icons';
@@ -13,17 +13,35 @@ import { ListStructureContext } from './ListStructureProvider'
 import SwipeView from '../../components/SwipeView'
 import { useNavigation } from '@react-navigation/native';
 
+import {Container, Header, Item, Input, Icon, Button} from 'native-base';
+import { Searchbar, TextInput } from 'react-native-paper';
+import { SearchBar } from 'react-native-elements';
+import { color } from 'react-native-reanimated';
 
 
 
 
+const { width: WIDTH } = Dimensions.get('window')
+
+state = {
+    query: '',
+    fullData: []
+}
+
+const BackButtonContext = React.createContext()
 
 
 export default function HomeScreen() {
     return (
-        <DataList />
+        
+
+            <DataList />
+        
     )
 }
+
+
+
 
 
 const DataList = () => {
@@ -37,7 +55,10 @@ const DataList = () => {
         isFolder,
         setIsFolder,
         CreateFileWindowVisible,
-        setCreateFileWindowVisible
+        setCreateFileWindowVisible,
+        setQuery,
+        setFulldata,
+        getQuery
     } = React.useContext(ListStructureContext)
 
     const navigation = useNavigation()
@@ -91,11 +112,40 @@ const DataList = () => {
         }
     }
 
+    function handleSearch(text) {
+        
+        setQuery({getQuery: text})
+    }
 
+    function renderHeader () {
+        return (
+            <Searchbar
+                placeholder="Suche"
+                onChangeText={handleSearch}
+                value={getQuery}
+            />
+            
+        )
+    }
+
+   
+
+    
     return (
+        <BackButtonContext.Provider value={{
+            _backButtonPressed: _backButtonPressed
+        }}>
+        
+            
+        
         <View style={styles.container}>
-            <SwipeView>
+            
+            
+            
+                <SwipeView methode={ _backButtonPressed}
+            >
                 <FlatList
+                    ListHeaderComponent={renderHeader}
                     data={currentListStructure}
                     keyExtractor={item => item.ID}
                     renderItem={({ item }) => (
@@ -117,12 +167,19 @@ const DataList = () => {
                 <TouchableOpacity style={styles.plusButton} onPress={() => setCreateFileWindowVisible(true)} >
                     <Entypo name="plus" size={50} color="black" />
                 </TouchableOpacity>
+
+                <TouchableOpacity style={styles.btnLogin}
+                /* onPress={() => this.regNewAcc()} */>
+                    <Text style={styles.text}>Login</Text>
+
+                </TouchableOpacity>
             </SwipeView>
         </View>
+        </BackButtonContext.Provider>
     );
 }
 
-
+export{BackButtonContext};
 
 const styles = StyleSheet.create({
     container: {
@@ -158,6 +215,15 @@ const styles = StyleSheet.create({
         height: StyleSheet.hairlineWidth,
         backgroundColor: 'gray',
         marginVertical: 5
+    },
+    btnNew: {
+        width: WIDTH - 55,
+        height: 45,
+        borderRadius: 25,
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        marginHorizontal: 25
+
     },
 
 })

@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 
+
 import Icon from 'react-native-vector-icons/Ionicons';
 
 
@@ -18,8 +19,8 @@ import FriendsScreen from './screens/FriendsScreen/FriendsScreen';
 import SettingsScreen from './screens/SettingsScreen/SettingsScreen';
 import StatisticsScreen from './screens/StatisticsScreen/StatisticsScreen';
 import SendCardsScreen from './screens/SendCardsScreen/SendCardsScreen';
-import LoginRegistrationScreen from './screens/LoginRegistrationScreen/LoginRegistrationScreen'
-//import LoginRegistrationScreen from './screens/LoginRegistrationScreen/LoginRegistrationScreen';
+import LoginRegistrationScreen from './screens/LoginRegistrationScreen/LoginRegistrationScreen';
+import RoomScreen from './screens/RoomScreen/RoomScreen';
 
 import { ListStructureProvider } from './screens/HomeScreen/ListStructureProvider'
 
@@ -32,6 +33,7 @@ const SettingsStack = createStackNavigator();
 const StatisticsStack = createStackNavigator();
 const SendCardsStack = createStackNavigator();
 const LoginRegistrationStack = createStackNavigator();
+const RoomStack = createStackNavigator();
 
 const listStructure = [
   {
@@ -76,6 +78,10 @@ const listStructure = [
 ]
 
 
+
+
+
+
 export default function App() {
   return (
     <Sidebar />
@@ -83,9 +89,9 @@ export default function App() {
 }
 
 
+const Sidebar = () => {
 
-
-function Sidebar() {
+  
 
 
   const HomeStackScreen = ({ navigation }) => (
@@ -100,18 +106,27 @@ function Sidebar() {
         <HomeStack.Screen name="ListOverView" component={HomeScreen} options={{
           headerRight: () => (
             <Icon.Button name="ios-menu" size={25} backgroundColor="black" onPress={() => { navigation.openDrawer() }} />
+          ),
+          headerLeft: () => (
+            <Icon.Button name="ios-arrow-back" size={25} backgroundColor="black" />
           )
         }}>
         </HomeStack.Screen>
         <HomeStack.Screen name="CardCreator" component={CardCreatorScreen} options={{
           headerRight: () => (
             <Icon.Button name="ios-menu" size={25} backgroundColor="black" onPress={() => { navigation.openDrawer() }} />
+          ),
+          headerLeft: () => (
+            <Icon.Button name="ios-arrow-back" size={25} backgroundColor="black"  />
           )
         }}>
         </HomeStack.Screen>
         <HomeStack.Screen name="CardScreen" component={CardScreen} options={{
           headerRight: () => (
             <Icon.Button name="ios-menu" size={25} backgroundColor="black" onPress={() => { navigation.openDrawer() }} />
+          ),
+          headerLeft: () => (
+            <Icon.Button name="ios-arrow-back" size={25} backgroundColor="black" />
           )
         }}>
 
@@ -223,6 +238,26 @@ function Sidebar() {
     </LoginRegistrationStack.Navigator>
   );
 
+  const RoomStackScreen = ({ navigation }) => (
+    <RoomStack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: "black"
+
+      },
+      headerTintColor: "white"
+    }}>
+      <RoomStack.Screen name="Räume" component={RoomScreen} options={{
+        headerRight: () => (
+          <Icon.Button name="ios-menu" size={25} backgroundColor="black" onPress={() => { navigation.openDrawer() }} />
+        ),
+        headerLeft: () => (
+          <Icon.Button name="ios-arrow-back" size={25} backgroundColor="black" />
+
+        )
+      }} />
+    </RoomStack.Navigator>
+  );
+
 
 
   return (
@@ -248,7 +283,7 @@ function Sidebar() {
         <Drawer.Screen name="Freunde" component={FriendsStackScreen}
           options={{
             drawerIcon: () => (
-              <Icon name="ios-people" color="white" size={25} />
+              <Icon name="md-person" color="white" size={25} />
             )
           }}
         />
@@ -277,6 +312,13 @@ function Sidebar() {
           options={{
             drawerIcon: () => (
               <Icon name="ios-share" color="white" size={25} />
+            )
+          }}
+        />
+        <Drawer.Screen name="Räume" component={RoomStackScreen}
+          options={{
+            drawerIcon: () => (
+              <Icon name="ios-people" color="white" size={25} />
             )
           }}
         />

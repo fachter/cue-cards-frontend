@@ -43,7 +43,7 @@ class SwipeView extends Component {
                 this.setState({ backgroundColor: 'blue' });
                 break;
             case SWIPE_RIGHT:
-                this.setState({ backgroundColor: 'yellow' });
+                this.props.methode()
                 break;
         }
     }
