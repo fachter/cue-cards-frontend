@@ -1,89 +1,113 @@
 import React, { useState, createContext, useContext, useEffect } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native'
+import uuid from 'react-native-uuid'
 
 import MultipleChoice from './MultipleChoice'
 import Vocable from './Vocable'
+import ImagePickerButton from '../../API/ImagePicker'
 
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import { useNavigation } from '@react-navigation/native'
 
-const CardCreatorContext = createContext()
+
 
 export default function CardCreatorScreen({ route }) {
 
-    const { currentListStructure, setCurrentListStructure } = useContext(ListStructureContext)
-
-    const [questionText, setQuestionText] = useState('')
-    const [isVocable, setIsVocable] = useState(false)
-    const [solution, setSolution] = useState('') //Lösung des Vocabelkarte
-    const [cardID, setcardID] = useState(null)
-
     const navigation = useNavigation()
+    const { currentListStructure, setCurrentListStructure, storeDataOnDevice } = useContext(ListStructureContext)
 
+    //CardValues
+    const [cardID, setcardID] = useState(_isValueNull(route.params.cardID) ? uuid.v1() : route.params.cardID)
+    const [cardType, setCardtype] = useState(_isValueNull(route.params.cardType) ? "MC" : route.params.cardType)
+    const [questionText, setQuestionText] = useState(_isValueNull(route.params.questionText) ? null : route.params.questionText)
+    const [cardLevel, setCardlevel] = useState(_isValueNull(route.params.cardLevel) ? null : route.params.cardLevel)
+    const [solution, setSolution] = useState(_isValueNull(route.params.solution) ? null : route.params.solution)
+    const [cardTopic, setCardTopic] = useState(_isValueNull(route.params.cardTopic) ? null : route.params.cardTopic)
+    const [answers, setAnswers] = useState(_isValueNull(route.params.answers) ? [] : route.params.answers)
 
-
-
-    function _determineNewID() {
-        let CardID = currentListStructure.length
-        setcardID(CardID)
-        return CardID
+    function _isValueNull(value) {
+        if (value === undefined) {
+            return true
+        }
+        return false
     }
 
-    function _save(answers) {
+
+
+
+
+    function _save() {
         let newCard
-        if (isVocable) {
+        if (cardType === "Voc") {
             newCard = {
-                cardID: _determineNewID(),
-                cardType: 'Voc',
+                ID: cardID,
+                cardType: cardType,
                 questionText: questionText,
-                cardLevel: 0,
-                numberOfRightTurns: 0,
+                cardLevel: 0,    //Beim bearbeiten einer Karte wird das Level zurück auf 0 gesetzt
                 solution: solution
             }
-        } else {
+        } else if (cardType === "MC") {
             newCard = {
-                cardID: _determineNewID(),
-                cardType: 'MC',
+                ID: cardID,
+                cardType: cardType,
                 questionText: questionText,
                 cardLevel: 0,
-                cardTopic: route.params.topic,
+                cardTopic: cardTopic,
                 numberOfRightAnswers: answers.length,
                 answers: answers
             }
         }
+
         let copy = currentListStructure
-        copy.push(newCard)
-        setCurrentListStructure(copy)
+
+        if (route.params.mode == "createMode") { // neue Karte erstellen
+            copy.push(newCard)
+            setCurrentListStructure(copy)
+
+        } else if (route.params.mode == "editMode") {   //alte Karte esetzen
+            var index
+            for (var i = 0; i < copy.length; i++) {
+                if (copy[i].ID === id) {
+                    index = i
+                }
+                copy[index] = newCard
+            }
+        }
+        storeDataOnDevice()
         navigation.goBack()
     }
 
 
+    function ifCurrentCardVoc() {
+        if (cardType === "Voc") {
+            return true
+        }
+        return false
+
+    }
 
     return (
-        <CardCreatorContext.Provider value={{
-            setSolution: setSolution,
-            _save: _save
-        }}>
-            <View style={styles.container}>
-                <View style={styles.menu}>
-                    <TouchableOpacity style={styles.menuButtons} onPress={() => setIsVocable(false)}>
-                        <Text style={{ textAlign: 'center' }}>Multiplechoice</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuButtons} onPress={() => setIsVocable(true)}>
-                        <Text style={{ textAlign: 'center' }}>Freitext</Text>
-                    </TouchableOpacity>
-                </View>
-                <TextInput
-                    style={[styles.questionInput, { textAlign: 'center' }]}
-                    multiline={true}
-                    placeholder="Bitte Frage hier eingeben"
-                    onChangeText={text => setQuestionText(text)}>
-                </TextInput>
-                <View style={styles.cardcomponent}>
-                    {isVocable ? <Vocable /> : <MultipleChoice onSave={_save} cardID={cardID} />}
-                </View>
+        <View style={styles.container}>
+            <View style={styles.menu}>
+                <TouchableOpacity style={styles.menuButtons} onPress={() => setCardtype("MC")}>
+                    <Text style={{ textAlign: 'center' }}>Multiplechoice</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.menuButtons} onPress={() => setCardtype("Voc")}>
+                    <Text style={{ textAlign: 'center' }}>Freitext</Text>
+                </TouchableOpacity>
             </View>
-        </CardCreatorContext.Provider>
+            <ImagePickerButton />
+            <TextInput
+                style={[styles.questionInput, { textAlign: 'center' }]}
+                multiline={true}
+                placeholder="Bitte Frage hier eingeben"
+                onChangeText={text => setQuestionText(text)}>
+                {questionText}
+            </TextInput>
+            <View style={styles.cardcomponent}>
+                {ifCurrentCardVoc() ? <Vocable onSave={_save} /> : <MultipleChoice onSave={_save} answers={answers} />}
+            </View>
+        </View>
     )
 }
 
@@ -119,7 +143,4 @@ const styles = StyleSheet.create({
 
     },
 });
-
-
-export { CardCreatorContext }
 

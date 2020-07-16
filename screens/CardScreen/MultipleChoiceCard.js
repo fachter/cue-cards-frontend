@@ -7,49 +7,13 @@ import AnswerListItem from './AnswerListItem'
 
 export default class MulitpleChoiceCard extends React.Component {
 
+
     state = {
         card: this.props.card,
-        sessionAnswers: [],
+        sessionAnswers: this.props.answers,
         result: false,  // true/false, je nachdem ob richtig oder falsch beantwortet wurde
     }
 
-    componentDidMount() {
-        this._createSessionAnswers()
-    }
-
-    _createSessionAnswers = () => {
-        let maximalAnswers = 4
-
-        var sessionAnswers = []
-        //fügt die richtigen Antworten der Karte hinzu
-        for (let i = 0; i < this.state.card.answers.length; i++) {
-            let rightAnswer = {
-                answerValues: this.state.card.answers[i],
-                isTrue: true,
-                checkState: false
-            }
-            sessionAnswers.push(rightAnswer)
-        }
-        //füllt die Antwortmöglichkeiten bis zur Zahl 4 auf mit zufällig Antworten aus dem Antwortenpool heraus
-        for (let i = this.state.card.numberOfRightAnswers; i < maximalAnswers; i++) {
-            let randomAnswer = this._getRandomAnswer(this.props.answerPool)
-            let wrongAnswer = {
-                answerValues: randomAnswer,
-                isTrue: false,
-                checkState: false
-            }
-            sessionAnswers.push(wrongAnswer) // setate der copy nicht den hauptarray
-        }
-
-        this.setState({ sessionAnswers: sessionAnswers })
-    }
-
-    _getRandomAnswer = (answerPool) => {
-        let min = Math.ceil(0);
-        let max = Math.floor(answerPool.length);
-        let randomNumber = Math.floor(Math.random() * (max - min)) + min;
-        return this.props.answerPool[randomNumber]
-    }
 
 
 
@@ -87,11 +51,10 @@ export default class MulitpleChoiceCard extends React.Component {
         return (
             <View style={styles.container}>
                 <FlatList
-                    data={this.state.sessionAnswers}
+                    data={this.props.answers}
                     keyExtractor={item => item.answerID}
                     renderItem={({ item }) => (
                         <AnswerListItem
-
                             item={item}
                             getCardState={this._updateCheckState}
                         />

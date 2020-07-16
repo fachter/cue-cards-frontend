@@ -9,6 +9,7 @@ export default class AnswerListItem extends React.Component {
     }
 
 
+
     componentDidUpdate() {
         this.props.getCardState(this.state.checkState, this.props.item)
     }

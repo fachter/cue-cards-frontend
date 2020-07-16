@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { StyleSheet, View, TextInput, FlatList, TouchableOpacity, Dimensions, Text } from 'react-native'
 
 
@@ -7,49 +7,51 @@ const data = [
 ]
 
 
+
 export default class MultipleChoice extends React.Component {
 
     state = {
-        answers: [],
+        answers: this.props.answers
     }
 
     _addItem() {
-        const { answers } = this.state
-        var copy = answers
+        var copy = this.state.answers
         copy.push({
-            answerID: answers.length,
-            cardID: this.props.cardID,
+            ID: this.state.answers.length,
             text: '',
         })
+
         this.setState({ answers: copy })
     }
+
+
 
     _deleteItemById(id) {
         var copy = this.state.answers
         var index
 
         for (var i = 0; i < copy.length; i++) {  //Sucht den Index des Items im Array nach id
-            if (copy[i].answerID === id)
+            if (copy[i].ID === id)
                 index = i
         }
         copy.splice(index, 1)  //schmeißt das Item mit dem Index raus
         this.setState({ answers: copy })
     }
 
+
     _updateAnswerText(text, id) {
         var copy = this.state.answers
         var index
         for (var i = 0; i < copy.length; i++) {  //Sucht den Index des Items im Array nach id
-            if (copy[i].answerID === id)
+            if (copy[i].ID === id)
                 index = i
         }
         copy[index].text = text
-        this.setState({ anwers: copy })
+        this.setState({ answers: copy })
     }
 
     render() {
         return (
-
             <View style={styles.container} >
                 <TouchableOpacity onPress={() => this._addItem()}>
                     <View style={styles.addButton}>
@@ -61,7 +63,7 @@ export default class MultipleChoice extends React.Component {
                         data={this.state.answers}
                         renderItem={({ item }) => (
                             <AnswerItem
-                                id={item.answerID}
+                                item={item}
                                 getText={this._updateAnswerText.bind(this)}
                                 deleteCallback={this._deleteItemById.bind(this)}
                             />
@@ -70,23 +72,25 @@ export default class MultipleChoice extends React.Component {
                         ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
                     />
                 </View>
-                <TouchableOpacity style={styles.bottomView} onPress={() => this.props.onSave(this.state.answers)}>
+                <TouchableOpacity style={styles.bottomView} onPress={() => this.props.onSave()}>
                     <View style={styles.saveButton}>
                         <Text style={{ fontStyle: 'italic', fontSize: 20, color: 'white' }}>speichern</Text>
                     </View>
                 </TouchableOpacity>
-
             </View>
         )
     }
+
 }
 
 class AnswerItem extends React.Component {
-
     render() {
+        const { item } = this.props
         return (
             <View style={styles.answeritem}>
-                <TextInput style={styles.answerInput} placeholder="Antwort" onChangeText={text => this.props.getText(text, this.props.id)}></TextInput>
+                <TextInput style={styles.answerInput} placeholder="Antwort" onChangeText={text => this.props.getText(text, item.ID)}>
+                    {item.text}
+                </TextInput>
                 <TouchableOpacity onPress={() => this.props.deleteCallback(this.props.id)}>
                     <View style={styles.deleteButton} />
                 </TouchableOpacity>

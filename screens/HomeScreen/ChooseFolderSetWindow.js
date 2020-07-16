@@ -1,15 +1,15 @@
 import React, { useState, createContext, useContext, useEffect } from 'react'
 import { View, Modal, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native'
 import * as Icon from '@expo/vector-icons'
-import { ListStructureContext } from './ListStructureProvider'
+import { ListStructureContext, ListStructureProvider } from './ListStructureProvider'
 import { useNavigation } from '@react-navigation/native';
-
+import uuid from 'react-native-uuid'
 
 const FileContext = createContext()
 
 
 export default function ChooseFolderSetWindow() {
-    const { currentListStructure, setCurrentListStructure, isFolder, setCreateFileWindowVisible, CreateFileWindowVisible } = useContext(ListStructureContext)
+    const { currentListStructure, setCurrentListStructure, isFolder, setCreateFileWindowVisible, CreateFileWindowVisible, storeDataOnDevice } = useContext(ListStructureContext)
 
     const [newFileName, setNewFileName] = useState(null)
     const [isNewFileFolder, setIsNewFileFolder] = useState(null)
@@ -17,27 +17,30 @@ export default function ChooseFolderSetWindow() {
 
 
 
-    function _save() {
 
-        //Folder oder Set
+    async function _save() {
+
+        let newID = uuid.v1()
         let newListItem = {
+            ID: newID,
             isFolder: isNewFileFolder,
             name: newFileName,
             subFolder: [],
             cards: []
         }
 
-        _addNewItemToList(newListItem)
+
         setCreateFileWindowVisible(false)
+        _addNewItemToList(newListItem)
     }
 
 
 
-    function _addNewItemToList(item) {
+    function _addNewItemToList(newListItem) {
         let copy = currentListStructure
-        copy.push(item)
+        copy.push(newListItem)
         setCurrentListStructure(copy)
-
+        storeDataOnDevice()
     }
 
 
@@ -138,7 +141,7 @@ function FileNameWindow() {
     function _saveButtonClicked() {
         if (isFolder == false) {
             setCreateFileWindowVisible(false)
-            navigation.navigate('CardCreator', { topic: newFileName })
+            navigation.navigate('CardCreator', { mode: "createMode" })
             return
         }
         _save()
@@ -162,25 +165,20 @@ function FileNameWindow() {
 
 
 
-
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'red'
-
     },
     background: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#000000aa',
-
     },
     window: {
         width: '80%',
         height: '20%',
-
         borderRadius: 5
     },
     windowButtons: {

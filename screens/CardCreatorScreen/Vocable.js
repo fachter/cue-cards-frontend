@@ -3,32 +3,33 @@ import { View, StyleSheet, TextInput, Dimensions, TouchableOpacity, Text } from 
 
 const windowWidth = Dimensions.get('window').width;
 
-import { CardCreatorContext } from './CardCreatorScreen'
 
+export default class Vocable extends React.Component {
 
-export default function Vocable() {
+    state = {
+        solution: this.props.solution
+    }
 
-    const { setSolution, _save } = useContext(CardCreatorContext)
-
-    return (
-        <View style={styles.container}>
-            <View style={styles.answer}>
-                <TextInput
-                    style={styles.textInput}
-                    multiline={true}
-                    placeholder=" .. und hier deine Antwort"
-                    onChangeText={text => setSolution(text)}>
-                </TextInput>
-            </View>
-            <TouchableOpacity style={styles.bottomView} onPress={() => _save()}>
-                <View style={styles.saveButton}>
-                    <Text style={{ fontStyle: 'italic', fontSize: 20, color: 'white' }}>speichern</Text>
+    render() {
+        return (
+            <View style={styles.container}>
+                <View style={styles.answer}>
+                    <TextInput
+                        style={styles.textInput}
+                        multiline={true}
+                        placeholder=" .. und hier deine Antwort"
+                        onChangeText={text => this.setState({ solution: text })}>
+                    </TextInput>
                 </View>
-            </TouchableOpacity>
-        </View >
+                <TouchableOpacity style={styles.bottomView} onPress={() => this.props.onSave()}>
+                    <View style={styles.saveButton}>
+                        <Text style={{ fontStyle: 'italic', fontSize: 20, color: 'white' }}>speichern</Text>
+                    </View>
+                </TouchableOpacity>
+            </View >
 
-    )
-
+        )
+    }
 }
 
 

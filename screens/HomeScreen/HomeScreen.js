@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, BackHandler } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, BackHandler, AppState } from 'react-native';
 
 
 import { Entypo } from '@expo/vector-icons';
@@ -7,41 +7,26 @@ import { Entypo } from '@expo/vector-icons';
 
 import ChooseFolderSetWindow from './ChooseFolderSetWindow'
 import FolderListItem from './FolderListItem';
+import DeleteWindow from './DeleteWindow'
 
 import { ListStructureContext } from './ListStructureProvider'
 
+
 import SwipeView from '../../components/SwipeView'
 import { useNavigation } from '@react-navigation/native';
-
-import {Container, Header, Item, Input, Icon, Button} from 'native-base';
-import { Searchbar, TextInput } from 'react-native-paper';
-import { SearchBar } from 'react-native-elements';
-import { color } from 'react-native-reanimated';
+import { Searchbar } from 'react-native-paper';
 
 
 
 
 const { width: WIDTH } = Dimensions.get('window')
 
-state = {
-    query: '',
-    fullData: []
-}
-
-const BackButtonContext = React.createContext()
-
 
 export default function HomeScreen() {
     return (
-        
-
-            <DataList />
-        
+        <DataList />
     )
 }
-
-
-
 
 
 const DataList = () => {
@@ -56,12 +41,47 @@ const DataList = () => {
         setIsFolder,
         CreateFileWindowVisible,
         setCreateFileWindowVisible,
+        storeDataOnDevice,
+        retrieveDataFromDevice,
+        dataIsLoading,
         setQuery,
         setFulldata,
         getQuery
-    } = React.useContext(ListStructureContext)
+    } = useContext(ListStructureContext)
+
+
+
+
 
     const navigation = useNavigation()
+    const [deleteWindowVisible, SetDeleteWindowVisible] = useState(false)
+    const [onDeleteItem, setOnDeleteItem] = useState(null)
+
+
+
+    useEffect(() => {
+        console.log(currentListStructure)
+        BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
+
+        AppState.addEventListener('change', _handleAppStateChange);
+        return () => {
+            AppState.removeEventListener('change', _handleAppStateChange);
+        }
+    }, []);
+
+
+
+
+    const _handleAppStateChange = (nextAppState) => {
+        console.log(nextAppState)
+        if (nextAppState === 'active') {
+            retrieveDataFromDevice()
+        }
+    }
+
+
+
+
 
 
     function _backButtonPressed() {
@@ -82,13 +102,13 @@ const DataList = () => {
     }
 
 
-    useEffect(() => {
-        console.log(currentListStructure)
-        BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
-    });
 
 
-    function _getClickedSubfolder(item) {
+
+
+
+    function _getClickedItem(item) {
+
         updateFolderHistory()
         if (item.isFolder) {
             //durchsucht das Array nach dem Item und ruft die OrdnerStruktur auf
@@ -102,8 +122,6 @@ const DataList = () => {
             setCurrentListStructure(subStructure)
         }
 
-
-
         if (item.isFolder == undefined) {
             setIsFolder(null)
         } else if (item.isFolder == true) {
@@ -113,10 +131,30 @@ const DataList = () => {
         }
     }
 
-    function _navigateToCardScreen() {
+
+
+    function _shuffleArray(cards) {
+        // let copy = { ...cards }  erstellt eine Kopie ohne Referenz
+        let copy = cards
+        var i,
+            j,
+            temp;
+        for (i = copy.length - 1; i > 0; i--) {
+            j = Math.floor(Math.random() * (i + 1));
+            temp = copy[i];
+            copy[i] = copy[j];
+            copy[j] = temp;
+        }
+        return copy
+    }
+
+
+    function _navigateToSession() {
+
         if (isFolder == false) {
             if (currentListStructure.length > 0) {
-                navigation.navigate('CardScreen', { cards: currentListStructure })
+                navigation.navigate('CardScreen', { mode: "sessionMode", card: currentListStructure[0] })
+
             } else {
                 alert('Füge deinem Set Karten hinzu um eine Session zu starten')
             }
@@ -124,47 +162,93 @@ const DataList = () => {
         }
     }
 
-    function handleSearch(text) {
-        
-        setQuery({getQuery: text})
+
+    function _navigateToCardScreen(item) {
+        navigation.navigate('CardScreen', { card: item, mode: "soloCard" })
     }
 
-    function renderHeader () {
+
+    function _navigateToCardCreator(item, mode) {
+
+        if (item.cardType = 'MC') {
+            navigation.navigate('CardCreator',
+                {
+                    ID: item.ID,
+                    cardType: item.cardType,
+                    questionText: item.questionText,
+                    cardLevel: item.cardLevel,
+                    cardTopic: item.cardTopic,
+                    numberOfRightAnswers: item.numberOfRightAnswers,
+                    answers: item.answers,
+                    mode: mode
+                })
+        } else if (item.cardType = 'Voc') {
+            navigation.navigate('CardCreator',
+                {
+                    ID: item.ID,
+                    cardType: item.cardType,
+                    questionText: item.questionText,
+                    cardLevel: item.cardLevel,
+                    solution: item.solution,
+                    mode: mode
+                })
+        }
+        SetDeleteWindowVisible(false)
+    }
+
+    function _showDeleteWindow(item) {
+        setOnDeleteItem(item)
+        SetDeleteWindowVisible(true)
+
+    }
+
+
+    function _deleteItemById(id) {
+        var copy = currentListStructure
+        var index
+
+        for (var i = 0; i < copy.length; i++) {  //Sucht den Index des Items im Array nach id
+            if (copy[i].ID === id)
+                index = i
+        }
+        copy.splice(index, 1)  //schmeißt das Item mit dem Index raus
+        setCurrentListStructure(copy)
+        SetDeleteWindowVisible(false)
+    }
+
+
+
+    function handleSearch(text) {
+        setQuery({ getQuery: text })
+    }
+
+
+    function renderHeader() {
         return (
             <Searchbar
                 placeholder="Suche"
                 onChangeText={handleSearch}
                 value={getQuery}
             />
-            
         )
     }
 
-   
 
-    
+
     return (
-        <BackButtonContext.Provider value={{
-            _backButtonPressed: _backButtonPressed
-        }}>
-        
-            
-        
         <View style={styles.container}>
-            
-            
-            
-                <SwipeView methode={ _backButtonPressed}
+            <SwipeView methode={_backButtonPressed}
             >
                 <FlatList
-                    ListHeaderComponent={renderHeader}
+                    //ListHeaderComponent={renderHeader}
                     data={currentListStructure}
                     keyExtractor={item => item.ID}
                     renderItem={({ item }) => (
                         <FolderListItem
-                            getSubFolder={_getClickedSubfolder}
                             item={item}
-                            callBackNavigation={_navigateToCardScreen}
+                            callBackItem={_getClickedItem}
+                            onDeleteWindow={_showDeleteWindow.bind(this)}
+                            onNavigateToCardScreen={_navigateToCardScreen}
                         />
                     )}
                     ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
@@ -173,25 +257,25 @@ const DataList = () => {
                     <ChooseFolderSetWindow
                         visible={CreateFileWindowVisible} />
                 </View>
-                {(isFolder) ? null : <TouchableOpacity style={styles.startSessionButton} onPress={() => _navigateToCardScreen()} >
+                {isFolder ? null : <TouchableOpacity style={styles.startSessionButton} onPress={() => _navigateToSession()} >
                     <Entypo name="controller-play" size={50} color="black" />
                 </TouchableOpacity>}
                 <TouchableOpacity style={styles.plusButton} onPress={() => setCreateFileWindowVisible(true)} >
                     <Entypo name="plus" size={50} color="black" />
                 </TouchableOpacity>
-
-                <TouchableOpacity style={styles.btnLogin}
-                /* onPress={() => this.regNewAcc()} */>
-                    <Text style={styles.text}>Login</Text>
-
-                </TouchableOpacity>
             </SwipeView>
+            {deleteWindowVisible ?
+                <DeleteWindow
+                    onDeleteWindow={() => SetDeleteWindowVisible(false)}
+                    onNavigateToCardCreator={_navigateToCardCreator}
+                    item={onDeleteItem}
+                    onDelete={_deleteItemById} /> : null}
         </View>
-        </BackButtonContext.Provider>
     );
+
 }
 
-export{BackButtonContext};
+
 
 const styles = StyleSheet.create({
     container: {
