@@ -7,14 +7,14 @@ export default class SessionOptionsPage extends React.Component {
 
 
     render() {
-        const { onsetLevel6included, onsetShuffleCards, level6included, shuffleCards, onStartSession } = this.props
+        const { onsetMaxLevelIncluded, onsetShuffleCards, maxLevelIncluded, shuffleCards, onStartSession } = this.props
         return (
             <View style={styles.container}>
                 <View style={[styles.optionView, { bottom: 350 }]}>
-                    <Text>Karten Level 6 mit abfragen?</Text>
+                    <Text>Karten Level  6 mit abfragen?</Text>
                     <CheckBox
-                        value={level6included}
-                        onValueChange={value => onsetLevel6included(value)}
+                        value={maxLevelIncluded}
+                        onValueChange={value => onsetMaxLevelIncluded(value)}
                         style={styles.checkbox}
                     />
                 </View>

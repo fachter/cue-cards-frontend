@@ -41,8 +41,6 @@ class ListStructureProvider extends React.Component {
         try {
             const value = await AsyncStorage.getItem('mainListStructure');
             if (value != null) {
-                console.log("TESTTEST")
-                console.log(JSON.parse(value))
                 this.state.currentListStructure = JSON.parse(value)
                 this.setDataIsLoading(false)
 
