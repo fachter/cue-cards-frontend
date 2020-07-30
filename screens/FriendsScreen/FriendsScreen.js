@@ -14,6 +14,8 @@ export default class FriendsScreen extends React.Component {
     constructor(props) {
         super(props)
 
+
+
         this.retrieveFriends()
 
 
@@ -108,7 +110,6 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
-
         backgroundColor: 'green',
         position: 'absolute',
         bottom: 10,

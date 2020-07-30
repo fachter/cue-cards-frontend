@@ -36,7 +36,6 @@ export default class AddFriendWindow extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-
     },
     background: {
         flex: 1,
@@ -46,7 +45,7 @@ const styles = StyleSheet.create({
     },
     window: {
         width: '80%',
-        height: '20%',
+        height: 120,
         borderRadius: 5,
         backgroundColor: 'gray',
         alignItems: 'center'
@@ -59,7 +58,6 @@ const styles = StyleSheet.create({
     },
     friendName: {
         width: '80%',
-        height: '10%',
         borderRadius: 5,
         borderWidth: 3,
         borderColor: 'grey',
@@ -69,6 +67,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
         padding: 10,
         textAlign: 'center',
+        margin: 5
     },
     addButton: {
         height: 60,
@@ -78,5 +77,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         margin: 10,
         backgroundColor: 'green',
+
     }
 });

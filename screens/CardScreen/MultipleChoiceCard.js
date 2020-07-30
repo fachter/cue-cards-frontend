@@ -9,13 +9,8 @@ export default class MulitpleChoiceCard extends React.Component {
 
 
     state = {
-        card: this.props.card,
-        sessionAnswers: this.props.answers,
         result: false,  // true/false, je nachdem ob richtig oder falsch beantwortet wurde
     }
-
-
-
 
     _checkChoiceAndSendBack = () => {
         this._checkTheChoice()
@@ -24,39 +19,42 @@ export default class MulitpleChoiceCard extends React.Component {
 
 
     _checkTheChoice = () => {
-        const { sessionAnswers } = this.state
+        const { answers } = this.props
         let numberOfRightSelection = 0
 
         //prüft wie viele Antworten richtig gewählt wurden
-        for (let i = 0; i < sessionAnswers.length; i++) {
-            if (sessionAnswers[i].checkState == true && sessionAnswers[i].isTrue == true) {
+        for (let i = 0; i < answers.length; i++) {
+            if (answers[i].checkState == true && answers[i].isTrue == true) {
                 numberOfRightSelection += 1
             }
         }
 
-        if (numberOfRightSelection == this.state.card.numberOfRightAnswers) {
+
+        if (numberOfRightSelection == this.props.card.numberOfRightAnswers) {
             this.state.result = true
+            this.setState({ result: true })
         } else {
-            this.state.result = false
+            this.setState({ result: false })
+
         }
     }
-
 
     _updateCheckState = (checkState, item) => {
         item.checkState = checkState
     }
 
-
     render() {
         return (
             <View style={styles.container}>
                 <FlatList
+                    extraData={this.props.answers}
                     data={this.props.answers}
                     keyExtractor={item => item.answerID}
                     renderItem={({ item }) => (
                         <AnswerListItem
                             item={item}
                             getCardState={this._updateCheckState}
+                            checkState={false}
                         />
                     )}
                     ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
@@ -69,9 +67,6 @@ export default class MulitpleChoiceCard extends React.Component {
         )
     }
 }
-
-
-
 
 
 const styles = StyleSheet.create({

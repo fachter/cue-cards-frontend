@@ -1,5 +1,5 @@
-import React, { useImperativeHandle, useState, useContext, useEffect } from 'react'
-import { View, Text, StyleSheet, Button, TouchableOpacity } from 'react-native'
+import React, { useState, useContext } from 'react'
+import { View, Text, StyleSheet } from 'react-native'
 
 
 
@@ -11,77 +11,63 @@ import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 
 
 
-
-
-
 export default function CardScreen({ route, navigation }) {
-
 
     const { currentListStructure, storeDataOnDevice } = useContext(ListStructureContext)
     const [currentCardindex, setCurrentCardindex] = useState(0)
     const [currentCard, setCurrentCard] = useState(route.params.card)
     const [mode, setMode] = useState(route.params.mode)
     const [startSession, setStartSession] = useState(false)
-    const [sessionCards, setSessionCards] = useState(currentListStructure)
-    const [level6included, setLevel6included] = useState(false)
+    let sessionCards = currentListStructure
+    // const [sessionCards, setSessionCards] = useState(currentListStructure)
+    const [maxLevelIncluded, setMaxLevelIncluded] = useState(true)
     const [shuffleCards, setShuffleCards] = useState(false)
+    //const [cardanswers, setCardanswers] = useState([])
     const maxCardLevel = 6
     const minCardLevel = 0
 
 
+    function _createRandomAnswers() {
 
-    useEffect(() => {
-        if (route.params.mode == "soloCard") {
-            setCurrentCard(route.params.card)
-        } else if (route.params.mode == "sessionMode") {
-            setCurrentCard(sessionCards[currentCardindex])
-        }
-    });
-
-
-
-
-    function _createSessionAnswers() {
         let answerPool = _getAllAnswersOfSameTopic()
         let maximalAnswers = 4
-        let sessionAnswers = []
+        let generatedAnswers = []
 
-        //fügt die richtigen Antworten der Karte hinzu
-        for (let i = 0; i < currentCard.answers.length; i++) {
-            console.log(currentCard)
-            let rightAnswer = {
-                answerValues: currentCard.answers[i],
-                isTrue: true,
-                checkState: false
-            }
-            sessionAnswers.push(rightAnswer)
-        }
-        //füllt die Antwortmöglichkeiten bis zur Zahl 4 auf mit zufällig Antworten aus dem Antwortenpool heraus
-        for (let i = currentCard.numberOfRightAnswers; i < maximalAnswers; i++) {
-            let randomAnswer = _getRandomAnswer(answerPool)
-            //Falls das Set zu wenige Karten und somit nicht genügen Antworten zum auffüllen enthält, füllt es die liste mit undifined Objecten auf
-            //Diese Objekte werden somit übersprungen
-            if (randomAnswer === undefined) {
-                break
-            } else {
-                let wrongAnswer = {
-                    answerValues: randomAnswer,
-                    isTrue: false,
+        if (currentCard.cardType == "MC") {
+            //fügt die richtigen Antworten der Karte hinzu
+            for (let i = 0; i < currentCard.answers.length; i++) {
+
+                let rightAnswer = {
+                    answerValues: currentCard.answers[i],
+                    isTrue: true,
                     checkState: false
                 }
-                sessionAnswers.push(wrongAnswer) // setate der copy nicht den hauptarray
+                generatedAnswers.push(rightAnswer)
+            }
+            //füllt die Antwortmöglichkeiten bis zur Zahl 4 auf mit zufällig Antworten aus dem Antwortenpool heraus
+            for (let i = currentCard.numberOfRightAnswers; i < maximalAnswers; i++) {
+                let randomAnswer = _getRandomAnswer(answerPool)
+                //Falls das Set zu wenige Karten und somit nicht genügen Antworten zum auffüllen enthält, füllt es die liste mit undifined Objecten auf
+                //Diese Objekte werden somit übersprungen
+                if (randomAnswer === undefined) {
+                    break
+                } else {
+                    let wrongAnswer = {
+                        answerValues: randomAnswer,
+                        isTrue: false,
+                        checkState: false
+                    }
+                    generatedAnswers.push(wrongAnswer) // setate der copy nicht den hauptarray
+                }
             }
         }
-        return sessionAnswers
+
+        return generatedAnswers
     }
 
 
 
-
-
-
     function _getAllAnswersOfSameTopic() {
-
         let answerPool = []
         for (let i = 0; i < currentListStructure.length; i++) {    //Druchlaufe alle Karten
             if (currentListStructure[i].ID == currentCard.ID) {   //Überspringt eigenen Antworten der Karte
@@ -98,8 +84,6 @@ export default function CardScreen({ route, navigation }) {
     }
 
 
-
-
     function _getRandomAnswer(answerPool) {
         let min = Math.ceil(0);
         let max = Math.floor(answerPool.length);
@@ -108,38 +92,37 @@ export default function CardScreen({ route, navigation }) {
     }
 
 
-
-
-
     function _updateCardValues(result) {
-        if (result == true) {
-            if (sessionCards[currentCardindex].cardLevel < maxCardLevel) {
-                sessionCards[currentCardindex].cardLevel += +1
-            }
-        } else {
-            if (sessionCards[currentCardindex].cardLevel > minCardLevel) {
-                sessionCards[currentCardindex].cardLevel += -1
-            }
-        }
 
-        if (mode == "soloCard") {
-            navigation.goBack()
-        } else if (mode == "sessionMode") {
-            if (currentCard.cardType == "MC") {
-                _createSessionAnswers()
+        for (let i = 0; i < sessionCards.length; i++) {
+            if (currentCard.ID == sessionCards[i].ID) {  //Sucht aktuelle im Set nach ID
+
+                //Je nach richtiger oder falscher Antwort wird die Karte Level auf bzw. abgestuft
+                if (result == true) {
+                    if (sessionCards[i].cardLevel < maxCardLevel) {
+
+                        sessionCards[i].cardLevel += +1
+                    }
+                } else {
+                    if (sessionCards[i].cardLevel > minCardLevel) {
+
+                        sessionCards[i].cardLevel += -1
+                    }
+                }
+                if (mode == "soloCard") {
+                    navigation.goBack()
+                } else if (mode == "sessionMode") {
+                    _nextCard()
+                }
+                storeDataOnDevice()
             }
-            _nextCard()
         }
-        storeDataOnDevice()
     }
 
     function _nextCard() {
         if (currentCardindex < sessionCards.length - 1) {
-            let nextCardIndex = currentCardindex + 1
-            setCurrentCardindex(nextCardIndex)
-            if (_ifCardMaxLevel) {
-                _nextCard()
-            }
+            setCurrentCard(sessionCards[currentCardindex + 1])
+            setCurrentCardindex(currentCardindex + 1)
         } else {
             alert("Dies war die letzte Karte, hier einen Endscreen einfügen!")
             navigation.goBack()
@@ -147,19 +130,15 @@ export default function CardScreen({ route, navigation }) {
     }
 
 
+    function _shuffleArray(array, createCopyWithReference) {
 
-    function _ifCardMaxLevel() {
-        //Überspringt bei Wahl das maximale Kartenlevel 
-        if (level6included == false) {
-            if (currentListStructure[currentCardindex].cardLevel == maxCardLevel) {
-                return true
-            }
+        let copy
+        if (createCopyWithReference === false) {
+            copy = JSON.parse(JSON.stringify(array))
+        } else {
+            copy = array
         }
-    }
 
-
-    function _shuffleArray(array) {
-        let copy = array
         var i,
             j,
             temp;
@@ -169,20 +148,19 @@ export default function CardScreen({ route, navigation }) {
             copy[i] = copy[j];
             copy[j] = temp;
         }
+
         return copy
     }
 
 
-
-
     function _renderTheRightCard() {
-        let answers = _createSessionAnswers()
+
+        let answers = _createRandomAnswers()
 
         //Voc und MC wird wsl. zusammen niemals vorkommen, hier nur für Testzwecke angebracht,
         if (currentCard.cardType == 'MC') {
             return (
-                <MultipleChoiceCard card={currentCard} getCardBack={_updateCardValues} answers={_shuffleArray(answers)} />
-
+                <MultipleChoiceCard card={currentCard} getCardBack={_updateCardValues} answers={_shuffleArray(answers, true)} />
             )
         } else if (currentCard.cardType == 'Voc')
             return (
@@ -194,12 +172,11 @@ export default function CardScreen({ route, navigation }) {
     function _setSessionOptionsAndStart() {
 
         if (shuffleCards == true) {
-            let shuffledCards = _shuffleArray(currentListStructure)
-            setSessionCards(shuffledCards)
+            sessionCards = _shuffleArray(currentListStructure, false)
+            setCurrentCard(sessionCards[currentCardindex])
+
         }
-        if (_ifCardMaxLevel()) {
-            _nextCard()
-        }
+
         setStartSession(true)
     }
 
@@ -220,6 +197,7 @@ export default function CardScreen({ route, navigation }) {
                         <View style={styles.cardInfos}>
                             {/* <View style={styles.topic}><Text style={{ color: 'white' }}>{currentListStructure[currentCardindex].cardTopic}</Text></View> */}
                             <View style={styles.level}><Text style={{ color: 'white' }}>{currentCard.cardLevel}</Text></View>
+                            <View style={styles.level}><Text style={{ color: 'green' }}>{currentCardindex}</Text></View>
                         </View>
                         <Text style={styles.questionText}>{currentCard.questionText}</Text>
                     </View>
@@ -230,13 +208,12 @@ export default function CardScreen({ route, navigation }) {
                 :
                 <SessionOptionsPage
                     onStartSession={_setSessionOptionsAndStart}
-                    onsetLevel6included={setLevel6included}
+                    onsetMaxLevelIncluded={setMaxLevelIncluded}
                     onsetShuffleCards={setShuffleCards}
-                    level6included={level6included}
+                    maxLevelIncluded={maxLevelIncluded}
                     shuffleCards={shuffleCards} />}
         </View >
     )
-
 }
 
 
