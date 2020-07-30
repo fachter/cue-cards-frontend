@@ -30,7 +30,6 @@ export default function HomeScreen() {
 
 
 const DataList = () => {
-
     const {
         updateFolderHistory,
         listHistoryArray,
@@ -60,7 +59,6 @@ const DataList = () => {
 
 
     useEffect(() => {
-        // console.log(currentListStructure)
         BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
 
         AppState.addEventListener('change', _handleAppStateChange);
@@ -85,20 +83,15 @@ const DataList = () => {
 
 
     function _backButtonPressed() {
-        var firstItemOfArray = 0
-        var stateOfPrevFolder
-
         //Holt sich die state "isFolder" der Vorherigen Ordnerstruktur
-        if (listHistoryArray.length > 1) {
-            stateOfPrevFolder = listHistoryArray[listHistoryArray.length - 2][firstItemOfArray].isFolder
 
+        if (listHistoryArray.length > 0) {
+            var lastFolderStructure = _getLastFolderStructure()
+            setCurrentListStructure(lastFolderStructure)
+            return true
         } else {
-            stateOfPrevFolder = true
+            return false
         }
-        var lastFolderStructure = _getLastFolderStructure()
-        setCurrentListStructure(lastFolderStructure)
-        setIsFolder(stateOfPrevFolder)
-        return true
     }
 
 
@@ -150,7 +143,6 @@ const DataList = () => {
 
 
     function _navigateToSession() {
-
         if (isFolder == false) {
             if (currentListStructure.length > 0) {
                 navigation.navigate('CardScreen', { mode: "sessionMode", card: currentListStructure[0] })
@@ -237,7 +229,7 @@ const DataList = () => {
 
     return (
         <View style={styles.container}>
-            <SwipeView methode={_backButtonPressed}
+            <SwipeView swipeRight={_backButtonPressed}
             >
                 <FlatList
                     //ListHeaderComponent={renderHeader}

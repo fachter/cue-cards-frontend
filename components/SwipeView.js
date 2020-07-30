@@ -34,16 +34,14 @@ class SwipeView extends Component {
         this.setState({ gestureName: gestureName });
         switch (gestureName) {
             case SWIPE_UP:
-                this.setState({ backgroundColor: 'red' });
                 break;
             case SWIPE_DOWN:
-                this.setState({ backgroundColor: 'green' });
                 break;
             case SWIPE_LEFT:
-                this.setState({ backgroundColor: 'blue' });
+
                 break;
             case SWIPE_RIGHT:
-                this.props.methode()
+                this.props.swipeRight()
                 break;
         }
     }
@@ -65,7 +63,6 @@ class SwipeView extends Component {
                 config={config}
                 style={{
                     flex: 1,
-                    backgroundColor: this.state.backgroundColor
                 }}
             >
                 {this.props.children}

@@ -1,5 +1,7 @@
 import React, { useContext, useState } from 'react'
-import { StyleSheet, View, TextInput, FlatList, TouchableOpacity, Dimensions, Text } from 'react-native'
+import { StyleSheet, View, TextInput, FlatList, TouchableOpacity, Dimensions, Text, TouchableWithoutFeedback } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler';
+
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -59,18 +61,20 @@ export default class MultipleChoice extends React.Component {
                     </View>
                 </TouchableOpacity>
                 <View style={styles.answers}>
-                    <FlatList
-                        data={this.state.answers}
-                        renderItem={({ item }) => (
-                            <AnswerItem
-                                item={item}
-                                getText={this._updateAnswerText.bind(this)}
-                                deleteCallback={this._deleteItemById.bind(this)}
-                            />
-                        )}
-                        keyExtractor={item => item.answerID}
-                        ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
-                    />
+                    <ScrollView>
+                        <FlatList
+                            data={this.state.answers}
+                            renderItem={({ item }) => (
+                                <AnswerItem
+                                    item={item}
+                                    getText={this._updateAnswerText.bind(this)}
+                                    deleteCallback={this._deleteItemById.bind(this)}
+                                />
+                            )}
+                            keyExtractor={item => item.answerID}
+                            ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
+                        />
+                    </ScrollView>
                 </View>
                 <TouchableOpacity style={styles.bottomView} onPress={() => this.props.onSave()}>
                     <View style={styles.saveButton}>

@@ -8,12 +8,9 @@ export default class AnswerListItem extends React.Component {
         checkState: false
     }
 
-
-
     componentDidUpdate() {
         this.props.getCardState(this.state.checkState, this.props.item)
     }
-
 
     _checkedUnchecked = () => {
         if (this.state.checkState) {
@@ -21,9 +18,7 @@ export default class AnswerListItem extends React.Component {
         } else {
             this.setState({ checkState: true })
         }
-
     }
-
 
     render() {
         return (
@@ -35,7 +30,6 @@ export default class AnswerListItem extends React.Component {
         )
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {

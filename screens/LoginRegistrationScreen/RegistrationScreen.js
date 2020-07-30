@@ -1,31 +1,43 @@
-import React from 'react';
-import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, ScrollView, StyleSheet } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import logo from '../../assets/Logo.png'
 import axios from 'axios';
+import { UserContext } from './UserProvider';
 
 
 
 
 const { width: WIDTH } = Dimensions.get('window')
 
-export default class RegistrationScreen extends React.Component {
+export default function RegistrationScreen({ navigation }) {
 
-    state = {
-        username: null,
-        password1: null,
-        password2: null,
-        email: null,
-        firstName: null,
-        lastName: null,
+    const { _storeToken, login } = useContext(UserContext)
+
+    const [username, setUsername] = useState(null)
+    const [password1, setPassword1] = useState(null)
+    const [password2, setPassword2] = useState(null)
+    const [email, setEmail] = useState(null)
+    const [fullName, setFullname] = useState(null)
+
+
+
+    function _regNewAcc() {
+        axios.post('https://cue-cards-app.herokuapp.com/register', {
+            username: 'username12',
+            password: 'password',
+            email: 'blaa@bla.de',
+            fullName: 'Philip'
+        })
+            .then((resp) => {
+                console.log(resp.data.jwt)
+                _storeToken(resp.data.jwt)
+                login()
+            }).catch((error) => {
+                console.log(error)
+            })
     }
 
-    _regNewAcc() {
-
-    }
-
-    _comparePasswords() {
-        const { password1, password2 } = this.state
-
+    function _comparePasswords() {
         return new Promise((resolve, reject) => {
             if (password1 === password2) {
                 resolve()
@@ -35,7 +47,7 @@ export default class RegistrationScreen extends React.Component {
         })
     }
 
-    _checkIfNull(value) {
+    function _checkIfNull(value) {
 
         return new Promise((resolve, reject) => {
             if (value != null) {
@@ -47,16 +59,15 @@ export default class RegistrationScreen extends React.Component {
     }
 
 
-    _checkValidityOfAllValues() {
-        const { username, password1, password2, email, firstName, lastName } = this.state
+    function _checkValidityOfAllValues() {
 
-        this._checkIfNull(username).then(() => {
-            this._checkIfNull(password1).then(() => {
-                this._checkIfNull(password2).then(() => {
-                    this._comparePasswords().then(() => {
-                        this._checkIfNull(email).then(() => {
-                            this._checkIfNull(firstName).then(() => {
-                                this._checkIfNull(lastName).then(() => {
+        _checkIfNull(username).then(() => {
+            _checkIfNull(password1).then(() => {
+                _checkIfNull(password2).then(() => {
+                    _comparePasswords().then(() => {
+                        _checkIfNull(email).then(() => {
+                            _checkIfNull(firstName).then(() => {
+                                _checkIfNull(lastName).then(() => {
 
                                     this.props.navigation.navigate('Login')
 
@@ -69,84 +80,66 @@ export default class RegistrationScreen extends React.Component {
         }).catch(error => console.log('Username ungültig: ' + error))
     }
 
-
-    render() {
-        return (
-            <ScrollView>
-                <View style={styles.container}>
-                    <Image source={logo} style={styles.logo} />
-
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder={'Benutzername'}
-                            placeholderTextColor={'white'}
-                            underlineColorAndroid={'transparent'}
-                            onChangeText={text => this.setState({ username: text })}
-                        />
-                    </View>
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder={'Passwort'}
-                            placeholderTextColor={'white'}
-                            underlineColorAndroid={'transparent'}
-                            secureTextEntry={true}
-                            onChangeText={text => this.setState({ password1: text })}
-                        />
-                    </View>
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder={'Passwort wiederholen'}
-                            placeholderTextColor={'white'}
-                            underlineColorAndroid={'transparent'}
-                            secureTextEntry={true}
-                            onChangeText={text => this.setState({ password2: text })}
-                        />
-                    </View>
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder={'E-Mail'}
-                            placeholderTextColor={'white'}
-                            underlineColorAndroid={'transparent'}
-                            secureTextEntry={true}
-                            onChangeText={text => this.setState({ email: text })}
-                        />
-                    </View>
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder={'Vorname'}
-                            placeholderTextColor={'white'}
-                            underlineColorAndroid={'transparent'}
-                            secureTextEntry={true}
-                            onChangeText={text => this.setState({ firstName: text })}
-                        />
-                    </View>
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder={'Nachname'}
-                            placeholderTextColor={'white'}
-                            underlineColorAndroid={'transparent'}
-                            secureTextEntry={true}
-                            onChangeText={text => this.setState({ lastName: text })}
-                        />
-                    </View>
-
-                    <TouchableOpacity
-                        style={styles.btnLogin}
-                        onPress={() => this._regNewAcc()}
-                    >
-                        <Text style={styles.text}>Registrieren</Text>
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
-
-        )
-    }
+    return (
+        <View style={styles.container}>
+            <Image source={logo} style={styles.logo} />
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Benutzername'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    onChangeText={text => setUsername(text)}
+                />
+            </View>
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Passwort'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    secureTextEntry={true}
+                    onChangeText={text => setPassword1(text)}
+                />
+            </View>
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Passwort wiederholen'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    secureTextEntry={true}
+                    onChangeText={text => setPassword2(text)}
+                />
+            </View>
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'E-Mail'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    secureTextEntry={true}
+                    onChangeText={text => setEmail(text)}
+                />
+            </View>
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Profilname'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    secureTextEntry={true}
+                    onChangeText={text => setFullname(text)}
+                />
+            </View>
+            <TouchableOpacity
+                style={styles.btnLogin}
+                onPress={() => _regNewAcc()}
+            >
+                <Text style={styles.text}>Registrieren</Text>
+            </TouchableOpacity>
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({

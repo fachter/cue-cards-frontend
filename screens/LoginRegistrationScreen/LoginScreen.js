@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Button, FlatList, StyleSheet } from 'react-native';
+import { UserContext } from './UserProvider'
 import logo from '../../assets/Logo.png';
-import { AsyncStorage } from 'react-native'
+
 import axios from 'axios';
 
 
@@ -9,71 +10,77 @@ import axios from 'axios';
 
 const { width: WIDTH } = Dimensions.get('window')
 
-export default function LoginScreen({ route, navigation }) {
+export default class LoginScreen extends React.Component {
 
+    static contextType = UserContext
 
-    function dataIsValid() {
-        return true
+    constructor(props) {
+        super(props)
+
     }
 
-    function _authenticateAcc() {
-        if (dataIsValid()) {
-            axios.post('http://167.172.170.147:8088/authenticate', {
-                username: 'username',
-                password: 'password',
-            })
-                .then((resp) => {
-                    console.log(resp.data.jwt)
-                    _storeToken(resp.data.jwt)
-                }).catch((error) => {
-                    console.log(error)
-                    alert("Login fehlgeschlagen")
+    componentDidMount() {
+        this.context.logout()
+    }
+
+    _authenticateAcc() {
+        const user = this.context
+
+        axios.post('https://cue-cards-app.herokuapp.com/authenticate', {
+            username: 'username',
+            password: 'password',
+        })
+            .then((res) => {
+                user._storeToken(res.data.jwt)
+                axios.get("https://cue-cards-app.herokuapp.com/get-users-data", {
+                    headers: {
+                        'Authorization': "Bearer " + res.data.jwt
+                    }
+                }).then(resp => {
+                    console.log(resp.data)
+                    //ListStrucutureprovider -> CurrentlistStrucutre aktualiseren
+                    user.login()
                 })
-        }
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            })
     }
 
+    render() {
 
-    async function _storeToken(token) {
-        try {
-            await AsyncStorage.setItem(
-                ' userToken', token
-            );
-        } catch (error) {
-            console.log("Error by storing token: " + error)
-        }
+        return (
+            <View style={styles.container}>
+                <Image source={logo} style={styles.logo} />
+                <View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Benutzername'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                    />
+                </View>
+                <View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Passwort'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        secureTextEntry={true}
+                    />
+                </View>
+                <TouchableOpacity style={styles.btnLogin} onPress={() => this._authenticateAcc()}>
+                    <Text text={styles.text}>Login</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.btnLogin} onPress={() => this.props.navigation.navigate('Registration')}>
+                    <Text text={styles.text}>Registrieren</Text>
+                </TouchableOpacity>
+            </View>
+        )
     }
-
-
-    return (
-        <View style={styles.container}>
-            <Image source={logo} style={styles.logo} />
-
-            <View>
-                <TextInput
-                    style={styles.input}
-                    placeholder={'Benutzername'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                />
-            </View>
-            <View>
-                <TextInput
-                    style={styles.input}
-                    placeholder={'Passwort'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    secureTextEntry={true}
-                />
-            </View>
-            <TouchableOpacity style={styles.btnLogin} onPress={() => _authenticateAcc()}>
-                <Text text={styles.text}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btnLogin} onPress={() => navigation.navigate('Registration')}>
-                <Text text={styles.text}>Registrieren</Text>
-            </TouchableOpacity>
-        </View>
-    )
 }
+
+
 
 
 const styles = StyleSheet.create({
