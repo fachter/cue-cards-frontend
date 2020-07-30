@@ -5,7 +5,9 @@ import * as Icon from '@expo/vector-icons'
 
 export default class AddRoomWindow extends React.Component {
 
-    
+    state = {
+        roomName: null
+    }
 
     render() {
         return (
@@ -19,9 +21,9 @@ export default class AddRoomWindow extends React.Component {
                         <View style={styles.window}>
                             <Text
                                 style={styles.headingText}>Gebe den Raumnamen ein</Text>
-                            <TextInput style={styles.friendName}></TextInput>
-                            <TouchableOpacity style={styles.addButton}  >
-                                <Icon.Feather name="check" size={50} />
+                            <TextInput style={styles.friendName} onChangeText={text => this.setState({ roomName: text })}></TextInput>
+                            <TouchableOpacity style={styles.addButton}   >
+                                <Icon.Feather name="check" size={50} onPress={newRoom => this.state.room.push(newRoom)} />
                             </TouchableOpacity>
                         </View>
                     </View>
