@@ -3,6 +3,8 @@ import {View, Text, StyleSheet, FlatList, Button, TouchableOpacity} from 'react-
 import { Entypo } from '@expo/vector-icons';
 import AddRoomWindow from './AddRoomWindow';
 import RoomListItem from './RoomListItem';
+import {SearchBar} from 'react-native-elements';
+import { Searchbar } from 'react-native-paper';
 
 
 
@@ -13,6 +15,7 @@ export default class RoomScreen extends React.Component {
 
 this.state= {
 addRoomWindowVisibility: false,
+search: '',
 rooms: [
     {
         id: 1,
@@ -30,7 +33,10 @@ rooms: [
 }
     }
 
-
+    _updateSearch = (search) => {
+        
+        this.setState({search});
+    };
 
 
     _setRoomAddWindowVisibility() {
@@ -43,8 +49,15 @@ rooms: [
 
     
 render() {
+        const {search} = this.state;
         return(
             <View style = {styles.container}>
+                <Text>Gebe die 6-stellige Raum-ID ein, um einem Raum beizutreten</Text>
+                <Searchbar
+                placeholder="Raum beitreten"
+                onChangeText={this._updateSearch}
+                value={search}
+                />
                 <FlatList
                 data={this.state.rooms}
                 keyExtractor={item => item.id}
