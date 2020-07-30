@@ -6,14 +6,22 @@ import { View, Text, StyleSheet } from 'react-native'
 export default class FriendListItem extends React.Component {
 
 
+    _OnlineOffline() {
+        if (this.props.item.isOnline === true) {
+            return 'green'
+        }
+        return 'gray'
+    }
 
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.innerView}>
                     <Text>{this.props.item.username}</Text>
-                </View>
+                    <View style={[styles.onlineState, { backgroundColor: this._OnlineOffline() }]}>
 
+                    </View>
+                </View>
             </View>
         )
     }
@@ -26,10 +34,22 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
         height: 60
+
     },
     innerView: {
         flex: 1,
-        backgroundColor: 'darkgrey'
+        backgroundColor: 'darkgrey',
+        flexDirection: 'row',
+    },
+    onlineState: {
+        height: 20,
+        width: 20,
+        borderWidth: 1,
+        borderRadius: 10,
+        borderColor: 'black',
+        alignSelf: 'center',
+        position: 'absolute',
+        right: 20
     }
 
 });

@@ -16,7 +16,8 @@ import FriendsScreen from '../screens/FriendsScreen/FriendsScreen';
 import SettingsScreen from '../screens/SettingsScreen/SettingsScreen';
 import StatisticsScreen from '../screens/StatisticsScreen/StatisticsScreen';
 import SendCardsScreen from '../screens/SendCardsScreen/SendCardsScreen';
-import LoginRegistrationScreen from '../screens/LoginRegistrationScreen/LoginRegistrationScreen';
+import LoginScreen from '../screens/LoginRegistrationScreen/LoginScreen'
+import RegistrationScreen from '../screens/LoginRegistrationScreen/RegistrationScreen'
 import RoomScreen from '../screens/RoomScreen/RoomScreen';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -154,12 +155,21 @@ const LoginRegistrationStackScreen = ({ navigation }) => (
         },
         headerTintColor: "white"
     }}>
-        <LoginRegistrationStack.Screen name="Login" component={LoginRegistrationScreen} options={{
+        <LoginRegistrationStack.Screen name="Login" component={LoginScreen} options={{
             headerRight: () => (
                 <Icon.Button name="ios-menu" size={25} backgroundColor="black" onPress={() => { navigation.openDrawer() }} />
             ),
             headerLeft: () => (
                 <Icon.Button name="ios-arrow-back" size={25} backgroundColor="black" />
+
+            )
+        }} />
+        <LoginRegistrationStack.Screen name="Registration" component={RegistrationScreen} options={{
+            headerRight: () => (
+                <Icon.Button name="ios-menu" size={25} backgroundColor="black" onPress={() => { navigation.openDrawer() }} />
+            ),
+            headerLeft: () => (
+                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="black" onPress={() => navigation.navigate('Login')} />
 
             )
         }} />

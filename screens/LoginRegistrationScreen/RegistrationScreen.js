@@ -11,61 +11,70 @@ const { width: WIDTH } = Dimensions.get('window')
 export default class RegistrationScreen extends React.Component {
 
     state = {
-        data: [],
         username: null,
-        password: null,
+        password1: null,
+        password2: null,
         email: null,
         firstName: null,
-        secondName: null,
+        lastName: null,
     }
 
-    componentDidMount() {
-        this.getapiData()
+    _regNewAcc() {
+
     }
 
-    async getapiData() {
-        let resp = await axios.get('http://167.172.170.147:8088/testapicall')
-        console.log(resp.data)
-        this.setState({ data: resp.data })
-    }
+    _comparePasswords() {
+        const { password1, password2 } = this.state
 
-  
-
-     _retrieveData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('userToken')
-            if (value != null) {
-                console.log(value)
+        return new Promise((resolve, reject) => {
+            if (password1 === password2) {
+                resolve()
+            } else {
+                reject('Passwörter stimmen nicht überein')
             }
-        } catch (error) {
-            console.log("Error by retrieve token:" + error)
-        }
+        })
     }
 
-  
+    _checkIfNull(value) {
 
-    testApiCall() {
-
-        const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQaGlsaXAxIiwiZXhwIjoxNTkxMjAwOTk1LCJpYXQiOjE1OTAzMzY5OTV9.KKvdVNXx6ZPymSQfhn6fJFuVdhd9O3LYeacSEge1wtc'
-
-        const AuthStr = 'Bearer '.concat(token);
-        axios.get('http://167.172.170.147:8088/testApiCall')
-            .then(response => {
-                // If request is good...
-                console.log(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        return new Promise((resolve, reject) => {
+            if (value != null) {
+                resolve(value)
+            } else {
+                reject(value)
+            }
+        })
     }
 
+
+    _checkValidityOfAllValues() {
+        const { username, password1, password2, email, firstName, lastName } = this.state
+
+        this._checkIfNull(username).then(() => {
+            this._checkIfNull(password1).then(() => {
+                this._checkIfNull(password2).then(() => {
+                    this._comparePasswords().then(() => {
+                        this._checkIfNull(email).then(() => {
+                            this._checkIfNull(firstName).then(() => {
+                                this._checkIfNull(lastName).then(() => {
+
+                                    this.props.navigation.navigate('Login')
+
+                                }).catch(error => console.log('Lastname ungültig: ' + error))
+                            }).catch(error => console.log('Firstname ungültig: ' + error))
+                        }).catch(error => console.log('Email ungültig: ' + error))
+                    }).catch(() => console.log('Passwörter stimmen nicht überein'))
+                }).catch(error => console.log('Password 2 ungültig: ' + error))
+            }).catch(error => console.log('Password 1 ungültig: ' + error))
+        }).catch(error => console.log('Username ungültig: ' + error))
+    }
 
 
     render() {
         return (
             <ScrollView>
                 <View style={styles.container}>
-                <Image source={logo} style={styles.logo} /> 
+                    <Image source={logo} style={styles.logo} />
 
                     <View>
                         <TextInput
@@ -83,7 +92,7 @@ export default class RegistrationScreen extends React.Component {
                             placeholderTextColor={'white'}
                             underlineColorAndroid={'transparent'}
                             secureTextEntry={true}
-                            onChangeText={text => this.setState({ password: text })}
+                            onChangeText={text => this.setState({ password1: text })}
                         />
                     </View>
                     <View>
@@ -93,7 +102,7 @@ export default class RegistrationScreen extends React.Component {
                             placeholderTextColor={'white'}
                             underlineColorAndroid={'transparent'}
                             secureTextEntry={true}
-                            onChangeText={text => this.setState({ passwordcheck: text })}
+                            onChangeText={text => this.setState({ password2: text })}
                         />
                     </View>
                     <View>
@@ -123,17 +132,15 @@ export default class RegistrationScreen extends React.Component {
                             placeholderTextColor={'white'}
                             underlineColorAndroid={'transparent'}
                             secureTextEntry={true}
-                            onChangeText={text => this.setState({ secondName: text })}
+                            onChangeText={text => this.setState({ lastName: text })}
                         />
                     </View>
 
                     <TouchableOpacity
                         style={styles.btnLogin}
-                        onPress={() => this.regNewAcc()}
-
+                        onPress={() => this._regNewAcc()}
                     >
                         <Text style={styles.text}>Registrieren</Text>
-
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -174,7 +181,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'center',
         marginHorizontal: 25,
-
         marginBottom: 10
     },
     text: {

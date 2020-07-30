@@ -9,37 +9,34 @@ import axios from 'axios';
 
 const { width: WIDTH } = Dimensions.get('window')
 
-export default class LoginScreen extends React.Component {
+export default function LoginScreen({ route, navigation }) {
 
 
-    dataIsValid() {
+    function dataIsValid() {
         return true
     }
 
-
-
-    _authenticateAcc() {
-        if (this.dataIsValid()) {
-
+    function _authenticateAcc() {
+        if (dataIsValid()) {
             axios.post('http://167.172.170.147:8088/authenticate', {
                 username: 'username',
                 password: 'password',
             })
                 .then((resp) => {
                     console.log(resp.data.jwt)
-                    this._storeToken(resp.data.jwt)
+                    _storeToken(resp.data.jwt)
                 }).catch((error) => {
                     console.log(error)
+                    alert("Login fehlgeschlagen")
                 })
         }
     }
 
 
-
-    _storeToken = async (token) => {
+    async function _storeToken(token) {
         try {
             await AsyncStorage.setItem(
-               ' userToken', token
+                ' userToken', token
             );
         } catch (error) {
             console.log("Error by storing token: " + error)
@@ -47,46 +44,37 @@ export default class LoginScreen extends React.Component {
     }
 
 
+    return (
+        <View style={styles.container}>
+            <Image source={logo} style={styles.logo} />
 
-
-
-    render() {
-
-        return (
-            <View style={styles.container}>
-                <Image source={logo} style={styles.logo} />
-
-                <View>
-                    <TextInput
-                        style={styles.input}
-                        placeholder={'Benutzername'}
-                        placeholderTextColor={'white'}
-                        underlineColorAndroid={'transparent'}
-                    />
-                </View>
-                <View>
-                    <TextInput
-                        style={styles.input}
-                        placeholder={'Passwort'}
-                        placeholderTextColor={'white'}
-                        underlineColorAndroid={'transparent'}
-                        secureTextEntry={true}
-                    />
-                </View>
-                <TouchableOpacity style={styles.btnLogin} onPress={() => this._authenticateAcc()}>
-                    <Text text={styles.text}>Login</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.btnLogin} onPress={() => this._retrieveData()}>
-                    <Text text={styles.text}>Login</Text>
-                </TouchableOpacity>
-
-
-
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Benutzername'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                />
             </View>
-
-        )
-    }
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Passwort'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    secureTextEntry={true}
+                />
+            </View>
+            <TouchableOpacity style={styles.btnLogin} onPress={() => _authenticateAcc()}>
+                <Text text={styles.text}>Login</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.btnLogin} onPress={() => navigation.navigate('Registration')}>
+                <Text text={styles.text}>Registrieren</Text>
+            </TouchableOpacity>
+        </View>
+    )
 }
+
 
 const styles = StyleSheet.create({
 

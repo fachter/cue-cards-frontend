@@ -1,5 +1,7 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+
 
 import { InternetConnectionProvider } from './API/InternetConnection'
 
@@ -9,64 +11,56 @@ import axios from 'axios'
 
 
 import Sidebar from './navigation/Sidebar'
+import LoginScreen from './screens/LoginRegistrationScreen/LoginScreen'
 
 
-export default class App extends React.Component {
+export default function App({ navigation }) {
 
-  constructor(props) {
-    super(props)
+  useEffect(() => {
 
-    this.state = {
-      jwt: null,
-
-    }
-
-    this._retrieveToken().then(() => {
-      this._getUserData()
+    _retrieveToken().then(token => {
+      _getUserData(token)
     })
-  }
+  })
 
 
 
 
-
-  _getUserData() {
+  function _getUserData(token) {
     axios.get("http://167.172.170.147:8088/get-users-data", {
       headers: {
-        'Authorization': "Bearer " + this.state.jwt
+        'Authorization': "Bearer " + token
       }
     }).then(resp => {
-      console.log('test')
       console.log(resp.data)
+      alert(true)
     })
       .catch((err) => {
         console.log(err)
+        //navigiere zum LoginScreen 
       })
   }
 
 
-  _retrieveToken = async () => {
+  async function _retrieveToken() {
     try {
       const token = await AsyncStorage.getItem('userToken')
       if (token != null) {
-        this.setState({ jwt: token })
+        return token
       }
     } catch (error) {
       console.log("Error by retrieve token:" + error)
+
     }
   }
 
 
+  return (
+    <InternetConnectionProvider>
+      <Sidebar />
+    </InternetConnectionProvider>
+  )
 
-
-  render() {
-    return (
-      <InternetConnectionProvider>
-        <Sidebar />
-      </InternetConnectionProvider>
-
-    )
-  }
 }
 
 

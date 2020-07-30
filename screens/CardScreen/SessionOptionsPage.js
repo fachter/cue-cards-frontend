@@ -11,7 +11,7 @@ export default class SessionOptionsPage extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={[styles.optionView, { bottom: 350 }]}>
-                    <Text>Karten Level  6 mit abfragen?</Text>
+                    <Text>Maximales Kartenlevel mit abfragen?</Text>
                     <CheckBox
                         value={maxLevelIncluded}
                         onValueChange={value => onsetMaxLevelIncluded(value)}

@@ -319,9 +319,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'center',
         marginHorizontal: 25
-
     },
-
 })
 
 
