@@ -133,7 +133,7 @@ export default function RegistrationScreen({ navigation }) {
                 />
             </View>
             <TouchableOpacity
-                style={styles.btnLogin}
+                style={styles.button}
                 onPress={() => _regNewAcc()}
             >
                 <Text style={styles.text}>Registrieren</Text>
@@ -167,14 +167,14 @@ const styles = StyleSheet.create({
         color: 'white'
 
     },
-    btnLogin: {
-        width: WIDTH - 55,
+    button: {
+        width: 100,
         height: 45,
         borderRadius: 25,
         backgroundColor: 'white',
         justifyContent: 'center',
-        marginHorizontal: 25,
-        marginBottom: 10
+        alignItems: 'center',
+        margin: 5,
     },
     text: {
         color: 'black',

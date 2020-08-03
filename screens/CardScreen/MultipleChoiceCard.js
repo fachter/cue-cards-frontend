@@ -10,7 +10,9 @@ export default class MulitpleChoiceCard extends React.Component {
 
     state = {
         result: false,  // true/false, je nachdem ob richtig oder falsch beantwortet wurde
-        backgroundColor: "grey"
+        backgroundColor: "#111111",
+        answers: this.props.answers
+
     }
 
     _checkChoiceAndSendBack = () => {
@@ -18,10 +20,11 @@ export default class MulitpleChoiceCard extends React.Component {
         setTimeout(() => {
             this.props.getCardBack(this.state.result)
         }, 1000);
+
     }
 
     _checkTheChoice = () => {
-        const { answers } = this.props
+        const { answers } = this.state
         let numberOfRightSelection = 0
 
         //prüft wie viele Antworten richtig gewählt wurden
@@ -48,14 +51,15 @@ export default class MulitpleChoiceCard extends React.Component {
     _updateCheckState = (checkState, item) => {
 
         item.checkState = checkState
+        console.log(this.state.answers)
     }
 
     render() {
         return (
             <View style={[styles.container, { backgroundColor: this.state.backgroundColor }]}>
                 <FlatList
-                    extraData={this.props.answers}
-                    data={this.props.answers}
+                    extraData={this.state.answers}
+                    data={this.state.answers}
                     keyExtractor={item => item.answerID}
                     renderItem={({ item }) => (
                         <AnswerListItem
@@ -94,6 +98,6 @@ const styles = StyleSheet.create({
     },
     listSeperator: {
         height: StyleSheet.hairlineWidth,
-        backgroundColor: 'black'
+        backgroundColor: 'white'
     }
 });

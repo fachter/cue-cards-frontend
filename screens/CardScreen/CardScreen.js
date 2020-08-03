@@ -44,26 +44,48 @@ export default function CardScreen({ route, navigation }) {
                 }
                 generatedAnswers.push(rightAnswer)
             }
+
+
             //füllt die Antwortmöglichkeiten bis zur Zahl 4 auf mit zufällig Antworten aus dem Antwortenpool heraus
             for (let i = currentCard.answers.length; i < maximalAnswers; i++) {
-                console.log("..")
-                let randomAnswer = _getRandomAnswer(answerPool)
 
-                //Falls das Set zu wenige Karten und somit nicht genügen Antworten zum auffüllen enthält, füllt es die liste mit undifined Objecten auf
-                //Diese Objekte werden somit übersprungen
-                if (randomAnswer === undefined) {
-                    break
-                } else {
-                    let wrongAnswer = {
-                        answerValues: randomAnswer,
-                        isTrue: false,
-                        checkState: false
+                let trys = 0
+                let randomAnswer
+
+                //wenn 3 mal eine Frage hinzugefügt wird die schon gezogen wurde, bricht das generieren von Fragen ab (zu wenig Fragen vorhanden)
+                while (trys < 3) {
+
+                    randomAnswer = _getRandomAnswer(answerPool)
+
+                    //Falls das Set zu wenige Karten und somit nicht genügen Antworten zum auffüllen enthält, füllt es die liste mit undifined Objecten auf
+                    //Diese Objekte werden somit übersprungen
+                    if (randomAnswer === undefined) {
+                        break
                     }
-                    generatedAnswers.push(wrongAnswer) // setate der copy nicht den hauptarray
+
+                    //Prüft ob die Antwort schon vorhanden ist
+                    let counter = 0
+                    for (let j = 0; j < generatedAnswers.length; j++) {
+                        if (generatedAnswers[j].answerValues.ID != randomAnswer.ID) {
+                            counter = counter + 1
+                        }
+                    }
+                    //falls nicht wird diese hinzugefügt & While scheilfe wird abgebrochen -> neue Antwort
+                    //falls schon wird ein neuer versuch gestartet
+                    if (counter === generatedAnswers.length) {
+                        let wrongAnswer = {
+                            answerValues: randomAnswer,
+                            isTrue: false,
+                            checkState: false
+                        }
+                        generatedAnswers.push(wrongAnswer) // setate der copy nicht den hauptarray
+                        trys = 3
+                    } else {
+                        trys = trys + 1
+                    }
                 }
             }
         }
-
         return generatedAnswers
     }
 
@@ -97,8 +119,6 @@ export default function CardScreen({ route, navigation }) {
 
     function _updateCardValues(result) {
 
-
-
         for (let i = 0; i < sessionCards.length; i++) {
             if (currentCard.cardID == sessionCards[i].cardID) {  //Sucht aktuelle im Set nach ID
 
@@ -124,15 +144,7 @@ export default function CardScreen({ route, navigation }) {
         }
     }
 
-    function _nextCard() {
-        if (currentCardindex < sessionCards.length - 1) {
-            setCurrentCard(sessionCards[currentCardindex + 1])
-            setCurrentCardindex(currentCardindex + 1)
-        } else {
-            alert("Dies war die letzte Karte, hier einen Endscreen einfügen!")
-            navigation.goBack()
-        }
-    }
+
 
 
     function _shuffleArray(array, createCopyWithReference) {
@@ -176,12 +188,33 @@ export default function CardScreen({ route, navigation }) {
     }
 
 
+    function _nextCard() {
+        if (currentCardindex < sessionCards.length - 1) {
+            let nextIndex = 1
+            while (sessionCards[currentCardindex + nextIndex].cardLevel === maxCardLevel) {
+                nextIndex = nextIndex + 1
+            }
+            setCurrentCard(sessionCards[currentCardindex + nextIndex])
+            setCurrentCardindex(currentCardindex + nextIndex)
+
+        } else {
+            alert("Dies war die letzte Karte, hier einen Endscreen einfügen!")
+            navigation.goBack()
+        }
+    }
+
+
     function _setSessionOptionsAndStart() {
 
         if (shuffleCards == true) {
             sessionCards = _shuffleArray(currentListStructure, false)
             setCurrentCard(sessionCards[currentCardindex])
+        }
 
+        if (maxLevelIncluded == false) {
+            if (currentCard.cardLevel === maxCardLevel) {
+                _nextCard()
+            }
         }
 
         setStartSession(true)
@@ -204,7 +237,6 @@ export default function CardScreen({ route, navigation }) {
                         <View style={styles.cardInfos}>
                             {/* <View style={styles.topic}><Text style={{ color: 'white' }}>{currentListStructure[currentCardindex].cardTopic}</Text></View> */}
                             <View style={styles.level}><Text style={{ color: 'white' }}>{currentCard.cardLevel}</Text></View>
-                            <View style={styles.level}><Text style={{ color: 'green' }}>{currentCardindex}</Text></View>
                         </View>
                         <Text style={styles.questionText}>{currentCard.questionText}</Text>
                     </View>

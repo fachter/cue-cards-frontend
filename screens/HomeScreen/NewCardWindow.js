@@ -1,5 +1,7 @@
 import React from 'react'
 import { View, Modal, TouchableOpacity, StyleSheet, Text } from 'react-native'
+import { AntDesign } from '@expo/vector-icons';
+
 
 export default class NewCardWindow extends React.Component {
 
@@ -8,29 +10,31 @@ export default class NewCardWindow extends React.Component {
     render() {
         const { onNavigateToCardCreator, onSetVisibility } = this.props
         return (
-            <View>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={this.props.visible}
-                    onRequestClose={() => onSetVisibility(false)}
-                >
-                    <View style={styles.background}>
-                        <Text style={styles.headingText}>Was möchtest du erstellen?</Text>
-                        <View style={styles.window}>
-                            <TouchableOpacity style={styles.windowButtons} onPress={() => onNavigateToCardCreator("MC")}>
-                                <Text style={styles.buttonText}>Multiplechoice</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={[styles.windowButtons, { marginTop: 20 }]} onPress={() => onNavigateToCardCreator("SC")}>
-                                <Text style={styles.buttonText}>Singlechoice</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={[styles.windowButtons, { marginTop: 20 }]} onPress={() => onNavigateToCardCreator("FT")}>
-                                <Text style={styles.buttonText}>Freitext</Text>
-                            </TouchableOpacity>
-                        </View>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={this.props.visible}
+                onRequestClose={() => onSetVisibility(false)}
+            >
+                <View style={styles.background}>
+                    <TouchableOpacity style={styles.cancelButton} onPress={() => onSetVisibility(false)}>
+                        <AntDesign name="closecircleo" size={24} color="white" />
+                    </TouchableOpacity>
+                    <Text style={styles.headingText}>Was möchtest du erstellen?</Text>
+                    <View style={styles.window}>
+                        <TouchableOpacity style={styles.windowButtons} onPress={() => onNavigateToCardCreator("MC")}>
+                            <Text style={styles.buttonText}>Multiplechoice</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.windowButtons, { marginTop: 20 }]} onPress={() => onNavigateToCardCreator("SC")}>
+                            <Text style={styles.buttonText}>Singlechoice</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.windowButtons, { marginTop: 20 }]} onPress={() => onNavigateToCardCreator("FT")}>
+                            <Text style={styles.buttonText}>Freitext</Text>
+                        </TouchableOpacity>
                     </View>
-                </Modal>
-            </View>
+                </View>
+            </Modal>
         )
     }
 }
@@ -77,6 +81,16 @@ const styles = StyleSheet.create({
         backgroundColor: 'green',
 
     },
+    cancelButton: {
+        width: 30,
+        height: 30,
+        borderRadius: 5,
+        alignSelf: 'flex-end',
+        margin: 5,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+
 
 
 });

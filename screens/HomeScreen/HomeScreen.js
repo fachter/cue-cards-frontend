@@ -62,7 +62,7 @@ const DataList = () => {
 
 
     useEffect(() => {
-        console.log("reloead")
+        console.log(currentListStructure)
         BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
 
         AppState.addEventListener('change', _handleAppStateChange);

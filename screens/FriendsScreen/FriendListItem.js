@@ -33,13 +33,16 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingLeft: 10,
         paddingRight: 10,
-        height: 60
+        paddingBottom: 10,
+        height: 80,
+
 
     },
     innerView: {
         flex: 1,
-        backgroundColor: 'darkgrey',
+        backgroundColor: '#696969',
         flexDirection: 'row',
+        borderRadius: 5
     },
     onlineState: {
         height: 20,

@@ -6,7 +6,7 @@ const UserContext = React.createContext()
 export default class UserProvider extends React.Component {
 
     state = {
-        isLoggedin: true,
+        isLoggedin: false,
     }
 
 

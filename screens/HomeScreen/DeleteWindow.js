@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, Modal, TouchableOpacity, Text } from 'react-native'
+import { AntDesign } from '@expo/vector-icons';
 
 
 export default class DeleteWindow extends React.Component {
@@ -22,14 +23,14 @@ export default class DeleteWindow extends React.Component {
                 transparent={true}>
                 <View style={styles.background}>
                     <View style={styles.window}>
-                        <TouchableOpacity style={styles.button} onPress={() => onDeleteWindow()}>
-                            <Text>x</Text>
+                        <TouchableOpacity style={styles.cancelButton} onPress={() => onDeleteWindow()}>
+                            <AntDesign name="closecircleo" size={24} color="white" />
                         </TouchableOpacity>
                         {this._checkIfItemIsFolderOrSet() ? null : <TouchableOpacity style={styles.button} onPress={() => onNavigateToCardCreator(item)} >
-                            <Text>bearbeiten</Text>
+                            <Text style={styles.buttonText}>bearbeiten</Text>
                         </TouchableOpacity>}
                         <TouchableOpacity style={styles.button} onPress={() => onDelete(item.ID)}>
-                            <Text>löschen</Text>
+                            <Text style={styles.buttonText}>löschen</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -49,19 +50,33 @@ const styles = StyleSheet.create({
 
     },
     window: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'flex-end',
+        flexDirection: 'column',
         width: '80%',
         height: '20%',
-        borderRadius: 5,
-        backgroundColor: 'red'
     },
     button: {
-        height: 50,
-        width: 50,
-        backgroundColor: 'blue'
+        flexDirection: 'row',
+        backgroundColor: 'grey',
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 5,
+    },
+    buttonText: {
+        fontSize: 20,
+        fontStyle: 'italic',
+        margin: 10
+    },
+    cancelButton: {
+        width: 30,
+        height: 30,
+        borderRadius: 5,
+        alignSelf: 'flex-end',
+        margin: 5,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
+
 });
 
 

@@ -25,26 +25,26 @@ export default class LoginScreen extends React.Component {
 
     _authenticateAcc() {
         const user = this.context
-
-        axios.post('https://cue-cards-app.herokuapp.com/authenticate', {
-            username: 'username',
-            password: 'password',
-        })
-            .then((res) => {
-                user._storeToken(res.data.jwt)
-                axios.get("https://cue-cards-app.herokuapp.com/get-users-data", {
-                    headers: {
-                        'Authorization': "Bearer " + res.data.jwt
-                    }
-                }).then(resp => {
-                    console.log(resp.data)
-                    //ListStrucutureprovider -> CurrentlistStrucutre aktualiseren
-                    user.login()
-                })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-            })
+        user.login()
+        // axios.post('https://cue-cards-app.herokuapp.com/authenticate', {
+        //     username: 'username',
+        //     password: 'password',
+        // })
+        //     .then((res) => {
+        //         user._storeToken(res.data.jwt)
+        //         axios.get("https://cue-cards-app.herokuapp.com/get-users-data", {
+        //             headers: {
+        //                 'Authorization': "Bearer " + res.data.jwt
+        //             }
+        //         }).then(resp => {
+        //             console.log(resp.data)
+        //             //ListStrucutureprovider -> CurrentlistStrucutre aktualiseren
+        //             user.login()
+        //         })
+        //             .catch((err) => {
+        //                 console.log(err)
+        //             })
+        //     })
     }
 
     render() {
@@ -69,11 +69,11 @@ export default class LoginScreen extends React.Component {
                         secureTextEntry={true}
                     />
                 </View>
-                <TouchableOpacity style={styles.btnLogin} onPress={() => this._authenticateAcc()}>
-                    <Text text={styles.text}>Login</Text>
+                <TouchableOpacity style={styles.button} onPress={() => this._authenticateAcc()}>
+                    <Text style={styles.text}>Login</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btnLogin} onPress={() => this.props.navigation.navigate('Registration')}>
-                    <Text text={styles.text}>Registrieren</Text>
+                <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Registration')}>
+                    <Text style={styles.text}>Registrieren</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -108,18 +108,21 @@ const styles = StyleSheet.create({
         color: 'white'
 
     },
-    btnLogin: {
-        width: WIDTH - 55,
+    button: {
+        width: 100,
         height: 45,
         borderRadius: 25,
         backgroundColor: 'white',
         justifyContent: 'center',
-        marginHorizontal: 25
+        alignItems: 'center',
+        margin: 5,
+
 
     },
     text: {
         color: 'black',
         fontSize: 16,
+        fontStyle: 'italic',
         textAlign: 'center'
     }
 })

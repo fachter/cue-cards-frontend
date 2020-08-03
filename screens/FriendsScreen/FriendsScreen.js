@@ -108,7 +108,7 @@ export default class FriendsScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'grey'
+        backgroundColor: "#111111",
     },
     listSeperator: {
         height: StyleSheet.hairlineWidth,

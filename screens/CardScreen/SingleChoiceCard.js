@@ -9,7 +9,7 @@ export default class SingleChoiceCard extends React.Component {
 
     state = {
         result: false,  // true/false, je nachdem ob richtig oder falsch beantwortet wurde
-        backgroundColor: "grey",
+        backgroundColor: "#111111",
         answers: this.props.answers
     }
 
@@ -23,7 +23,7 @@ export default class SingleChoiceCard extends React.Component {
 
 
     _checkTheChoice = () => {
-        const { answers } = this.props
+        const { answers } = this.state
         let numberOfRightSelection = 0
 
         //prüft wie viele Antworten richtig gewählt wurden
@@ -48,21 +48,15 @@ export default class SingleChoiceCard extends React.Component {
     _updateCheckState = (checkstate, item) => {
         let copy = this.state.answers
 
-        // for (let i = 0; i < copy.length; i++) {
-        //     if (item.answerValues.ID === copy[i].answerValues.ID) {
-        //         console.log(item.answerValues.ID)
-        //         copy[i].checkState = true
-        //     } else {
-        //         copy[i].checkState = false
-        //     }
-        // }
-
         for (let i = 0; i < copy.length; i++) {
-            copy[i].checkState = false
+            if (item.answerValues.ID === copy[i].answerValues.ID) {
+                copy[i].checkState = true
+            } else {
+                copy[i].checkState = false
+            }
         }
-
         this.setState({ answers: copy })
-        console.log(copy)
+
     }
 
 
@@ -71,7 +65,7 @@ export default class SingleChoiceCard extends React.Component {
             <View style={[styles.container, { backgroundColor: this.state.backgroundColor }]}>
                 <FlatList
                     extraData={this.state.answers}
-                    data={this.props.answers}
+                    data={this.state.answers}
                     keyExtractor={item => item.answerValues.ID}
                     renderItem={({ item }) => (
                         <AnswerListItem
@@ -110,6 +104,6 @@ const styles = StyleSheet.create({
     },
     listSeperator: {
         height: StyleSheet.hairlineWidth,
-        backgroundColor: 'black'
+        backgroundColor: 'white'
     }
 });

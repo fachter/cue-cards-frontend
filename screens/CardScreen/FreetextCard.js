@@ -20,7 +20,7 @@ export default class Freetext extends React.Component {
     state = {
         solution: 'tippe für die Lösung',
         choice: null,
-        backgroundColor: "grey"
+        backgroundColor: "#111111",
     }
 
 
