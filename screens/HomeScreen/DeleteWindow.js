@@ -25,7 +25,7 @@ export default class DeleteWindow extends React.Component {
                         <TouchableOpacity style={styles.button} onPress={() => onDeleteWindow()}>
                             <Text>x</Text>
                         </TouchableOpacity>
-                        {this._checkIfItemIsFolderOrSet() ? null : <TouchableOpacity style={styles.button} onPress={() => onNavigateToCardCreator(item, "editMode")} >
+                        {this._checkIfItemIsFolderOrSet() ? null : <TouchableOpacity style={styles.button} onPress={() => onNavigateToCardCreator(item)} >
                             <Text>bearbeiten</Text>
                         </TouchableOpacity>}
                         <TouchableOpacity style={styles.button} onPress={() => onDelete(item.ID)}>

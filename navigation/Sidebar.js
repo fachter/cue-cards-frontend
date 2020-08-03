@@ -10,8 +10,12 @@ import { ListStructureProvider } from '../screens/HomeScreen/ListStructureProvid
 import { UserContext } from '../screens/LoginRegistrationScreen/UserProvider';
 
 import HomeScreen from '../screens/HomeScreen/HomeScreen'
-import CardCreatorScreen from '../screens/CardCreatorScreen/CardCreatorScreen'
 import CardScreen from '../screens/CardScreen/CardScreen'
+import MultipleChoice from '../screens/CardCreatorScreen/MultipleChoice';
+import SingleChoice from '../screens/CardCreatorScreen/SingleChoice';
+import Freetext from '../screens/CardCreatorScreen/Freetext';
+
+
 
 import FriendsScreen from '../screens/FriendsScreen/FriendsScreen';
 import SettingsScreen from '../screens/SettingsScreen/SettingsScreen';
@@ -62,7 +66,9 @@ const HomeStackScreen = ({ navigation }) => (
             headerTintColor: "white"
         }}>
             <HomeStack.Screen name="ListOverView" component={HomeScreen} options={headerOptionsFirstPage}></HomeStack.Screen>
-            <HomeStack.Screen name="CardCreator" component={CardCreatorScreen} options={headerOptions}></HomeStack.Screen>
+            <HomeStack.Screen name="MultipleChoice" component={MultipleChoice} options={headerOptions}></HomeStack.Screen>
+            <HomeStack.Screen name="SingleChoice" component={SingleChoice} options={headerOptions}></HomeStack.Screen>
+            <HomeStack.Screen name="Freetext" component={Freetext} options={headerOptions}></HomeStack.Screen>
             <HomeStack.Screen name="CardScreen" component={CardScreen} options={headerOptions}></HomeStack.Screen>
         </HomeStack.Navigator>
     </ListStructureProvider>

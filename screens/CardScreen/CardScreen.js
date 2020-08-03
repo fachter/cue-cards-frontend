@@ -5,7 +5,8 @@ import { View, Text, StyleSheet } from 'react-native'
 
 
 import MultipleChoiceCard from './MultipleChoiceCard'
-import VocableCard from './VocableCard'
+import FreetextCard from './FreetextCard'
+import SingleChoiceCard from './SingleChoiceCard'
 import SessionOptionsPage from './SessionOptionsPage'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 
@@ -27,16 +28,15 @@ export default function CardScreen({ route, navigation }) {
     const minCardLevel = 0
 
 
-    function _createRandomAnswers() {
 
+    function _createRandomAnswers() {
         let answerPool = _getAllAnswersOfSameTopic()
         let maximalAnswers = 4
         let generatedAnswers = []
 
-        if (currentCard.cardType == "MC") {
+        if (currentCard.cardType === "MC" || currentCard.cardType === "SC") {
             //fügt die richtigen Antworten der Karte hinzu
             for (let i = 0; i < currentCard.answers.length; i++) {
-
                 let rightAnswer = {
                     answerValues: currentCard.answers[i],
                     isTrue: true,
@@ -45,8 +45,10 @@ export default function CardScreen({ route, navigation }) {
                 generatedAnswers.push(rightAnswer)
             }
             //füllt die Antwortmöglichkeiten bis zur Zahl 4 auf mit zufällig Antworten aus dem Antwortenpool heraus
-            for (let i = currentCard.numberOfRightAnswers; i < maximalAnswers; i++) {
+            for (let i = currentCard.answers.length; i < maximalAnswers; i++) {
+                console.log("..")
                 let randomAnswer = _getRandomAnswer(answerPool)
+
                 //Falls das Set zu wenige Karten und somit nicht genügen Antworten zum auffüllen enthält, füllt es die liste mit undifined Objecten auf
                 //Diese Objekte werden somit übersprungen
                 if (randomAnswer === undefined) {
@@ -70,16 +72,17 @@ export default function CardScreen({ route, navigation }) {
     function _getAllAnswersOfSameTopic() {
         let answerPool = []
         for (let i = 0; i < currentListStructure.length; i++) {    //Druchlaufe alle Karten
-            if (currentListStructure[i].ID == currentCard.ID) {   //Überspringt eigenen Antworten der Karte
+            if (currentListStructure[i].cardID == currentCard.cardID) {   //Überspringt eigenen Antworten der Karte
                 continue;
             } else {
-                if (currentListStructure[i].cardType == "MC" && currentListStructure[i].cardTopic == currentListStructure[currentCardindex].cardTopic) {  //Filtere nach MultipleChoice Karte und dem Topic
+                if ((currentListStructure[i].cardType === "MC" || currentListStructure[i].cardType === "SC") && currentListStructure[i].cardTopic == currentListStructure[currentCardindex].cardTopic) {  //Filtere nach MultipleChoice Karte und dem Topic
                     for (let j = 0; j < currentListStructure[i].answers.length; j++) { //Durchlaufe alle Antworten der aktuelle durchlaufenden Karte
                         answerPool.push(currentListStructure[i].answers[j])            //Fügt dem Antwortenpool die Antwort hinzu
                     }
                 }
             }
         }
+
         return answerPool
     }
 
@@ -94,8 +97,10 @@ export default function CardScreen({ route, navigation }) {
 
     function _updateCardValues(result) {
 
+
+
         for (let i = 0; i < sessionCards.length; i++) {
-            if (currentCard.ID == sessionCards[i].ID) {  //Sucht aktuelle im Set nach ID
+            if (currentCard.cardID == sessionCards[i].cardID) {  //Sucht aktuelle im Set nach ID
 
                 //Je nach richtiger oder falscher Antwort wird die Karte Level auf bzw. abgestuft
                 if (result == true) {
@@ -148,7 +153,6 @@ export default function CardScreen({ route, navigation }) {
             copy[i] = copy[j];
             copy[j] = temp;
         }
-
         return copy
     }
 
@@ -157,14 +161,17 @@ export default function CardScreen({ route, navigation }) {
 
         let answers = _createRandomAnswers()
 
-        //Voc und MC wird wsl. zusammen niemals vorkommen, hier nur für Testzwecke angebracht,
         if (currentCard.cardType == 'MC') {
             return (
                 <MultipleChoiceCard card={currentCard} getCardBack={_updateCardValues} answers={_shuffleArray(answers, true)} />
             )
-        } else if (currentCard.cardType == 'Voc')
+        } else if (currentCard.cardType === "SC") {
             return (
-                <VocableCard card={currentCard} getCardBack={_updateCardValues} />
+                <SingleChoiceCard card={currentCard} getCardBack={_updateCardValues} answers={_shuffleArray(answers, true)} />
+            )
+        } else if (currentCard.cardType == 'FT')
+            return (
+                <FreetextCard card={currentCard} getCardBack={_updateCardValues} />
             )
     }
 
@@ -222,7 +229,7 @@ export default function CardScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
     },
     questionView: {
         flex: 1,

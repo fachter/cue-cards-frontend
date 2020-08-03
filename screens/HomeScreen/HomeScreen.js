@@ -8,6 +8,7 @@ import { Entypo } from '@expo/vector-icons';
 import ChooseFolderSetWindow from './ChooseFolderSetWindow'
 import FolderListItem from './FolderListItem';
 import DeleteWindow from './DeleteWindow'
+import NewCardWindow from './NewCardWindow'
 
 import { ListStructureContext } from './ListStructureProvider'
 
@@ -40,6 +41,8 @@ const DataList = () => {
         setIsFolder,
         CreateFileWindowVisible,
         setCreateFileWindowVisible,
+        CreateNewCardWindowVisible,
+        setCreateNewCardWindowVisible,
         storeDataOnDevice,
         retrieveDataFromDevice,
         dataIsLoading,
@@ -59,6 +62,7 @@ const DataList = () => {
 
 
     useEffect(() => {
+        console.log("reloead")
         BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
 
         AppState.addEventListener('change', _handleAppStateChange);
@@ -88,6 +92,7 @@ const DataList = () => {
         if (listHistoryArray.length > 0) {
             var lastFolderStructure = _getLastFolderStructure()
             setCurrentListStructure(lastFolderStructure)
+            setIsFolder(true)
             return true
         } else {
             return false
@@ -159,13 +164,13 @@ const DataList = () => {
         navigation.navigate('CardScreen', { card: item, mode: "soloCard" })
     }
 
+    function editCard(item) {
+        const mode = "editMode"
 
-    function _navigateToCardCreator(item, mode) {
-
-        if (item.cardType = 'MC') {
-            navigation.navigate('CardCreator',
+        if (item.cardType === 'MC') {
+            navigation.navigate('MultipleChoice',
                 {
-                    ID: item.ID,
+                    cardID: item.cardID,
                     cardType: item.cardType,
                     questionText: item.questionText,
                     cardLevel: item.cardLevel,
@@ -174,14 +179,25 @@ const DataList = () => {
                     answers: item.answers,
                     mode: mode
                 })
-        } else if (item.cardType = 'Voc') {
-            navigation.navigate('CardCreator',
+        } else if (item.cardType === 'FT') {
+            navigation.navigate('Freetext',
                 {
-                    ID: item.ID,
+                    cardID: item.cardID,
                     cardType: item.cardType,
                     questionText: item.questionText,
                     cardLevel: item.cardLevel,
                     solution: item.solution,
+                    mode: mode
+                })
+        } else if (item.cardType === "SC") {
+            navigation.navigate('SingleChoice',
+                {
+                    cardID: item.cardID,
+                    cardType: item.cardType,
+                    questionText: item.questionText,
+                    cardLevel: item.cardLevel,
+                    cardTopic: item.cardTopic,
+                    answers: item.answers,
                     mode: mode
                 })
         }
@@ -226,6 +242,28 @@ const DataList = () => {
     }
 
 
+    function plusButtonClicked() {
+        if (isFolder === true) {
+            setCreateFileWindowVisible(true)
+        } else {
+            setCreateNewCardWindowVisible(true)
+        }
+
+
+    }
+
+    function createNewCard(cardType) {
+        if (cardType === "MC") {
+            console.log("test")
+            navigation.navigate('MultipleChoice', { mode: "createMode" })
+        } else if (cardType === "SC") {
+            navigation.navigate('SingleChoice', { mode: "createMode" })
+        } else if (cardType === "FT") {
+            navigation.navigate('Freetext', { mode: "createMode" })
+        }
+        setCreateNewCardWindowVisible(false)
+    }
+
 
     return (
         <View style={styles.container}>
@@ -247,19 +285,25 @@ const DataList = () => {
                 />
                 <View>
                     <ChooseFolderSetWindow
-                        visible={CreateFileWindowVisible} />
+                        visible={CreateFileWindowVisible}
+                    />
+                    <NewCardWindow
+                        visible={CreateNewCardWindowVisible}
+                        onNavigateToCardCreator={createNewCard}
+                        onSetVisibility={setCreateNewCardWindowVisible}
+                    />
                 </View>
                 {isFolder ? null : <TouchableOpacity style={styles.startSessionButton} onPress={() => _navigateToSession()} >
                     <Entypo name="controller-play" size={50} color="black" />
                 </TouchableOpacity>}
-                <TouchableOpacity style={styles.plusButton} onPress={() => setCreateFileWindowVisible(true)} >
+                <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
                     <Entypo name="plus" size={50} color="black" />
                 </TouchableOpacity>
             </SwipeView>
             {deleteWindowVisible ?
                 <DeleteWindow
                     onDeleteWindow={() => SetDeleteWindowVisible(false)}
-                    onNavigateToCardCreator={_navigateToCardCreator}
+                    onNavigateToCardCreator={editCard}
                     item={onDeleteItem}
                     onDelete={_deleteItemById} /> : null}
         </View>

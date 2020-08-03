@@ -12,6 +12,7 @@ class ListStructureProvider extends React.Component {
         currentListStructure: [],
         isFolder: true,
         CreateFileWindowVisible: false,  //PopupFenster um neue Datei anzuulegen
+        CreateNewCardWindowVisible: false,
         dataIsLoading: true,
         query: "",
         fullData: []
@@ -74,6 +75,10 @@ class ListStructureProvider extends React.Component {
         this.setState({ CreateFileWindowVisible })
     }
 
+    setCreateNewCardWindowVisible = (value) => {
+        this.setState({ CreateNewCardWindowVisible: value })
+    }
+
     setDataIsLoading(value) {
         this.setState({ dataIsLoading: value })
     }
@@ -109,6 +114,8 @@ class ListStructureProvider extends React.Component {
                 setIsFolder: this.setIsFolder,
                 CreateFileWindowVisible: this.state.CreateFileWindowVisible,
                 setCreateFileWindowVisible: this.setCreateFileWindowVisible,
+                CreateNewCardWindowVisible: this.state.CreateNewCardWindowVisible,
+                setCreateNewCardWindowVisible: this.setCreateNewCardWindowVisible,
                 storeDataOnDevice: this.storeDataOnDevice,
                 retrieveDataFromDevice: this.retrieveDataFromDevice,
                 dataIsLoading: this.state.dataIsLoading,

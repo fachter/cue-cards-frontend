@@ -1,17 +1,18 @@
 import React from 'react'
 import { View, StyleSheet, Text, FlatList, TouchableOpacity } from 'react-native'
 import * as Icon from '@expo/vector-icons'
-
 import AnswerListItem from './AnswerListItem'
 
 
-export default class MulitpleChoiceCard extends React.Component {
 
+export default class SingleChoiceCard extends React.Component {
 
     state = {
         result: false,  // true/false, je nachdem ob richtig oder falsch beantwortet wurde
-        backgroundColor: "grey"
+        backgroundColor: "grey",
+        answers: this.props.answers
     }
+
 
     _checkChoiceAndSendBack = () => {
         this._checkTheChoice()
@@ -19,6 +20,7 @@ export default class MulitpleChoiceCard extends React.Component {
             this.props.getCardBack(this.state.result)
         }, 1000);
     }
+
 
     _checkTheChoice = () => {
         const { answers } = this.props
@@ -31,8 +33,7 @@ export default class MulitpleChoiceCard extends React.Component {
             }
         }
 
-
-        if (numberOfRightSelection == this.props.card.numberOfRightAnswers) {
+        if (numberOfRightSelection == this.props.card.answers.length) {
             this.state.result = true
             this.setState({ result: true })
             this.setState({ backgroundColor: "green" })
@@ -41,27 +42,43 @@ export default class MulitpleChoiceCard extends React.Component {
             this.setState({ result: false })
             this.setState({ backgroundColor: 'red' })
 
-
         }
     }
 
-    _updateCheckState = (checkState, item) => {
+    _updateCheckState = (checkstate, item) => {
+        let copy = this.state.answers
 
-        item.checkState = checkState
+        // for (let i = 0; i < copy.length; i++) {
+        //     if (item.answerValues.ID === copy[i].answerValues.ID) {
+        //         console.log(item.answerValues.ID)
+        //         copy[i].checkState = true
+        //     } else {
+        //         copy[i].checkState = false
+        //     }
+        // }
+
+        for (let i = 0; i < copy.length; i++) {
+            copy[i].checkState = false
+        }
+
+        this.setState({ answers: copy })
+        console.log(copy)
     }
+
 
     render() {
         return (
             <View style={[styles.container, { backgroundColor: this.state.backgroundColor }]}>
                 <FlatList
-                    extraData={this.props.answers}
+                    extraData={this.state.answers}
                     data={this.props.answers}
-                    keyExtractor={item => item.answerID}
+                    keyExtractor={item => item.answerValues.ID}
                     renderItem={({ item }) => (
                         <AnswerListItem
                             item={item}
                             getCardState={this._updateCheckState}
                             checkState={false}
+                            backgroundColor={this.props.backgroundColor}
                         />
                     )}
                     ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
@@ -74,7 +91,6 @@ export default class MulitpleChoiceCard extends React.Component {
         )
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {
