@@ -61,25 +61,25 @@ const DataList = () => {
 
 
 
-    useEffect(() => {
-        console.log(currentListStructure)
-        BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
+    // useEffect(() => {
+    //     console.log(currentListStructure)
+    //     BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
 
-        AppState.addEventListener('change', _handleAppStateChange);
-        return () => {
-            AppState.removeEventListener('change', _handleAppStateChange);
-        }
-    }, []);
-
-
+    //     AppState.addEventListener('change', _handleAppStateChange);
+    //     return () => {
+    //         AppState.removeEventListener('change', _handleAppStateChange);
+    //     }
+    // }, []);
 
 
-    const _handleAppStateChange = (nextAppState) => {
-        console.log(nextAppState)
-        if (nextAppState === 'active') {
-            retrieveDataFromDevice()
-        }
-    }
+
+
+    // const _handleAppStateChange = (nextAppState) => {
+    //     console.log(nextAppState)
+    //     if (nextAppState === 'active') {
+    //         console.log("test")
+    //     }
+    // }
 
 
 

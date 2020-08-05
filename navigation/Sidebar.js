@@ -26,7 +26,6 @@ import RegistrationScreen from '../screens/LoginRegistrationScreen/RegistrationS
 import RoomScreen from '../screens/RoomScreen/RoomScreen';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import { AntDesign } from '@expo/vector-icons';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();
@@ -57,21 +56,21 @@ const headerOptionsFirstPage = ({ navigation }) => ({
 
 
 const HomeStackScreen = ({ navigation }) => (
-    <ListStructureProvider>
-        <HomeStack.Navigator screenOptions={{
-            headerTitle: false,
-            headerStyle: {
-                backgroundColor: "black"
-            },
-            headerTintColor: "white"
-        }}>
-            <HomeStack.Screen name="ListOverView" component={HomeScreen} options={headerOptionsFirstPage}></HomeStack.Screen>
-            <HomeStack.Screen name="MultipleChoice" component={MultipleChoice} options={headerOptions}></HomeStack.Screen>
-            <HomeStack.Screen name="SingleChoice" component={SingleChoice} options={headerOptions}></HomeStack.Screen>
-            <HomeStack.Screen name="Freetext" component={Freetext} options={headerOptions}></HomeStack.Screen>
-            <HomeStack.Screen name="CardScreen" component={CardScreen} options={headerOptions}></HomeStack.Screen>
-        </HomeStack.Navigator>
-    </ListStructureProvider>
+
+    <HomeStack.Navigator screenOptions={{
+        headerTitle: false,
+        headerStyle: {
+            backgroundColor: "black"
+        },
+        headerTintColor: "white"
+    }}>
+        <HomeStack.Screen name="ListOverView" component={HomeScreen} options={headerOptionsFirstPage}></HomeStack.Screen>
+        <HomeStack.Screen name="MultipleChoice" component={MultipleChoice} options={headerOptions}></HomeStack.Screen>
+        <HomeStack.Screen name="SingleChoice" component={SingleChoice} options={headerOptions}></HomeStack.Screen>
+        <HomeStack.Screen name="Freetext" component={Freetext} options={headerOptions}></HomeStack.Screen>
+        <HomeStack.Screen name="CardScreen" component={CardScreen} options={headerOptions}></HomeStack.Screen>
+    </HomeStack.Navigator>
+
 
 
 );
@@ -92,6 +91,7 @@ const FriendsStackScreen = ({ navigation }) => (
 
 
 const SettingsStackScreen = ({ navigation }) => (
+
     <SettingsStack.Navigator screenOptions={{
         headerStyle: {
             backgroundColor: "black"
@@ -242,13 +242,6 @@ export default class Sidebar extends React.Component {
                     options={{
                         drawerIcon: () => (
                             <Icon name="ios-settings" color="white" size={25} />
-                        )
-                    }}
-                />
-                <Drawer.Screen name="Logout" component={LoginRegistrationStackScreen}
-                    options={{
-                        drawerIcon: () => (
-                            <AntDesign name="logout" size={25} color="white" />
                         )
                     }}
                 />

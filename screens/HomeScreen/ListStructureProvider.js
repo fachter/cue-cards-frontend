@@ -18,8 +18,6 @@ class ListStructureProvider extends React.Component {
         fullData: []
     }
 
-
-
     storeDataOnDevice = async () => {
         try {
             if (this.state.listHistoryArray.length > 0) {
@@ -32,7 +30,7 @@ class ListStructureProvider extends React.Component {
                 )
             }
         } catch (error) {
-            console.log("error by store data in lokal storage: " + error)
+            console.log("Fehler speichern der Daten auf das Gerät: " + error)
 
         }
     }
@@ -42,12 +40,13 @@ class ListStructureProvider extends React.Component {
         try {
             const value = await AsyncStorage.getItem('mainListStructure');
             if (value != null) {
-                this.state.currentListStructure = JSON.parse(value)
-                this.setDataIsLoading(false)
-
+                let data = JSON.parse(value)
+                this.setCurrentListStructure(data)
+                return true
             }
         } catch (error) {
-            console.log("error by retrieve data vom lokal storage: " + error)
+            console.log("Fehler beim laden der Daten vom Gerät: " + error)
+            return false
         }
     }
 
@@ -55,9 +54,6 @@ class ListStructureProvider extends React.Component {
     setCurrentListStructure = (newListStructure) => {
         this.setState({ currentListStructure: newListStructure })
     }
-
-
-
 
     updateFolderHistory = () => {
         this.state.listHistoryArray.push(this.state.currentListStructure)

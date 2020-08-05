@@ -1,83 +1,83 @@
-import React, { useContext, useEffect } from 'react';
-import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Button, FlatList, StyleSheet } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Button, FlatList, StyleSheet, CheckBox } from 'react-native';
 import { UserContext } from './UserProvider'
+import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
+import { SettingsContext } from '../SettingsScreen/SettingsProvider'
 import logo from '../../assets/Logo.png';
 
-import axios from 'axios';
 
 
 
 
 const { width: WIDTH } = Dimensions.get('window')
 
-export default class LoginScreen extends React.Component {
+export default function LoginScreen({ navigation }) {
 
-    static contextType = UserContext
+    const { checkIfUserStayedLoggedin, _authenticateAcc, login } = useContext(UserContext)
+    const { setCurrentListStructure } = useContext(ListStructureContext)
+    const { retrieveSettignsfromDevice } = useContext(SettingsContext)
+    const [username, setUnsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [stayLoggedin, setStayLoggedin] = useState(false)
 
-    constructor(props) {
-        super(props)
 
+    useEffect(() => {
+        checkIfUserStayedLoggedin().then(() => {
+            userLogin()
+        })
+    })
+
+
+    function userLogin() {
+        _authenticateAcc(stayLoggedin, username, password).then((data) => {
+            setCurrentListStructure(data.folders)
+            retrieveSettignsfromDevice()
+        }).then(() => {
+            login()
+        })
     }
 
-    componentDidMount() {
-        this.context.logout()
-    }
 
-    _authenticateAcc() {
-        const user = this.context
-        user.login()
-        // axios.post('https://cue-cards-app.herokuapp.com/authenticate', {
-        //     username: 'username',
-        //     password: 'password',
-        // })
-        //     .then((res) => {
-        //         user._storeToken(res.data.jwt)
-        //         axios.get("https://cue-cards-app.herokuapp.com/get-users-data", {
-        //             headers: {
-        //                 'Authorization': "Bearer " + res.data.jwt
-        //             }
-        //         }).then(resp => {
-        //             console.log(resp.data)
-        //             //ListStrucutureprovider -> CurrentlistStrucutre aktualiseren
-        //             user.login()
-        //         })
-        //             .catch((err) => {
-        //                 console.log(err)
-        //             })
-        //     })
-    }
-
-    render() {
-
-        return (
-            <View style={styles.container}>
-                <Image source={logo} style={styles.logo} />
-                <View>
-                    <TextInput
-                        style={styles.input}
-                        placeholder={'Benutzername'}
-                        placeholderTextColor={'white'}
-                        underlineColorAndroid={'transparent'}
-                    />
-                </View>
-                <View>
-                    <TextInput
-                        style={styles.input}
-                        placeholder={'Passwort'}
-                        placeholderTextColor={'white'}
-                        underlineColorAndroid={'transparent'}
-                        secureTextEntry={true}
-                    />
-                </View>
-                <TouchableOpacity style={styles.button} onPress={() => this._authenticateAcc()}>
-                    <Text style={styles.text}>Login</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Registration')}>
-                    <Text style={styles.text}>Registrieren</Text>
-                </TouchableOpacity>
+    return (
+        <View style={styles.container}>
+            <Image source={logo} style={styles.logo} />
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Benutzername'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    onChangeText={text => setUnsername(text)}
+                />
             </View>
-        )
-    }
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Passwort'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    secureTextEntry={true}
+                    onChangeText={text => setPassword(text)}
+                />
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                <CheckBox
+                    value={stayLoggedin}
+                    onValueChange={value => setStayLoggedin(value)}
+                    style={styles.checkbox}
+                />
+                <Text style={{ color: 'white', marginLeft: 5 }}>eingeloggt bleiben</Text>
+            </View>
+            <TouchableOpacity style={[styles.button, { marginTop: 30 }]} onPress={() => userLogin()}>
+                <Text style={styles.text}>Login</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[styles.button, { marginTop: 10 }]} onPress={() => navigation.navigate('Registration')}>
+                <Text style={styles.text}>Registrieren</Text>
+            </TouchableOpacity>
+        </View>
+    )
+
 }
 
 
@@ -87,14 +87,14 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        alignItems: 'center',
         backgroundColor: '#111111',
         paddingTop: 25
     },
     logo: {
         width: 200,
         height: 80,
-        marginBottom: 50
+        marginBottom: 50,
+        alignSelf: 'center'
     },
     input: {
         width: WIDTH - 55,
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         backgroundColor: 'black',
         marginHorizontal: 25,
-        marginVertical: 25,
+        marginVertical: 10,
         paddingLeft: 10,
         color: 'white'
 
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 5,
+        alignSelf: 'center',
 
 
     },
@@ -124,5 +124,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontStyle: 'italic',
         textAlign: 'center'
+    },
+    checkbox: {
+
     }
 })

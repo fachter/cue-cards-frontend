@@ -22,7 +22,7 @@ export default function ChooseFolderSetWindow() {
             ID: newID,
             isFolder: isNewFileFolder,
             name: newFileName,
-            subFolder: [],
+            subFolders: [],
             cards: []
         }
 

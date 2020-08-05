@@ -5,6 +5,10 @@ import React, { useEffect, useState, useCallback, useContext } from 'react';
 
 import { InternetConnectionProvider } from './API/InternetConnection'
 import { UserProvider, UserContext } from './screens/LoginRegistrationScreen/UserProvider'
+import { SettingsProvider } from './screens/SettingsScreen/SettingsProvider'
+import { ListStructureProvider } from './screens/HomeScreen/ListStructureProvider'
+import { storeDataOnDB } from './API/Database'
+
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { AsyncStorage, AppState } from 'react-native'
@@ -16,9 +20,11 @@ import { LoginRegistrationStackScreen } from './navigation/Sidebar';
 const StartStack = createStackNavigator()
 
 
-
 const StartScreen = () => {
   const { isLoggedin } = useContext(UserContext)
+
+
+
   return (
     <NavigationContainer >
       <StartStack.Navigator screenOptions={{
@@ -39,50 +45,32 @@ export default class App extends React.Component {
   constructor(props) {
     super(props)
 
-    this._retrieveToken().then(token => {
-      this._getUserData(token)
-    })
+    AppState.addEventListener('change', this._handleAppStateChange);
+
   }
 
 
-
-
-
-  _getUserData(token) {
-    axios.get("https://cue-cards-app.herokuapp.com/get-users-data", {
-      headers: {
-        'Authorization': "Bearer " + token
-      }
-    }).then(resp => {
-      console.log(resp.data)
-    })
-      .catch((err) => {
-        console.log(err)
-
-      })
-  }
-
-
-  async _retrieveToken() {
-    try {
-      const token = await AsyncStorage.getItem('userToken')
-      if (token != null) {
-        return token
-
-      }
-    } catch (error) {
-      console.log("Error by retrieve token:" + error)
-
+  _handleAppStateChange = (nextAppState) => {
+    console.log(nextAppState)
+    if (nextAppState === 'background') {
+      storeDataOnDB()
     }
   }
 
+
+
+
   render() {
     return (
-      <UserProvider>
-        <InternetConnectionProvider>
-          <StartScreen />
-        </InternetConnectionProvider>
-      </UserProvider >
+      <ListStructureProvider>
+        <SettingsProvider>
+          <UserProvider>
+            <InternetConnectionProvider>
+              <StartScreen />
+            </InternetConnectionProvider>
+          </UserProvider >
+        </SettingsProvider>
+      </ListStructureProvider>
     )
   }
 }
