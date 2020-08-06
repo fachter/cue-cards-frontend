@@ -105,11 +105,11 @@ function CreateFolderOrSet() {
                 <Text style={styles.headingText}>Was möchtest du erstellen?</Text>
                 <View style={styles.window}>
                     <TouchableOpacity style={styles.windowButtons} onPress={() => _setFileType(true)}>
-                        <Icon.AntDesign name="addfolder" size={50} />
+                        <Icon.AntDesign name="addfolder" size={35} color='#008FD3' />
                         <Text style={styles.buttonText}>Ordner</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.windowButtons, { marginTop: 20 }]} onPress={() => _setFileType(false)}>
-                        <Icon.MaterialCommunityIcons name="cards-variant" size={50} />
+                    <TouchableOpacity style={[styles.windowButtons]} onPress={() => _setFileType(false)}>
+                        <Icon.MaterialCommunityIcons name="cards-variant" size={35} color='#008FD3' />
                         <Text style={styles.buttonText}>Set</Text>
                     </TouchableOpacity>
                 </View>
@@ -151,12 +151,12 @@ function FileNameWindow() {
     return (
         <View style={styles.background}>
             <Text
-                style={styles.headingText}>...</Text>
+                style={styles.headingText}>Name:</Text>
             <TextInput style={styles.fileNameTextInput} onChangeText={text => setNewFileName(text)} ></TextInput>
             <TouchableOpacity onPress={() => setSave(true)} >
 
                 <View style={styles.saveButton}>
-                    <Icon.Feather name="check" size={50} />
+                    <Icon.Feather name="check" size={30} color="#008FD3" />
                 </View>
             </TouchableOpacity>
         </View>
@@ -179,14 +179,15 @@ const styles = StyleSheet.create({
     },
     window: {
         width: '80%',
-        height: '20%',
+        height: '15%',
+        flexDirection: 'row',
         borderRadius: 5
     },
     windowButtons: {
         flex: 1,
         flexDirection: 'row',
-        backgroundColor: 'grey',
-        borderRadius: 5,
+        //backgroundColor: 'grey',
+        //borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -194,35 +195,39 @@ const styles = StyleSheet.create({
         color: 'white',
         margin: 10,
         fontSize: 20,
-        fontStyle: 'italic'
+        //fontStyle: 'italic'
     },
     buttonText: {
         fontSize: 20,
         fontStyle: 'italic',
-        margin: 10
+        margin: 10,
+        color: 'white'
     },
     fileNameTextInput: {
         width: '80%',
-        height: '10%',
+        height: 40,
         borderRadius: 5,
-        borderWidth: 3,
+        borderWidth: 1,
         borderColor: 'grey',
         fontSize: 20,
         fontStyle: 'italic',
         color: 'white',
-        backgroundColor: 'black',
+        backgroundColor: '#1a1a1a',
         padding: 10,
         textAlign: 'center',
     },
     saveButton: {
-        height: 60,
-        width: 60,
+        height: 45,
+        width: 45,
         borderRadius: 30,
         alignSelf: 'flex-end',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 10,
-        backgroundColor: 'green',
+        margin: 15,
+        borderWidth: 1,
+        borderColor: 'grey',
+
+
     },
     cancelButton: {
         width: 30,
