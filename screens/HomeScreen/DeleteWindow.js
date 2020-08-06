@@ -35,16 +35,24 @@ export default class DeleteWindow extends React.Component {
                         style={styles.normalButton}
                         name="ios-trash"
                         size={30} color="white"
-                        backgroundColor="black"
-                        onPress={() => onDelete(item.id)}
+                        backgroundColor="#202225"
+                        onPress={() => onDelete(item.ID)}
                     />
                     {/*Kopieren*/}
                     <Icon.Button
                         style={styles.normalButton}
                         name="ios-copy"
                         size={23} color="white"
-                        backgroundColor="black"
+                        backgroundColor="#202225"
                         onPress={() => this.copy(item)}
+                    />
+                    {/*Ausschneiden*/}
+                    <Icon.Button
+                        style={styles.normalButton}
+                        name="ios-cut"
+                        size={23} color="white"
+                        backgroundColor="#202225"
+                        onPress={() => onDelete(item.ID)}
                     />
                     {/*Bearbeiten*/}
                     {this._checkIfItemIsFolderOrSet() ? null :
@@ -52,7 +60,7 @@ export default class DeleteWindow extends React.Component {
                             style={styles.normalButton}
                             name="ios-brush"
                             size={25} color="white"
-                            backgroundColor="black"
+                            backgroundColor="#202225"
                             onPress={() => onNavigateToCardCreator(item, "editMode")}
                         />}
                     {/*Schließen*/}
@@ -60,7 +68,7 @@ export default class DeleteWindow extends React.Component {
                         style={styles.closeButton}
                         name="ios-close"
                         size={35} color="white"
-                        backgroundColor="black"
+                        backgroundColor="#202225"
                         onPress={() => onDeleteWindow()}
                     />
                 </View>
@@ -95,7 +103,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 56,
         //borderRadius: 5,
-        backgroundColor: 'black'
+        backgroundColor: '#202225'
     },
     button: {
         height: 50,

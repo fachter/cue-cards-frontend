@@ -39,16 +39,16 @@ const RoomStack = createStackNavigator();
 
 const headerOptions = ({ navigation }) => ({
     headerRight: () => (
-        <Icon.Button name="ios-menu" size={25} backgroundColor="black" onPress={() => { navigation.openDrawer() }} />
+        <Icon.Button name="ios-menu" size={25} backgroundColor="#202225" onPress={() => { navigation.openDrawer() }} />
     ),
     headerLeft: () => (
-        <Icon.Button name="ios-arrow-back" size={25} backgroundColor="black" onPress={() => navigation.goBack()} />
+        <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" onPress={() => navigation.goBack()} />
     )
 })
 
 const headerOptionsFirstPage = ({ navigation }) => ({
     headerRight: () => (
-        <Icon.Button name="ios-menu" size={25} backgroundColor="black" onPress={() => { navigation.openDrawer() }} />
+        <Icon.Button name="ios-menu" size={25} backgroundColor="#202225" onPress={() => { navigation.openDrawer() }} />
     ),
 
 })
@@ -60,7 +60,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Navigator screenOptions={{
         headerTitle: false,
         headerStyle: {
-            backgroundColor: "black"
+            backgroundColor: "#202225"
         },
         headerTintColor: "white"
     }}>
@@ -80,7 +80,7 @@ const HomeStackScreen = ({ navigation }) => (
 const FriendsStackScreen = ({ navigation }) => (
     <FriendsStack.Navigator screenOptions={{
         headerStyle: {
-            backgroundColor: "black"
+            backgroundColor: "#202225"
 
         },
         headerTintColor: "white"
@@ -94,17 +94,17 @@ const SettingsStackScreen = ({ navigation }) => (
 
     <SettingsStack.Navigator screenOptions={{
         headerStyle: {
-            backgroundColor: "black"
+            backgroundColor: "#202225"
 
         },
         headerTintColor: "white"
     }}>
         <SettingsStack.Screen name="Einstellungen" component={SettingsScreen} options={{
             headerRight: () => (
-                <Icon.Button name="ios-menu" size={25} backgroundColor="black" onPress={() => { navigation.openDrawer() }} />
+                <Icon.Button name="ios-menu" size={25} backgroundColor="#202225" onPress={() => { navigation.openDrawer() }} />
             ),
             headerLeft: () => (
-                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="black" />
+                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" />
             )
         }} />
     </SettingsStack.Navigator>
@@ -113,17 +113,17 @@ const SettingsStackScreen = ({ navigation }) => (
 const StatisticsStackScreen = ({ navigation }) => (
     <StatisticsStack.Navigator screenOptions={{
         headerStyle: {
-            backgroundColor: "black"
+            backgroundColor: "#202225"
 
         },
         headerTintColor: "white"
     }}>
         <StatisticsStack.Screen name="Statistiken" component={StatisticsScreen} options={{
             headerRight: () => (
-                <Icon.Button name="ios-menu" size={25} backgroundColor="black" onPress={() => { navigation.openDrawer() }} />
+                <Icon.Button name="ios-menu" size={25} backgroundColor="#202225" onPress={() => { navigation.openDrawer() }} />
             ),
             headerLeft: () => (
-                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="black" />
+                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" />
             )
         }} />
     </StatisticsStack.Navigator>
@@ -132,17 +132,17 @@ const StatisticsStackScreen = ({ navigation }) => (
 const SendCardsStackScreen = ({ navigation }) => (
     <SendCardsStack.Navigator screenOptions={{
         headerStyle: {
-            backgroundColor: "black"
+            backgroundColor: "#202225"
 
         },
         headerTintColor: "white"
     }}>
         <SendCardsStack.Screen name="Karten senden" component={SendCardsScreen} options={{
             headerRight: () => (
-                <Icon.Button name="ios-menu" size={25} backgroundColor="black" onPress={() => { navigation.openDrawer() }} />
+                <Icon.Button name="ios-menu" size={25} backgroundColor="#202225" onPress={() => { navigation.openDrawer() }} />
             ),
             headerLeft: () => (
-                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="black" />
+                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" />
 
             )
 
@@ -153,15 +153,15 @@ const SendCardsStackScreen = ({ navigation }) => (
 export const LoginRegistrationStackScreen = ({ navigation }) => (
     <LoginRegistrationStack.Navigator screenOptions={{
         headerStyle: {
-            backgroundColor: "black"
+            backgroundColor: "#202225"
 
         },
-        headerTintColor: "black"
+        headerTintColor: "#202225"
     }}>
         <LoginRegistrationStack.Screen name="Login" component={LoginScreen} />
         <LoginRegistrationStack.Screen name="Registration" component={RegistrationScreen} options={{
             headerLeft: () => (
-                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="black" onPress={() => navigation.goBack()} />)
+                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" onPress={() => navigation.goBack()} />)
         }} />
     </LoginRegistrationStack.Navigator>
 );
@@ -171,7 +171,7 @@ export const LoginRegistrationStackScreen = ({ navigation }) => (
 const RoomStackScreen = ({ navigation }) => (
     <RoomStack.Navigator screenOptions={{
         headerStyle: {
-            backgroundColor: "black"
+            backgroundColor: "#202225"
 
         },
         headerTintColor: "white"
@@ -196,7 +196,7 @@ export default class Sidebar extends React.Component {
         return (
             <Drawer.Navigator drawerContentOptions={{
                 style: {
-                    backgroundColor: 'black'
+                    backgroundColor: '#202225'
                 },
                 labelStyle: {
                     color: 'white'

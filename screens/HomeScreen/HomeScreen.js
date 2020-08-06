@@ -326,7 +326,8 @@ const DataList = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#595959",
+        backgroundColor: "#2f3136",
+        paddingTop: 30
     },
     plusButton: {
         height: 45,
@@ -334,8 +335,8 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1,
-        borderColor: 'white',
+        borderWidth: 0.5,
+        borderColor: 'grey',
         position: 'absolute',
         bottom: 20,
         right: 20

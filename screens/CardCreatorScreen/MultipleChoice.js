@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import { StyleSheet, View, TextInput, FlatList, TouchableOpacity, Dimensions, Text, ScrollView } from 'react-native'
 import ImagePickerButton from '../../API/ImagePicker'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import uuid from 'react-native-uuid'
 
@@ -117,19 +118,19 @@ export default class MultipleChoice extends React.Component {
         return (
             <View style={styles.container} >
                 <TextInput
-                    style={[styles.questionInput, { textAlign: 'center' }]}
+                    style={[styles.textInput, { marginBottom: 25 }]}
                     multiline={true}
-                    placeholder="Bitte Frage hier eingeben"
+                    placeholder="Frage eingeben"
+                    placeholderTextColor="grey"
                     onChangeText={text => this.setState({ questionText: text })}>
                     {this.state.questionText}
                 </TextInput>
-                <ImagePickerButton />
                 <TouchableOpacity onPress={() => this._addItem()}>
                     <View style={styles.addButton}>
-
+                        <Text style={styles.addButtonText}>+ Frage hinzufügen</Text>
                     </View>
                 </TouchableOpacity>
-                <View style={styles.answers}>
+                <View>
                     <ScrollView>
                         <FlatList
                             data={this.state.answers}
@@ -163,12 +164,20 @@ class AnswerItem extends React.Component {
         const { item } = this.props
         return (
             <View style={styles.answeritem}>
-                <TextInput style={styles.answerInput} placeholder="Antwort" onChangeText={text => this.props.getText(text, item.id)}>
+                <TextInput
+                    style={[styles.textInput, { width: "75%" }]}
+                    placeholder="Antwort"
+                    placeholderTextColor="grey"
+                    onChangeText={text => this.props.getText(text, item.ID)}>
                     {item.text}
                 </TextInput>
-                <TouchableOpacity onPress={() => this.props.deleteCallback(this.props.id)}>
-                    <View style={styles.deleteButton} />
-                </TouchableOpacity>
+                <Icon.Button
+                    style={styles.deleteButton}
+                    name="ios-close"
+                    size={35} color="white"
+                    backgroundColor="#2f3136"
+                    onPress={() => this.props.deleteCallback(this.props.id)}
+                />
             </View>
         )
     }
@@ -179,49 +188,19 @@ class AnswerItem extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
-    },
-
-    answers: {
-        flex: 3,
-        borderWidth: 2,
-        borderRadius: 5,
-        borderColor: '#848a91',
-        margin: 20,
+        backgroundColor: '#2f3136',
+        paddingTop: 25
     },
     answeritem: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'flex-end',
-        margin: 20,
-    },
-    answerInput: {
-        flex: 1,
-        borderColor: '#848a91',
-        borderWidth: 1,
-        borderRadius: 5,
-        fontSize: 15,
-        fontStyle: 'italic',
-        padding: 5
-    },
-    deleteButton: {
-        height: 20,
-        width: 20,
-        backgroundColor: 'black',
-        marginLeft: 20,
-        marginRight: 20,
-        borderRadius: 10
+        justifyContent: 'flex-start',
     },
     addButton: {
         height: 20,
-        width: 20,
-        backgroundColor: 'black',
-        alignSelf: 'flex-end',
-        marginRight: 20
-    },
-    listSeperator: {
-        // height: StyleSheet.hairlineWidth,
-        //backgroundColor: 'green'
+        alignSelf: 'flex-start',
+        marginLeft: 20,
+        marginBottom: 20
     },
     bottomView: {
         flex: 1,
@@ -229,26 +208,30 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     saveButton: {
-        backgroundColor: '#2c2e30',
+        backgroundColor: '#008FD3',
         height: 40,
         width: 130,
         borderRadius: 30,
         alignSelf: 'center',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginTop: 30
 
     },
-    questionInput: {
-        flex: 1,
-        padding: 5,
-        borderColor: 'black',
+    textInput: {
+        paddingLeft: 15,
+        padding: 7,
         color: 'black',
-        borderWidth: 1,
         margin: 20,
+        borderRadius: 10,
         fontSize: 15,
-        fontStyle: 'italic'
-
+        fontStyle: 'italic',
+        backgroundColor: '#C7C7C7',
     },
+    deleteButton: {
+        marginRight: 20,
+        marginLeft: 10
+    }
 
 
 

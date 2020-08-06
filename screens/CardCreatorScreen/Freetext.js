@@ -86,20 +86,22 @@ export default class Vocable extends React.Component {
         return (
             <View style={styles.container}>
                 <TextInput
-                    style={[styles.questionInput, { textAlign: 'center' }]}
+                    style={[styles.textInput]}
                     multiline={true}
-                    placeholder="Bitte Frage hier eingeben"
+                    placeholder="Frage eingeben"
+                    placeholderTextColor="grey"
                     onChangeText={text => this.setState({ questionText: text })}>
                     {this.state.questionText}
                 </TextInput>
-                <ImagePickerButton />
                 <TextInput
                     style={styles.textInput}
                     multiline={true}
-                    placeholder=" .. und hier deine Antwort"
+                    placeholder="Antwort eingeben"
+                    placeholderTextColor="grey"
                     onChangeText={text => this.setState({ solution: text })}>
                     {this.state.solution}
                 </TextInput>
+<<<<<<< HEAD
                 <View style={styles.bottomView} >
                     <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
                         <Text style={{ fontStyle: 'italic', fontSize: 10, color: 'white' }}>speichern</Text>
@@ -108,6 +110,14 @@ export default class Vocable extends React.Component {
                         <Text style={{ fontStyle: 'italic', fontSize: 10, color: 'white' }}>speichern und neu</Text>
                     </TouchableOpacity>
                 </View>
+=======
+                <ImagePickerButton />
+                <TouchableOpacity onPress={() => this._save()}>
+                    <View style={styles.saveButton}>
+                        <Text style={{ fontStyle: 'italic', fontSize: 20, color: 'white' }}>speichern</Text>
+                    </View>
+                </TouchableOpacity>
+>>>>>>> 04f20fc3c31c4b4928c65af2381c024c7abf8bcb
             </View >
 
         )
@@ -118,12 +128,10 @@ export default class Vocable extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#595959"
+        backgroundColor: "#2f3136",
+        paddingTop: 25
     },
-    answer: {
-        // flex: 1,
-        borderColor: '#848a91',
-    },
+<<<<<<< HEAD
     textInput: {
         // flex: 1,
         padding: 5,
@@ -139,23 +147,36 @@ const styles = StyleSheet.create({
     },
     saveButton: {
         backgroundColor: '#2c2e30',
+=======
+    saveButton: {
+        backgroundColor: '#008FD3',
+>>>>>>> 04f20fc3c31c4b4928c65af2381c024c7abf8bcb
         height: 40,
         width: 130,
         borderRadius: 30,
         alignSelf: 'center',
         alignItems: 'center',
+<<<<<<< HEAD
         justifyContent: 'center'
 
     },
     questionInput: {
         padding: 5,
         borderColor: 'black',
+=======
+        justifyContent: 'center',
+        marginTop: 30
+    },
+    textInput: {
+        paddingLeft: 15,
+        padding: 7,
+        marginBottom: 25,
+        borderRadius: 10,
+>>>>>>> 04f20fc3c31c4b4928c65af2381c024c7abf8bcb
         color: 'black',
-        borderWidth: 1,
         margin: 20,
         fontSize: 15,
-        fontStyle: 'italic'
-
+        fontStyle: 'italic',
+        backgroundColor: '#C7C7C7'
     },
-
 });

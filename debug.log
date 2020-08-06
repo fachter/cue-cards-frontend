@@ -7,3 +7,7 @@
 [0607/195305.924:ERROR:process_reader_win.cc(123)] NtOpenThread: Eine unzulï¿½ssige Clientkennung wurde angegeben. (0xc000000b)
 [0607/195305.930:ERROR:exception_snapshot_win.cc(98)] thread id 7120 not found in process
 [0607/195305.930:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: Es wurde versucht, auf einen Prozess zuzugreifen, der gerade beendet wurde. (0xc000010a)
+[0806/151629.351:ERROR:process_reader_win.cc(123)] NtOpenThread: {Zugriff verweigert} Ein Prozess hat einen Zugriff auf ein Objekt angefordert, aber ihm wurden nicht die Rechte für den Zugriff erteilt. (0xc0000022)
+[0806/151629.341:ERROR:process_reader_win.cc(123)] NtOpenThread: {Zugriff verweigert} Ein Prozess hat einen Zugriff auf ein Objekt angefordert, aber ihm wurden nicht die Rechte für den Zugriff erteilt. (0xc0000022)
+[0806/151629.351:ERROR:exception_snapshot_win.cc(98)] thread ID 15340 not found in process
+[0806/151629.351:ERROR:exception_snapshot_win.cc(98)] thread ID 20656 not found in process
