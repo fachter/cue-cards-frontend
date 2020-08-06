@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, BackHandler, AppState } from 'react-native';
+import { View, FlatList, Dimensions, Text, Button, StyleSheet, TouchableOpacity, BackHandler, AppState } from 'react-native';
 
 
 import { Entypo } from '@expo/vector-icons';
@@ -11,6 +11,7 @@ import DeleteWindow from './DeleteWindow'
 import NewCardWindow from './NewCardWindow'
 
 import { ListStructureContext } from './ListStructureProvider'
+import { CopyPasteContext } from './CopyPasteProvider'
 
 
 import SwipeView from '../../components/SwipeView'
@@ -51,24 +52,17 @@ const DataList = () => {
         getQuery
     } = useContext(ListStructureContext)
 
-
-
-
+    const { pasteTheData, someThingIsCopied, copyData } = useContext(CopyPasteContext)
 
     const navigation = useNavigation()
     const [deleteWindowVisible, SetDeleteWindowVisible] = useState(false)
     const [onDeleteItem, setOnDeleteItem] = useState(null)
 
-
-
     useEffect(() => {
-        console.log(currentListStructure)
+
         BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
 
     }, []);
-
-
-
 
 
 
@@ -253,9 +247,19 @@ const DataList = () => {
         setCreateNewCardWindowVisible(false)
     }
 
+    function pasteTheCopiedData() {
+        let copy = currentListStructure
+        copy.push(copyData)
+        setCurrentListStructure(copy)
+    }
+
 
     return (
         <View style={styles.container}>
+            {someThingIsCopied ? <View style={styles.copyPasteView}>
+                <Button title="paste" onPress={() => pasteTheCopiedData()} />
+                <Button title="x" />
+            </View> : null}
             <SwipeView swipeRight={_backButtonPressed}
             >
                 <FlatList
@@ -345,6 +349,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginHorizontal: 25
     },
+    copyPasteView: {
+        flexDirection: 'row'
+    }
 })
 
 
