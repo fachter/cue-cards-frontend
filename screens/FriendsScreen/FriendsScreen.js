@@ -14,33 +14,36 @@ export default class FriendsScreen extends React.Component {
     constructor(props) {
         super(props)
 
-
-
         this.retrieveFriends()
-
 
         this.state = {
             addWindowVisibility: false,
+            loadFriendsSuccesfull: true,
             friends: [
                 {
                     userID: 1111,
                     username: "Philip.B",
+                    isOnline: true,
                 },
                 {
                     userID: 2222,
                     username: "Matze.M",
+                    isOnline: false,
                 },
                 {
                     userID: 3333,
                     username: "Clara.L",
+                    isOnline: false,
                 },
                 {
                     userID: 4444,
                     username: "Darius.W",
+                    isOnline: false,
                 },
                 {
                     userID: 5555,
                     username: "Felix.A",
+                    isOnline: true,
                 }
             ]
         }
@@ -52,7 +55,14 @@ export default class FriendsScreen extends React.Component {
 
 
     retrieveFriends() {
-
+        console.log(1)
+        try {
+            //Abruf der Freundeliste
+            this.setState({ loadFriendsSuccesfull: true })
+        } catch (error) {
+            console.log("Error by loading friendlist:" + error)
+            this.setState({ loadFriendsSuccesfull: false })
+        }
     }
 
     _setAddWindowVisibility() {
@@ -64,7 +74,7 @@ export default class FriendsScreen extends React.Component {
     }
 
     render() {
-        if (this.context.isConnected === true) {
+        if (this.context.isConnected === true && this.state.loadFriendsSuccesfull === true) {
             return (
                 <View style={styles.container}>
                     <FlatList
@@ -86,7 +96,7 @@ export default class FriendsScreen extends React.Component {
         } else {
             return (
                 <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-                    <Text style={{ fontSize: 20, fontStyle: 'italic', color: 'white', margin: 10 }}>Bitte prüfe deine Internetverbindung</Text>
+                    <Text style={{ fontSize: 20, fontStyle: 'italic', color: 'white', margin: 10 }}>Hoppala, da ist wohl etwas schief gelaufen</Text>
                     <ActivityIndicator size="large" color="white" />
                 </View>
             )
@@ -98,7 +108,7 @@ export default class FriendsScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'grey'
+        backgroundColor: "#111111",
     },
     listSeperator: {
         height: StyleSheet.hairlineWidth,

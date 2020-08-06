@@ -1,5 +1,12 @@
 import React, { useContext, useState } from 'react'
-import { StyleSheet, View, TextInput, FlatList, TouchableOpacity, Dimensions, Text } from 'react-native'
+import { StyleSheet, View, TextInput, FlatList, TouchableOpacity, Dimensions, Text, ScrollView } from 'react-native'
+import ImagePickerButton from '../../API/ImagePicker'
+import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
+
+import uuid from 'react-native-uuid'
+
+
+
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -10,14 +17,63 @@ const data = [
 
 export default class MultipleChoice extends React.Component {
 
+    static contextType = ListStructureContext
+
     state = {
-        answers: this.props.answers
+        cardID: this._isValueNull(this.props.route.params.cardID) ? uuid.v1() : this.props.route.params.cardID,
+        cardType: "MC",
+        cardLevel: this._isValueNull(this.props.route.params.cardLevel) ? null : this.props.route.params.cardLevel,
+        questionText: this._isValueNull(this.props.route.params.questionText) ? null : this.props.route.params.questionText,
+        cardTopic: this._isValueNull(this.props.route.params.cardTopic) ? null : this.props.route.params.cardTopic,
+        answers: this._isValueNull(this.props.route.params.answers) ? [] : this.props.route.params.answers
     }
+
+
+    _isValueNull(value) {
+        if (value === undefined) {
+            return true
+        }
+        return false
+    }
+
+    _save() {
+        const { cardID, cardType, questionText, cardTopic, answers } = this.state
+        const updateCards = this.context
+
+        let newCard = {
+            cardID: cardID,
+            cardType: cardType,
+            questionText: questionText,
+            cardLevel: 0,
+            cardTopic: cardTopic,
+            answers: answers
+        }
+        console.log(newCard)
+
+        let copy = updateCards.currentListStructure
+
+        if (this.props.route.params.mode == "createMode") { // neue Karte erstellen
+            copy.push(newCard)
+            updateCards.setCurrentListStructure(copy)
+
+        } else if (this.props.route.params.mode == "editMode") {   //alte Karte aktualisieren
+            var index
+            for (var i = 0; i < copy.length; i++) {
+                if (copy[i].ID === id) {
+                    index = i
+                }
+                copy[index] = newCard
+            }
+        }
+        updateCards.storeDataOnDevice()
+        this.props.navigation.goBack()
+    }
+
 
     _addItem() {
         var copy = this.state.answers
         copy.push({
-            ID: this.state.answers.length,
+            ID: uuid.v1(),
             text: '',
         })
 
@@ -53,26 +109,36 @@ export default class MultipleChoice extends React.Component {
     render() {
         return (
             <View style={styles.container} >
+                <TextInput
+                    style={[styles.questionInput, { textAlign: 'center' }]}
+                    multiline={true}
+                    placeholder="Bitte Frage hier eingeben"
+                    onChangeText={text => this.setState({ questionText: text })}>
+                    {this.state.questionText}
+                </TextInput>
+                <ImagePickerButton />
                 <TouchableOpacity onPress={() => this._addItem()}>
                     <View style={styles.addButton}>
 
                     </View>
                 </TouchableOpacity>
                 <View style={styles.answers}>
-                    <FlatList
-                        data={this.state.answers}
-                        renderItem={({ item }) => (
-                            <AnswerItem
-                                item={item}
-                                getText={this._updateAnswerText.bind(this)}
-                                deleteCallback={this._deleteItemById.bind(this)}
-                            />
-                        )}
-                        keyExtractor={item => item.answerID}
-                        ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
-                    />
+                    <ScrollView>
+                        <FlatList
+                            data={this.state.answers}
+                            renderItem={({ item }) => (
+                                <AnswerItem
+                                    item={item}
+                                    getText={this._updateAnswerText.bind(this)}
+                                    deleteCallback={this._deleteItemById.bind(this)}
+                                />
+                            )}
+                            keyExtractor={item => item.answerID}
+                            ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
+                        />
+                    </ScrollView>
                 </View>
-                <TouchableOpacity style={styles.bottomView} onPress={() => this.props.onSave()}>
+                <TouchableOpacity style={styles.bottomView} onPress={() => this._save()}>
                     <View style={styles.saveButton}>
                         <Text style={{ fontStyle: 'italic', fontSize: 20, color: 'white' }}>speichern</Text>
                     </View>
@@ -80,7 +146,6 @@ export default class MultipleChoice extends React.Component {
             </View>
         )
     }
-
 }
 
 class AnswerItem extends React.Component {
@@ -163,6 +228,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
 
     },
+    questionInput: {
+        flex: 1,
+        padding: 5,
+        borderColor: 'black',
+        color: 'black',
+        borderWidth: 1,
+        margin: 20,
+        fontSize: 15,
+        fontStyle: 'italic'
+
+    },
+
 
 
 });

@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, TouchableOpacity, MaterialCommunityIcons, Text, StyleSheet } from 'react-native'
+import DeleteRoomWindow from './DeleteRoomWindow';
 
 
 
@@ -9,27 +10,45 @@ export default class RoomListItem extends React.Component {
 
     render() {
         return (
+            <TouchableOpacity
+            onLongPress={()=>this.props.onDeleteWindow(this.props.item.title)}
+            >
             <View style={styles.container}>
                 <View style={styles.innerView}>
                     <Text>{this.props.item.title}</Text>
                 </View>
-
+                    
             </View>
+            </TouchableOpacity>
+            
+           /*  < TouchableOpacity>
+                <View style={styles.container}>
+                    <MaterialCommunityIcons
+                        style={styles.folderButton}
+                        name="credit-card-multiple-outline"
+                        size={25} color="white" />
+                    <Text style={styles.fontStyle}>{this.props.item.title}</Text>
+                </View>
+            </TouchableOpacity> */
+    
         )
     }
 }
+    
+
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        paddingTop: 10,
-        paddingLeft: 10,
-        paddingRight: 10,
-        height: 60
+        padding: 10,
+        flexDirection: 'row',
+        alignItems: "center"
     },
-    innerView: {
-        flex: 1,
-        backgroundColor: 'darkgrey'
-    }
+    folderButton: {
+        marginRight: 20
+    },
+    fontStyle: {
+        fontWeight: "bold",
+        color: "white"
+    },
 
 });

@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, Modal, TouchableOpacity, Text } from 'react-native'
+import { AntDesign } from '@expo/vector-icons';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -63,6 +64,21 @@ export default class DeleteWindow extends React.Component {
                         onPress={() => onDeleteWindow()}
                     />
                 </View>
+
+
+                {/* <View style={styles.background}>
+                    <View style={styles.window}>
+                        <TouchableOpacity style={styles.cancelButton} onPress={() => onDeleteWindow()}>
+                            <AntDesign name="closecircleo" size={24} color="white" />
+                        </TouchableOpacity>
+                        {this._checkIfItemIsFolderOrSet() ? null : <TouchableOpacity style={styles.button} onPress={() => onNavigateToCardCreator(item)} >
+                            <Text style={styles.buttonText}>bearbeiten</Text>
+                        </TouchableOpacity>}
+                        <TouchableOpacity style={styles.button} onPress={() => onDelete(item.ID)}>
+                            <Text style={styles.buttonText}>löschen</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View> */}
             </Modal>
 
         )
@@ -92,6 +108,7 @@ const styles = StyleSheet.create({
         marginRight: 20,
         marginLeft: 30
     }
+
 });
 
 

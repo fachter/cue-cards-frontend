@@ -1,14 +1,37 @@
 
-import React from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
+
+
 
 import { InternetConnectionProvider } from './API/InternetConnection'
-
+import { UserProvider, UserContext } from './screens/LoginRegistrationScreen/UserProvider'
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { AsyncStorage, AppState } from 'react-native'
-
 import axios from 'axios'
-
-
 import Sidebar from './navigation/Sidebar'
+import { LoginRegistrationStackScreen } from './navigation/Sidebar';
+
+
+const StartStack = createStackNavigator()
+
+
+
+const StartScreen = () => {
+  const { isLoggedin } = useContext(UserContext)
+  return (
+    <NavigationContainer >
+      <StartStack.Navigator screenOptions={{
+        headerShown: false,
+      }}>
+        {isLoggedin ? <StartStack.Screen name="Sidebar" component={Sidebar}></StartStack.Screen>
+          :
+          <StartStack.Screen name="LoginScreen" component={LoginRegistrationStackScreen}></StartStack.Screen>}
+      </StartStack.Navigator>
+
+    </NavigationContainer>
+  )
+}
 
 
 export default class App extends React.Component {
@@ -16,13 +39,8 @@ export default class App extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      jwt: null,
-
-    }
-
-    this._retrieveToken().then(() => {
-      this._getUserData()
+    this._retrieveToken().then(token => {
+      this._getUserData(token)
     })
   }
 
@@ -30,44 +48,45 @@ export default class App extends React.Component {
 
 
 
-  _getUserData() {
-    axios.get("http://167.172.170.147:8088/get-users-data", {
+  _getUserData(token) {
+    axios.get("https://cue-cards-app.herokuapp.com/get-users-data", {
       headers: {
-        'Authorization': "Bearer " + this.state.jwt
+        'Authorization': "Bearer " + token
       }
     }).then(resp => {
-      console.log('test')
       console.log(resp.data)
     })
       .catch((err) => {
         console.log(err)
+
       })
   }
 
 
-  _retrieveToken = async () => {
+  async _retrieveToken() {
     try {
       const token = await AsyncStorage.getItem('userToken')
       if (token != null) {
-        this.setState({ jwt: token })
+        return token
+
       }
     } catch (error) {
       console.log("Error by retrieve token:" + error)
+
     }
   }
 
-
-
-
   render() {
     return (
-      <InternetConnectionProvider>
-        <Sidebar />
-      </InternetConnectionProvider>
-
+      <UserProvider>
+        <InternetConnectionProvider>
+          <StartScreen />
+        </InternetConnectionProvider>
+      </UserProvider >
     )
   }
 }
+
 
 
 

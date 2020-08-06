@@ -1,23 +1,28 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList, Button, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, FlatList, Button, TouchableOpacity, SectionList} from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import AddRoomWindow from './AddRoomWindow';
 import RoomListItem from './RoomListItem';
+import DeleteRoomWindow from './DeleteRoomWindow';
 import {SearchBar} from 'react-native-elements';
 import { Searchbar } from 'react-native-paper';
-
+import {v4 as uuidv4} from 'uuid';
 
 
 export default class RoomScreen extends React.Component {
 
     constructor(props) {
         super(props)
+    
 
-this.state= {
+
+ this.state= {
 addRoomWindowVisibility: false,
+deleteWindowVisible: false,
+onDeleteItem: null,
 search: '',
-rooms: [
-    {
+ rooms: [
+     {
         id: 1,
         title: "Winf"
     },
@@ -28,24 +33,31 @@ rooms: [
     {
         id: 3,
         title: "Clara und ich"
+    } 
+] 
+} 
     }
-]
-}
+
+
+     handleAdd(newListItem){
+         let copy = this.state.rooms
+         copy.push({id: copy.length, title: newListItem})
+         this.setState({rooms: copy})
+         }
+    
+
+    _showDeleteWindow(item){
+        this.setState({onDeleteItem: item})
+        this.setState({deleteWindowVisible: true})
     }
 
-    _updateSearch = (search) => {
-        
-        this.setState({search});
-    };
-
-
-    _setRoomAddWindowVisibility() {
+      _setRoomAddWindowVisibility() {
         if (this.state.addRoomWindowVisibility == true) {
-            this.setState({ addRoomWindowVisibility: false })
+            this.setState({addRoomWindowVisibility: false})
         } else {
-            this.setState({ addRoomWindowVisibility: true })
+            this.setState({addRoomWindowVisibility: true})
         }
-    }
+    } 
 
     
 render() {
@@ -55,29 +67,42 @@ render() {
                 <Text>Gebe die 6-stellige Raum-ID ein, um einem Raum beizutreten</Text>
                 <Searchbar
                 placeholder="Raum beitreten"
-                onChangeText={this._updateSearch}
+                //onChangeText={_updateSearch()}
                 value={search}
                 />
                 <FlatList
                 data={this.state.rooms}
                 keyExtractor={item => item.id}
                 renderItem={({item}) => (
-                <RoomListItem item={item}/>
+                <RoomListItem 
+                item={item}
+                onDeleteWindow={this._showDeleteWindow.bind(this)}
+                />
                 )}
                 />
                 
-                <TouchableOpacity style={styles.plusButton} onPress={() => this.setState({ addRoomWindowVisibility: true })} >
+                <TouchableOpacity style={styles.plusButton} onPress={() => this.setState({addRoomWindowVisibility: true})} >
                     <Entypo name="plus" size={50} color="black" />
                 </TouchableOpacity>
-                <AddRoomWindow onSetVisibility={this._setRoomAddWindowVisibility.bind(this)} addRoomWindowVisibility={this.state.addRoomWindowVisibility} />
+                <AddRoomWindow 
+                    onSetVisibility={this._setRoomAddWindowVisibility.bind(this)} 
+                    addRoomWindowVisibility={this.state.addRoomWindowVisibility}
+                    //name={this.state.rooms.ti}
+                    onAdd={this.handleAdd.bind(this)}
+                 />
+                 {this.state.deleteWindowVisible ?
+                <DeleteRoomWindow
+                    onDeleteWindow={() => this.props.setState({ deleteWindowVisible: true })}
+                /> : null}
             </View>
             
 
 
-        );
+        )
     
+                }
 }
-};
+
 
 const styles = StyleSheet.create({
     container: {

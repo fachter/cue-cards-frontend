@@ -1,145 +1,145 @@
-import React from 'react';
-import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, ScrollView, StyleSheet } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import logo from '../../assets/Logo.png'
 import axios from 'axios';
+import { UserContext } from './UserProvider';
 
 
 
 
 const { width: WIDTH } = Dimensions.get('window')
 
-export default class RegistrationScreen extends React.Component {
+export default function RegistrationScreen({ navigation }) {
 
-    state = {
-        data: [],
-        username: null,
-        password: null,
-        email: null,
-        firstName: null,
-        secondName: null,
-    }
+    const { _storeToken, login } = useContext(UserContext)
 
-    componentDidMount() {
-        this.getapiData()
-    }
+    const [username, setUsername] = useState(null)
+    const [password1, setPassword1] = useState(null)
+    const [password2, setPassword2] = useState(null)
+    const [email, setEmail] = useState(null)
+    const [fullName, setFullname] = useState(null)
 
-    async getapiData() {
-        let resp = await axios.get('http://167.172.170.147:8088/testapicall')
-        console.log(resp.data)
-        this.setState({ data: resp.data })
-    }
 
-  
 
-     _retrieveData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('userToken')
-            if (value != null) {
-                console.log(value)
-            }
-        } catch (error) {
-            console.log("Error by retrieve token:" + error)
-        }
-    }
-
-  
-
-    testApiCall() {
-
-        const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQaGlsaXAxIiwiZXhwIjoxNTkxMjAwOTk1LCJpYXQiOjE1OTAzMzY5OTV9.KKvdVNXx6ZPymSQfhn6fJFuVdhd9O3LYeacSEge1wtc'
-
-        const AuthStr = 'Bearer '.concat(token);
-        axios.get('http://167.172.170.147:8088/testApiCall')
-            .then(response => {
-                // If request is good...
-                console.log(response.data);
+    function _regNewAcc() {
+        axios.post('https://cue-cards-app.herokuapp.com/register', {
+            username: 'username12',
+            password: 'password',
+            email: 'blaa@bla.de',
+            fullName: 'Philip'
+        })
+            .then((resp) => {
+                console.log(resp.data.jwt)
+                _storeToken(resp.data.jwt)
+                login()
+            }).catch((error) => {
+                console.log(error)
             })
-            .catch((error) => {
-                console.log(error);
-            });
+    }
+
+    function _comparePasswords() {
+        return new Promise((resolve, reject) => {
+            if (password1 === password2) {
+                resolve()
+            } else {
+                reject('Passwörter stimmen nicht überein')
+            }
+        })
+    }
+
+    function _checkIfNull(value) {
+
+        return new Promise((resolve, reject) => {
+            if (value != null) {
+                resolve(value)
+            } else {
+                reject(value)
+            }
+        })
     }
 
 
+    function _checkValidityOfAllValues() {
 
-    render() {
-        return (
-            <ScrollView>
-                <View style={styles.container}>
-                <Image source={logo} style={styles.logo} /> 
+        _checkIfNull(username).then(() => {
+            _checkIfNull(password1).then(() => {
+                _checkIfNull(password2).then(() => {
+                    _comparePasswords().then(() => {
+                        _checkIfNull(email).then(() => {
+                            _checkIfNull(firstName).then(() => {
+                                _checkIfNull(lastName).then(() => {
 
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder={'Benutzername'}
-                            placeholderTextColor={'white'}
-                            underlineColorAndroid={'transparent'}
-                            onChangeText={text => this.setState({ username: text })}
-                        />
-                    </View>
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder={'Passwort'}
-                            placeholderTextColor={'white'}
-                            underlineColorAndroid={'transparent'}
-                            secureTextEntry={true}
-                            onChangeText={text => this.setState({ password: text })}
-                        />
-                    </View>
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder={'Passwort wiederholen'}
-                            placeholderTextColor={'white'}
-                            underlineColorAndroid={'transparent'}
-                            secureTextEntry={true}
-                            onChangeText={text => this.setState({ passwordcheck: text })}
-                        />
-                    </View>
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder={'E-Mail'}
-                            placeholderTextColor={'white'}
-                            underlineColorAndroid={'transparent'}
-                            secureTextEntry={true}
-                            onChangeText={text => this.setState({ email: text })}
-                        />
-                    </View>
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder={'Vorname'}
-                            placeholderTextColor={'white'}
-                            underlineColorAndroid={'transparent'}
-                            secureTextEntry={true}
-                            onChangeText={text => this.setState({ firstName: text })}
-                        />
-                    </View>
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder={'Nachname'}
-                            placeholderTextColor={'white'}
-                            underlineColorAndroid={'transparent'}
-                            secureTextEntry={true}
-                            onChangeText={text => this.setState({ secondName: text })}
-                        />
-                    </View>
+                                    this.props.navigation.navigate('Login')
 
-                    <TouchableOpacity
-                        style={styles.btnLogin}
-                        onPress={() => this.regNewAcc()}
-
-                    >
-                        <Text style={styles.text}>Registrieren</Text>
-
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
-
-        )
+                                }).catch(error => console.log('Lastname ungültig: ' + error))
+                            }).catch(error => console.log('Firstname ungültig: ' + error))
+                        }).catch(error => console.log('Email ungültig: ' + error))
+                    }).catch(() => console.log('Passwörter stimmen nicht überein'))
+                }).catch(error => console.log('Password 2 ungültig: ' + error))
+            }).catch(error => console.log('Password 1 ungültig: ' + error))
+        }).catch(error => console.log('Username ungültig: ' + error))
     }
+
+    return (
+        <View style={styles.container}>
+            <Image source={logo} style={styles.logo} />
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Benutzername'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    onChangeText={text => setUsername(text)}
+                />
+            </View>
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Passwort'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    secureTextEntry={true}
+                    onChangeText={text => setPassword1(text)}
+                />
+            </View>
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Passwort wiederholen'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    secureTextEntry={true}
+                    onChangeText={text => setPassword2(text)}
+                />
+            </View>
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'E-Mail'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    secureTextEntry={true}
+                    onChangeText={text => setEmail(text)}
+                />
+            </View>
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Profilname'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    secureTextEntry={true}
+                    onChangeText={text => setFullname(text)}
+                />
+            </View>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => _regNewAcc()}
+            >
+                <Text style={styles.text}>Registrieren</Text>
+            </TouchableOpacity>
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -167,15 +167,14 @@ const styles = StyleSheet.create({
         color: 'white'
 
     },
-    btnLogin: {
-        width: WIDTH - 55,
+    button: {
+        width: 100,
         height: 45,
         borderRadius: 25,
         backgroundColor: 'white',
         justifyContent: 'center',
-        marginHorizontal: 25,
-
-        marginBottom: 10
+        alignItems: 'center',
+        margin: 5,
     },
     text: {
         color: 'black',

@@ -3,13 +3,18 @@ import { View, Modal, StyleSheet, Text, TextInput, TouchableOpacity } from 'reac
 import * as Icon from '@expo/vector-icons'
 
 
-export default class AddRoomWindow extends React.Component {
+ export default class AddRoomWindow extends React.Component {
 
     state = {
         roomName: null
     }
 
-    render() {
+    render() { 
+
+
+        
+            
+        
         return (
             <View style={styles.container} >
                 <Modal
@@ -21,17 +26,18 @@ export default class AddRoomWindow extends React.Component {
                         <View style={styles.window}>
                             <Text
                                 style={styles.headingText}>Gebe den Raumnamen ein</Text>
-                            <TextInput style={styles.friendName} onChangeText={text => this.setState({ roomName: text })}></TextInput>
+                            <TextInput style={styles.friendName} onChangeText={text => this.setState({roomName: text})}></TextInput>
                             <TouchableOpacity style={styles.addButton}   >
-                                <Icon.Feather name="check" size={50} onPress={newRoom => this.state.room.push(newRoom)} />
+                                <Icon.Feather name="check" size={50} onPress={()=>this.props.onAdd(this.state.roomName)} />
                             </TouchableOpacity>
                         </View>
                     </View>
                 </Modal>
             </View>
         )
+        };
     }
-}
+
 
 const styles = StyleSheet.create({
     container: {

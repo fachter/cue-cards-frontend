@@ -1,6 +1,7 @@
 import React, { useState, createContext, useContext, useEffect } from 'react'
 import { View, Modal, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native'
 import * as Icon from '@expo/vector-icons'
+import { AntDesign } from '@expo/vector-icons';
 import { ListStructureContext, ListStructureProvider } from './ListStructureProvider'
 import { useNavigation } from '@react-navigation/native';
 import uuid from 'react-native-uuid'
@@ -15,11 +16,7 @@ export default function ChooseFolderSetWindow() {
     const [isNewFileFolder, setIsNewFileFolder] = useState(null)
 
 
-
-
-
-    async function _save() {
-
+    function _save() {
         let newID = uuid.v1()
         let newListItem = {
             ID: newID,
@@ -91,6 +88,7 @@ export default function ChooseFolderSetWindow() {
 function CreateFolderOrSet() {
     const [showFileNameWindow, setShowFileNameWindow] = useState(false)
     const { setIsNewFileFolder } = useContext(FileContext)
+    const { setCreateFileWindowVisible } = useContext(ListStructureContext)
 
     function _setFileType(isFolder) {
         setIsNewFileFolder(isFolder)
@@ -101,6 +99,9 @@ function CreateFolderOrSet() {
     if (showFileNameWindow == false) {
         return (
             <View style={styles.background}>
+                <TouchableOpacity style={styles.cancelButton} onPress={() => setCreateFileWindowVisible(false)}>
+                    <AntDesign name="closecircleo" size={24} color="white" />
+                </TouchableOpacity>
                 <Text style={styles.headingText}>Was möchtest du erstellen?</Text>
                 <View style={styles.window}>
                     <TouchableOpacity style={styles.windowButtons} onPress={() => _setFileType(true)}>
@@ -228,6 +229,15 @@ const styles = StyleSheet.create({
 
 
     },
+    cancelButton: {
+        width: 30,
+        height: 30,
+        borderRadius: 5,
+        alignSelf: 'flex-end',
+        margin: 5,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
 
 
 });

@@ -8,7 +8,6 @@ import { Entypo } from '@expo/vector-icons';
 
 const card =
 {
-    cardID: '1',
     questionText: 'Auto',
     cardLevel: 2,            // Stufe im Karteikasten
     numberOfRightTurns: null,  // wie oft wurde die Karte bereits richtig beantwortet (bsp. ab 3 level up)
@@ -16,29 +15,35 @@ const card =
 }
 
 
-
-export default class VocableCard extends React.Component {
+export default class Freetext extends React.Component {
 
     state = {
-        card: card,
         solution: 'tippe für die Lösung',
         choice: null,
+        backgroundColor: "#111111",
     }
 
 
 
     _saveChoice = (choice) => {
-        this.props.getCardBack(choice)
+        if (choice === true) {
+            this.setState({ backgroundColor: 'green' })
+        } else {
+            this.setState({ backgroundColor: 'red' })
+        }
+        setTimeout(() => {
+            this.props.getCardBack(choice)
+        }, 1000);
     }
 
 
     _showSolution = () => {
-        this.setState({ solution: this.state.card.solution })
+        this.setState({ solution: this.props.card.solution })
     }
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, { backgroundColor: this.state.backgroundColor }]}>
                 <TouchableOpacity style={styles.solution} onPress={() => this._showSolution()}>
                     <Text style={styles.solutionText}>{this.state.solution}</Text>
                 </TouchableOpacity>
@@ -61,7 +66,6 @@ export default class VocableCard extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 4,
-        backgroundColor: '#4b5057'
     },
     solution: {
         flex: 1,
@@ -78,7 +82,6 @@ const styles = StyleSheet.create({
         bottom: 10,
         alignSelf: 'center',
         flexDirection: 'row'
-
     },
     saveButton: {
         height: 60,

@@ -9,12 +9,6 @@ export default class AnswerListItem extends React.Component {
     }
 
 
-
-    componentDidUpdate() {
-        this.props.getCardState(this.state.checkState, this.props.item)
-    }
-
-
     _checkedUnchecked = () => {
         if (this.state.checkState) {
             this.setState({ checkState: false })
@@ -22,20 +16,19 @@ export default class AnswerListItem extends React.Component {
             this.setState({ checkState: true })
         }
 
+        this.props.getCardState(this.state.checkState, this.props.item)
     }
-
 
     render() {
         return (
             <TouchableOpacity onPress={() => { this._checkedUnchecked() }}>
-                <View style={[styles.container, { backgroundColor: (this.state.checkState == true ? 'green' : '#4b5057') }]}>
+                <View style={[styles.container, { backgroundColor: (this.props.item.checkState == true ? 'green' : this.props.backgroundColor) }]}>
                     <Text style={{ fontSize: 20, color: 'white' }}>{this.props.item.answerValues.text}</Text>
                 </View>
             </TouchableOpacity>
         )
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {

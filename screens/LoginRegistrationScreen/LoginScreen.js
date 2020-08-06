@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Button, FlatList, StyleSheet } from 'react-native';
+import { UserContext } from './UserProvider'
 import logo from '../../assets/Logo.png';
-import { AsyncStorage } from 'react-native'
+
 import axios from 'axios';
 
 
@@ -11,51 +12,46 @@ const { width: WIDTH } = Dimensions.get('window')
 
 export default class LoginScreen extends React.Component {
 
+    static contextType = UserContext
 
-    dataIsValid() {
-        return true
+    constructor(props) {
+        super(props)
+
     }
 
-
+    componentDidMount() {
+        this.context.logout()
+    }
 
     _authenticateAcc() {
-        if (this.dataIsValid()) {
-
-            axios.post('http://167.172.170.147:8088/authenticate', {
-                username: 'username',
-                password: 'password',
-            })
-                .then((resp) => {
-                    console.log(resp.data.jwt)
-                    this._storeToken(resp.data.jwt)
-                }).catch((error) => {
-                    console.log(error)
-                })
-        }
+        const user = this.context
+        user.login()
+        // axios.post('https://cue-cards-app.herokuapp.com/authenticate', {
+        //     username: 'username',
+        //     password: 'password',
+        // })
+        //     .then((res) => {
+        //         user._storeToken(res.data.jwt)
+        //         axios.get("https://cue-cards-app.herokuapp.com/get-users-data", {
+        //             headers: {
+        //                 'Authorization': "Bearer " + res.data.jwt
+        //             }
+        //         }).then(resp => {
+        //             console.log(resp.data)
+        //             //ListStrucutureprovider -> CurrentlistStrucutre aktualiseren
+        //             user.login()
+        //         })
+        //             .catch((err) => {
+        //                 console.log(err)
+        //             })
+        //     })
     }
-
-
-
-    _storeToken = async (token) => {
-        try {
-            await AsyncStorage.setItem(
-               ' userToken', token
-            );
-        } catch (error) {
-            console.log("Error by storing token: " + error)
-        }
-    }
-
-
-
-
 
     render() {
 
         return (
             <View style={styles.container}>
                 <Image source={logo} style={styles.logo} />
-
                 <View>
                     <TextInput
                         style={styles.input}
@@ -73,20 +69,19 @@ export default class LoginScreen extends React.Component {
                         secureTextEntry={true}
                     />
                 </View>
-                <TouchableOpacity style={styles.btnLogin} onPress={() => this._authenticateAcc()}>
-                    <Text text={styles.text}>Login</Text>
+                <TouchableOpacity style={styles.button} onPress={() => this._authenticateAcc()}>
+                    <Text style={styles.text}>Login</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btnLogin} onPress={() => this._retrieveData()}>
-                    <Text text={styles.text}>Login</Text>
+                <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Registration')}>
+                    <Text style={styles.text}>Registrieren</Text>
                 </TouchableOpacity>
-
-
-
             </View>
-
         )
     }
 }
+
+
+
 
 const styles = StyleSheet.create({
 
@@ -113,18 +108,21 @@ const styles = StyleSheet.create({
         color: 'white'
 
     },
-    btnLogin: {
-        width: WIDTH - 55,
+    button: {
+        width: 100,
         height: 45,
         borderRadius: 25,
         backgroundColor: 'white',
         justifyContent: 'center',
-        marginHorizontal: 25
+        alignItems: 'center',
+        margin: 5,
+
 
     },
     text: {
         color: 'black',
         fontSize: 16,
+        fontStyle: 'italic',
         textAlign: 'center'
     }
 })
