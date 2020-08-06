@@ -307,7 +307,7 @@ const DataList = () => {
                     <Entypo name="plus" size={45} color="#008FD3" />
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.plusButton, { left: 10 }]} onPress={() => DataBase.storeDataOnDB(listHistoryArray, currentListStructure, userToken)} >
-                    <Entypo name="plus" size={45} color="#008FD3" />
+                    <Text>Speichern</Text>
                 </TouchableOpacity>
             </SwipeView>
             {deleteWindowVisible ?

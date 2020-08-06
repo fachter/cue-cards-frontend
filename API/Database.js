@@ -25,7 +25,7 @@ export default class Database extends React.Component {
                 'Authorization': "Bearer " + userToken
             }
         }).then(result => {
-            // console.log(result)
+            console.log(result)
         }).catch(error => {
             console.log(error)
         })

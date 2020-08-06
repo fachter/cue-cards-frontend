@@ -105,13 +105,16 @@ export default class MultipleChoice extends React.Component {
 
     _updateAnswerText(text, id) {
         var copy = this.state.answers
-        var index
-        for (var i = 0; i < copy.length; i++) {  //Sucht den Index des Items im Array nach id
-            if (copy[i].id === id)
-                index = i
+
+        console.log(id)
+        for (let i = 0; i < copy.length; i++) {  //Sucht den Index des Items im Array nach id
+            if (copy[i].id === id) {
+                copy[i].text = text
+                this.setState({ answers: copy })
+            }
         }
-        copy[index].text = text
-        this.setState({ answers: copy })
+
+
     }
 
     render() {
@@ -145,14 +148,14 @@ export default class MultipleChoice extends React.Component {
                             ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
                         />
                     </ScrollView>
-                </View>
-                <View style={styles.bottomView} >
-                    <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
-                        <Text style={{ fontStyle: 'italic', fontSize: 10, color: 'white' }}>speichern</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
-                        <Text style={{ fontStyle: 'italic', fontSize: 10, color: 'white' }}>speichern und neu</Text>
-                    </TouchableOpacity>
+                    <View style={styles.bottomView} >
+                        <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
+                            <Text style={{ fontStyle: 'italic', fontSize: 10, color: 'white' }}>speichern</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
+                            <Text style={{ fontStyle: 'italic', fontSize: 10, color: 'white' }}>speichern und neu</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         )
@@ -168,7 +171,7 @@ class AnswerItem extends React.Component {
                     style={[styles.textInput, { width: "75%" }]}
                     placeholder="Antwort"
                     placeholderTextColor="grey"
-                    onChangeText={text => this.props.getText(text, item.ID)}>
+                    onChangeText={text => this.props.getText(text, item.id)}>
                     {item.text}
                 </TextInput>
                 <Icon.Button
