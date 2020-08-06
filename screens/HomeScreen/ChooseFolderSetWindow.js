@@ -35,11 +35,12 @@ export default function ChooseFolderSetWindow() {
 
     function _addNewItemToList(newListItem) {
         let copy = currentListStructure
-        copy.push(newListItem)
-        setCurrentListStructure(copy)
-        storeDataOnDevice()
-    }
+        console.log(copy)
 
+        currentListStructure.push(newListItem)
+        // setCurrentListStructure(copy)
+        // storeDataOnDevice()
+    }
 
 
     if (isFolder == false) {
@@ -81,8 +82,6 @@ export default function ChooseFolderSetWindow() {
         )
     }
 }
-
-
 
 
 function CreateFolderOrSet() {

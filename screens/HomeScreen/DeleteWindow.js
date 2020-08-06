@@ -1,8 +1,8 @@
 import React from 'react'
 import { StyleSheet, View, Modal, TouchableOpacity, Text } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
-
 import Icon from 'react-native-vector-icons/Ionicons';
+import { CopyPasteContext } from './CopyPasteProvider'
 
 export default class DeleteWindow extends React.Component {
 
@@ -13,7 +13,6 @@ export default class DeleteWindow extends React.Component {
         }
         return false
     }
-
 
 
     render() {

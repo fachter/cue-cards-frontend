@@ -21,12 +21,17 @@ export default function LoginScreen({ navigation }) {
     const [username, setUnsername] = useState('')
     const [password, setPassword] = useState('')
     const [stayLoggedin, setStayLoggedin] = useState(false)
+    const [screenIsMounted, setScreenIsMouted] = useState(false)
 
 
     useEffect(() => {
-        checkIfUserStayedLoggedin().then(savedLoginState => {
-            userLogin(savedLoginState)
-        })
+
+        if (screenIsMounted === false) {
+            checkIfUserStayedLoggedin().then(savedLoginState => {
+                userLogin(savedLoginState)
+                setScreenIsMouted(true)
+            })
+        }
     })
 
 

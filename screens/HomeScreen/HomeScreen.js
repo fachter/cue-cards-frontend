@@ -61,25 +61,13 @@ const DataList = () => {
 
 
 
-    // useEffect(() => {
-    //     console.log(currentListStructure)
-    //     BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
+    useEffect(() => {
+        console.log(currentListStructure)
+        BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
 
-    //     AppState.addEventListener('change', _handleAppStateChange);
-    //     return () => {
-    //         AppState.removeEventListener('change', _handleAppStateChange);
-    //     }
-    // }, []);
+    }, []);
 
 
-
-
-    // const _handleAppStateChange = (nextAppState) => {
-    //     console.log(nextAppState)
-    //     if (nextAppState === 'active') {
-    //         console.log("test")
-    //     }
-    // }
 
 
 
@@ -111,7 +99,8 @@ const DataList = () => {
         if (item.isFolder) {
             //durchsucht das Array nach dem Item und ruft die OrdnerStruktur auf
             let indexOfItem = currentListStructure.indexOf(item)
-            let subStructure = currentListStructure[indexOfItem].subFolder
+            let subStructure = currentListStructure[indexOfItem].subFolders
+            console.log(subStructure)
             setCurrentListStructure(subStructure)
         } else {
             //durchsucht das Array nach dem Item und ruft die OrdnerStruktur auf
