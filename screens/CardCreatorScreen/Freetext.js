@@ -76,15 +76,13 @@ export default class Vocable extends React.Component {
                     {this.state.questionText}
                 </TextInput>
                 <ImagePickerButton />
-                <View style={styles.answer}>
-                    <TextInput
-                        style={styles.textInput}
-                        multiline={true}
-                        placeholder=" .. und hier deine Antwort"
-                        onChangeText={text => this.setState({ solution: text })}>
-                        {this.state.solution}
-                    </TextInput>
-                </View>
+                <TextInput
+                    style={styles.textInput}
+                    multiline={true}
+                    placeholder=" .. und hier deine Antwort"
+                    onChangeText={text => this.setState({ solution: text })}>
+                    {this.state.solution}
+                </TextInput>
                 <TouchableOpacity style={styles.bottomView} onPress={() => this._save()}>
                     <View style={styles.saveButton}>
                         <Text style={{ fontStyle: 'italic', fontSize: 20, color: 'white' }}>speichern</Text>
@@ -99,14 +97,15 @@ export default class Vocable extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: "#595959"
     },
     answer: {
-        flex: 3,
+        // flex: 1,
         borderColor: '#848a91',
     },
     textInput: {
-        flex: 1,
+        // flex: 1,
         padding: 5,
         borderColor: 'black',
         color: 'black',
@@ -127,7 +126,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     questionInput: {
-        flex: 1,
+
         padding: 5,
         borderColor: 'black',
         color: 'black',
