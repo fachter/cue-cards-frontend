@@ -56,7 +56,7 @@ export default class FolderListItem extends React.Component {
                                 style={styles.folderButton}
                                 name="ios-folder"
                                 size={25} color="white"
-                                backgroundColor="#595959"
+                                backgroundColor="#2f3136"
                             />
                             <Text style={styles.fontStyle}>{item.name}</Text>
                         </View>

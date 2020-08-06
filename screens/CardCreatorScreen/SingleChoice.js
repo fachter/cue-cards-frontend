@@ -76,20 +76,22 @@ export default class SingleChoice extends React.Component {
         return (
             <View style={styles.container}>
                 <TextInput
-                    style={[styles.questionInput, { textAlign: 'center' }]}
+                    style={styles.textInput}
                     multiline={true}
-                    placeholder="Bitte Frage hier eingeben"
+                    placeholder="Frage eingeben"
+                    placeholderTextColor="grey"
                     onChangeText={text => this.setState({ questionText: text })}>
                     {this.state.questionText}
                 </TextInput>
-                <ImagePickerButton />
                 <TextInput
                     style={styles.textInput}
                     multiline={true}
-                    placeholder=" .. und hier deine Antwort"
+                    placeholder="Antwort eingeben"
+                    placeholderTextColor="grey"
                     onChangeText={text => this.updateAnswers(text)}>
                     {this.state.answers[0].text}
                 </TextInput>
+                <ImagePickerButton />
                 <TouchableOpacity style={styles.bottomView} onPress={() => this._save()}>
                     <View style={styles.saveButton}>
                         <Text style={{ fontStyle: 'italic', fontSize: 20, color: 'white' }}>speichern</Text>
@@ -103,17 +105,22 @@ export default class SingleChoice extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: "#2f3136",
+        paddingTop: 25
     },
     textInput: {
-        height: 30,
-        borderColor: 'black',
+        paddingLeft: 15,
+        padding: 7,
+        marginBottom: 25,
+        borderRadius: 10,
         color: 'black',
-        borderWidth: 1,
-        margin: 20
+        margin: 20,
+        fontSize: 15,
+        fontStyle: 'italic',
+        backgroundColor: '#C7C7C7'
     },
     saveButton: {
-        backgroundColor: '#2c2e30',
+        backgroundColor: '#008FD3',
         height: 40,
         width: 130,
         borderRadius: 30,
@@ -121,21 +128,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         position: 'absolute',
         alignItems: 'center',
-        justifyContent: 'center'
-
-    }, bottomView: {
-        flex: 1,
+        justifyContent: 'center',
+        marginTop: 30
     },
-    questionInput: {
-        flex: 1,
-        padding: 5,
-        borderColor: 'black',
-        color: 'black',
-        borderWidth: 1,
-        margin: 20,
-        fontSize: 15,
-        fontStyle: 'italic'
-
-    },
-
 });

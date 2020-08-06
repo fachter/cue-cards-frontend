@@ -16,7 +16,7 @@ export default class ImagePickerButton extends React.Component {
         return (
             <View>
                 <TouchableOpacity style={{ alignSelf: 'center' }} onPress={this._pickImage}>
-                    <Text style={{ borderWidth: 1 }}>Bild hinzufügen</Text>
+                    <Text style={{ color: "white" }}>+ Bild hinzufügen</Text>
                 </TouchableOpacity>
                 {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
             </View>
