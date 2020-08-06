@@ -7,7 +7,7 @@ import { UserContext } from './UserProvider';
 
 
 
-const { width: WIDTH } = Dimensions.get('window')
+const { width: WidTH } = Dimensions.get('window')
 
 export default function RegistrationScreen({ navigation }) {
 
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
         marginBottom: 50
     },
     input: {
-        width: WIDTH - 55,
+        width: WidTH - 55,
         height: 45,
         borderRadius: 25,
         fontSize: 16,

@@ -5,11 +5,11 @@ import { AntDesign } from '@expo/vector-icons';
 
 export default class DeleteRoomWindow extends React.Component {
 
-    
+
 
 
     render() {
-        const {item, onDeleteWindow, onDelete} = this.props
+        const { item, onDeleteWindow, onDelete } = this.props
         return (
             <Modal
                 animationType="slide"
@@ -19,7 +19,7 @@ export default class DeleteRoomWindow extends React.Component {
                         <TouchableOpacity style={styles.cancelButton} onPress={() => onDeleteWindow()}>
                             <AntDesign name="closecircleo" size={24} color="white" />
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => onDelete(item.ID)}>
+                        <TouchableOpacity style={styles.button} onPress={() => onDelete(item.id)}>
                             <Text style={styles.buttonText}>löschen</Text>
                         </TouchableOpacity>
                     </View>

@@ -13,12 +13,12 @@ export default class SingleChoice extends React.Component {
 
 
     state = {
-        cardID: this._isValueNull(this.props.route.params.cardID) ? uuid.v1() : this.props.route.params.cardID,
+        id: this._isValueNull(this.props.route.params.id) ? uuid.v1() : this.props.route.params.id,
         cardType: "SC",
-        cardLevel: this._isValueNull(this.props.route.params.cardLevel) ? null : this.props.route.params.cardLevel,
-        questionText: this._isValueNull(this.props.route.params.questionText) ? null : this.props.route.params.questionText,
-        cardTopic: this._isValueNull(this.props.route.params.cardTopic) ? null : this.props.route.params.cardTopic,
-        answers: this._isValueNull(this.props.route.params.answers) ? [{ D: null, text: '' }] : this.props.route.params.answers
+        cardLevel: this._isValueNull(this.props.route.params.cardLevel) ? 0 : this.props.route.params.cardLevel,
+        questionText: this._isValueNull(this.props.route.params.questionText) ? '' : this.props.route.params.questionText,
+        cardTopic: this._isValueNull(this.props.route.params.cardTopic) ? '' : this.props.route.params.cardTopic,
+        answers: this._isValueNull(this.props.route.params.answers) ? [{ id: null, text: '' }] : this.props.route.params.answers
     }
 
     _isValueNull(value) {
@@ -29,12 +29,32 @@ export default class SingleChoice extends React.Component {
         return false
     }
 
+
+
+    _saveAndGoBack() {
+        const updateCards = this.context
+        this._save()
+        updateCards.storeDataOnDevice()
+        this.props.navigation.goBack()
+    }
+
+
+    _saveAndNew() {
+        this._save()
+        this.setState({ id: uuid.v1() })
+        this.setState({ questionText: '' })
+        this.setState({ cardTopic: '' })
+        this.setState({ answers: [{ id: null, text: '' }] })
+    }
+
+
+
     _save() {
-        const { cardID, cardType, questionText, cardTopic, answers } = this.state
+        const { id, cardType, questionText, cardTopic, answers } = this.state
         const updateCards = this.context
 
         let newCard = {
-            cardID: cardID,
+            id: id,
             cardType: cardType,
             questionText: questionText,
             cardLevel: 0,
@@ -51,21 +71,20 @@ export default class SingleChoice extends React.Component {
         } else if (this.props.route.params.mode == "editMode") {   //alte Karte aktualisieren
             var index
             for (var i = 0; i < copy.length; i++) {
-                if (copy[i].ID === id) {
+                if (copy[i].id === id) {
                     index = i
                 }
                 copy[index] = newCard
             }
         }
-        updateCards.storeDataOnDevice()
-        this.props.navigation.goBack()
+
     }
 
 
     updateAnswers(text) {
         var copy = []
         copy.push({
-            ID: uuid.v1(),
+            id: uuid.v1(),
             text: text,
         })
 
@@ -90,11 +109,14 @@ export default class SingleChoice extends React.Component {
                     onChangeText={text => this.updateAnswers(text)}>
                     {this.state.answers[0].text}
                 </TextInput>
-                <TouchableOpacity style={styles.bottomView} onPress={() => this._save()}>
-                    <View style={styles.saveButton}>
-                        <Text style={{ fontStyle: 'italic', fontSize: 20, color: 'white' }}>speichern</Text>
-                    </View>
-                </TouchableOpacity>
+                <View style={styles.bottomView} >
+                    <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
+                        <Text style={{ fontStyle: 'italic', fontSize: 10, color: 'white' }}>speichern</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
+                        <Text style={{ fontStyle: 'italic', fontSize: 10, color: 'white' }}>speichern und neu</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         )
     }
@@ -112,19 +134,20 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         margin: 20
     },
+    bottomView: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
     saveButton: {
         backgroundColor: '#2c2e30',
         height: 40,
         width: 130,
         borderRadius: 30,
-        top: 0,
         alignSelf: 'center',
-        position: 'absolute',
         alignItems: 'center',
         justifyContent: 'center'
 
-    }, bottomView: {
-        flex: 1,
     },
     questionInput: {
         flex: 1,

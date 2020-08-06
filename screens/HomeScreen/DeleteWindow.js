@@ -36,7 +36,7 @@ export default class DeleteWindow extends React.Component {
                         name="ios-trash"
                         size={30} color="white"
                         backgroundColor="black"
-                        onPress={() => onDelete(item.ID)}
+                        onPress={() => onDelete(item.id)}
                     />
                     {/*Kopieren*/}
                     <Icon.Button
@@ -45,14 +45,6 @@ export default class DeleteWindow extends React.Component {
                         size={23} color="white"
                         backgroundColor="black"
                         onPress={() => this.copy(item)}
-                    />
-                    {/*Ausschneiden*/}
-                    <Icon.Button
-                        style={styles.normalButton}
-                        name="ios-cut"
-                        size={23} color="white"
-                        backgroundColor="black"
-                        onPress={() => onDelete(item.ID)}
                     />
                     {/*Bearbeiten*/}
                     {this._checkIfItemIsFolderOrSet() ? null :
@@ -81,7 +73,7 @@ export default class DeleteWindow extends React.Component {
                         {this._checkIfItemIsFolderOrSet() ? null : <TouchableOpacity style={styles.button} onPress={() => onNavigateToCardCreator(item)} >
                             <Text style={styles.buttonText}>bearbeiten</Text>
                         </TouchableOpacity>}
-                        <TouchableOpacity style={styles.button} onPress={() => onDelete(item.ID)}>
+                        <TouchableOpacity style={styles.button} onPress={() => onDelete(item.id)}>
                             <Text style={styles.buttonText}>löschen</Text>
                         </TouchableOpacity>
                     </View>

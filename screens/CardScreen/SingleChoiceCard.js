@@ -49,7 +49,7 @@ export default class SingleChoiceCard extends React.Component {
         let copy = this.state.answers
 
         for (let i = 0; i < copy.length; i++) {
-            if (item.answerValues.ID === copy[i].answerValues.ID) {
+            if (item.answerValues.id === copy[i].answerValues.id) {
                 copy[i].checkState = true
             } else {
                 copy[i].checkState = false
@@ -66,7 +66,7 @@ export default class SingleChoiceCard extends React.Component {
                 <FlatList
                     extraData={this.state.answers}
                     data={this.state.answers}
-                    keyExtractor={item => item.answerValues.ID}
+                    keyExtractor={item => item.answerValues.id}
                     renderItem={({ item }) => (
                         <AnswerListItem
                             item={item}

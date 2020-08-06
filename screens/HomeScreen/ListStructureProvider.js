@@ -5,6 +5,8 @@ import { AsyncStorage } from 'react-native'
 const ListStructureContext = React.createContext()
 
 
+
+
 class ListStructureProvider extends React.Component {
 
     state = {

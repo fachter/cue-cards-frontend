@@ -21,27 +21,27 @@ export default class FriendsScreen extends React.Component {
             loadFriendsSuccesfull: true,
             friends: [
                 {
-                    userID: 1111,
+                    userid: 1111,
                     username: "Philip.B",
                     isOnline: true,
                 },
                 {
-                    userID: 2222,
+                    userid: 2222,
                     username: "Matze.M",
                     isOnline: false,
                 },
                 {
-                    userID: 3333,
+                    userid: 3333,
                     username: "Clara.L",
                     isOnline: false,
                 },
                 {
-                    userID: 4444,
+                    userid: 4444,
                     username: "Darius.W",
                     isOnline: false,
                 },
                 {
-                    userID: 5555,
+                    userid: 5555,
                     username: "Felix.A",
                     isOnline: true,
                 }
@@ -79,7 +79,7 @@ export default class FriendsScreen extends React.Component {
                 <View style={styles.container}>
                     <FlatList
                         data={this.state.friends}
-                        keyExtractor={item => item.userID}
+                        keyExtractor={item => item.userid}
                         renderItem={({ item }) => (
                             <FriendListItem
                                 item={item} />

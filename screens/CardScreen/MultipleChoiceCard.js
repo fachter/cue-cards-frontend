@@ -34,8 +34,7 @@ export default class MulitpleChoiceCard extends React.Component {
             }
         }
 
-
-        if (numberOfRightSelection == this.props.card.numberOfRightAnswers) {
+        if (numberOfRightSelection == this.props.card.answers.length) {
             this.state.result = true
             this.setState({ result: true })
             this.setState({ backgroundColor: "green" })
@@ -51,7 +50,6 @@ export default class MulitpleChoiceCard extends React.Component {
     _updateCheckState = (checkState, item) => {
 
         item.checkState = checkState
-        console.log(this.state.answers)
     }
 
     render() {
@@ -60,7 +58,7 @@ export default class MulitpleChoiceCard extends React.Component {
                 <FlatList
                     extraData={this.state.answers}
                     data={this.state.answers}
-                    keyExtractor={item => item.answerID}
+                    keyExtractor={item => item.answerid}
                     renderItem={({ item }) => (
                         <AnswerListItem
                             item={item}

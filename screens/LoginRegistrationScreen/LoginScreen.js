@@ -10,7 +10,7 @@ import logo from '../../assets/Logo.png';
 
 
 
-const { width: WIDTH } = Dimensions.get('window')
+const { width: WidTH } = Dimensions.get('window')
 
 export default function LoginScreen({ navigation }) {
 
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     input: {
-        width: WIDTH - 55,
+        width: WidTH - 55,
         height: 45,
         borderRadius: 25,
         fontSize: 16,

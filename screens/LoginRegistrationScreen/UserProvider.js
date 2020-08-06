@@ -8,34 +8,49 @@ import axios from 'axios';
 const UserContext = React.createContext()
 
 export default class UserProvider extends React.Component {
-
     static contextType = ListStructureContext
 
-    state = {
-        isLoggedin: false,
-    }
+    constructor(props) {
+        super(props)
 
+        this._authenticateAcc = this._authenticateAcc.bind(this)
 
-    async _storeTokenOnDevice(token) {
-        try {
-            await AsyncStorage.setItem(
-                'userToken', token
-            );
-        } catch (error) {
-            console.log("Fehler beim speichern des Tokens: " + error)
+        this.state = {
+            isLoggedin: false,
+            userToken: null,
         }
+
     }
 
-    async retrievetTokenFromDevice() {
-        try {
-            const token = await AsyncStorage.getItem('userToken')
-            if (token != null) {
-                return token
-            }
-        } catch (error) {
-            console.log("Error by retrieve token:" + error)
-        }
+
+
+
+    static getUserToken() {
+        return this.state.userToken
     }
+
+
+    // async _storeTokenOnDevice(token) {
+    //     try {
+    //         await AsyncStorage.setItem(
+    //             'userToken', token
+    //         );
+    //     } catch (error) {
+    //         console.log("Fehler beim speichern des Tokens: " + error)
+    //     }
+    // }
+
+    // async retrievetTokenFromDevice() {
+    //     try {
+    //         const token = await AsyncStorage.getItem('userToken')
+    //         console.log(token)
+    //         if (token != null) {
+    //             return token
+    //         }
+    //     } catch (error) {
+    //         console.log("Error by retrieve token:" + error)
+    //     }
+    // }
 
 
     login = () => {
@@ -92,11 +107,12 @@ export default class UserProvider extends React.Component {
 
         return new Promise((resolve, reject) => {
             axios.post('https://cue-cards-app.herokuapp.com/authenticate', {
-                username: 'username',
+                username: 'user',
                 password: 'password',
             })
                 .then((res) => {
-                    user._storeTokenOnDevice(res.data.jwt)
+                    // user._storeTokenOnDevice(res.data.jwt)
+                    this.setState({ userToken: res.data.jwt })
                     axios.get("https://cue-cards-app.herokuapp.com/get-users-data", {
                         headers: {
                             'Authorization': "Bearer " + res.data.jwt
@@ -141,7 +157,7 @@ export default class UserProvider extends React.Component {
         return (
             <UserContext.Provider value={{
                 isLoggedin: this.state.isLoggedin,
-
+                userToken: this.state.userToken,
                 logout: this.logout,
                 login: this.login,
                 _storeTokenOnDevice: this._storeTokenOnDevice,

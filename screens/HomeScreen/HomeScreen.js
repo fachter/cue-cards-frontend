@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { View, FlatList, Dimensions, Text, Button, StyleSheet, TouchableOpacity, BackHandler, AppState } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 
 import { Entypo } from '@expo/vector-icons';
@@ -17,11 +18,12 @@ import { CopyPasteContext } from './CopyPasteProvider'
 import SwipeView from '../../components/SwipeView'
 import { useNavigation } from '@react-navigation/native';
 import { Searchbar } from 'react-native-paper';
+import { UserContext } from '../LoginRegistrationScreen/UserProvider';
+
+import DataBase from '../../API/Database'
 
 
-
-
-const { width: WIDTH } = Dimensions.get('window')
+const { width: WidTH } = Dimensions.get('window')
 
 
 export default function HomeScreen() {
@@ -52,20 +54,20 @@ const DataList = () => {
         getQuery
     } = useContext(ListStructureContext)
 
-    const { pasteTheData, someThingIsCopied, copyData } = useContext(CopyPasteContext)
+    const { someThingIsCopied, copyData, setSomeThingIsCopied } = useContext(CopyPasteContext)
+
+    const { userToken } = useContext(UserContext)
 
     const navigation = useNavigation()
     const [deleteWindowVisible, SetDeleteWindowVisible] = useState(false)
     const [onDeleteItem, setOnDeleteItem] = useState(null)
 
+
+
+
     useEffect(() => {
-
         BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
-
     }, []);
-
-
-
 
 
     function _backButtonPressed() {
@@ -94,7 +96,6 @@ const DataList = () => {
             //durchsucht das Array nach dem Item und ruft die OrdnerStruktur auf
             let indexOfItem = currentListStructure.indexOf(item)
             let subStructure = currentListStructure[indexOfItem].subFolders
-            console.log(subStructure)
             setCurrentListStructure(subStructure)
         } else {
             //durchsucht das Array nach dem Item und ruft die OrdnerStruktur auf
@@ -153,7 +154,7 @@ const DataList = () => {
         if (item.cardType === 'MC') {
             navigation.navigate('MultipleChoice',
                 {
-                    cardID: item.cardID,
+                    id: item.id,
                     cardType: item.cardType,
                     questionText: item.questionText,
                     cardLevel: item.cardLevel,
@@ -165,7 +166,7 @@ const DataList = () => {
         } else if (item.cardType === 'FT') {
             navigation.navigate('Freetext',
                 {
-                    cardID: item.cardID,
+                    id: item.id,
                     cardType: item.cardType,
                     questionText: item.questionText,
                     cardLevel: item.cardLevel,
@@ -175,7 +176,7 @@ const DataList = () => {
         } else if (item.cardType === "SC") {
             navigation.navigate('SingleChoice',
                 {
-                    cardID: item.cardID,
+                    id: item.id,
                     cardType: item.cardType,
                     questionText: item.questionText,
                     cardLevel: item.cardLevel,
@@ -199,7 +200,7 @@ const DataList = () => {
         var index
 
         for (var i = 0; i < copy.length; i++) {  //Sucht den Index des Items im Array nach id
-            if (copy[i].ID === id)
+            if (copy[i].id === id)
                 index = i
         }
         copy.splice(index, 1)  //schmeißt das Item mit dem Index raus
@@ -254,18 +255,31 @@ const DataList = () => {
     }
 
 
+
     return (
+
         <View style={styles.container}>
             {someThingIsCopied ? <View style={styles.copyPasteView}>
-                <Button title="paste" onPress={() => pasteTheCopiedData()} />
-                <Button title="x" />
+                <Text>Einfügen</Text>
+                <Icon.Button
+                    name="ios-copy"
+                    size={23} color="black"
+                    backgroundColor="white"
+                    onPress={() => pasteTheCopiedData()} />
+                <Icon.Button
+                    style={{ alignSelf: 'flex-start' }}
+                    name="ios-close"
+                    size={23} color="black"
+                    backgroundColor="white"
+                    onPress={() => setSomeThingIsCopied(false)} />
+
             </View> : null}
             <SwipeView swipeRight={_backButtonPressed}
             >
                 <FlatList
                     //ListHeaderComponent={renderHeader}
                     data={currentListStructure}
-                    keyExtractor={item => item.ID}
+                    keyExtractor={item => item.id}
                     renderItem={({ item }) => (
                         <FolderListItem
                             item={item}
@@ -292,6 +306,9 @@ const DataList = () => {
                 <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
                     <Entypo name="plus" size={45} color="#008FD3" />
                 </TouchableOpacity>
+                <TouchableOpacity style={[styles.plusButton, { left: 10 }]} onPress={() => DataBase.storeDataOnDB(listHistoryArray, currentListStructure, userToken)} >
+                    <Entypo name="plus" size={45} color="#008FD3" />
+                </TouchableOpacity>
             </SwipeView>
             {deleteWindowVisible ?
                 <DeleteWindow
@@ -310,7 +327,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#595959",
-        paddingTop: 30
     },
     plusButton: {
         height: 45,
@@ -342,7 +358,7 @@ const styles = StyleSheet.create({
         marginVertical: 5
     },
     btnNew: {
-        width: WIDTH - 55,
+        width: WidTH - 55,
         height: 45,
         borderRadius: 25,
         backgroundColor: 'white',
@@ -350,6 +366,8 @@ const styles = StyleSheet.create({
         marginHorizontal: 25
     },
     copyPasteView: {
+        justifyContent: 'center',
+        alignItems: 'center',
         flexDirection: 'row'
     }
 })

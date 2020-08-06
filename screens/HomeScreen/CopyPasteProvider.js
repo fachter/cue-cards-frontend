@@ -9,7 +9,7 @@ class CopyPasteProvider extends React.Component {
         super(props)
 
         this.copyTheData = this.copyTheData.bind(this)
-
+        this.setSomeThingIsCopied = this.setSomeThingIsCopied.bind(this)
 
 
         this.state = {
@@ -20,19 +20,32 @@ class CopyPasteProvider extends React.Component {
 
 
 
+    setSomeThingIsCopied(value) {
+        this.setState({ someThingIsCopied: value })
+    }
 
     copyTheData(data) {
+        // this.updateAllids(data)
         this.setState({ copyData: data })
         this.setState({ someThingIsCopied: true })
     }
 
 
-    updateAllIDs() {
-        // let data = []
-
-        // for(let i = 0; i < data.length; i++){
-        //     data[i].
-        // }
+    updateAllids(data) {
+        if (data.length > 0) {
+            for (let i = 0; i < data.length; i++) {
+                data[i].id = uuid.v1()
+                if (data.cards.length > 0) {
+                    this.updateAllids(data.cards)
+                }
+                if (data.subFolders.length > 0) {
+                    this.updateAllids(data.subFolders)
+                }
+                if (data.answers.length > 0) {
+                    this.updateAllids(data.answers)
+                }
+            }
+        }
     }
 
 
@@ -42,7 +55,8 @@ class CopyPasteProvider extends React.Component {
                 copyData: this.state.copyData,
                 someThingIsCopied: this.state.someThingIsCopied,
                 copyTheData: this.copyTheData,
-                pasteTheData: this.pasteTheData
+                pasteTheData: this.pasteTheData,
+                setSomeThingIsCopied: this.setSomeThingIsCopied
 
             }}>
                 {this.props.children}
