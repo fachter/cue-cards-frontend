@@ -9,7 +9,7 @@ export default class DeleteRoomWindow extends React.Component {
 
 
     render() {
-        const { item, onDeleteWindow, onDelete} = this.props
+        const {item, onDeleteWindow, onDelete} = this.props
         return (
             <Modal
                 animationType="slide"
