@@ -7,12 +7,13 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default class RoomListItem extends React.Component {
 
-
+    
 
     render() {
         return (
             <TouchableOpacity
             onLongPress={()=>this.props.onDeleteWindow(this.props.item)}
+            onPress={()=>this.props.showContainRoomScreen()}
             >
             <View style={styles.container}>
                 <MaterialCommunityIcons

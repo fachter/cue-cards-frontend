@@ -1,6 +1,8 @@
 import React from 'react'
 import { View, Modal, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native'
-import * as Icon from '@expo/vector-icons'
+import * as Icon from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
+
 
 
  export default class AddRoomWindow extends React.Component {
@@ -24,6 +26,9 @@ import * as Icon from '@expo/vector-icons'
                     onRequestClose={() => this.props.onSetVisibility()}>
                     <View style={styles.background}>
                         <View style={styles.window}>
+                            <TouchableOpacity style={styles.cancelButton} onPress={() => this.props.onSetVisibility()}>
+                                <AntDesign name="closecircleo" size={24} color="white" />
+                            </TouchableOpacity>
                             <Text
                                 style={styles.headingText}>Gebe den Raumnamen ein</Text>
                             <TextInput style={styles.friendName} onChangeText={text => this.setState({roomName: text})}></TextInput>
