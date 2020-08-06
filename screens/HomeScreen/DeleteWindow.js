@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, View, Modal, TouchableOpacity, Text } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CopyPasteContext } from './CopyPasteProvider'
 
 export default class DeleteWindow extends React.Component {
+
+    static contextType = CopyPasteContext
 
     _checkIfItemIsFolderOrSet() {
         //Im Falle einer Karte -> undifine
@@ -14,9 +16,16 @@ export default class DeleteWindow extends React.Component {
         return false
     }
 
+    copy(item) {
+        const copy = this.context
+        copy.copyTheData(item)
+        this.props.onDeleteWindow()
+    }
+
 
     render() {
         const { item, onDeleteWindow, onDelete, onNavigateToCardCreator } = this.props
+
         return (
             <Modal
                 transparent={true}>
@@ -35,7 +44,7 @@ export default class DeleteWindow extends React.Component {
                         name="ios-copy"
                         size={23} color="white"
                         backgroundColor="#202225"
-                        onPress={() => onDelete(item.ID)}
+                        onPress={() => this.copy(item)}
                     />
                     {/*Ausschneiden*/}
                     <Icon.Button
@@ -63,7 +72,6 @@ export default class DeleteWindow extends React.Component {
                         onPress={() => onDeleteWindow()}
                     />
                 </View>
-
 
                 {/* <View style={styles.background}>
                     <View style={styles.window}>

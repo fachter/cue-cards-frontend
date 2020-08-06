@@ -7,6 +7,7 @@ import { InternetConnectionProvider } from './API/InternetConnection'
 import { UserProvider, UserContext } from './screens/LoginRegistrationScreen/UserProvider'
 import { SettingsProvider } from './screens/SettingsScreen/SettingsProvider'
 import { ListStructureProvider } from './screens/HomeScreen/ListStructureProvider'
+import { CopyPasteProvider } from './screens/HomeScreen/CopyPasteProvider'
 import { storeDataOnDB, updateOnlineState } from './API/Database'
 
 import { createStackNavigator } from '@react-navigation/stack';
@@ -19,11 +20,8 @@ import { LoginRegistrationStackScreen } from './navigation/Sidebar';
 
 const StartStack = createStackNavigator()
 
-
 const StartScreen = () => {
   const { isLoggedin } = useContext(UserContext)
-
-
 
   return (
     <NavigationContainer >
@@ -34,19 +32,15 @@ const StartScreen = () => {
           :
           <StartStack.Screen name="LoginScreen" component={LoginRegistrationStackScreen}></StartStack.Screen>}
       </StartStack.Navigator>
-
     </NavigationContainer>
   )
 }
 
 
 export default class App extends React.Component {
-
   constructor(props) {
     super(props)
-
     AppState.addEventListener('change', this._handleAppStateChange);
-
   }
 
 
@@ -59,19 +53,19 @@ export default class App extends React.Component {
   }
 
 
-
-
   render() {
     return (
-      <ListStructureProvider>
-        <SettingsProvider>
-          <UserProvider>
-            <InternetConnectionProvider>
-              <StartScreen />
-            </InternetConnectionProvider>
-          </UserProvider >
-        </SettingsProvider>
-      </ListStructureProvider>
+      <CopyPasteProvider>
+        <ListStructureProvider>
+          <SettingsProvider>
+            <UserProvider>
+              <InternetConnectionProvider>
+                <StartScreen />
+              </InternetConnectionProvider>
+            </UserProvider >
+          </SettingsProvider>
+        </ListStructureProvider>
+      </CopyPasteProvider>
     )
   }
 }
