@@ -7,7 +7,7 @@ import { InternetConnectionProvider } from './API/InternetConnection'
 import { UserProvider, UserContext } from './screens/LoginRegistrationScreen/UserProvider'
 import { SettingsProvider } from './screens/SettingsScreen/SettingsProvider'
 import { ListStructureProvider } from './screens/HomeScreen/ListStructureProvider'
-import { storeDataOnDB } from './API/Database'
+import { storeDataOnDB, updateOnlineState } from './API/Database'
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -53,7 +53,8 @@ export default class App extends React.Component {
   _handleAppStateChange = (nextAppState) => {
     console.log(nextAppState)
     if (nextAppState === 'background') {
-      storeDataOnDB()
+      // storeDataOnDB()
+      updateOnlineState()
     }
   }
 

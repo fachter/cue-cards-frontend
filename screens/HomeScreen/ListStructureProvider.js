@@ -41,12 +41,11 @@ class ListStructureProvider extends React.Component {
             const value = await AsyncStorage.getItem('mainListStructure');
             if (value != null) {
                 let data = JSON.parse(value)
-                this.setCurrentListStructure(data)
-                return true
+                return data
             }
         } catch (error) {
             console.log("Fehler beim laden der Daten vom Gerät: " + error)
-            return false
+            return null
         }
     }
 

@@ -3,6 +3,7 @@ import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Button, Fla
 import { UserContext } from './UserProvider'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import { SettingsContext } from '../SettingsScreen/SettingsProvider'
+import { InternetConnectionContext } from '../../API/InternetConnection'
 import logo from '../../assets/Logo.png';
 
 
@@ -14,26 +15,50 @@ const { width: WIDTH } = Dimensions.get('window')
 export default function LoginScreen({ navigation }) {
 
     const { checkIfUserStayedLoggedin, _authenticateAcc, login } = useContext(UserContext)
-    const { setCurrentListStructure } = useContext(ListStructureContext)
+    const { setCurrentListStructure, retrieveDataFromDevice } = useContext(ListStructureContext)
     const { retrieveSettignsfromDevice } = useContext(SettingsContext)
+    const { isConnected } = useContext(InternetConnectionContext)
     const [username, setUnsername] = useState('')
     const [password, setPassword] = useState('')
     const [stayLoggedin, setStayLoggedin] = useState(false)
 
 
     useEffect(() => {
-        checkIfUserStayedLoggedin().then(() => {
-            userLogin()
+        checkIfUserStayedLoggedin().then(savedLoginState => {
+            userLogin(savedLoginState)
         })
     })
 
 
-    function userLogin() {
-        _authenticateAcc(stayLoggedin, username, password).then((data) => {
-            setCurrentListStructure(data.folders)
+    async function userLogin(savedLoginState) {
+
+        var deviceData = await retrieveDataFromDevice()
+
+        _authenticateAcc(stayLoggedin, username, password).then(async (data) => {
+
+            let networkData = data.folders
+
+            // //prüft ob die Daten auf dem Gerät oder aus dem Netz aktuell sind und läd diese dementsprechend
+            // if (deviceData.date < networkData.date) {
+            //     setCurrentListStructure(data.folders)
+            // } else {
+            //     setCurrentListStructure(deviceData)
+            // }
+
             retrieveSettignsfromDevice()
+            setCurrentListStructure(data.folders)
+
         }).then(() => {
             login()
+
+        }).catch(() => {
+            if (savedLoginState === true) {
+                console.log("Verbindung zur Datenbank fehlgeschlagen, logge ein mit Lokalen daten")
+                retrieveSettignsfromDevice()
+                setCurrentListStructure(deviceData)
+                login()
+            }
+
         })
     }
 

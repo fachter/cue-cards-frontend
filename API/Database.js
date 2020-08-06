@@ -7,7 +7,6 @@ import { UserContext } from '../screens/LoginRegistrationScreen/UserProvider'
 
 
 async function storeDataOnDB(data) {
-    console.log("yep")
 
     const { retrievetTokenFromDevice } = useContext(UserContext)
 
@@ -22,4 +21,12 @@ async function storeDataOnDB(data) {
     })
 }
 
-export { storeDataOnDB }
+
+function updateOnlineState() {
+
+    Axios.post().then(() => {
+
+    })
+}
+
+export { storeDataOnDB, updateOnlineState }

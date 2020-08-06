@@ -38,10 +38,6 @@ export default class UserProvider extends React.Component {
     }
 
 
-
-
-
-
     login = () => {
         this.setState({ isLoggedin: true })
     }
@@ -72,20 +68,20 @@ export default class UserProvider extends React.Component {
     }
 
 
-    async checkIfUserStayedLoggedin() {
-        const user = new UserProvider
+    checkIfUserStayedLoggedin() {
         return new Promise(async (resolve, reject) => {
-
             try {
                 const loginData = await AsyncStorage.getItem('loginData')
                 if (loginData != null) {
                     let data = JSON.parse(loginData)
                     if (data.stayLoggedin === true) {
-                        resolve()
+                        console.log("Nutzerdaten sind gespeichert worden und werden genutzt.")
+                        resolve(true)
                     }
                 }
             } catch (error) {
-                reject(error)
+                console.log("Nutzerdaten sind nicht gespeichert worden, bitte einloggen.")
+                reject(false)
             }
         })
     }
@@ -93,8 +89,8 @@ export default class UserProvider extends React.Component {
 
     _authenticateAcc(stayLoggedin, username, password) {
         const user = new UserProvider
-        return new Promise((resolve, reject) => {
 
+        return new Promise((resolve, reject) => {
             axios.post('https://cue-cards-app.herokuapp.com/authenticate', {
                 username: 'username',
                 password: 'password',
@@ -109,11 +105,14 @@ export default class UserProvider extends React.Component {
                         if (stayLoggedin === true) {
                             user.saveUserOnDevice(stayLoggedin, username, password)
                         }
+
+                        console.log("Verbindung mit der Datenbank erfolgreich. Daten: ")
+                        console.log(resp.data)
                         resolve(resp.data)
                     })
                         .catch((err) => {
                             reject()
-                            console.log("Fehler beim einloggen: " + err)
+                            console.log("Login fehlgeschlagen, keine Verbindung zur Datenbank möglich: " + err)
                         })
                 })
         })
