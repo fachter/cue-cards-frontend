@@ -16,11 +16,11 @@ export default class Vocable extends React.Component {
 
 
     state = {
-        cardID: this._isValueNull(this.props.route.params.cardID) ? uuid.v1() : this.props.route.params.cardID,
+        id: this._isValueNull(this.props.route.params.id) ? uuid.v1() : this.props.route.params.id,
         cardType: "FT",
-        cardLevel: this._isValueNull(this.props.route.params.cardLevel) ? null : this.props.route.params.cardLevel,
-        questionText: this._isValueNull(this.props.route.params.questionText) ? null : this.props.route.params.questionText,
-        solution: this._isValueNull(this.props.route.params.solution) ? null : this.props.route.params.solution
+        cardLevel: this._isValueNull(this.props.route.params.cardLevel) ? 0 : this.props.route.params.cardLevel,
+        questionText: this._isValueNull(this.props.route.params.questionText) ? '' : this.props.route.params.questionText,
+        solution: this._isValueNull(this.props.route.params.solution) ? '' : this.props.route.params.solution
     }
 
     _isValueNull(value) {
@@ -30,14 +30,32 @@ export default class Vocable extends React.Component {
         return false
     }
 
+
+
+    _saveAndGoBack() {
+        const updateCards = this.context
+        this._save()
+        updateCards.storeDataOnDevice()
+        this.props.navigation.goBack()
+    }
+
+
+    _saveAndNew() {
+        this._save()
+        this.setState({ id: uuid.v1() })
+        this.setState({ questionText: '' })
+        this.setState({ solution: [] })
+    }
+
+
+
     _save() {
 
-        const { cardID, cardType, questionText, solution } = this.state
+        const { id, cardType, questionText, solution } = this.state
         const updateCards = this.context
 
-
         let newCard = {
-            cardID: cardID,
+            id: id,
             cardType: cardType,
             questionText: questionText,
             cardLevel: 0,    //Beim bearbeiten einer Karte wird das Level zurück auf 0 gesetzt
@@ -53,14 +71,13 @@ export default class Vocable extends React.Component {
         } else if (this.props.route.params.mode == "editMode") {   //alte Karte aktualisieren
             var index
             for (var i = 0; i < copy.length; i++) {
-                if (copy[i].ID === id) {
+                if (copy[i].id === id) {
                     index = i
                 }
                 copy[index] = newCard
             }
         }
-        updateCards.storeDataOnDevice()
-        this.props.navigation.goBack()
+
     }
 
 
@@ -108,10 +125,14 @@ const styles = StyleSheet.create({
         height: 40,
         width: 130,
         borderRadius: 30,
-        top: 0,
         alignSelf: 'center',
-        position: 'absolute',
         alignItems: 'center',
+        justifyContent: 'center'
+
+    },
+    questionInput: {
+        padding: 5,
+        borderColor: 'black',
         justifyContent: 'center',
         marginTop: 30
     },

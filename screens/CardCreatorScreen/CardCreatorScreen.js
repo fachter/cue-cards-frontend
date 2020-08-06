@@ -20,7 +20,7 @@ export default function CardCreatorScreen({ route }) {
     const { currentListStructure, setCurrentListStructure, storeDataOnDevice } = useContext(ListStructureContext)
 
     //CardValues
-    const [cardID, setcardID] = useState(_isValueNull(route.params.cardID) ? uuid.v1() : route.params.cardID)
+    const [id, setid] = useState(_isValueNull(route.params.id) ? uuid.v1() : route.params.id)
     const [cardType, setCardtype] = useState(_isValueNull(route.params.cardType) ? "MC" : route.params.cardType)
     const [questionText, setQuestionText] = useState(_isValueNull(route.params.questionText) ? null : route.params.questionText)
     const [cardLevel, setCardlevel] = useState(_isValueNull(route.params.cardLevel) ? null : route.params.cardLevel)
@@ -48,7 +48,7 @@ export default function CardCreatorScreen({ route }) {
         let newCard
         if (cardType === "Voc") {
             newCard = {
-                cardID: cardID,
+                id: id,
                 cardType: cardType,
                 questionText: questionText,
                 cardLevel: 0,    //Beim bearbeiten einer Karte wird das Level zurück auf 0 gesetzt
@@ -56,7 +56,7 @@ export default function CardCreatorScreen({ route }) {
             }
         } else if (cardType === "MC") {
             newCard = {
-                cardID: cardID,
+                id: id,
                 cardType: cardType,
                 questionText: questionText,
                 cardLevel: 0,
@@ -66,7 +66,7 @@ export default function CardCreatorScreen({ route }) {
             }
         } else if (cardType === "SC") {
             newCard = {
-                cardID: cardID,
+                id: id,
                 cardType: cardType,
                 questionText: questionText,
                 cardLevel: 0,
@@ -74,8 +74,7 @@ export default function CardCreatorScreen({ route }) {
                 answers: answers
             }
         }
-        console.log("________________________")
-        console.log(newCard)
+
         let copy = currentListStructure
 
         if (route.params.mode == "createMode") { // neue Karte erstellen
@@ -85,7 +84,7 @@ export default function CardCreatorScreen({ route }) {
         } else if (route.params.mode == "editMode") {   //alte Karte aktualisieren
             var index
             for (var i = 0; i < copy.length; i++) {
-                if (copy[i].ID === id) {
+                if (copy[i].id === id) {
                     index = i
                 }
                 copy[index] = newCard

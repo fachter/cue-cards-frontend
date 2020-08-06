@@ -66,7 +66,7 @@ export default function CardScreen({ route, navigation }) {
                     //Prüft ob die Antwort schon vorhanden ist
                     let counter = 0
                     for (let j = 0; j < generatedAnswers.length; j++) {
-                        if (generatedAnswers[j].answerValues.ID != randomAnswer.ID) {
+                        if (generatedAnswers[j].answerValues.id != randomAnswer.id) {
                             counter = counter + 1
                         }
                     }
@@ -94,7 +94,7 @@ export default function CardScreen({ route, navigation }) {
     function _getAllAnswersOfSameTopic() {
         let answerPool = []
         for (let i = 0; i < currentListStructure.length; i++) {    //Druchlaufe alle Karten
-            if (currentListStructure[i].cardID == currentCard.cardID) {   //Überspringt eigenen Antworten der Karte
+            if (currentListStructure[i].id == currentCard.id) {   //Überspringt eigenen Antworten der Karte
                 continue;
             } else {
                 if ((currentListStructure[i].cardType === "MC" || currentListStructure[i].cardType === "SC") && currentListStructure[i].cardTopic == currentListStructure[currentCardindex].cardTopic) {  //Filtere nach MultipleChoice Karte und dem Topic
@@ -120,7 +120,7 @@ export default function CardScreen({ route, navigation }) {
     function _updateCardValues(result) {
 
         for (let i = 0; i < sessionCards.length; i++) {
-            if (currentCard.cardID == sessionCards[i].cardID) {  //Sucht aktuelle im Set nach ID
+            if (currentCard.id == sessionCards[i].id) {  //Sucht aktuelle im Set nach id
 
                 //Je nach richtiger oder falscher Antwort wird die Karte Level auf bzw. abgestuft
                 if (result == true) {

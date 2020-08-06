@@ -6,7 +6,7 @@ import * as Icon from '@expo/vector-icons'
 export default class AddFriendWindow extends React.Component {
 
     state = {
-        newFriendID: null
+        newFriendid: null
     }
 
     render() {
@@ -20,8 +20,8 @@ export default class AddFriendWindow extends React.Component {
                     <View style={styles.background}>
                         <View style={styles.window}>
                             <Text
-                                style={styles.headingText}>Gebe die ID deines Freundes ein</Text>
-                            <TextInput style={styles.friendName} onChangeText={text => this.setState({ newFriendID: text })} ></TextInput>
+                                style={styles.headingText}>Gebe die id deines Freundes ein</Text>
+                            <TextInput style={styles.friendName} onChangeText={text => this.setState({ newFriendid: text })} ></TextInput>
                             <TouchableOpacity style={styles.addButton}  >
                                 <Icon.Feather name="check" size={50} />
                             </TouchableOpacity>

@@ -4,7 +4,7 @@ import { Entypo } from '@expo/vector-icons';
 import AddRoomWindow from './AddRoomWindow';
 import RoomListItem from './RoomListItem';
 import DeleteRoomWindow from './DeleteRoomWindow';
-import {SearchBar} from 'react-native-elements';
+import { SearchBar } from 'react-native-elements';
 import { Searchbar } from 'react-native-paper';
 import {v4 as uuidv4} from 'uuid';
 import ContainRoomScreen from './ContainRoomScreen';
@@ -29,8 +29,6 @@ search: '',
             ID: '1',
             Set: 'Superset'
         }
- ]
-} 
     }
 
 
@@ -48,9 +46,8 @@ search: '',
 
     
 
-    _showDeleteWindow(item){
-        this.setState({onDeleteItem: item})
-        this.setState({deleteWindowVisible: true})
+    componentDidUpdate() {
+        console.log(this.state.rooms)
     }
 
     _showContainRoomScreen(){
@@ -60,25 +57,25 @@ search: '',
 
       _setRoomAddWindowVisibility() {
         if (this.state.addRoomWindowVisibility == true) {
-            this.setState({addRoomWindowVisibility: false})
+            this.setState({ addRoomWindowVisibility: false })
         } else {
-            this.setState({addRoomWindowVisibility: true})
+            this.setState({ addRoomWindowVisibility: true })
         }
-    } 
+    }
 
-    _deleteItemById(id)  {
+    _deleteItemById(id) {
         const copy = this.state.rooms
         var index
 
         for (var i = 0; i < copy.length; i++) {  //Sucht den Index des Items im Array nach id
-            if (copy[i].ID === id)
+            if (copy[i].id === id)
                 index = i
-            
+
         }
         copy.splice(index, 1)  //schmeißt das Item mit dem Index raus
-        this.setState({rooms: copy})
-        this.setState({deleteWindowVisible: false}) 
-        
+        this.setState({ rooms: copy })
+        this.setState({ deleteWindowVisible: false })
+
     }
 
      _backButtonPressed(){
@@ -118,8 +115,8 @@ render() {
                 <TouchableOpacity style={styles.plusButton} onPress={() => this.setState({addRoomWindowVisibility: true})} >
                      <Entypo name="plus" size={50} color="black" /> 
                 </TouchableOpacity>
-                <AddRoomWindow 
-                    onSetVisibility={this._setRoomAddWindowVisibility.bind(this)} 
+                <AddRoomWindow
+                    onSetVisibility={this._setRoomAddWindowVisibility.bind(this)}
                     addRoomWindowVisibility={this.state.addRoomWindowVisibility}
                     //name={this.state.rooms.ti}
                     onAdd={this.handleAdd.bind(this)}
@@ -136,14 +133,14 @@ render() {
                         backButtonPressed = {this._backButtonPressed.bind(this)}
                     /> : null}
             </View>
-            
+
 
 
         )
-    
-                }
-}
 
+    }
+}
+}
 
 const styles = StyleSheet.create({
     container: {

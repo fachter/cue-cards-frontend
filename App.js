@@ -8,7 +8,7 @@ import { UserProvider, UserContext } from './screens/LoginRegistrationScreen/Use
 import { SettingsProvider } from './screens/SettingsScreen/SettingsProvider'
 import { ListStructureProvider } from './screens/HomeScreen/ListStructureProvider'
 import { CopyPasteProvider } from './screens/HomeScreen/CopyPasteProvider'
-import { storeDataOnDB, updateOnlineState } from './API/Database'
+import Database from './API/Database'
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -47,11 +47,9 @@ export default class App extends React.Component {
   _handleAppStateChange = (nextAppState) => {
     console.log(nextAppState)
     if (nextAppState === 'background') {
-      // storeDataOnDB()
-      updateOnlineState()
+      // Database.storeDataOnDB()
     }
   }
-
 
   render() {
     return (
