@@ -258,10 +258,10 @@ const DataList = () => {
                         visible={CreateFileWindowVisible} />
                 </View>
                 {isFolder ? null : <TouchableOpacity style={styles.startSessionButton} onPress={() => _navigateToSession()} >
-                    <Entypo name="controller-play" size={50} color="black" />
+                    <Entypo name="controller-play" size={45} color="#008FD3" />
                 </TouchableOpacity>}
                 <TouchableOpacity style={styles.plusButton} onPress={() => setCreateFileWindowVisible(true)} >
-                    <Entypo name="plus" size={50} color="black" />
+                    <Entypo name="plus" size={45} color="#008FD3" />
                 </TouchableOpacity>
             </SwipeView>
             {deleteWindowVisible ?
@@ -280,32 +280,32 @@ const DataList = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#111111",
+        backgroundColor: "#595959",
         paddingTop: 30
     },
     plusButton: {
-        height: 60,
-        width: 60,
+        height: 45,
+        width: 45,
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
-
-        backgroundColor: 'green',
+        borderWidth: 1,
+        borderColor: 'white',
         position: 'absolute',
-        bottom: 10,
-        right: 10
+        bottom: 20,
+        right: 20
     },
     startSessionButton: {
-        height: 60,
-        width: 60,
+        height: 45,
+        width: 45,
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
 
-        backgroundColor: 'blue',
+        backgroundColor: 'white',
         position: 'absolute',
-        bottom: 90,
-        right: 10
+        bottom: 75,
+        right: 20
     },
     listSeperator: {
         height: StyleSheet.hairlineWidth,

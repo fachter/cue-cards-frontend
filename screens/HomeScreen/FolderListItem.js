@@ -56,25 +56,28 @@ export default class FolderListItem extends React.Component {
                                 style={styles.folderButton}
                                 name="ios-folder"
                                 size={25} color="white"
-                                backgroundColor="#111111"
+                                backgroundColor="#595959"
                             />
                             <Text style={styles.fontStyle}>{item.name}</Text>
                         </View>
-                    </TouchableOpacity> : null}
-                {this.state.isSet ?
-                    < TouchableOpacity
-                        onPress={() => callBackItem(item)}
-                        onLongPress={() => onDeleteWindow(item)}>
-                        <View style={styles.container}>
-                            <MaterialCommunityIcons
-                                style={styles.folderButton}
-                                name="cards-outline"
-                                size={25} color="white" />
-                            <Text style={styles.fontStyle}>{item.name}</Text>
-                        </View>
-                    </TouchableOpacity > : null}
+                    </TouchableOpacity> : null
+                }
+                {
+                    this.state.isSet ?
+                        < TouchableOpacity
+                            onPress={() => callBackItem(item)}
+                            onLongPress={() => onDeleteWindow(item)}>
+                            <View style={styles.container}>
+                                <MaterialCommunityIcons
+                                    style={styles.stackButton}
+                                    name="cards-outline"
+                                    size={25} color="white" />
+                                <Text style={styles.fontStyle}>{item.name}</Text>
+                            </View>
+                        </TouchableOpacity > : null
+                }
 
-            </View>
+            </View >
         )
     }
 }
@@ -85,14 +88,20 @@ const styles = StyleSheet.create({
     container: {
         padding: 10,
         flexDirection: 'row',
-        alignItems: "center"
+        alignItems: "center",
     },
     folderButton: {
-        marginRight: 20
+        marginRight: 0,
+        marginLeft: 3,
+    },
+    stackButton: {
+        marginRight: 17,
+        marginLeft: 10
     },
     fontStyle: {
         fontWeight: "bold",
-        color: "white"
+        color: "white",
+        marginLeft: 10
     },
 
 });
