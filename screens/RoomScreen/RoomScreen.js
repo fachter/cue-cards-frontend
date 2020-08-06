@@ -21,30 +21,26 @@ addRoomWindowVisibility: false,
 deleteWindowVisible: false,
 onDeleteItem: null,
 search: '',
- rooms: [
-     {
-        id: 1,
-        title: "Winf"
-    },
-    {
-        id: 2,
-        title: "Wirtschaftsinformatik"
-    },
-    {
-        id: 3,
-        title: "Clara und ich"
-    } 
-] 
+ rooms: [],
+ containRooms: [
+        {
+            ID: '1',
+            Set: 'Superset'
+        }
+ ]
 } 
     }
 
 
      handleAdd(newListItem){
          let copy = this.state.rooms
-         copy.push({id: copy.length, title: newListItem})
+         copy.push({ID: copy.length, title: newListItem})
          this.setState({rooms: copy})
          }
     
+         componentDidUpdate(){
+             console.log(this.state.rooms)
+         }
 
     _showDeleteWindow(item){
         this.setState({onDeleteItem: item})
@@ -59,6 +55,21 @@ search: '',
         }
     } 
 
+    _deleteItemById(id)  {
+        const copy = this.state.rooms
+        var index
+
+        for (var i = 0; i < copy.length; i++) {  //Sucht den Index des Items im Array nach id
+            if (copy[i].ID === id)
+                index = i
+            
+        }
+        copy.splice(index, 1)  //schmeißt das Item mit dem Index raus
+        this.setState({rooms: copy})
+        this.setState({deleteWindowVisible: false}) 
+        
+    }
+
     
 render() {
         const {search} = this.state;
@@ -72,7 +83,7 @@ render() {
                 />
                 <FlatList
                 data={this.state.rooms}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.ID}
                 renderItem={({item}) => (
                 <RoomListItem 
                 item={item}
@@ -92,7 +103,9 @@ render() {
                  />
                  {this.state.deleteWindowVisible ?
                 <DeleteRoomWindow
-                    onDeleteWindow={() => this.props.setState({ deleteWindowVisible: true })}
+                    onDeleteWindow={() => this.setState({ deleteWindowVisible: false })}
+                    onDelete={this._deleteItemById.bind(this)}
+                    item={this.state.onDeleteItem}
                 /> : null}
             </View>
             
@@ -107,8 +120,8 @@ render() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 10,
-        marginBottom: 10
+        backgroundColor: "#595959",
+        paddingTop: 30
     },
     item: {
         backgroundColor: '#f9c2ff',
