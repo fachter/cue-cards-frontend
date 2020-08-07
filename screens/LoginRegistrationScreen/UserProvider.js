@@ -16,7 +16,7 @@ export default class UserProvider extends React.Component {
         this._authenticateAcc = this._authenticateAcc.bind(this)
 
         this.state = {
-            isLoggedin: false,
+            isLoggedin: true,
             userToken: null,
         }
 

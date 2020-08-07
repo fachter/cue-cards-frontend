@@ -22,8 +22,15 @@ export default class RoomScreen extends React.Component {
             addRoomWindowVisibility: false,
             deleteWindowVisible: false,
             onDeleteItem: null,
+            isRoom: null,
+            isSet: null,
             search: '',
-            rooms: [],
+            rooms: [
+                {
+                    id: '1',
+                    title: 'Raum'
+                }
+            ],
             containRooms: [
                 {
                     ID: '1',
@@ -89,20 +96,23 @@ export default class RoomScreen extends React.Component {
 
     render() {
         const { search } = this.state;
+        if(this.state.containRoomScreenVisible === false)
+        {
         return (
+            
             <View style={styles.container}>
 
-                {this.state.roomsVisible ?
+                
                     <Text>Gebe die 6-stellige Raum-ID ein, um einem Raum beizutreten
 
-                </Text> : null}
-                {this.state.roomsVisible ?
+                </Text> 
+                
                     <Searchbar
                         placeholder="Raum beitreten"
                         //onChangeText={_updateSearch()}
                         value={search}
-                    /> : null}
-                {this.state.roomsVisible ?
+                    /> 
+                
                     <FlatList
                         data={this.state.rooms}
                         keyExtractor={item => item.ID}
@@ -113,7 +123,7 @@ export default class RoomScreen extends React.Component {
                                 showContainRoomScreen={this._showContainRoomScreen.bind(this)}
                             />
                         )}
-                    /> : null}
+                    /> 
 
                 <TouchableOpacity style={styles.plusButton} onPress={() => this.setState({ addRoomWindowVisibility: true })} >
                     <Entypo name="plus" size={50} color="black" />
@@ -130,19 +140,26 @@ export default class RoomScreen extends React.Component {
                         onDelete={this._deleteItemById.bind(this)}
                         item={this.state.onDeleteItem}
                     /> : null}
-                {this.state.containRoomScreenVisible ?
+            </View>
+                    );
+                    }
+
+                    else if(this.state.containRoomScreenVisible === true){
+                    return (
                     <ContainRoomScreen
                         //showContainRoomScreen={() => this.setState({ containRoomScreenVisible: true })}
                         backButtonPressed={this._backButtonPressed.bind(this)}
-                    /> : null}
-            </View>
+                    /> 
+                    );
+                    }
+            
 
 
 
-        )
-
+    
+                }
     }
-}
+
 
 
 const styles = StyleSheet.create({
