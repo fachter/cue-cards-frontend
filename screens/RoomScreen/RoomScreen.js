@@ -4,7 +4,6 @@ import { Entypo } from '@expo/vector-icons';
 import AddRoomWindow from './AddRoomWindow';
 import RoomListItem from './RoomListItem';
 import DeleteRoomWindow from './DeleteRoomWindow';
-import { SearchBar } from 'react-native-elements';
 import { Searchbar } from 'react-native-paper';
 import { v4 as uuidv4 } from 'uuid';
 import ContainRoomScreen from './ContainRoomScreen';
@@ -47,6 +46,7 @@ export default class RoomScreen extends React.Component {
         let copy = this.state.rooms
         copy.push({ ID: copy.length, title: newListItem })
         this.setState({ rooms: copy })
+        this.setState({addRoomWindowVisibility: false})
     }
 
     componentDidUpdate() {

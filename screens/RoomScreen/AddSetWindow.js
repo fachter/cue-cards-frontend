@@ -26,14 +26,11 @@ export default class AddRoomWindow extends React.Component {
                     onRequestClose={() => this.props.showAddSetWindow()}>
                     <View style={styles.background}>
                         <View style={styles.window}>
-                            <TouchableOpacity style={styles.cancelButton} onPress={() => this.props.onSetVisibility()}>
-                                <AntDesign name="closecircleo" size={24} color="white" />
-                            </TouchableOpacity>
                             <Text
                                 style={styles.headingText}>Gebe den Setnamen ein</Text>
                             <TextInput style={styles.friendName} onChangeText={text => this.setState({ setName: text })}></TextInput>
                             <TouchableOpacity style={styles.addButton}   >
-                                <Icon.Feather name="check" size={50} onPress={() => this.props.onAdd(this.state.roomName)} />
+                                <Icon.Feather name="check" size={50} onPress={() => this.props.onAdd(this.state.setName)} />
                             </TouchableOpacity>
                         </View>
                     </View>

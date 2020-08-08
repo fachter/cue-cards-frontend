@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, Button, StyleSheet, FlatList, View, Text, BackHandler} from 'react-native';
-import { Entypo } from '@expo/vector-icons';
+import { FontAwesome5, Entypo } from '@expo/vector-icons';
 import AddSetWindow from './AddSetWindow'
 import RoomSetListItem from './RoomSetListItem';
+import { Searchbar } from 'react-native-paper';
 import Drawer from 'react-native-drawer';
 
 
@@ -12,6 +13,7 @@ export default class ContainRoomScreen extends React.Component {
         super(props)
 
         this.state= {
+            search: '',
             currentSetStructure: [
                 {
                     id: '1',
@@ -39,6 +41,13 @@ export default class ContainRoomScreen extends React.Component {
 
         
     }
+
+    handleSetAdd(newListItem) {
+        let copy = this.state.currentSetStructure
+        copy.push({ id: copy.length, set: newListItem })
+        this.setState({ currentSetStructure: copy })
+        this.setState({showAddSetWindow: false})
+    }
     
     _showAddSetWindow(){
         if(this.state.showAddSetWindow === false){
@@ -51,8 +60,16 @@ export default class ContainRoomScreen extends React.Component {
 
     renderDrawer(){
         //SlideMenu
+        const { search } = this.state;
+
         return(
             <View style={styles.menuContainer}>
+                <Text style={styles.textStyle}>Freund einladen</Text>
+                <Searchbar
+                    placeholder="Freund ID eingeben"
+                    //onChangeText={_updateSearch()}
+                    value={search}
+                /> 
                 <FlatList
                     style={{ flex: 1.0 }}
                     data={this.state.friends}
@@ -67,9 +84,7 @@ export default class ContainRoomScreen extends React.Component {
                             </TouchableOpacity>
                         )
                     }} />
-                    <Button onPress={() => this.closeDrawer()}
-                    title='Schließen'
-                    ></Button>
+                    
             </View>
         )
     }
@@ -109,15 +124,18 @@ export default class ContainRoomScreen extends React.Component {
                 {this.state.showAddSetWindow ?
                 <AddSetWindow
                 showAddSetWindow={this._showAddSetWindow}
+                onAdd={this.handleSetAdd.bind(this)}
+
                 /> : null}
                 
                 
                 <TouchableOpacity style={styles.plusButton} onPress={() => this.setState({ showAddSetWindow: true })} >
                     <Entypo name="plus" size={50} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.freundeButton} onPress={() => this.openDrawer()} >
-                    <Entypo name="plus" size={50} color="black" />
-                </TouchableOpacity>
+                 <TouchableOpacity style={styles.friendsButton} onPress={() => this.openDrawer()} >
+                    <Entypo name="users" size={50} color="black" />
+                </TouchableOpacity> 
+                
                     
             </View>
             </Drawer>
@@ -145,7 +163,7 @@ const styles = StyleSheet.create({
         bottom: 10,
         right: 10
     },
-    freundeButton: {
+    friendsButton: {
         height: 60,
         width: 60,
         borderRadius: 30,
@@ -168,6 +186,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 17,
         alignSelf: 'center',
+    },
+    textStyle: {
+        color: 'white'
     }
     
 })
