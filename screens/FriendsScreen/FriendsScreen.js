@@ -87,7 +87,7 @@ export default class FriendsScreen extends React.Component {
                         ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
                     />
                     <TouchableOpacity style={styles.plusButton} onPress={() => this.setState({ addWindowVisibility: true })} >
-                        <AntDesign name="adduser" size={40} color="black" />
+                        <AntDesign name="adduser" size={40} color="#008FD3" />
                     </TouchableOpacity>
                     <AddFriendWindow onSetVisibility={this._setAddWindowVisibility.bind(this)} addWindowVisibility={this.state.addWindowVisibility} />
                 </View>
@@ -108,21 +108,22 @@ export default class FriendsScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#111111",
+        backgroundColor: "#2f3136",
     },
     listSeperator: {
         height: StyleSheet.hairlineWidth,
-        backgroundColor: 'blue'
+        backgroundColor: 'grey'
     },
     plusButton: {
         height: 60,
         width: 60,
         borderRadius: 30,
+        borderWidth: 0.5,
+        borderColor: "grey",
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'green',
         position: 'absolute',
-        bottom: 10,
-        right: 10
+        bottom: 20,
+        right: 20
     },
 });

@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         //borderRadius: 5,
         backgroundColor: '#202225'
     },
-    button: {
+    normalbutton: {
         height: 50,
         width: 50,
         color: "white",

@@ -1,6 +1,7 @@
-import React from 'react'
-import { View, Modal, TouchableOpacity, StyleSheet, Text } from 'react-native'
+import React from 'react';
+import { View, Modal, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
 export default class NewCardWindow extends React.Component {
@@ -21,16 +22,19 @@ export default class NewCardWindow extends React.Component {
                     <TouchableOpacity style={styles.cancelButton} onPress={() => onSetVisibility(false)}>
                         <AntDesign name="closecircleo" size={24} color="white" />
                     </TouchableOpacity>
-                    <Text style={styles.headingText}>Was möchtest du erstellen?</Text>
                     <View style={styles.window}>
-                        <TouchableOpacity style={styles.windowButtons} onPress={() => onNavigateToCardCreator("MC")}>
-                            <Text style={styles.buttonText}>Multiplechoice</Text>
-                        </TouchableOpacity>
+                        <Text style={styles.headingText}>Was möchtest du erstellen?</Text>
                         <TouchableOpacity style={[styles.windowButtons, { marginTop: 20 }]} onPress={() => onNavigateToCardCreator("SC")}>
-                            <Text style={styles.buttonText}>Singlechoice</Text>
+                            <Icon name="check-all" size={30} color='#008FD3' />
+                            <Text style={styles.buttonText}>    Multiplechoice</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.windowButtons, { marginTop: 20 }]} onPress={() => onNavigateToCardCreator("FT")}>
-                            <Text style={styles.buttonText}>Freitext</Text>
+                        <TouchableOpacity style={[styles.windowButtons, { marginTop: 10 }]} onPress={() => onNavigateToCardCreator("SC")}>
+                            <Icon name="check" size={30} color='#008FD3' />
+                            <Text style={styles.buttonText}>    Singlechoice</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.windowButtons, { marginTop: 10 }]} onPress={() => onNavigateToCardCreator("FT")}>
+                            <Icon name="card-text-outline" size={30} color='#008FD3' />
+                            <Text style={styles.buttonText}>    Freitext</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -44,53 +48,37 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#000000aa',
+        backgroundColor: 'black',
+        opacity: 0.9
     },
     window: {
         width: '80%',
-        height: '20%',
-        borderRadius: 5
+        height: '30%',
+        alignItems: 'center',
+
     },
+
     windowButtons: {
-        flex: 1,
         flexDirection: 'row',
-        backgroundColor: 'grey',
-        borderRadius: 5,
-        justifyContent: 'center',
-        alignItems: 'center'
+        width: '50%',
+        height: '20%',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+
     },
     headingText: {
         color: 'white',
         margin: 10,
+        marginBottom: 10,
         fontSize: 20,
-        fontStyle: 'italic'
     },
     buttonText: {
         fontSize: 20,
         fontStyle: 'italic',
-        margin: 10
-    },
-    saveButton: {
-        height: 60,
-        width: 60,
-        borderRadius: 30,
-        alignSelf: 'flex-end',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 10,
-        backgroundColor: 'green',
-
+        color: 'white',
     },
     cancelButton: {
-        width: 30,
-        height: 30,
-        borderRadius: 5,
         alignSelf: 'flex-end',
         margin: 5,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
-
-
-
+    },
 });

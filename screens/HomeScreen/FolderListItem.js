@@ -86,7 +86,8 @@ export default class FolderListItem extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
+        padding: 7,
+        paddingLeft: 10,
         flexDirection: 'row',
         alignItems: "center",
     },
@@ -96,12 +97,13 @@ const styles = StyleSheet.create({
     },
     stackButton: {
         marginRight: 17,
-        marginLeft: 10
+        marginLeft: 10,
+        paddingVertical: 8
     },
     fontStyle: {
         fontWeight: "bold",
         color: "white",
-        marginLeft: 10
+        marginLeft: 10,
     },
 
 });

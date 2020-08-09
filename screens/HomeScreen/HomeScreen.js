@@ -313,8 +313,8 @@ const styles = StyleSheet.create({
         paddingTop: 30
     },
     plusButton: {
-        height: 45,
-        width: 45,
+        height: 60,
+        width: 60,
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
     },
     listSeperator: {
         height: StyleSheet.hairlineWidth,
-        backgroundColor: 'gray',
+        backgroundColor: 'grey',
         marginVertical: 5
     },
     btnNew: {
