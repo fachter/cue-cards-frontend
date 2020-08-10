@@ -5,40 +5,40 @@ import { AntDesign } from '@expo/vector-icons';
 
 
 
- export default class AddRoomWindow extends React.Component {
+export default class AddRoomWindow extends React.Component {
 
     state = {
-        roomName: null
+        setName: null
     }
 
-    render() { 
+    render() {
 
 
-        
-            
-        
+
+
+
         return (
             <View style={styles.container} >
                 <Modal
                     animationType="slide"
                     transparent={true}
                     visible={this.props.addRoomWindowVisibility}
-                    onRequestClose={() => this.props.onSetVisibility()}>
+                    onRequestClose={() => this.props.showAddSetWindow()}>
                     <View style={styles.background}>
                         <View style={styles.window}>
                             <Text
-                                style={styles.headingText}>Gebe den Raumnamen ein</Text>
-                            <TextInput style={styles.friendName} onChangeText={text => this.setState({roomName: text})}></TextInput>
+                                style={styles.headingText}>Gebe den Setnamen ein</Text>
+                            <TextInput style={styles.friendName} onChangeText={text => this.setState({ setName: text })}></TextInput>
                             <TouchableOpacity style={styles.addButton}   >
-                                <Icon.Feather name="check" size={50} onPress={()=>this.props.onAdd(this.state.roomName)} />
+                                <Icon.Feather name="check" size={50} onPress={() => this.props.onAdd(this.state.setName)} />
                             </TouchableOpacity>
                         </View>
                     </View>
                 </Modal>
             </View>
         )
-        };
-    }
+    };
+}
 
 
 const styles = StyleSheet.create({

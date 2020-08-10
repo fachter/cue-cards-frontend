@@ -1,89 +1,103 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import { View, StyleSheet, Text, FlatList, TouchableOpacity } from 'react-native'
 import * as Icon from '@expo/vector-icons'
 import AnswerListItem from './AnswerListItem'
+import { CardScreenContext } from './CardScreen'
 
 
 
-export default class SingleChoiceCard extends React.Component {
 
-    state = {
-        result: false,  // true/false, je nachdem ob richtig oder falsch beantwortet wurde
-        backgroundColor: "#111111",
-        answers: this.props.answers
-    }
+export default function SingleChoiceCard() {
+
+    const { currentCard, _updateCardValues, _createRandomAnswers, _shuffleArray, _getArrayOfTrueAnswers, answers } = useContext(CardScreenContext)
+    const [result, setResult] = useState(false)
+    const [backgroundColor, setBackgroundColor] = useState("#111111")
 
 
-    _checkChoiceAndSendBack = () => {
-        this._checkTheChoice()
+    function _checkChoiceAndSendBack() {
+        _checkTheChoice()
         setTimeout(() => {
-            this.props.getCardBack(this.state.result)
+            _updateCardValues(result)
+            setBackgroundColor("#111111")
         }, 1000);
     }
 
 
-    _checkTheChoice = () => {
-        const { answers } = this.state
+
+    function _checkTheChoice() {
+
         let numberOfRightSelection = 0
-
-        //prüft wie viele Antworten richtig gewählt wurden
         for (let i = 0; i < answers.length; i++) {
-            if (answers[i].checkState == true && answers[i].isTrue == true) {
+            if (answers[i].checkState === true && answers[i].isTrue === true) {
                 numberOfRightSelection += 1
+                console.log(numberOfRightSelection)
             }
         }
 
-        if (numberOfRightSelection == this.props.card.answers.length) {
-            this.state.result = true
-            this.setState({ result: true })
-            this.setState({ backgroundColor: "green" })
+        let numberOfChoosenAnswers = 0
+        for (let i = 0; i < answers.length; i++) {
+            if (answers[i].checkState == true) {
+                numberOfChoosenAnswers += 1
+            }
+        }
 
+        if (numberOfRightSelection === currentCard.answers.length && currentCard.answers.length === numberOfChoosenAnswers) {
+            setResult(true)
+            setBackgroundColor("green")
         } else {
-            this.setState({ result: false })
-            this.setState({ backgroundColor: 'red' })
-
+            //this._showTrueAnswers()
+            setResult(false)
+            setBackgroundColor("red")
         }
     }
 
-    _updateCheckState = (checkstate, item) => {
-        let copy = this.state.answers
 
-        for (let i = 0; i < copy.length; i++) {
-            if (item.answerValues.ID === copy[i].answerValues.ID) {
-                copy[i].checkState = true
-            } else {
-                copy[i].checkState = false
-            }
-        }
-        this.setState({ answers: copy })
 
+    // _showTrueAnswers() {
+    //     const { answers, trueAnswers } = this.state
+    //     let copy = answers
+
+    //     for (let i = 0; i < copy.length; i++) {
+    //         copy[i].checkState = false
+    //     }
+
+    //     for (let i = 0; i < copy.length; i++) {
+    //         for (let j = 0; j < trueAnswers.length; j++) {
+    //             if (copy[i].answerValues.id === trueAnswers[j].id) {
+    //                 copy[i].checkState = true
+    //             }
+    //         }
+    //     }
+    //     this.setState({ answers: copy })
+    // }
+
+    function _updateCheckState(checkState, item) {
+        item.checkState = checkState
     }
 
+    return (
 
-    render() {
-        return (
-            <View style={[styles.container, { backgroundColor: this.state.backgroundColor }]}>
-                <FlatList
-                    extraData={this.state.answers}
-                    data={this.state.answers}
-                    keyExtractor={item => item.answerValues.ID}
-                    renderItem={({ item }) => (
-                        <AnswerListItem
-                            item={item}
-                            getCardState={this._updateCheckState}
-                            checkState={false}
-                            backgroundColor={this.props.backgroundColor}
-                        />
-                    )}
-                    ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
-                />
-                <TouchableOpacity style={styles.saveButton} onPress={() => this._checkChoiceAndSendBack()}>
-                    <Icon.Feather name="check" size={50} />
-                </TouchableOpacity>
-            </View >
+        <View style={[styles.container, { backgroundColor: backgroundColor }]}>
+            <FlatList
+                extraData={answers}
+                data={answers}
+                keyExtractor={item => item.answerValues.id}
+                renderItem={({ item }) => (
+                    <AnswerListItem
+                        item={item}
+                        getCardState={_updateCheckState}
+                        checkState={false}
 
-        )
-    }
+                    />
+                )}
+                ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
+            />
+            <TouchableOpacity style={styles.saveButton} onPress={() => _checkChoiceAndSendBack()}>
+                <Icon.Feather name="check" size={50} />
+            </TouchableOpacity>
+        </View >
+
+    )
 }
 
 const styles = StyleSheet.create({

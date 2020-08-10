@@ -81,7 +81,7 @@ export default class DeleteWindow extends React.Component {
                         {this._checkIfItemIsFolderOrSet() ? null : <TouchableOpacity style={styles.button} onPress={() => onNavigateToCardCreator(item)} >
                             <Text style={styles.buttonText}>bearbeiten</Text>
                         </TouchableOpacity>}
-                        <TouchableOpacity style={styles.button} onPress={() => onDelete(item.ID)}>
+                        <TouchableOpacity style={styles.button} onPress={() => onDelete(item.id)}>
                             <Text style={styles.buttonText}>löschen</Text>
                         </TouchableOpacity>
                     </View>

@@ -7,7 +7,7 @@ import { AntDesign } from '@expo/vector-icons';
 export default class AddFriendWindow extends React.Component {
 
     state = {
-        newFriendID: null
+        newFriendid: null
     }
 
     render() {

@@ -17,9 +17,9 @@ export default function ChooseFolderSetWindow() {
 
 
     function _save() {
-        let newID = uuid.v1()
+        let newid = uuid.v1()
         let newListItem = {
-            ID: newID,
+            id: newid,
             isFolder: isNewFileFolder,
             name: newFileName,
             subFolders: [],
