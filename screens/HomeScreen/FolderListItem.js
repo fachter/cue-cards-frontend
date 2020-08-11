@@ -53,7 +53,7 @@ export default class FolderListItem extends React.Component {
                         onLongPress={() => onDeleteWindow(item)}>
                         <View style={styles.container}>
                             <Icon.Button
-                                style={styles.folderButton}
+                                style={styles.folderButton} a
                                 name="ios-folder"
                                 size={25} color="white"
                                 backgroundColor="#2f3136"
@@ -64,19 +64,26 @@ export default class FolderListItem extends React.Component {
                 }
                 {
                     this.state.isSet ?
-                        < TouchableOpacity
-                            onPress={() => callBackItem(item)}
-                            onLongPress={() => onDeleteWindow(item)}>
-                            <View style={styles.container}>
-                                <MaterialCommunityIcons
-                                    style={styles.stackButton}
-                                    name="cards-outline"
-                                    size={25} color="white" />
-                                <Text style={styles.fontStyle}>{item.name}</Text>
-                            </View>
-                        </TouchableOpacity > : null
+                        <View style={styles.setItemView}>
+                            < TouchableOpacity
+                                style={styles.itemInfo}
+                                onPress={() => callBackItem(item)}
+                                onLongPress={() => onDeleteWindow(item)}>
+                                <View style={styles.container}>
+                                    <MaterialCommunityIcons
+                                        style={styles.stackButton}
+                                        name="cards-outline"
+                                        size={25} color="white" />
+                                    <Text style={styles.fontStyle}>{item.name}</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.startSessionButton}
+                                onPress={() => this.props.onNavigateToSession(item)}>
+                                <Text>start</Text>
+                            </TouchableOpacity>
+                        </View> : null
                 }
-
             </View >
         )
     }
@@ -105,7 +112,22 @@ const styles = StyleSheet.create({
         color: "white",
         marginLeft: 10,
     },
+    setItemView: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    itemInfo: {
+        flex: 1,
+    },
+    startSessionButton: {
+        flex: 1,
+        position: 'absolute',
+        right: 20,
+        height: 30,
+        width: 30,
+        backgroundColor: 'blue'
 
+    }
 });
 
 

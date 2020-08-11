@@ -17,9 +17,11 @@ export default function MulitpleChoiceCard() {
 
 
 
-    function _checkChoiceAndSendBack() {
 
-    }
+    useEffect(() => {
+        console.log("999999999999999999999999")
+        console.log(answers)
+    })
 
 
     function _checkTheChoice() {
