@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
 
 
 
-import MultipleChoiceCard from './MultipleChoiceCard'
+import MultipleChoiceCard from './MultipleAndSingleChoice'
 import FreetextCard from './FreetextCard'
 import SingleChoiceCard from './SingleChoiceCard'
 import SessionOptionsPage from './SessionOptionsPage'
@@ -24,8 +24,6 @@ export default function CardScreen({ route, navigation }) {
     const [shuffleCards, setShuffleCards] = useState(false)
     const maxCardLevel = 6
     const minCardLevel = 0
-
-
 
 
 
@@ -144,7 +142,7 @@ export default function CardScreen({ route, navigation }) {
             [i].id) {  //Sucht aktuelle im Set nach id
 
                 //Je nach richtiger oder falscher Antwort wird die Karte Level auf bzw. abgestuft
-                if (result == true) {
+                if (result === true) {
                     if (currentListStructure
                     [i].cardLevel < maxCardLevel) {
                         currentListStructure
@@ -198,7 +196,7 @@ export default function CardScreen({ route, navigation }) {
 
     function _renderTheRightCard() {
 
-        if (currentCard.cardType == 'MC') {
+        if (currentCard.cardType == 'MC' || currentCard.cardType == 'SC') {
             return (
                 <CardScreenContext.Provider value={{
                     currentCard: currentCard,
@@ -213,21 +211,21 @@ export default function CardScreen({ route, navigation }) {
                     <MultipleChoiceCard card={currentCard} />
                 </CardScreenContext.Provider>
             )
-        } else if (currentCard.cardType === "SC") {
-            return (
-                <CardScreenContext.Provider value={{
-                    currentCard: currentCard,
-                    _updateCardValues: _updateCardValues,
-                    _createRandomAnswers: _createRandomAnswers,
-                    _shuffleArray: _shuffleArray,
-                    _getArrayOfTrueAnswers: _getArrayOfTrueAnswers,
-                    answers: answers,
-                    setAnswers: setAnswers
+            // } else if (currentCard.cardType === "SC") {
+            //     return (
+            //         <CardScreenContext.Provider value={{
+            //             currentCard: currentCard,
+            //             _updateCardValues: _updateCardValues,
+            //             _createRandomAnswers: _createRandomAnswers,
+            //             _shuffleArray: _shuffleArray,
+            //             _getArrayOfTrueAnswers: _getArrayOfTrueAnswers,
+            //             answers: answers,
+            //             setAnswers: setAnswers
 
-                }}>
-                    <SingleChoiceCard card={currentCard} />
-                </CardScreenContext.Provider >
-            )
+            //         }}>
+            //             <SingleChoiceCard card={currentCard} />
+            //         </CardScreenContext.Provider >
+            //     )
         } else if (currentCard.cardType == 'FT')
             return (
                 <FreetextCard card={currentCard} getCardBack={_updateCardValues} />
@@ -236,7 +234,6 @@ export default function CardScreen({ route, navigation }) {
 
 
     function _nextCard() {
-        console.log()
         if (currentCardindex < currentListStructure
             .length - 1) {
             let nextIndex = 1
@@ -262,10 +259,8 @@ export default function CardScreen({ route, navigation }) {
     function _setSessionOptionsAndStart() {
         //Mischt die Karten
         if (shuffleCards == true) {
-            currentListStructure
-                = _shuffleArray(currentListStructure, false)
-            setCurrentCard(currentListStructure
-            [currentCardindex])
+            currentListStructure = _shuffleArray(currentListStructure, false)
+            setCurrentCard(currentListStructure[currentCardindex])
         }
 
         //Maximale Kartenlevel abfragen

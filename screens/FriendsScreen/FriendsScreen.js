@@ -1,106 +1,107 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Text } from 'react-native';
-import FriendListItem from './FriendListItem'
-import AddFriendWindow from './AddFriendWindow'
-import { InternetConnectionContext } from '../../API/InternetConnection'
 import { AntDesign } from '@expo/vector-icons';
 
+import FriendListItem from './FriendListItem'
+import AddFriendWindow from './AddFriendWindow'
+import FriendOptionsWindow from './FriendOptionsWindow'
+
+import { InternetConnectionContext } from '../../API/InternetConnection'
+import { CopyPasteContext } from '../HomeScreen/CopyPasteProvider'
 
 
-export default class FriendsScreen extends React.Component {
 
-    static contextType = InternetConnectionContext
+export default function FriendsScreen() {
 
-    constructor(props) {
-        super(props)
+    const { checkIfConnected, isConnected } = useContext(InternetConnectionContext)
+    const { someThingIsCopied } = useContext(CopyPasteContext)
+    const [addWindowVisibility, setAddWindowVisibility] = useState(false)
+    const [friendOptionsWindowVisibility, setfriendOptionWindowVisibility] = useState(false)
+    const [loadFriendsSuccesfull, setLoadFriendsSuccesfull] = useState(true)
+    const [friends, setFriends] = useState([{
+        userid: 1111,
+        username: "Philip.B",
+        isOnline: true,
+    },
+    {
+        userid: 2222,
+        username: "Matze.M",
+        isOnline: false,
+    },
+    {
+        userid: 3333,
+        username: "Clara.L",
+        isOnline: false,
+    },
+    {
+        userid: 4444,
+        username: "Darius.W",
+        isOnline: false,
+    },
+    {
+        userid: 5555,
+        username: "Felix.A",
+        isOnline: true,
+    }])
 
-        this.retrieveFriends()
 
-        this.state = {
-            addWindowVisibility: false,
-            loadFriendsSuccesfull: true,
-            friends: [
-                {
-                    userid: 1111,
-                    username: "Philip.B",
-                    isOnline: true,
-                },
-                {
-                    userid: 2222,
-                    username: "Matze.M",
-                    isOnline: false,
-                },
-                {
-                    userid: 3333,
-                    username: "Clara.L",
-                    isOnline: false,
-                },
-                {
-                    userid: 4444,
-                    username: "Darius.W",
-                    isOnline: false,
-                },
-                {
-                    userid: 5555,
-                    username: "Felix.A",
-                    isOnline: true,
-                }
-            ]
-        }
+    useEffect(() => {
+        checkIfConnected()
+        retrieveFriends()
+    })
+
+
+    function retrieveFriends() {
+
     }
 
-    componentDidMount() {
-        this.context.checkIfConnected()
+    function _setAddWindowVisibility() {
+
     }
 
-
-    retrieveFriends() {
-        console.log(1)
-        try {
-            //Abruf der Freundeliste
-            this.setState({ loadFriendsSuccesfull: true })
-        } catch (error) {
-            console.log("Error by loading friendlist:" + error)
-            this.setState({ loadFriendsSuccesfull: false })
-        }
-    }
-
-    _setAddWindowVisibility() {
-        if (this.state.addWindowVisibility == true) {
-            this.setState({ addWindowVisibility: false })
+    function _setFriendOptionsWindowVisibility() {
+        if (friendOptionsWindowVisibility === true) {
+            setfriendOptionWindowVisibility(false)
         } else {
-            this.setState({ addWindowVisibility: true })
+            setfriendOptionWindowVisibility(true)
         }
     }
 
-    render() {
-        if (this.context.isConnected === true && this.state.loadFriendsSuccesfull === true) {
-            return (
-                <View style={styles.container}>
-                    <FlatList
-                        data={this.state.friends}
-                        keyExtractor={item => item.userid}
-                        renderItem={({ item }) => (
-                            <FriendListItem
-                                item={item} />
-                        )}
-                        ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
-                    />
-                    <TouchableOpacity style={styles.plusButton} onPress={() => this.setState({ addWindowVisibility: true })} >
-                        <AntDesign name="adduser" size={40} color="#008FD3" />
-                    </TouchableOpacity>
-                    <AddFriendWindow onSetVisibility={this._setAddWindowVisibility.bind(this)} addWindowVisibility={this.state.addWindowVisibility} />
-                </View>
 
-            );
-        } else {
-            return (
-                <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-                    <Text style={{ fontSize: 20, fontStyle: 'italic', color: 'white', margin: 10 }}>Hoppala, da ist wohl etwas schief gelaufen</Text>
-                    <ActivityIndicator size="large" color="white" />
-                </View>
-            )
-        }
+    function sendCardToFriend(userID) {
+
+    }
+
+
+    if (isConnected === true && loadFriendsSuccesfull === true) {
+        return (
+            <View style={styles.container}>
+                <FlatList
+                    data={friends}
+                    keyExtractor={item => item.userID}
+                    renderItem={({ item }) => (
+                        <FriendListItem
+                            item={item}
+                            onGetFriend={() => sendCardToFriend}
+                        />
+                    )}
+                    ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
+                />
+                <TouchableOpacity style={styles.plusButton} onPress={() => setAddWindowVisibility(true)} >
+                    <AntDesign name="adduser" size={40} color="#008FD3" />
+                </TouchableOpacity>
+                <AddFriendWindow onSetVisibility={_setAddWindowVisibility.bind(this)} addWindowVisibility={addWindowVisibility} />
+                {friendOptionsWindowVisibility ? <FriendOptionsWindow onSetVisibility={_setFriendOptionsWindowVisibility} /> : null}
+            </View>
+
+        );
+    } else {
+        return (
+            <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+                <Text style={{ fontSize: 20, fontStyle: 'italic', color: 'white', margin: 10 }}>Hoppala, da ist wohl etwas schief gelaufen</Text>
+                <ActivityIndicator size="large" color="white" />
+            </View>
+        )
     }
 };
 

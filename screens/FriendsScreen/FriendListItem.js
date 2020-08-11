@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 
@@ -14,26 +15,20 @@ export default class FriendListItem extends React.Component {
         return 'gray'
     }
 
+
+
+
     render() {
         return (
-            <View style={styles.container}>
+            <TouchableOpacity style={styles.container}
+                onLongPress={() => this.props.onSetVisibility()}>
                 <View style={styles.innerView}>
                     <View style={[styles.onlineState, { backgroundColor: this._OnlineOffline() }]}>
                         <View style={styles.onlineStateInnerRing}></View>
                     </View>
                     <Text style={styles.listText}>{this.props.item.username}</Text>
-                    <View style={styles.buttonContainer}>
-                        <Icon.Button
-                            style={styles.normalButton}
-                            name="ios-share"
-                            size={30}
-                            color="white"
-                            backgroundColor="#2f3136"
-                        // </Icon.Button>onPress={() => onDelete(item.ID)}
-                        />
-                    </View>
                 </View>
-            </View>
+            </TouchableOpacity>
         )
     }
 }
@@ -42,6 +37,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 10,
+        flexDirection: 'row',
         //paddingLeft: 10,
         //paddingRight: 10,
         paddingBottom: 10,
@@ -79,13 +75,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: "white"
     },
-    normalButton: {
-        //height: 50,
-        //width: 50,
-        //color: "white",
-    },
-    buttonContainer: {
-        position: "absolute",
-        right: 20
+    shareButton: {
+        position: 'relative',
+        right: 10
     }
 });

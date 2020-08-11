@@ -11,18 +11,14 @@ import AnswerListItem from './AnswerListItem'
 export default function MulitpleChoiceCard() {
 
 
-    const { currentCard, _updateCardValues, _createRandomAnswers, _shuffleArray, _getArrayOfTrueAnswers, answers, setAnswers } = useContext(CardScreenContext)
-    const [result, setResult] = useState(false)
+    const { currentCard, _updateCardValues, _getArrayOfTrueAnswers, answers, setAnswers } = useContext(CardScreenContext)
     const [backgroundColor, setBackgroundColor] = useState("#111111")
+    const [showNextButton, setShowNextButton] = useState(false)
 
 
 
     function _checkChoiceAndSendBack() {
-        _checkTheChoice()
-        setTimeout(() => {
-            _updateCardValues(result)
-            setBackgroundColor("#111111")
-        }, 1000);
+
     }
 
 
@@ -44,12 +40,20 @@ export default function MulitpleChoiceCard() {
         }
 
         if (numberOfRightSelection === currentCard.answers.length && currentCard.answers.length === numberOfChoosenAnswers) {
-            setResult(true)
+
             setBackgroundColor("green")
+            setTimeout(() => {
+                _nextCardAndUpdateValues(true)
+                setBackgroundColor("#111111")
+            }, 1000)
+
         } else {
             _showTrueAnswers()
-            setResult(false)
             setBackgroundColor("red")
+            setShowNextButton(true)
+            setTimeout(() => {
+                setBackgroundColor("#111111")
+            }, 1000)
 
         }
     }
@@ -73,13 +77,17 @@ export default function MulitpleChoiceCard() {
         setAnswers(copy)
     }
 
+    function _nextCardAndUpdateValues(result) {
+        _updateCardValues(result)
+        setShowNextButton(false)
+    }
+
 
     function _updateCheckState(checkState, item) {
         item.checkState = checkState
     }
 
-    console.log(currentCard)
-    console.log(answers)
+
     return (
 
         <View style={[styles.container, { backgroundColor: backgroundColor }]}>
@@ -97,9 +105,13 @@ export default function MulitpleChoiceCard() {
                 )}
                 ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
             />
-            <TouchableOpacity style={styles.saveButton} onPress={() => _checkChoiceAndSendBack()}>
-                <Icon.Feather name="check" size={50} />
-            </TouchableOpacity>
+            {showNextButton ?
+                <TouchableOpacity style={styles.nextButton} onPress={() => _nextCardAndUpdateValues(false)}>
+                    <Text>nächste</Text>
+                </TouchableOpacity> :
+                <TouchableOpacity style={styles.saveButton} onPress={() => _checkTheChoice()}>
+                    <Icon.Feather name="check" size={50} />
+                </TouchableOpacity>}
         </View >
 
     )
@@ -128,5 +140,14 @@ const styles = StyleSheet.create({
     listSeperator: {
         height: StyleSheet.hairlineWidth,
         backgroundColor: 'white'
+    },
+    nextButton: {
+        height: 60,
+        width: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        backgroundColor: 'green',
+
     }
 });

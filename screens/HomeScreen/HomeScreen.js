@@ -272,7 +272,6 @@ const DataList = () => {
                     size={23} color="black"
                     backgroundColor="white"
                     onPress={() => setSomeThingIsCopied(false)} />
-
             </View> : null}
             <SwipeView swipeRight={_backButtonPressed}
             >

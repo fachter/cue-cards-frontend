@@ -1,14 +1,10 @@
-import React from 'react';
-import { View, Modal, TouchableOpacity, StyleSheet, Text } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import React from 'react'
+import { Modal, TouchableOpacity, View, StyleSheet } from 'react-native'
+import { AntDesign } from '@expo/vector-icons'
 
-
-export default class NewCardWindow extends React.Component {
-
+export default class FriendOptionsWindow extends React.Component {
 
     render() {
-        const { onNavigateToCardCreator, onSetVisibility } = this.props
         return (
             <Modal
                 animationType="slide"
@@ -23,23 +19,16 @@ export default class NewCardWindow extends React.Component {
                     <View style={styles.window}>
                         <Text style={styles.headingText}>Was möchtest du erstellen?</Text>
                         <TouchableOpacity style={[styles.windowButtons, { marginTop: 20 }]} onPress={() => onNavigateToCardCreator("MC")}>
-                            <Icon name="check-all" size={30} color='#008FD3' />
                             <Text style={styles.buttonText}>    Multiplechoice</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.windowButtons, { marginTop: 10 }]} onPress={() => onNavigateToCardCreator("SC")}>
-                            <Icon name="check" size={30} color='#008FD3' />
-                            <Text style={styles.buttonText}>    Singlechoice</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.windowButtons, { marginTop: 10 }]} onPress={() => onNavigateToCardCreator("FT")}>
-                            <Icon name="card-text-outline" size={30} color='#008FD3' />
-                            <Text style={styles.buttonText}>    Freitext</Text>
-                        </TouchableOpacity>
+
                     </View>
                 </View>
             </Modal>
         )
     }
 }
+
 
 const styles = StyleSheet.create({
     background: {
