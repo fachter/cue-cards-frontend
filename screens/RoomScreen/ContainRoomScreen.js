@@ -15,10 +15,24 @@ export default class ContainRoomScreen extends React.Component {
         this.state= {
             search: '',
             currentSetStructure: [
+                
                 {
-                    id: '1',
-                    set: 'Set'
+                    subfolder: [
+                        {
+                            id: '1',
+                            folder: 'folder2'
+                        },
+                        {
+                            id: '2',
+                            folder: 'folder3'
+                        },
+                        {
+                            id: '3',
+                            folder: 'folder4'
+                        }
+                    ]
                 }
+                
             ],
             showAddSetWindow: false,
             friends: [
@@ -43,8 +57,8 @@ export default class ContainRoomScreen extends React.Component {
     }
 
     handleSetAdd(newListItem) {
-        let copy = this.state.currentSetStructure
-        copy.push({ id: copy.length, set: newListItem })
+        let copy = this.state.currentSetStructure[0].subfolder
+        copy.push({ id: copy.length, folder: newListItem })
         this.setState({ currentSetStructure: copy })
         this.setState({showAddSetWindow: false})
     }
@@ -112,7 +126,7 @@ export default class ContainRoomScreen extends React.Component {
             <View style = {styles.container}>
                 
                 <FlatList
-                data={this.state.currentSetStructure}
+                data={this.state.currentSetStructure[0].subfolder}
                 keyExtractor={item=> item.id}
                 renderItem={({item}) =>
                  (
