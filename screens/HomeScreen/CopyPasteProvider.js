@@ -22,6 +22,10 @@ class CopyPasteProvider extends React.Component {
 
     setSomeThingIsCopied(value) {
         this.setState({ someThingIsCopied: value })
+
+        if (value === false) {
+            this.state.copyData = null
+        }
     }
 
     copyTheData(data) {

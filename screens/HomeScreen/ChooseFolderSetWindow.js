@@ -71,7 +71,7 @@ export default function ChooseFolderSetWindow() {
             }}>
                 <View style={styles.container} >
                     <Modal
-                        animationType="slide"
+                        animationType='fade'
                         transparent={true}
                         visible={CreateFileWindowVisible}
                         onRequestClose={() => setCreateFileWindowVisible(false)}>
@@ -99,7 +99,7 @@ function CreateFolderOrSet() {
         return (
             <View style={styles.background}>
                 <TouchableOpacity style={styles.cancelButton} onPress={() => setCreateFileWindowVisible(false)}>
-                    <AntDesign name="closecircleo" size={24} color="white" />
+                    <AntDesign name="closecircleo" size={24} color="grey" />
                 </TouchableOpacity>
                 <Text style={styles.headingText}>Was möchtest du erstellen?</Text>
                 <View style={styles.window}>
@@ -151,11 +151,17 @@ function FileNameWindow() {
         <View style={styles.background}>
             <Text
                 style={styles.headingText}>Name:</Text>
-            <TextInput style={styles.fileNameTextInput} onChangeText={text => setNewFileName(text)} ></TextInput>
+            <TextInput
+                style={styles.fileNameTextInput}
+                onChangeText={text => setNewFileName(text)}
+                placeholder="z.B. Geschichte"
+                placeholderTextColor="grey"
+            >
+            </TextInput>
             <TouchableOpacity onPress={() => setSave(true)} >
 
                 <View style={styles.saveButton}>
-                    <Icon.Feather name="check" size={30} color="#008FD3" />
+                    <Icon.Feather name="check" size={35} color="#008FD3" />
                 </View>
             </TouchableOpacity>
         </View>
@@ -166,15 +172,16 @@ function FileNameWindow() {
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'red'
-    },
+    // container: {
+    //     flex: 1,
+    //     backgroundColor: 'red'
+    //},
     background: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#000000aa',
+        backgroundColor: 'black',
+        opacity: 0.9
     },
     window: {
         width: '80%',
@@ -185,16 +192,13 @@ const styles = StyleSheet.create({
     windowButtons: {
         flex: 1,
         flexDirection: 'row',
-        //backgroundColor: 'grey',
-        //borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center'
     },
     headingText: {
         color: 'white',
         margin: 10,
-        fontSize: 20,
-        //fontStyle: 'italic'
+        fontSize: 23,
     },
     buttonText: {
         fontSize: 20,
@@ -203,21 +207,18 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     fileNameTextInput: {
-        width: '80%',
-        height: 40,
+        width: '85%',
         borderRadius: 5,
-        borderWidth: 1,
-        borderColor: 'grey',
         fontSize: 20,
         fontStyle: 'italic',
         color: 'white',
-        backgroundColor: '#1a1a1a',
+        backgroundColor: '#202225',
         padding: 10,
-        textAlign: 'center',
+        margin: 5
     },
     saveButton: {
-        height: 45,
-        width: 45,
+        height: 50,
+        width: 50,
         borderRadius: 30,
         alignSelf: 'flex-end',
         justifyContent: 'center',
@@ -225,8 +226,6 @@ const styles = StyleSheet.create({
         margin: 15,
         borderWidth: 1,
         borderColor: 'grey',
-
-
     },
     cancelButton: {
         width: 30,
@@ -237,6 +236,4 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     }
-
-
 });

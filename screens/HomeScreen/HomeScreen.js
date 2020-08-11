@@ -131,15 +131,15 @@ const DataList = () => {
     }
 
 
-    function _navigateToSession() {
-        if (isFolder == false) {
-            if (currentListStructure.length > 0) {
-                navigation.navigate('CardScreen', { mode: "sessionMode", card: currentListStructure[0] })
+    function _navigateToSession(item) {
 
-            } else {
-                alert('Füge deinem Set Karten hinzu um eine Session zu starten')
-            }
+        if (item.cards.length > 0) {
+            setCurrentListStructure(item.cards)
+            updateFolderHistory(item.cards)
+            navigation.navigate('CardScreen', { mode: "sessionMode", card: item.cards[0] })
 
+        } else {
+            alert('Füge deinem Set Karten hinzu um eine Session zu starten')
         }
     }
 
@@ -232,13 +232,12 @@ const DataList = () => {
         } else {
             setCreateNewCardWindowVisible(true)
         }
-
-
     }
+
+
 
     function createNewCard(cardType) {
         if (cardType === "MC") {
-            console.log("test")
             navigation.navigate('MultipleChoice', { mode: "createMode" })
         } else if (cardType === "SC") {
             navigation.navigate('SingleChoice', { mode: "createMode" })
@@ -257,7 +256,6 @@ const DataList = () => {
 
 
     return (
-
         <View style={styles.container}>
             {someThingIsCopied ? <View style={styles.copyPasteView}>
                 <Text>Einfügen</Text>
@@ -272,7 +270,6 @@ const DataList = () => {
                     size={23} color="black"
                     backgroundColor="white"
                     onPress={() => setSomeThingIsCopied(false)} />
-
             </View> : null}
             <SwipeView swipeRight={_backButtonPressed}
             >
@@ -286,6 +283,7 @@ const DataList = () => {
                             callBackItem={_getClickedItem}
                             onDeleteWindow={_showDeleteWindow.bind(this)}
                             onNavigateToCardScreen={_navigateToCardScreen}
+                            onNavigateToSession={_navigateToSession}
                         />
                     )}
                     ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
@@ -300,9 +298,6 @@ const DataList = () => {
                         onSetVisibility={setCreateNewCardWindowVisible}
                     />
                 </View>
-                {isFolder ? null : <TouchableOpacity style={styles.startSessionButton} onPress={() => _navigateToSession()} >
-                    <Entypo name="controller-play" size={45} color="#008FD3" />
-                </TouchableOpacity>}
                 <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
                     <Entypo name="plus" size={45} color="#008FD3" />
                 </TouchableOpacity>
@@ -330,8 +325,8 @@ const styles = StyleSheet.create({
         paddingTop: 30
     },
     plusButton: {
-        height: 45,
-        width: 45,
+        height: 60,
+        width: 60,
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
@@ -355,7 +350,7 @@ const styles = StyleSheet.create({
     },
     listSeperator: {
         height: StyleSheet.hairlineWidth,
-        backgroundColor: 'gray',
+        backgroundColor: 'grey',
         marginVertical: 5
     },
     btnNew: {

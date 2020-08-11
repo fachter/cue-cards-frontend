@@ -1,38 +1,30 @@
-import React, {Component} from 'react';
-import {TouchableOpacity, Button, StyleSheet, FlatList, View, Text, BackHandler} from 'react-native';
+import React, { Component } from 'react';
+import { TouchableOpacity, Button, StyleSheet, FlatList, View, Text, BackHandler } from 'react-native';
 import { FontAwesome5, Entypo } from '@expo/vector-icons';
 import AddSetWindow from './AddSetWindow'
 import RoomSetListItem from './RoomSetListItem';
 import { Searchbar } from 'react-native-paper';
 import Drawer from 'react-native-drawer';
 
+import Icon from 'react-native-vector-icons/Ionicons';
+import { CopyPasteContext } from '../HomeScreen/CopyPasteProvider'
+
+
 
 export default class ContainRoomScreen extends React.Component {
+
+    static contextType = CopyPasteContext
 
     constructor(props) {
         super(props)
 
-        this.state= {
+        this.state = {
             search: '',
             currentSetStructure: [
-                
                 {
-                    subfolder: [
-                        {
-                            id: '1',
-                            folder: 'folder2'
-                        },
-                        {
-                            id: '2',
-                            folder: 'folder3'
-                        },
-                        {
-                            id: '3',
-                            folder: 'folder4'
-                        }
-                    ]
+                    id: '1',
+                    set: 'Set'
                 }
-                
             ],
             showAddSetWindow: false,
             friends: [
@@ -50,40 +42,47 @@ export default class ContainRoomScreen extends React.Component {
                 }
             ]
         }
-
-
-
-        
     }
+
+
+    updateRoomList() {
+        const copyPaste = this.context
+        console.log(copyPaste.copyData)
+
+        let copy = this.state.currentSetStructure
+        copy.push(copyPaste.copyData)
+        this.setState({ currentSetStructure: copy })
+    }
+
 
     handleSetAdd(newListItem) {
-        let copy = this.state.currentSetStructure[0].subfolder
-        copy.push({ id: copy.length, folder: newListItem })
+        let copy = this.state.currentSetStructure
+        copy.push({ id: copy.length, set: newListItem })
         this.setState({ currentSetStructure: copy })
-        this.setState({showAddSetWindow: false})
+        this.setState({ showAddSetWindow: false })
     }
-    
-    _showAddSetWindow(){
-        if(this.state.showAddSetWindow === false){
-        this.setState({showAddSetWindow: true})
+
+    _showAddSetWindow() {
+        if (this.state.showAddSetWindow === false) {
+            this.setState({ showAddSetWindow: true })
         }
-        else if(this.state.showAddSetWindow === true){
-            this.setState({showAddSetWindow: false})
+        else if (this.state.showAddSetWindow === true) {
+            this.setState({ showAddSetWindow: false })
         }
     }
 
-    renderDrawer(){
+    renderDrawer() {
         //SlideMenu
         const { search } = this.state;
 
-        return(
+        return (
             <View style={styles.menuContainer}>
                 <Text style={styles.textStyle}>Freund einladen</Text>
                 <Searchbar
                     placeholder="Freund ID eingeben"
                     //onChangeText={_updateSearch()}
                     value={search}
-                /> 
+                />
                 <FlatList
                     style={{ flex: 1.0 }}
                     data={this.state.friends}
@@ -98,22 +97,24 @@ export default class ContainRoomScreen extends React.Component {
                             </TouchableOpacity>
                         )
                     }} />
-                    
+
             </View>
         )
     }
 
-    openDrawer(){
+    openDrawer() {
         this.drawer.open()
     }
 
-    closeDrawer(){
+    closeDrawer() {
         this.drawer.close()
     }
 
     render() {
-        
-        return(
+
+        const copyPaste = this.context
+
+        return (
             <Drawer
                 ref={(ref) => { this.drawer = ref }}
                 type="overlay"
@@ -123,38 +124,55 @@ export default class ContainRoomScreen extends React.Component {
                 style={styles.drawer}
                 side="right"
             >
-            <View style = {styles.container}>
-                
-                <FlatList
-                data={this.state.currentSetStructure[0].subfolder}
-                keyExtractor={item=> item.id}
-                renderItem={({item}) =>
-                 (
-                    <RoomSetListItem
-                    item={item}
-                    />
-                )}
-                />
-                {this.state.showAddSetWindow ?
-                <AddSetWindow
-                showAddSetWindow={this._showAddSetWindow}
-                onAdd={this.handleSetAdd.bind(this)}
+                <View style={styles.container}>
 
-                /> : null}
-                
-                
-                <TouchableOpacity style={styles.plusButton} onPress={() => this.setState({ showAddSetWindow: true })} >
-                    <Entypo name="plus" size={50} color="black" />
-                </TouchableOpacity>
-                 <TouchableOpacity style={styles.friendsButton} onPress={() => this.openDrawer()} >
-                    <Entypo name="users" size={50} color="black" />
-                </TouchableOpacity> 
-                
-                    
-            </View>
+
+                    {copyPaste.someThingIsCopied ? <View style={styles.copyPasteView}>
+                        <Text>Einfügen</Text>
+                        <Icon.Button
+                            name="ios-copy"
+                            size={23} color="black"
+                            backgroundColor="white"
+                            onPress={() => this.updateRoomList()}
+                        />
+                        <Icon.Button
+                            style={{ alignSelf: 'flex-start' }}
+                            name="ios-close"
+                            size={23} color="black"
+                            backgroundColor="white"
+                            onPress={() => copyPaste.setSomeThingIsCopied(false)} />
+                    </View> : null}
+
+
+                    <FlatList
+                        data={this.state.currentSetStructure}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item }) =>
+                            (
+                                <RoomSetListItem
+                                    item={item}
+                                />
+                            )}
+                    />
+                    {this.state.showAddSetWindow ?
+                        <AddSetWindow
+                            showAddSetWindow={this._showAddSetWindow}
+                            onAdd={this.handleSetAdd.bind(this)}
+
+                        /> : null}
+
+                    <TouchableOpacity style={styles.plusButton} onPress={() => this.setState({ showAddSetWindow: true })} >
+                        <Entypo name="plus" size={50} color="black" />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.friendsButton} onPress={() => this.openDrawer()} >
+                        <Entypo name="users" size={50} color="black" />
+                    </TouchableOpacity>
+
+
+                </View>
             </Drawer>
 
-            
+
         )
     }
 }
@@ -193,7 +211,7 @@ const styles = StyleSheet.create({
         flex: 1.0,
         backgroundColor: 'black',
     },
-    
+
     menuTitle: {
         width: '100%',
         color: 'white',
@@ -203,7 +221,11 @@ const styles = StyleSheet.create({
     },
     textStyle: {
         color: 'white'
+    },
+    copyPasteView: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row'
     }
-    
-})
 
+})
