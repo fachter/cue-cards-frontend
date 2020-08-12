@@ -130,7 +130,7 @@ export default class MultipleChoice extends React.Component {
                 </TextInput>
                 <TouchableOpacity onPress={() => this._addItem()}>
                     <View style={styles.addButton}>
-                        <Text style={styles.addButtonText}>+ Frage hinzufügen</Text>
+                        <Text style={styles.addButtonText}>+  Antwort hinzufügen</Text>
                     </View>
                 </TouchableOpacity>
                 <View>
@@ -150,10 +150,10 @@ export default class MultipleChoice extends React.Component {
                     </ScrollView>
                     <View style={styles.bottomView} >
                         <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
-                            <Text style={{ fontStyle: 'italic', fontSize: 10, color: 'white' }}>speichern</Text>
+                            <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
-                            <Text style={{ fontStyle: 'italic', fontSize: 10, color: 'white' }}>speichern und neu</Text>
+                            <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern und Neu</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -202,8 +202,11 @@ const styles = StyleSheet.create({
     addButton: {
         height: 20,
         alignSelf: 'flex-start',
-        marginLeft: 20,
+        marginLeft: 22,
         marginBottom: 20
+    },
+    addButtonText: {
+        color: 'white'
     },
     bottomView: {
         flex: 1,
@@ -218,10 +221,12 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 30
+        marginTop: 40,
+        marginHorizontal: 7
 
     },
     textInput: {
+        height: 33,
         paddingLeft: 15,
         padding: 7,
         color: 'black',

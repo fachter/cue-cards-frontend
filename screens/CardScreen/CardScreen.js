@@ -319,13 +319,12 @@ const styles = StyleSheet.create({
     },
     questionView: {
         flex: 1,
-        backgroundColor: 'black',
+        backgroundColor: '#2f3136',
         justifyContent: 'center',
         alignItems: 'center'
     },
     questionText: {
-        fontSize: 20,
-        fontStyle: 'italic',
+        fontSize: 23,
         color: 'white'
     },
     answer: {
@@ -342,8 +341,8 @@ const styles = StyleSheet.create({
 
     },
     level: {
-        borderWidth: 2,
-        borderColor: 'white',
+        borderWidth: 0.5,
+        borderColor: 'grey',
         borderRadius: 15,
         width: 30,
         height: 30,

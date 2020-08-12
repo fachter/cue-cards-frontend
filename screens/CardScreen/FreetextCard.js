@@ -9,31 +9,42 @@ import { Entypo } from '@expo/vector-icons';
 const card =
 {
     questionText: 'Auto',
-    cardLevel: 2,            // Stufe im Karteikasten
+    cardLevel: 2,            //@Philip das ist noch hatt gecodet Stufe im Karteikasten
     numberOfRightTurns: null,  // wie oft wurde die Karte bereits richtig beantwortet (bsp. ab 3 level up)
-    solution: 'Car'
+    solution: 'Car'         //@Philip muss das nicht noch weg?
 }
 
 
 export default class Freetext extends React.Component {
 
     state = {
-        solution: 'tippe für die Lösung',
+        solution: 'Tippe für die Lösung',
         choice: null,
-        backgroundColor: "#111111",
+        backgroundColor: '#2f3136',
+        color: 'white'
     }
 
 
 
     _saveChoice = (choice) => {
         if (choice === true) {
-            this.setState({ backgroundColor: 'green' })
+            this.setState({
+                color: '#3CB371'
+            })
         } else {
-            this.setState({ backgroundColor: 'red' })
+            this.setState({
+                color: '#b20000'
+            })
         }
         setTimeout(() => {
             this.props.getCardBack(choice)
-        }, 1000);
+            this.setState({
+                backgroundColor: '#2f3136',
+                solution: 'Tippe für die Lösung',
+                color: 'white'
+            })
+
+        }, 1500);
     }
 
 
@@ -44,17 +55,17 @@ export default class Freetext extends React.Component {
     render() {
         return (
             <View style={[styles.container, { backgroundColor: this.state.backgroundColor }]}>
+                <View style={styles.trennlinie}></View>
                 <TouchableOpacity style={styles.solution} onPress={() => this._showSolution()}>
-                    <Text style={styles.solutionText}>{this.state.solution}</Text>
+                    <Text style={[styles.solutionText, { color: this.state.color }]}>{this.state.solution}</Text>
                 </TouchableOpacity>
 
                 <View style={styles.buttonView}>
-                    <TouchableOpacity style={[styles.saveButton, { backgroundColor: 'red' }]} onPress={() => this._saveChoice(false)} >
-
-                        <Entypo name="cross" size={50} color="black" />
+                    <TouchableOpacity style={styles.saveButton} onPress={() => this._saveChoice(false)} >
+                        <Icon.Feather name="x" size={40} color='#008FD3' />
                     </TouchableOpacity >
-                    <TouchableOpacity style={[styles.saveButton, { backgroundColor: 'green' }]} onPress={() => this._saveChoice(true)} >
-                        <Icon.Feather name="check" size={50} />
+                    <TouchableOpacity style={styles.saveButton} onPress={() => this._saveChoice(true)} >
+                        <Icon.Feather name="check" size={40} color='#008FD3' />
                     </TouchableOpacity >
                 </View>
             </View >
@@ -67,15 +78,20 @@ const styles = StyleSheet.create({
     container: {
         flex: 4,
     },
+    trennlinie: {
+        height: 0.5,
+        width: '100%',
+        backgroundColor: '#008FD3'
+    },
     solution: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
     },
     solutionText: {
-        fontSize: 30,
+        fontSize: 23,
         fontStyle: 'italic',
-        color: 'white'
+        color: 'grey'
     },
     buttonView: {
         position: 'absolute',
@@ -90,6 +106,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         margin: 10,
+        borderWidth: 0.5,
+        borderColor: 'grey',
     },
 
 });

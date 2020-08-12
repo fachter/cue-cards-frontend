@@ -12,7 +12,7 @@ export default function MulitpleChoiceCard() {
 
 
     const { currentCard, _updateCardValues, _getArrayOfTrueAnswers, answers, setAnswers } = useContext(CardScreenContext)
-    const [backgroundColor, setBackgroundColor] = useState("#111111")
+    const [backgroundColor, setBackgroundColor] = useState("#2f3136")
     const [showNextButton, setShowNextButton] = useState(false)
 
 
@@ -44,7 +44,7 @@ export default function MulitpleChoiceCard() {
             setBackgroundColor("green")
             setTimeout(() => {
                 _nextCardAndUpdateValues(true)
-                setBackgroundColor("#111111")
+                setBackgroundColor("#2f3136")
             }, 1000)
 
         } else {
@@ -52,7 +52,7 @@ export default function MulitpleChoiceCard() {
             setBackgroundColor("red")
             setShowNextButton(true)
             setTimeout(() => {
-                setBackgroundColor("#111111")
+                setBackgroundColor("#2f3136")
             }, 1000)
 
         }
@@ -91,6 +91,7 @@ export default function MulitpleChoiceCard() {
     return (
 
         <View style={[styles.container, { backgroundColor: backgroundColor }]}>
+            <View style={styles.trennlinie}></View>
             <FlatList
                 extraData={answers}
                 data={answers}
@@ -106,11 +107,11 @@ export default function MulitpleChoiceCard() {
                 ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
             />
             {showNextButton ?
-                <TouchableOpacity style={styles.nextButton} onPress={() => _nextCardAndUpdateValues(false)}>
-                    <Text>nächste</Text>
+                <TouchableOpacity style={styles.buttons} onPress={() => _nextCardAndUpdateValues(false)}>
+                    <Icon.Feather name="arrow-right" size={45} color='#008FD3' />
                 </TouchableOpacity> :
-                <TouchableOpacity style={styles.saveButton} onPress={() => _checkTheChoice()}>
-                    <Icon.Feather name="check" size={50} />
+                <TouchableOpacity style={styles.buttons} onPress={() => _checkTheChoice()}>
+                    <Icon.Feather name="check" size={45} color='#008FD3' />
                 </TouchableOpacity>}
         </View >
 
@@ -125,29 +126,27 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    saveButton: {
+    trennlinie: {
+        height: 0.5,
+        width: '100%',
+        backgroundColor: '#008FD3'
+    },
+    buttons: {
         height: 60,
         width: 60,
         borderRadius: 30,
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 10,
-        backgroundColor: 'green',
-        position: 'absolute',
-        bottom: 10,
-        right: 10
-    },
-    listSeperator: {
-        height: StyleSheet.hairlineWidth,
-        backgroundColor: 'white'
-    },
-    nextButton: {
-        height: 60,
-        width: 60,
+        borderColor: 'grey',
+        borderWidth: 0.5,
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        backgroundColor: 'green',
-
-    }
+        marginTop: 10,
+        bottom: 20,
+    },
+    listSeperator: {
+        height: StyleSheet.hairlineWidth,
+        backgroundColor: 'grey',
+        width: '94%',
+        alignSelf: 'center'
+    },
 });
