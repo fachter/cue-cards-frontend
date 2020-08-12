@@ -46,7 +46,7 @@ export default class RoomScreen extends React.Component {
         let copy = this.state.rooms
         copy.push({ ID: copy.length, title: newListItem })
         this.setState({ rooms: copy })
-        this.setState({addRoomWindowVisibility: false})
+        this.setState({ addRoomWindowVisibility: false })
     }
 
     componentDidUpdate() {
@@ -96,23 +96,16 @@ export default class RoomScreen extends React.Component {
 
     render() {
         const { search } = this.state;
-        if(this.state.containRoomScreenVisible === false)
-        {
-        return (
-            
-            <View style={styles.container}>
+        if (this.state.containRoomScreenVisible === false) {
+            return (
 
-                
-                    <Text>Gebe die 6-stellige Raum-ID ein, um einem Raum beizutreten
-
-                </Text> 
-                
+                <View style={styles.container}>
+                    {/* <Text>Gebe die 6-stellige Raum-ID ein, um einem Raum beizutreten</Text>
                     <Searchbar
                         placeholder="Raum beitreten"
                         //onChangeText={_updateSearch()}
                         value={search}
-                    /> 
-                
+                    /> */}
                     <FlatList
                         data={this.state.rooms}
                         keyExtractor={item => item.ID}
@@ -123,56 +116,63 @@ export default class RoomScreen extends React.Component {
                                 showContainRoomScreen={this._showContainRoomScreen.bind(this)}
                             />
                         )}
-                    /> 
+                        ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
+                    />
+                    <TouchableOpacity style={styles.plusButton} onPress={() => this.setState({ addRoomWindowVisibility: true })} >
+                        <Entypo name="plus" size={45} color="#008FD3" />
+                    </TouchableOpacity>
+                    <AddRoomWindow
+                        onSetVisibility={this._setRoomAddWindowVisibility.bind(this)}
+                        addRoomWindowVisibility={this.state.addRoomWindowVisibility}
+                        //name={this.state.rooms.ti}
+                        onAdd={this.handleAdd.bind(this)}
+                    />
+                    {this.state.deleteWindowVisible ?
+                        <DeleteRoomWindow
+                            onDeleteWindow={() => this.setState({ deleteWindowVisible: false })}
+                            onDelete={this._deleteItemById.bind(this)}
+                            item={this.state.onDeleteItem}
+                        /> : null}
+                </View>
+            );
+        }
 
-                <TouchableOpacity style={styles.plusButton} onPress={() => this.setState({ addRoomWindowVisibility: true })} >
-                    <Entypo name="plus" size={50} color="black" />
-                </TouchableOpacity>
-                <AddRoomWindow
-                    onSetVisibility={this._setRoomAddWindowVisibility.bind(this)}
-                    addRoomWindowVisibility={this.state.addRoomWindowVisibility}
-                    //name={this.state.rooms.ti}
-                    onAdd={this.handleAdd.bind(this)}
+        else if (this.state.containRoomScreenVisible === true) {
+            return (
+                <ContainRoomScreen
+                    //showContainRoomScreen={() => this.setState({ containRoomScreenVisible: true })}
+                    backButtonPressed={this._backButtonPressed.bind(this)}
                 />
-                {this.state.deleteWindowVisible ?
-                    <DeleteRoomWindow
-                        onDeleteWindow={() => this.setState({ deleteWindowVisible: false })}
-                        onDelete={this._deleteItemById.bind(this)}
-                        item={this.state.onDeleteItem}
-                    /> : null}
-            </View>
-                    );
-                    }
-
-                    else if(this.state.containRoomScreenVisible === true){
-                    return (
-                    <ContainRoomScreen
-                        //showContainRoomScreen={() => this.setState({ containRoomScreenVisible: true })}
-                        backButtonPressed={this._backButtonPressed.bind(this)}
-                    /> 
-                    );
-                    }
-            
+            );
+        }
 
 
 
-    
-                }
+
+
     }
+}
 
 
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#595959",
-        paddingTop: 30
+        backgroundColor: "#2f3136",
+        paddingTop: 10
     },
     item: {
         backgroundColor: '#f9c2ff',
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,
+    },
+    listSeperator: {
+        height: 0.4,
+        backgroundColor: 'grey',
+        marginVertical: 10,
+        width: '96%',
+        alignSelf: 'center'
     },
     title: {
         fontSize: 32,
@@ -183,10 +183,11 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
-
-        backgroundColor: 'green',
+        borderWidth: 0.5,
+        borderColor: 'grey',
         position: 'absolute',
-        bottom: 10,
-        right: 10
+        bottom: 20,
+        right: 20,
+        backgroundColor: "#2f3136",
     }
 });

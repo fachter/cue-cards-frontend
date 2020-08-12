@@ -7,38 +7,39 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default class RoomListItem extends React.Component {
 
-    
+
 
     render() {
         return (
             <TouchableOpacity
-            onLongPress={()=>this.props.onDeleteWindow(this.props.item)}
-            onPress={()=>this.props.showContainRoomScreen()}
+                onLongPress={() => this.props.onDeleteWindow(this.props.item)}
+                onPress={() => this.props.showContainRoomScreen()}
             >
-            <View style={styles.container}>
-                <MaterialCommunityIcons
-                    style= {styles.folderButton}
-                    name="account-group-outline"
-                    size={25}
-                    color = "white"
+                <View style={styles.container}>
+                    <MaterialCommunityIcons
+                        style={styles.folderButton}
+                        name="account-group-outline"
+                        size={25}
+                        color="white"
                     />
                     <Text style={styles.fontStyle}>{this.props.item.title}</Text>
                 </View>
             </TouchableOpacity>
-            
-           
-    
+
+
+
         )
     }
 }
-    
+
 
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
+        padding: 7,
+        paddingLeft: 20,
         flexDirection: 'row',
-        alignItems: "center"
+        alignItems: "center",
     },
     folderButton: {
         marginRight: 20
