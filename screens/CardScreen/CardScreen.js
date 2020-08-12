@@ -27,6 +27,12 @@ export default function CardScreen({ route, navigation }) {
 
 
 
+
+    // useEffect(() => {
+    //     console.log("#################")
+    //     console.log(currentListStructure)
+    // })
+
     function _getArrayOfTrueAnswers() {
         let trueAnswers = []
 
@@ -38,8 +44,7 @@ export default function CardScreen({ route, navigation }) {
 
 
     function _createRandomAnswers(cardIndex) {
-        console.log(currentListStructure)
-        console.log(cardIndex)
+
         let answerPool = _getAllAnswersOfSameTopic(cardIndex)
         let maximalAnswers = 4
         let generatedAnswers = []
@@ -195,7 +200,6 @@ export default function CardScreen({ route, navigation }) {
 
 
     function _renderTheRightCard() {
-
         if (currentCard.cardType == 'MC' || currentCard.cardType == 'SC') {
             return (
                 <CardScreenContext.Provider value={{

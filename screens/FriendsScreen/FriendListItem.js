@@ -16,8 +16,6 @@ export default class FriendListItem extends React.Component {
     }
 
 
-
-
     render() {
         return (
             <TouchableOpacity style={styles.container}
