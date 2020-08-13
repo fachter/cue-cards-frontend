@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Modal, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native'
 import * as Icon from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
 
 
@@ -25,6 +26,9 @@ export default class AddRoomWindow extends React.Component {
                 onRequestClose={() => this.props.onSetVisibility()}>
                 <View style={styles.background}>
                     <View style={styles.window}>
+                        <TouchableOpacity style={styles.cancelButton} onPress={() => addRoomWindowVisibility(false)}>
+                            <AntDesign name="closecircleo" size={24} color="grey" />
+                        </TouchableOpacity>
                         <Text
                             style={styles.headingText}>Raumname oder RaumID</Text>
                         <TextInput
@@ -60,9 +64,18 @@ const styles = StyleSheet.create({
         opacity: 0.9
     },
     window: {
-        width: '80%',
+        width: '100%',
         height: '20%',
         borderRadius: 5,
+        alignItems: 'center'
+    },
+    cancelButton: {
+        width: 30,
+        height: 30,
+        borderRadius: 5,
+        alignSelf: 'flex-end',
+        margin: 5,
+        justifyContent: 'center',
         alignItems: 'center'
     },
     headingText: {

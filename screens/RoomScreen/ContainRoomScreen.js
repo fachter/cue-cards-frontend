@@ -162,10 +162,10 @@ export default class ContainRoomScreen extends React.Component {
                         /> : null}
 
                     <TouchableOpacity style={styles.plusButton} onPress={() => this.setState({ showAddSetWindow: true })} >
-                        <Entypo name="plus" size={50} color="black" />
+                        <Entypo name="plus" size={45} color="#008FD3" />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.friendsButton} onPress={() => this.openDrawer()} >
-                        <Entypo name="users" size={50} color="black" />
+                        <Entypo name="users" size={30} color="#008FD3" />
                     </TouchableOpacity>
 
 
@@ -180,7 +180,7 @@ export default class ContainRoomScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#595959",
+        backgroundColor: "#2f3136",
         paddingTop: 30
     },
     plusButton: {
@@ -189,11 +189,12 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
-
-        backgroundColor: 'green',
+        borderWidth: 0.5,
+        borderColor: 'grey',
         position: 'absolute',
-        bottom: 10,
-        right: 10
+        bottom: 20,
+        right: 20,
+        backgroundColor: "#2f3136",
     },
     friendsButton: {
         height: 60,
@@ -201,11 +202,12 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
-
-        backgroundColor: 'green',
+        borderWidth: 0.5,
+        borderColor: 'grey',
         position: 'absolute',
-        bottom: 10,
-        left: 10
+        bottom: 20,
+        left: 20,
+        backgroundColor: "#2f3136",
     },
     menuContainer: {
         flex: 1.0,
