@@ -1,82 +1,100 @@
 import React from 'react'
 import { View, Modal, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native'
 import * as Icon from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 
 
 
- export default class AddRoomWindow extends React.Component {
+export default class AddRoomWindow extends React.Component {
 
     state = {
         roomName: null
     }
 
-    render() { 
+    render() {
 
 
-        
-            
-        
+
+
+
         return (
-            <View style={styles.container} >
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={this.props.addRoomWindowVisibility}
-                    onRequestClose={() => this.props.onSetVisibility()}>
-                    <View style={styles.background}>
-                        <View style={styles.window}>
-                            <Text
-                                style={styles.headingText}>Gebe den Raumnamen ein</Text>
-                            <TextInput style={styles.friendName} onChangeText={text => this.setState({roomName: text})}></TextInput>
-                            <TouchableOpacity style={styles.addButton}   >
-                                <Icon.Feather name="check" size={50} onPress={()=>this.props.onAdd(this.state.roomName)} />
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={this.props.addRoomWindowVisibility}
+                onRequestClose={() => this.props.onSetVisibility()}>
+                <View style={styles.background}>
+                    <View style={styles.window}>
+                        <TouchableOpacity style={styles.cancelButton} onPress={() => addRoomWindowVisibility(false)}>
+                            <AntDesign name="closecircleo" size={24} color="grey" />
+                        </TouchableOpacity>
+                        <Text
+                            style={styles.headingText}>Raumname oder RaumID</Text>
+                        <TextInput
+                            style={styles.friendName}
+                            placeholder="z.B. #Lerngruppe1234"
+                            placeholderTextColor="grey"
+                            onChangeText={text => this.setState({ roomName: text })}>
+                        </TextInput>
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity style={styles.saveButton} onPress={() => this.props.onAdd(this.state.roomName)}>
+                                <MaterialCommunityIcons name="import" size={25} color="white" />
+                                <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Beitreten</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.saveButton} onPress={() => this.props.onAdd(this.state.roomName)}>
+                                <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
+                                <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Erstellen</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
-                </Modal>
-            </View>
+                </View>
+            </Modal>
         )
-        };
-    }
+    };
+}
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-
-    },
     background: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#000000aa',
+        backgroundColor: 'black',
+        opacity: 0.9
     },
     window: {
-        width: '80%',
+        width: '100%',
         height: '20%',
         borderRadius: 5,
-        backgroundColor: 'gray',
+        alignItems: 'center'
+    },
+    cancelButton: {
+        width: 30,
+        height: 30,
+        borderRadius: 5,
+        alignSelf: 'flex-end',
+        margin: 5,
+        justifyContent: 'center',
         alignItems: 'center'
     },
     headingText: {
         color: 'white',
         margin: 10,
-        fontSize: 20,
-        fontStyle: 'italic'
+        fontSize: 23,
     },
     friendName: {
-        width: '80%',
-        height: '10%',
+        width: '85%',
         borderRadius: 5,
-        borderWidth: 3,
-        borderColor: 'grey',
         fontSize: 20,
         fontStyle: 'italic',
         color: 'white',
-        backgroundColor: 'black',
+        backgroundColor: '#202225',
         padding: 10,
-        textAlign: 'center',
+        margin: 5
+    },
+    buttonContainer: {
+        flexDirection: 'row'
     },
     addButton: {
         height: 60,
@@ -86,5 +104,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         margin: 10,
         backgroundColor: 'green',
+    },
+    saveButton: {
+
+        borderColor: '#008FD3',
+        borderWidth: 1,
+        flexDirection: 'row',
+        height: 45,
+        width: 140,
+        borderRadius: 30,
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 40,
+        marginHorizontal: 7
     }
 });

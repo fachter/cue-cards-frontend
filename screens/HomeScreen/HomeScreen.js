@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#2f3136",
-        paddingTop: 30
+
     },
     plusButton: {
         height: 60,
@@ -334,7 +334,8 @@ const styles = StyleSheet.create({
         borderColor: 'grey',
         position: 'absolute',
         bottom: 20,
-        right: 20
+        right: 20,
+        backgroundColor: "#2f3136",
     },
     startSessionButton: {
         height: 45,
@@ -351,7 +352,9 @@ const styles = StyleSheet.create({
     listSeperator: {
         height: StyleSheet.hairlineWidth,
         backgroundColor: 'grey',
-        marginVertical: 5
+        marginVertical: 5,
+        width: '96%',
+        alignSelf: 'center'
     },
     btnNew: {
         width: WidTH - 55,

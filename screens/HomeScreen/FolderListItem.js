@@ -60,8 +60,7 @@ export default class FolderListItem extends React.Component {
                             />
                             <Text style={styles.fontStyle}>{item.name}</Text>
                         </View>
-                    </TouchableOpacity> : null
-                }
+                    </TouchableOpacity> : null}
                 {
                     this.state.isSet ?
                         <View style={styles.setItemView}>
@@ -80,7 +79,9 @@ export default class FolderListItem extends React.Component {
                             <TouchableOpacity
                                 style={styles.startSessionButton}
                                 onPress={() => this.props.onNavigateToSession(item)}>
-                                <Text>start</Text>
+                                <MaterialCommunityIcons
+                                    name="play"
+                                    size={30} color="#008FD3" />
                             </TouchableOpacity>
                         </View> : null
                 }
@@ -122,11 +123,9 @@ const styles = StyleSheet.create({
     startSessionButton: {
         flex: 1,
         position: 'absolute',
-        right: 20,
+        right: 30,
         height: 30,
         width: 30,
-        backgroundColor: 'blue'
-
     }
 });
 

@@ -49,8 +49,10 @@ export default function RoomScreen() {
     function handleAdd(newListItem) {
         let copy = rooms
         copy.push({ ID: copy.length, title: newListItem })
+
         setRooms(copy)
         setAddRoomWindowVisibility(false)
+
     }
 
    
@@ -110,6 +112,7 @@ function _getClickedItem(item) {
     }
 
 
+
        
 
 
@@ -125,11 +128,14 @@ function _getClickedItem(item) {
 
                 </Text>
 
+
                     <Searchbar
                         placeholder="Raum beitreten"
                         //onChangeText={_updateSearch()}
                         value={search}
+
                     />
+
 
                     <FlatList
                         data={rooms}
@@ -157,6 +163,7 @@ function _getClickedItem(item) {
                             onDeleteWindow={() => setDeleteWindowVisibility(false)}
                             onDelete={_deleteItemById}
                             item={onDeleteItem}
+
                         /> : null}
                 </View>
             );
@@ -166,9 +173,8 @@ function _getClickedItem(item) {
             return (
                 <ContainRoomScreen
                     //showContainRoomScreen={() => setState({ containRoomScreenVisible: true })}
-                    
-                />
-            );
+                    ></ContainRoomScreen>
+            )
         }
 
 
@@ -180,17 +186,25 @@ function _getClickedItem(item) {
 
 
 
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#595959",
-        paddingTop: 30
+        backgroundColor: "#2f3136",
+        paddingTop: 10
     },
     item: {
         backgroundColor: '#f9c2ff',
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,
+    },
+    listSeperator: {
+        height: 0.4,
+        backgroundColor: 'grey',
+        marginVertical: 10,
+        width: '96%',
+        alignSelf: 'center'
     },
     title: {
         fontSize: 32,
@@ -201,10 +215,11 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
-
-        backgroundColor: 'green',
+        borderWidth: 0.5,
+        borderColor: 'grey',
         position: 'absolute',
-        bottom: 10,
-        right: 10
+        bottom: 20,
+        right: 20,
+        backgroundColor: "#2f3136",
     }
 });
