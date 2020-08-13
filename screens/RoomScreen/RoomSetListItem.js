@@ -22,7 +22,7 @@ export default class RoomSetListItem extends React.Component {
                         size={25}
                         color="white"
                     />
-                    <Text style={styles.fontStyle}>{this.props.item.folder}</Text>
+                    <Text style={styles.fontStyle}>{this.props.item.set}</Text>
                 </View>
             </TouchableOpacity>
 

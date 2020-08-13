@@ -17,7 +17,9 @@ class ListStructureProvider extends React.Component {
         CreateNewCardWindowVisible: false,
         dataIsLoading: true,
         query: "",
-        fullData: []
+        fullData: [],
+        setHistoryArray: [],
+        currentSetStructure: []
     }
 
     storeDataOnDevice = async () => {
@@ -84,6 +86,28 @@ class ListStructureProvider extends React.Component {
 
 
 
+
+    setCurrentSetStructure = (newSetStructure) => {
+        this.setState({ currentSetStructure: newSetStructure })
+    }
+
+    updateSetHistory = () => {
+        this.state.setHistoryArray.push(this.state.currentSetStructure)
+    }
+
+    _getLastSetFolderStructure = () => {
+        return this.state.setHistoryArray.pop()
+    }
+
+
+
+
+
+
+
+
+
+
     setQuery = (query) => {
         this.setState({ query })
     }
@@ -117,6 +141,12 @@ class ListStructureProvider extends React.Component {
                 retrieveDataFromDevice: this.retrieveDataFromDevice,
                 dataIsLoading: this.state.dataIsLoading,
                 setDataIsLoading: this.setDataIsLoading,
+                // for Rooms
+                setHistoryArray: this.state.setHistoryArray,
+                currentSetStructure: this.state.currentSetStructure,
+                setCurrentSetStructure: this.setCurrentSetStructure,
+                updateSetHistory: this.updateSetHistory,
+                _getLastSetFolderStructure: this._getLastSetFolderStructure,
 
 
 

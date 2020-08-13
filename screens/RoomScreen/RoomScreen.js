@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import { View, Text, StyleSheet, FlatList, Button, TouchableOpacity, SectionList, BackHandler } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import AddRoomWindow from './AddRoomWindow';
@@ -7,158 +7,176 @@ import DeleteRoomWindow from './DeleteRoomWindow';
 import { Searchbar } from 'react-native-paper';
 import { v4 as uuidv4 } from 'uuid';
 import ContainRoomScreen from './ContainRoomScreen';
+import {ListStructureContext} from '../HomeScreen/ListStructureProvider';
 
 
-export default class RoomScreen extends React.Component {
-
-    constructor(props) {
-        super(props)
-
-
-        this.state = {
-            containRoomScreenVisible: false,
-            roomsVisible: true,
-            addRoomWindowVisibility: false,
-            deleteWindowVisible: false,
-            onDeleteItem: null,
-            isRoom: null,
-            isSet: null,
-            search: '',
-            rooms: [
-                {
-                    id: '1',
-                    title: 'Raum'
-                }
-            ],
-            containRooms: [
-                {
-                    ID: '1',
-                    Set: 'Superset'
-                }
-            ]
-        }
+const initialRoomState = [
+    {
+        id: '1',
+        title: 'Raum'
     }
+]
+
+export default function RoomScreen() {
+
+    return (
+        <SetDataList/>
+    )
+}
+
+    const SetDataList = () => {
+        const {
+            setHistoryArray,
+            currentSetStructure,
+            currentListStructure,
+            setCurrentSetStructure,
+            updateSetHistory,
+            _getLastSetFolderStructure
+        } = useContext(ListStructureContext)
+
+            const[containRoomScreenVisibility, setContainRoomVisibility] = useState(false);
+            const[roomsVisibility, setRoomsVisibility] = useState(false);
+            const[addRoomWindowVisibility, setAddRoomWindowVisibility] = useState(false);
+            const[deleteWindowVisibility, setDeleteWindowVisibility] =useState(false);
+            const[onDeleteItem, setOnDeleteItem] = useState(false);
+            const[search, setSearch] = useState('');
+            const[rooms, setRooms] = useState(initialRoomState);
+            
+            
 
 
 
-
-    handleAdd(newListItem) {
-        let copy = this.state.rooms
+    function handleAdd(newListItem) {
+        let copy = rooms
         copy.push({ ID: copy.length, title: newListItem })
-        this.setState({ rooms: copy })
-        this.setState({addRoomWindowVisibility: false})
+        setRooms(copy)
+        setAddRoomWindowVisibility(false)
     }
 
-    componentDidUpdate() {
-        console.log(this.state.rooms)
+   
+
+    function componentDidUpdate() {
+        console.log(rooms)
     }
 
 
 
-    _showDeleteWindow(item) {
-        this.setState({ onDeleteItem: item })
-        this.setState({ deleteWindowVisible: true })
+    function _showDeleteWindow(item) {
+        setOnDeleteItem(item)
+        setDeleteWindowVisibility(true)
     }
 
-    _showContainRoomScreen() {
-        this.setState({ containRoomScreenVisible: true })
-        this.setState({ roomsVisible: false })
-    }
 
-    _setRoomAddWindowVisibility() {
-        if (this.state.addRoomWindowVisibility == true) {
-            this.setState({ addRoomWindowVisibility: false })
+
+    function _setRoomAddWindowVisibility() {
+        if (addRoomWindowVisibility == true) {
+            setAddRoomWindowVisibility(false)
         } else {
-            this.setState({ addRoomWindowVisibility: true })
+            setAddRoomWindowVisibility(true)
         }
     }
 
-    _deleteItemById(id) {
-        const copy = this.state.rooms
+    function _deleteItemById(id) {
+        const copy = rooms
         var index
 
         for (var i = 0; i < copy.length; i++) {  //Sucht den Index des Items im Array nach id
-            if (copy[i].ID === id)
+            if (copy[i].id === id)
                 index = i
 
         }
         copy.splice(index, 1)  //schmeißt das Item mit dem Index raus
-        this.setState({ rooms: copy })
-        this.setState({ deleteWindowVisible: false })
+        setRooms(copy)
+        setDeleteWindowVisibility(false)
 
     }
 
-    _backButtonPressed() {
-        this.setState({ containRoomScreenVisible: false })
-        this.setState({ roomsVisible: true })
+
+function updateFolderHistory ()  {
+    setHistoryArray.push(currentSetStructure)
+}
+
+function _getClickedItem(item) {
+    let indexOfItem = currentSetStructure.indexOf(item)
+    let subStructure = currentSetStructure[indexOfItem]
+    setCurrentSetStructure(subStructure)
+} 
+
+    function _showContainRoomScreen() {
+        setContainRoomVisibility(true)
+        setRoomsVisibility(false)
+        updateFolderHistory()
+        _getClickedItem()
     }
 
 
-    render() {
-        const { search } = this.state;
-        if(this.state.containRoomScreenVisible === false)
-        {
-        return (
-            
-            <View style={styles.container}>
+       
 
-                
+
+    
+        //const { search } = state;
+        if (containRoomScreenVisibility === false) {
+            return (
+
+                <View style={styles.container}>
+
+
                     <Text>Gebe die 6-stellige Raum-ID ein, um einem Raum beizutreten
 
-                </Text> 
-                
+                </Text>
+
                     <Searchbar
                         placeholder="Raum beitreten"
                         //onChangeText={_updateSearch()}
                         value={search}
-                    /> 
-                
+                    />
+
                     <FlatList
-                        data={this.state.rooms}
+                        data={rooms}
                         keyExtractor={item => item.ID}
                         renderItem={({ item }) => (
                             <RoomListItem
                                 item={item}
-                                onDeleteWindow={this._showDeleteWindow.bind(this)}
-                                showContainRoomScreen={this._showContainRoomScreen.bind(this)}
+                                onDeleteWindow={_showDeleteWindow}
+                                showContainRoomScreen={_showContainRoomScreen}
                             />
                         )}
-                    /> 
+                    />
 
-                <TouchableOpacity style={styles.plusButton} onPress={() => this.setState({ addRoomWindowVisibility: true })} >
-                    <Entypo name="plus" size={50} color="black" />
-                </TouchableOpacity>
-                <AddRoomWindow
-                    onSetVisibility={this._setRoomAddWindowVisibility.bind(this)}
-                    addRoomWindowVisibility={this.state.addRoomWindowVisibility}
-                    //name={this.state.rooms.ti}
-                    onAdd={this.handleAdd.bind(this)}
+                    <TouchableOpacity style={styles.plusButton} onPress={() => setAddRoomWindowVisibility(true)} >
+                        <Entypo name="plus" size={50} color="black" />
+                    </TouchableOpacity>
+                    <AddRoomWindow
+                        onSetVisibility={_setRoomAddWindowVisibility}
+                        addRoomWindowVisibility={addRoomWindowVisibility}
+                        //name={rooms.ti}
+                        onAdd={handleAdd}
+                    />
+                    {deleteWindowVisibility ?
+                        <DeleteRoomWindow
+                            onDeleteWindow={() => setDeleteWindowVisibility(false)}
+                            onDelete={_deleteItemById}
+                            item={onDeleteItem}
+                        /> : null}
+                </View>
+            );
+        }
+
+        else if (containRoomScreenVisibility === true) {
+            return (
+                <ContainRoomScreen
+                    //showContainRoomScreen={() => setState({ containRoomScreenVisible: true })}
+                    
                 />
-                {this.state.deleteWindowVisible ?
-                    <DeleteRoomWindow
-                        onDeleteWindow={() => this.setState({ deleteWindowVisible: false })}
-                        onDelete={this._deleteItemById.bind(this)}
-                        item={this.state.onDeleteItem}
-                    /> : null}
-            </View>
-                    );
-                    }
-
-                    else if(this.state.containRoomScreenVisible === true){
-                    return (
-                    <ContainRoomScreen
-                        //showContainRoomScreen={() => this.setState({ containRoomScreenVisible: true })}
-                        backButtonPressed={this._backButtonPressed.bind(this)}
-                    /> 
-                    );
-                    }
-            
+            );
+        }
 
 
 
-    
-                }
+
+
     }
+
 
 
 
