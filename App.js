@@ -3,12 +3,12 @@ import React, { useEffect, useState, useCallback, useContext } from 'react';
 
 
 
-import { InternetConnectionProvider } from './API/InternetConnection'
+import { InternetConnectionProvider, InternetConnectionContext } from './API/InternetConnection'
 import { UserProvider, UserContext } from './screens/LoginRegistrationScreen/UserProvider'
 import { SettingsProvider } from './screens/SettingsScreen/SettingsProvider'
-import { ListStructureProvider } from './screens/HomeScreen/ListStructureProvider'
+import { ListStructureProvider, ListStructureContext } from './screens/HomeScreen/ListStructureProvider'
 import { CopyPasteProvider } from './screens/HomeScreen/CopyPasteProvider'
-import Database from './API/Database'
+import storeDataOnDB from './API/Database'
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -37,36 +37,21 @@ const StartScreen = () => {
 }
 
 
-export default class App extends React.Component {
-  constructor(props) {
-    super(props)
-    AppState.addEventListener('change', this._handleAppStateChange);
-  }
+export default function App() {
 
-
-  _handleAppStateChange = (nextAppState) => {
-    console.log(nextAppState)
-    if (nextAppState === 'background') {
-      // Database.storeDataOnDB()
-    }
-  }
-
-  render() {
-
-    return (
-      <CopyPasteProvider>
-        <ListStructureProvider>
-          <SettingsProvider>
-            <UserProvider>
-              <InternetConnectionProvider>
-                <StartScreen />
-              </InternetConnectionProvider>
-            </UserProvider >
-          </SettingsProvider>
-        </ListStructureProvider>
-      </CopyPasteProvider>
-    )
-  }
+  return (
+    <CopyPasteProvider>
+      <ListStructureProvider>
+        <SettingsProvider>
+          <UserProvider>
+            <InternetConnectionProvider>
+              <StartScreen />
+            </InternetConnectionProvider>
+          </UserProvider >
+        </SettingsProvider>
+      </ListStructureProvider>
+    </CopyPasteProvider>
+  )
 }
 
 

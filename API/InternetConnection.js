@@ -3,16 +3,15 @@
 import React from 'react'
 import NetInfo from "@react-native-community/netinfo";
 
+
 const InternetConnectionContext = React.createContext()
 
-class InternetConnectionProvider extends React.Component {
 
+class InternetConnectionProvider extends React.Component {
 
     state = {
         isConnected: false
     }
-
-
 
 
     checkIfConnected() {
@@ -21,10 +20,8 @@ class InternetConnectionProvider extends React.Component {
         }).catch(error => {
             console.log("Verbindung zum Netzwerk nicht möglich =>  " + error)
         })
+    }
 
-
-
-    };
 
     render() {
         return (

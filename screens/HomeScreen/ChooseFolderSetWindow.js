@@ -29,6 +29,7 @@ export default function ChooseFolderSetWindow() {
 
         setCreateFileWindowVisible(false)
         _addNewItemToList(newListItem)
+        setNewFileName(null)
     }
 
 

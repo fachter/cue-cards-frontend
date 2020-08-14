@@ -13,6 +13,7 @@ import NewCardWindow from './NewCardWindow'
 
 import { ListStructureContext } from './ListStructureProvider'
 import { CopyPasteContext } from './CopyPasteProvider'
+import { SettingsContext } from '../SettingsScreen/SettingsProvider'
 
 
 import SwipeView from '../../components/SwipeView'
@@ -20,7 +21,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Searchbar } from 'react-native-paper';
 import { UserContext } from '../LoginRegistrationScreen/UserProvider';
 
-import DataBase from '../../API/Database'
+import { storeDataOnDB } from '../../API/Database'
 
 
 const { width: WidTH } = Dimensions.get('window')
@@ -47,14 +48,14 @@ const DataList = () => {
         CreateNewCardWindowVisible,
         setCreateNewCardWindowVisible,
         storeDataOnDevice,
-        retrieveDataFromDevice,
         dataIsLoading,
         setQuery,
         setFulldata,
         getQuery
     } = useContext(ListStructureContext)
 
-    const { someThingIsCopied, copyData, setSomeThingIsCopied } = useContext(CopyPasteContext)
+    const { someThingIsCopied, copyData, setSomeThingIsCopied, copiedItemIsCard } = useContext(CopyPasteContext)
+    const { shuffleCards } = useContext(SettingsContext)
 
     const { userToken } = useContext(UserContext)
 
@@ -116,7 +117,6 @@ const DataList = () => {
 
 
     function _shuffleArray(cards) {
-        // let copy = { ...cards }  erstellt eine Kopie ohne Referenz
         let copy = cards
         var i,
             j,
@@ -133,10 +133,16 @@ const DataList = () => {
 
     function _navigateToSession(item) {
 
+        let sessionCards = item.cards
+
+        if (shuffleCards === true) {
+            sessionCards = _shuffleArray(item.cards)
+        }
+
         if (item.cards.length > 0) {
             setCurrentListStructure(item.cards)
             updateFolderHistory(item.cards)
-            navigation.navigate('CardScreen', { mode: "sessionMode", card: item.cards[0] })
+            navigation.navigate('CardScreen', { mode: "sessionMode", card: item.cards[0], sessionCards: sessionCards })
 
         } else {
             alert('Füge deinem Set Karten hinzu um eine Session zu starten')
@@ -145,7 +151,7 @@ const DataList = () => {
 
 
     function _navigateToCardScreen(item) {
-        navigation.navigate('CardScreen', { card: item, mode: "soloCard" })
+        navigation.navigate('CardScreen', { card: item, mode: "soloCard", sessionCards: currentListStructure })
     }
 
     function editCard(item) {
@@ -254,22 +260,30 @@ const DataList = () => {
     }
 
 
+    function _allowedToPasteCard() {
+        if (copiedItemIsCard && isFolder === false) {
+            return true
+        }
+        return false
+    }
 
     return (
         <View style={styles.container}>
             {someThingIsCopied ? <View style={styles.copyPasteView}>
-                <Text>Einfügen</Text>
-                <Icon.Button
-                    name="ios-copy"
-                    size={23} color="black"
-                    backgroundColor="white"
-                    onPress={() => pasteTheCopiedData()} />
-                <Icon.Button
-                    style={{ alignSelf: 'flex-start' }}
-                    name="ios-close"
-                    size={23} color="black"
-                    backgroundColor="white"
-                    onPress={() => setSomeThingIsCopied(false)} />
+                {copiedItemIsCard ? <View> <Text>Einfügen</Text>
+                    <Icon.Button
+                        name="ios-copy"
+                        size={23} color="black"
+                        backgroundColor="white"
+                        onPress={() => pasteTheCopiedData()} />
+                    <Icon.Button
+                        style={{ alignSelf: 'flex-start' }}
+                        name="ios-close"
+                        size={23} color="black"
+                        backgroundColor="white"
+                        onPress={() => setSomeThingIsCopied(false)} />
+                </View> :
+                    <Text></Text>}
             </View> : null}
             <SwipeView swipeRight={_backButtonPressed}
             >
@@ -301,7 +315,7 @@ const DataList = () => {
                 <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
                     <Entypo name="plus" size={45} color="#008FD3" />
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.plusButton, { left: 10 }]} onPress={() => DataBase.storeDataOnDB(listHistoryArray, currentListStructure, userToken)} >
+                <TouchableOpacity style={[styles.plusButton, { left: 10 }]} onPress={() => storeDataOnDB(listHistoryArray, currentListStructure, userToken)} >
                     <Text>Speichern</Text>
                 </TouchableOpacity>
             </SwipeView>

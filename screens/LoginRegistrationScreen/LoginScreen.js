@@ -37,7 +37,7 @@ export default function LoginScreen({ navigation }) {
 
     async function userLogin(savedLoginState) {
 
-        var deviceData = await retrieveDataFromDevice()
+        //var deviceData = await retrieveDataFromDevice()
 
         _authenticateAcc(stayLoggedin, username, password).then(async (data) => {
 
@@ -56,9 +56,9 @@ export default function LoginScreen({ navigation }) {
         }).then(() => {
             login()
 
-        }).catch(() => {
+        }).catch(err => {
             if (savedLoginState === true) {
-                console.log("Verbindung zur Datenbank fehlgeschlagen, logge ein mit Lokalen daten")
+                console.log("Verbindung zur Datenbank fehlgeschlagen, logge ein mit Lokalen daten: " + err)
                 retrieveSettignsfromDevice()
                 setCurrentListStructure(deviceData)
                 login()

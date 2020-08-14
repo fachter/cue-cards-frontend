@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import uuid from 'react-native-uuid'
 
-
 const CopyPasteContext = React.createContext()
 
 class CopyPasteProvider extends React.Component {
+
+
+
     constructor(props) {
         super(props)
 
@@ -14,7 +16,8 @@ class CopyPasteProvider extends React.Component {
 
         this.state = {
             copyData: null,
-            someThingIsCopied: false
+            someThingIsCopied: false,
+            copiedItemIsCard: false,
         }
     }
 
@@ -29,27 +32,37 @@ class CopyPasteProvider extends React.Component {
     }
 
     copyTheData(data) {
-        // this.updateAllids(data)
-        this.setState({ copyData: data })
+        this.setState({ copyData: this.updateAllids({ ...data }) })
+        if (data.isFolder == undefined) {
+            this.setState({ copiedItemIsCard: true })
+        }
         this.setState({ someThingIsCopied: true })
     }
 
+    setCopiedItemIsCard(value) {
+        this.setState({ copiedItemIsCard: value })
+
+    }
 
     updateAllids(data) {
-        if (data.length > 0) {
-            for (let i = 0; i < data.length; i++) {
-                data[i].id = uuid.v1()
-                if (data.cards.length > 0) {
-                    this.updateAllids(data.cards)
-                }
-                if (data.subFolders.length > 0) {
-                    this.updateAllids(data.subFolders)
-                }
-                if (data.answers.length > 0) {
-                    this.updateAllids(data.answers)
-                }
+
+        data.id = uuid.v1()
+        if (data.cards != undefined) {
+            for (let i = 0; i < data.cards.length; i++) {
+                this.updateAllids(data.cards[i])
             }
         }
+        if (data.subFolders != undefined) {
+            for (let i = 0; i < data.subFolders.length; i++) {
+                this.updateAllids(data.subFolders[i])
+            }
+        }
+        if (data.answers != undefined) {
+            for (let i = 0; i < data.answers.length; i++) {
+                this.updateAllids(data.answers[i])
+            }
+        }
+        return data
     }
 
 
@@ -60,7 +73,9 @@ class CopyPasteProvider extends React.Component {
                 someThingIsCopied: this.state.someThingIsCopied,
                 copyTheData: this.copyTheData,
                 pasteTheData: this.pasteTheData,
-                setSomeThingIsCopied: this.setSomeThingIsCopied
+                setSomeThingIsCopied: this.setSomeThingIsCopied,
+                copiedItemIsCard: this.state.copiedItemIsCard,
+                setCopiedItemIsCard: this.setCopiedItemIsCard
 
             }}>
                 {this.props.children}

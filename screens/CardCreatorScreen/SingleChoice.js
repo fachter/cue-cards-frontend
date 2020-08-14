@@ -18,7 +18,10 @@ export default class SingleChoice extends React.Component {
         cardLevel: this._isValueNull(this.props.route.params.cardLevel) ? 0 : this.props.route.params.cardLevel,
         questionText: this._isValueNull(this.props.route.params.questionText) ? '' : this.props.route.params.questionText,
         cardTopic: this._isValueNull(this.props.route.params.cardTopic) ? '' : this.props.route.params.cardTopic,
-        answers: this._isValueNull(this.props.route.params.answers) ? [{ id: null, text: '' }] : this.props.route.params.answers
+        answers: this._isValueNull(this.props.route.params.answers) ? [{ id: null, text: '' }] : this.props.route.params.answers,
+        questionInputHeight: 0,
+        answerInputHeight: 0,
+
     }
 
     _isValueNull(value) {
@@ -99,6 +102,7 @@ export default class SingleChoice extends React.Component {
                     multiline={true}
                     placeholder="Frage eingeben"
                     placeholderTextColor="grey"
+                    onContentSizeChange={(event) => this.setState({ questionInputHeight: event.nativeEvent.contentSize.height })}
                     onChangeText={text => this.setState({ questionText: text })}>
                     {this.state.questionText}
                 </TextInput>
@@ -107,6 +111,7 @@ export default class SingleChoice extends React.Component {
                     multiline={true}
                     placeholder="Antwort eingeben"
                     placeholderTextColor="grey"
+                    onContentSizeChange={(event) => this.setState({ answerInputHeight: event.nativeEvent.contentSize.height })}
                     onChangeText={text => this.updateAnswers(text)}>
                     {this.state.answers[0].text}
                 </TextInput>

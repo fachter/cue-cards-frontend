@@ -1,7 +1,8 @@
 import React from 'react'
-import { AsyncStorage } from 'react-native'
+import { AsyncStorage, AppState } from 'react-native'
 import { ListStructureContext, ListStructureProvider } from '../HomeScreen/ListStructureProvider'
-import { SettingsProvider } from '../SettingsScreen/SettingsProvider'
+import NetInfo from "@react-native-community/netinfo";
+import { storeDataOnDB } from '../../API/Database'
 import axios from 'axios';
 
 
@@ -16,19 +17,16 @@ export default class UserProvider extends React.Component {
         this._authenticateAcc = this._authenticateAcc.bind(this)
 
         this.state = {
-            isLoggedin: true,
+            isLoggedin: false,
             userToken: null,
         }
 
     }
 
 
-
-
     static getUserToken() {
         return this.state.userToken
     }
-
 
     // async _storeTokenOnDevice(token) {
     //     try {
@@ -59,8 +57,12 @@ export default class UserProvider extends React.Component {
 
     logout = () => {
         this.setState({ isLoggedin: false })
-
         this.saveUserOnDevice(false, '', '')
+        console.log("")
+    }
+
+    setUserToken(token) {
+        this.setState({ userToken: token })
     }
 
     setDataIsLoading(value) {
@@ -107,37 +109,36 @@ export default class UserProvider extends React.Component {
 
         return new Promise((resolve, reject) => {
             axios.post('https://cue-cards-app.herokuapp.com/authenticate', {
-                username: 'user',
-                password: 'password',
+                username: 'xx',
+                password: 'xx',
             })
                 .then((res) => {
-                    // user._storeTokenOnDevice(res.data.jwt)
+                    console.log("Authentifizierung erfolgreich")
                     this.setState({ userToken: res.data.jwt })
                     axios.get("https://cue-cards-app.herokuapp.com/get-users-data", {
                         headers: {
                             'Authorization': "Bearer " + res.data.jwt
                         }
                     }).then(resp => {
+                        console.log("Laden der Nutzerdaten erfolgreich")
                         if (stayLoggedin === true) {
                             user.saveUserOnDevice(stayLoggedin, username, password)
                         }
 
-                        console.log("Verbindung mit der Datenbank erfolgreich. Daten: ")
-                        console.log(resp.data)
                         resolve(resp.data)
                     })
                         .catch((err) => {
                             reject()
-                            console.log("Login fehlgeschlagen, keine Verbindung zur Datenbank möglich: " + err)
+                            console.log("Laden der Nutzerdaten fehlgeschlagen " + err)
                         })
+                }).catch(err => {
+                    console.log("Authentifizierung fehlgeschlagen: " + err)
                 })
         })
     }
 
 
     async loadingDataAndSettings() {
-
-        const dataList = this.context
 
         return new Promise(async (resolve, reject) => {
             let response = await ListStructureProvider.retrieveDataFromDevice()
@@ -147,9 +148,6 @@ export default class UserProvider extends React.Component {
                 reject()
             }
         }).catch(error => console.log(error))
-
-
-
     }
 
 
@@ -158,13 +156,15 @@ export default class UserProvider extends React.Component {
             <UserContext.Provider value={{
                 isLoggedin: this.state.isLoggedin,
                 userToken: this.state.userToken,
+                setUserToken: this.setUserToken,
                 logout: this.logout,
                 login: this.login,
                 _storeTokenOnDevice: this._storeTokenOnDevice,
                 saveUserOnDevice: this.saveUserOnDevice,
                 checkIfUserStayedLoggedin: this.checkIfUserStayedLoggedin,
                 _authenticateAcc: this._authenticateAcc,
-                retrievetTokenFromDevice: this.retrievetTokenFromDevice
+                retrievetTokenFromDevice: this.retrievetTokenFromDevice,
+
             }}>
                 {this.props.children}
             </UserContext.Provider>

@@ -5,22 +5,21 @@ import ImagePickerButton from '../../API/ImagePicker'
 
 import uuid from 'react-native-uuid'
 
-
-
 const windowWidth = Dimensions.get('window').width;
-
 
 export default class Vocable extends React.Component {
 
     static contextType = ListStructureContext
-
 
     state = {
         id: this._isValueNull(this.props.route.params.id) ? uuid.v1() : this.props.route.params.id,
         cardType: "FT",
         cardLevel: this._isValueNull(this.props.route.params.cardLevel) ? 0 : this.props.route.params.cardLevel,
         questionText: this._isValueNull(this.props.route.params.questionText) ? '' : this.props.route.params.questionText,
-        solution: this._isValueNull(this.props.route.params.solution) ? '' : this.props.route.params.solution
+        solution: this._isValueNull(this.props.route.params.solution) ? '' : this.props.route.params.solution,
+        questionInputHeight: 0,
+        answerInputHeight: 0,
+
     }
 
     _isValueNull(value) {
@@ -90,6 +89,8 @@ export default class Vocable extends React.Component {
                     multiline={true}
                     placeholder="Frage eingeben"
                     placeholderTextColor="grey"
+                    onContentSizeChange={(event) => this.setState({ questionInputHeight: event.nativeEvent.contentSize.height })}
+
                     onChangeText={text => this.setState({ questionText: text })}>
                     {this.state.questionText}
                 </TextInput>
@@ -98,15 +99,19 @@ export default class Vocable extends React.Component {
                     multiline={true}
                     placeholder="Antwort eingeben"
                     placeholderTextColor="grey"
+                    onContentSizeChange={(event) => this.setState({ answerInputHeight: event.nativeEvent.contentSize.height })}
                     onChangeText={text => this.setState({ solution: text })}>
                     {this.state.solution}
                 </TextInput>
                 <ImagePickerButton />
-                <TouchableOpacity onPress={() => this._save()}>
-                    <View style={styles.saveButton}>
-                        <Text style={{ fontStyle: 'italic', fontSize: 20, color: 'white' }}>speichern</Text>
-                    </View>
-                </TouchableOpacity>
+                <View style={styles.bottomView} >
+                    <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
+                        <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
+                        <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern und Neu</Text>
+                    </TouchableOpacity>
+                </View>
             </View >
 
         )
@@ -146,5 +151,10 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontStyle: 'italic',
         backgroundColor: '#C7C7C7'
+    },
+    bottomView: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center'
     },
 });

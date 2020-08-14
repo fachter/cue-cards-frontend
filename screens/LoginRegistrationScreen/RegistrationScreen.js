@@ -11,7 +11,7 @@ const { width: WidTH } = Dimensions.get('window')
 
 export default function RegistrationScreen({ navigation }) {
 
-    const { _storeToken, login } = useContext(UserContext)
+    const { login, setUserToken } = useContext(UserContext)
 
     const [username, setUsername] = useState(null)
     const [password1, setPassword1] = useState(null)
@@ -23,14 +23,14 @@ export default function RegistrationScreen({ navigation }) {
 
     function _regNewAcc() {
         axios.post('https://cue-cards-app.herokuapp.com/register', {
-            username: 'username12',
-            password: 'password',
-            email: 'blaa@bla.de',
-            fullName: 'Philip'
+            username: 'xx',
+            password: 'xx',
+            email: 'xx@bla.de',
+            fullName: 'xx'
         })
             .then((resp) => {
                 console.log(resp.data.jwt)
-                _storeToken(resp.data.jwt)
+                setUserToken(resp.data.jwt)
                 login()
             }).catch((error) => {
                 console.log(error)
@@ -60,7 +60,6 @@ export default function RegistrationScreen({ navigation }) {
 
 
     function _checkValidityOfAllValues() {
-
         _checkIfNull(username).then(() => {
             _checkIfNull(password1).then(() => {
                 _checkIfNull(password2).then(() => {

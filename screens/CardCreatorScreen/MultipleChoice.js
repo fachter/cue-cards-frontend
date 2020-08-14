@@ -20,7 +20,8 @@ export default class MultipleChoice extends React.Component {
         cardLevel: this._isValueNull(this.props.route.params.cardLevel) ? 0 : this.props.route.params.cardLevel,
         questionText: this._isValueNull(this.props.route.params.questionText) ? '' : this.props.route.params.questionText,
         cardTopic: this._isValueNull(this.props.route.params.cardTopic) ? '' : this.props.route.params.cardTopic,
-        answers: this._isValueNull(this.props.route.params.answers) ? [] : this.props.route.params.answers
+        answers: this._isValueNull(this.props.route.params.answers) ? [] : this.props.route.params.answers,
+        questionInputHeight: 0,
     }
 
 
@@ -58,7 +59,6 @@ export default class MultipleChoice extends React.Component {
             cardTopic: cardTopic,
             answers: answers
         }
-        console.log(newCard)
 
         let copy = updateCards.currentListStructure
 
@@ -106,7 +106,6 @@ export default class MultipleChoice extends React.Component {
     _updateAnswerText(text, id) {
         var copy = this.state.answers
 
-        console.log(id)
         for (let i = 0; i < copy.length; i++) {  //Sucht den Index des Items im Array nach id
             if (copy[i].id === id) {
                 copy[i].text = text
@@ -125,6 +124,7 @@ export default class MultipleChoice extends React.Component {
                     multiline={true}
                     placeholder="Frage eingeben"
                     placeholderTextColor="grey"
+                    onContentSizeChange={(event) => this.setState({ questionInputHeight: event.nativeEvent.contentSize.height })}
                     onChangeText={text => this.setState({ questionText: text })}>
                     {this.state.questionText}
                 </TextInput>
@@ -163,14 +163,20 @@ export default class MultipleChoice extends React.Component {
 }
 
 class AnswerItem extends React.Component {
+
+    state = {
+        answerInputHeight: 0,
+    }
+
     render() {
         const { item } = this.props
         return (
             <View style={styles.answeritem}>
                 <TextInput
-                    style={[styles.textInput, { width: "75%" }]}
+                    style={[styles.textInput, { width: "75%", height: this.state.answerInputHeight }]}
                     placeholder="Antwort"
                     placeholderTextColor="grey"
+                    onContentSizeChange={(event) => this.setState({ answerInputHeight: event.nativeEvent.contentSize.height })}
                     onChangeText={text => this.props.getText(text, item.id)}>
                     {item.text}
                 </TextInput>
@@ -184,7 +190,6 @@ class AnswerItem extends React.Component {
             </View>
         )
     }
-
 }
 
 
@@ -226,7 +231,6 @@ const styles = StyleSheet.create({
 
     },
     textInput: {
-        height: 33,
         paddingLeft: 15,
         padding: 7,
         color: 'black',
