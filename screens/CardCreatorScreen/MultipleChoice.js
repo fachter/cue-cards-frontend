@@ -228,7 +228,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: 40,
         marginHorizontal: 7
-
     },
     textInput: {
         paddingLeft: 15,

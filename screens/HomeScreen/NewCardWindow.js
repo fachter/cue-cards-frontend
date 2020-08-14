@@ -11,7 +11,7 @@ export default class NewCardWindow extends React.Component {
         const { onNavigateToCardCreator, onSetVisibility } = this.props
         return (
             <Modal
-                animationType="slide"
+                animationType="fade"
                 transparent={true}
                 visible={this.props.visible}
                 onRequestClose={() => onSetVisibility(false)}

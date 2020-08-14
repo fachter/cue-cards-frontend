@@ -196,7 +196,7 @@ export default class Sidebar extends React.Component {
         return (
             <Drawer.Navigator drawerContentOptions={{
                 style: {
-                    backgroundColor: '#202225'
+                    backgroundColor: '#202225',
                 },
                 labelStyle: {
                     color: 'white'

@@ -117,10 +117,10 @@ export default class SingleChoice extends React.Component {
                 </TextInput>
                 <View style={styles.bottomView} >
                     <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
-                        <Text style={{ fontStyle: 'italic', fontSize: 10, color: 'white' }}>speichern</Text>
+                        <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
-                        <Text style={{ fontStyle: 'italic', fontSize: 10, color: 'white' }}>speichern und neu</Text>
+                        <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern und Neu</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -137,7 +137,6 @@ const styles = StyleSheet.create({
     textInput: {
         paddingLeft: 15,
         padding: 7,
-        marginBottom: 25,
         borderRadius: 10,
         color: 'black',
         margin: 20,
@@ -148,16 +147,16 @@ const styles = StyleSheet.create({
     bottomView: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginTop: 30
     },
     saveButton: {
         backgroundColor: '#008FD3',
         height: 40,
         width: 130,
         borderRadius: 30,
-        alignSelf: 'center',
         alignItems: 'center',
-        justifyContent: 'center'
-
+        justifyContent: 'center',
+        marginHorizontal: 7
     },
 });
