@@ -18,7 +18,10 @@ export default class SingleChoice extends React.Component {
         cardLevel: this._isValueNull(this.props.route.params.cardLevel) ? 0 : this.props.route.params.cardLevel,
         questionText: this._isValueNull(this.props.route.params.questionText) ? '' : this.props.route.params.questionText,
         cardTopic: this._isValueNull(this.props.route.params.cardTopic) ? '' : this.props.route.params.cardTopic,
-        answers: this._isValueNull(this.props.route.params.answers) ? [{ id: null, text: '' }] : this.props.route.params.answers
+        answers: this._isValueNull(this.props.route.params.answers) ? [{ id: null, text: '' }] : this.props.route.params.answers,
+        questionInputHeight: 0,
+        answerInputHeight: 0,
+
     }
 
     _isValueNull(value) {
@@ -99,6 +102,7 @@ export default class SingleChoice extends React.Component {
                     multiline={true}
                     placeholder="Frage eingeben"
                     placeholderTextColor="grey"
+                    onContentSizeChange={(event) => this.setState({ questionInputHeight: event.nativeEvent.contentSize.height })}
                     onChangeText={text => this.setState({ questionText: text })}>
                     {this.state.questionText}
                 </TextInput>
@@ -107,15 +111,16 @@ export default class SingleChoice extends React.Component {
                     multiline={true}
                     placeholder="Antwort eingeben"
                     placeholderTextColor="grey"
+                    onContentSizeChange={(event) => this.setState({ answerInputHeight: event.nativeEvent.contentSize.height })}
                     onChangeText={text => this.updateAnswers(text)}>
                     {this.state.answers[0].text}
                 </TextInput>
                 <View style={styles.bottomView} >
                     <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
-                        <Text style={{ fontStyle: 'italic', fontSize: 10, color: 'white' }}>speichern</Text>
+                        <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
-                        <Text style={{ fontStyle: 'italic', fontSize: 10, color: 'white' }}>speichern und neu</Text>
+                        <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern und Neu</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -132,7 +137,6 @@ const styles = StyleSheet.create({
     textInput: {
         paddingLeft: 15,
         padding: 7,
-        marginBottom: 25,
         borderRadius: 10,
         color: 'black',
         margin: 20,
@@ -143,16 +147,16 @@ const styles = StyleSheet.create({
     bottomView: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginTop: 30
     },
     saveButton: {
         backgroundColor: '#008FD3',
         height: 40,
         width: 130,
         borderRadius: 30,
-        alignSelf: 'center',
         alignItems: 'center',
-        justifyContent: 'center'
-
+        justifyContent: 'center',
+        marginHorizontal: 7
     },
 });

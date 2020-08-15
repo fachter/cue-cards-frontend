@@ -1,13 +1,13 @@
 import React from 'react'
 import { AsyncStorage } from 'react-native'
 
-
 const ListStructureContext = React.createContext()
 
 
 
 
 class ListStructureProvider extends React.Component {
+
 
     state = {
         listHistoryArray: [],
@@ -22,17 +22,23 @@ class ListStructureProvider extends React.Component {
         currentSetStructure: []
     }
 
-    storeDataOnDevice = async () => {
+
+    storeDataOnDevice(newListStructure) {
         try {
             if (this.state.listHistoryArray.length > 0) {
-                await AsyncStorage.setItem(
-                    'mainListStructure', JSON.stringify(this.state.listHistoryArray[0]),
+                AsyncStorage.setItem(
+                    'mainListStructure', JSON.stringify({
+                        Folders: this.state.listHistoryArray[0],
+                        lastEdit: new Date().getTime()
+
+                    }),
                 )
             } else {
-                await AsyncStorage.setItem(
-                    'mainListStructure', JSON.stringify(this.state.currentListStructure),
+                AsyncStorage.setItem(
+                    'mainListStructure', JSON.stringify(newListStructure),
                 )
             }
+            console.log("Daten wurden auf dem Gerät gespeichert")
         } catch (error) {
             console.log("Fehler speichern der Daten auf das Gerät: " + error)
 
@@ -45,6 +51,7 @@ class ListStructureProvider extends React.Component {
             const value = await AsyncStorage.getItem('mainListStructure');
             if (value != null) {
                 let data = JSON.parse(value)
+                console.log("Daten wurden vom gerät geladen")
                 return data
             }
         } catch (error) {
@@ -56,6 +63,7 @@ class ListStructureProvider extends React.Component {
 
     setCurrentListStructure = (newListStructure) => {
         this.setState({ currentListStructure: newListStructure })
+        this.storeDataOnDevice(newListStructure)
     }
 
     updateFolderHistory = () => {

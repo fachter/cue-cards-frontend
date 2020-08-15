@@ -3,13 +3,17 @@ import React, { useEffect, useState, useCallback, useContext } from 'react';
 
 
 
-import { InternetConnectionProvider } from './API/InternetConnection'
+import { InternetConnectionProvider, InternetConnectionContext } from './API/InternetConnection'
 import { UserProvider, UserContext } from './screens/LoginRegistrationScreen/UserProvider'
 import { SettingsProvider } from './screens/SettingsScreen/SettingsProvider'
+<<<<<<< HEAD
 import { ListStructureProvider } from './screens/HomeScreen/ListStructureProvider'
 import { RoomListStructureProvider } from './screens/RoomScreen/RoomListStructureProvider'
+=======
+import { ListStructureProvider, ListStructureContext } from './screens/HomeScreen/ListStructureProvider'
+>>>>>>> d1433f680701de7f614d5e71d60ab0be34a5ad67
 import { CopyPasteProvider } from './screens/HomeScreen/CopyPasteProvider'
-import Database from './API/Database'
+import storeDataOnDB from './API/Database'
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';

@@ -4,6 +4,7 @@ import * as Icon from '@expo/vector-icons'
 import { CardScreenContext } from './CardScreen'
 
 import AnswerListItem from './AnswerListItem'
+import { set } from 'react-native-reanimated'
 
 
 
@@ -17,20 +18,11 @@ export default function MulitpleChoiceCard() {
 
 
 
-
-    useEffect(() => {
-        console.log("999999999999999999999999")
-        console.log(answers)
-    })
-
-
     function _checkTheChoice() {
-
         let numberOfRightSelection = 0
         for (let i = 0; i < answers.length; i++) {
             if (answers[i].checkState === true && answers[i].isTrue === true) {
                 numberOfRightSelection += 1
-                console.log(numberOfRightSelection)
             }
         }
 
@@ -86,8 +78,27 @@ export default function MulitpleChoiceCard() {
 
 
     function _updateCheckState(checkState, item) {
-        item.checkState = checkState
+        console.log(checkState)
+        let copy = [...answers]
+        if (currentCard.cardType === "SC") {
+
+            for (let i = 0; i < answers.length; i++) {
+                if (item.answerValues.id === answers[i].answerValues.id) {
+                    copy[i].checkState = true
+                } else {
+                    copy[i].checkState = false
+                }
+            } setAnswers(copy)
+        } else {
+            for (let i = 0; i < answers.length; i++) {
+                if (item.answerValues.id === answers[i].answerValues.id) {
+                    console.log("yep")
+                    copy[i].checkState = checkState
+                }
+            } setAnswers(copy)
+        }
     }
+
 
 
     return (
@@ -102,7 +113,6 @@ export default function MulitpleChoiceCard() {
                     <AnswerListItem
                         item={item}
                         getCardState={_updateCheckState}
-                        checkState={false}
 
                     />
                 )}

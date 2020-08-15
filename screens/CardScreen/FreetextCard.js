@@ -21,7 +21,8 @@ export default class Freetext extends React.Component {
         solution: 'Tippe für die Lösung',
         choice: null,
         backgroundColor: '#2f3136',
-        color: 'white'
+        color: 'white',
+        solutionShown: false,
     }
 
 
@@ -50,6 +51,7 @@ export default class Freetext extends React.Component {
 
     _showSolution = () => {
         this.setState({ solution: this.props.card.solution })
+        this.setState({ solutionShown: true })
     }
 
     render() {
@@ -60,14 +62,14 @@ export default class Freetext extends React.Component {
                     <Text style={[styles.solutionText, { color: this.state.color }]}>{this.state.solution}</Text>
                 </TouchableOpacity>
 
-                <View style={styles.buttonView}>
+                {this.state.solutionShown ? <View style={styles.buttonView}>
                     <TouchableOpacity style={styles.saveButton} onPress={() => this._saveChoice(false)} >
                         <Icon.Feather name="x" size={40} color='#008FD3' />
                     </TouchableOpacity >
                     <TouchableOpacity style={styles.saveButton} onPress={() => this._saveChoice(true)} >
                         <Icon.Feather name="check" size={40} color='#008FD3' />
                     </TouchableOpacity >
-                </View>
+                </View> : null}
             </View >
         )
     }

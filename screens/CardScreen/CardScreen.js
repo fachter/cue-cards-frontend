@@ -2,36 +2,25 @@ import React, { useState, useContext, useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
 
-
-
 import MultipleChoiceCard from './MultipleAndSingleChoice'
 import FreetextCard from './FreetextCard'
-import SingleChoiceCard from './SingleChoiceCard'
-import SessionOptionsPage from './SessionOptionsPage'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
+import { SettingsContext } from '../SettingsScreen/SettingsProvider'
 
 const CardScreenContext = React.createContext()
 
 export default function CardScreen({ route, navigation }) {
 
-    const { currentListStructure, storeDataOnDevice } = useContext(ListStructureContext)
+    const { storeDataOnDevice } = useContext(ListStructureContext)
+    const { maxCardLevel, shuffleCards } = useContext(SettingsContext)
+    const [sessionCards, setSessionCards] = useState(route.params.sessionCards)
     const [currentCard, setCurrentCard] = useState(route.params.card)
     const [currentCardindex, setCurrendCardIndex] = useState(0)
     const [answers, setAnswers] = useState(_createRandomAnswers(0))
     const [mode, setMode] = useState(route.params.mode)
-    const [startSession, setStartSession] = useState(false)
     const [maxLevelIncluded, setMaxLevelIncluded] = useState(true)
-    const [shuffleCards, setShuffleCards] = useState(false)
-    const maxCardLevel = 6
+
     const minCardLevel = 0
-
-
-
-
-    // useEffect(() => {
-    //     console.log("#################")
-    //     console.log(currentListStructure)
-    // })
 
     function _getArrayOfTrueAnswers() {
         let trueAnswers = []
@@ -49,14 +38,14 @@ export default function CardScreen({ route, navigation }) {
         let maximalAnswers = 4
         let generatedAnswers = []
 
-        if (currentListStructure
-        [cardIndex].cardType === "MC" || currentListStructure
+        if (sessionCards
+        [cardIndex].cardType === "MC" || sessionCards
         [cardIndex].cardType === "SC") {
             //fügt die richtigen Antworten der Karte hinzu
-            for (let i = 0; i < currentListStructure
+            for (let i = 0; i < sessionCards
             [cardIndex].answers.length; i++) {
                 let rightAnswer = {
-                    answerValues: currentListStructure
+                    answerValues: sessionCards
                     [cardIndex].answers[i],
                     isTrue: true,
                     checkState: false
@@ -66,7 +55,7 @@ export default function CardScreen({ route, navigation }) {
 
 
             //füllt die Antwortmöglichkeiten bis zur Zahl 4 auf mit zufällig Antworten aus dem Antwortenpool heraus
-            for (let i = currentListStructure
+            for (let i = sessionCards
             [cardIndex].answers.length; i < maximalAnswers; i++) {
 
                 let trys = 0
@@ -114,14 +103,14 @@ export default function CardScreen({ route, navigation }) {
 
     function _getAllAnswersOfSameTopic(cardIndex) {
         let answerPool = []
-        for (let i = 0; i < currentListStructure.length; i++) {    //Druchlaufe alle Karten
-            if (currentListStructure[i].id == currentListStructure
+        for (let i = 0; i < sessionCards.length; i++) {    //Druchlaufe alle Karten
+            if (sessionCards[i].id == sessionCards
             [cardIndex].id) {   //Überspringt eigenen Antworten der Karte
                 continue;
             } else {
-                if ((currentListStructure[i].cardType === "MC" || currentListStructure[i].cardType === "SC") && currentListStructure[i].cardTopic == currentListStructure[currentCardindex].cardTopic) {  //Filtere nach MultipleChoice Karte und dem Topic
-                    for (let j = 0; j < currentListStructure[i].answers.length; j++) { //Durchlaufe alle Antworten der aktuelle durchlaufenden Karte
-                        answerPool.push(currentListStructure[i].answers[j])            //Fügt dem Antwortenpool die Antwort hinzu
+                if ((sessionCards[i].cardType === "MC" || sessionCards[i].cardType === "SC") && sessionCards[i].cardTopic == sessionCards[currentCardindex].cardTopic) {  //Filtere nach MultipleChoice Karte und dem Topic
+                    for (let j = 0; j < sessionCards[i].answers.length; j++) { //Durchlaufe alle Antworten der aktuelle durchlaufenden Karte
+                        answerPool.push(sessionCards[i].answers[j])            //Fügt dem Antwortenpool die Antwort hinzu
                     }
                 }
             }
@@ -141,22 +130,22 @@ export default function CardScreen({ route, navigation }) {
 
 
     function _updateCardValues(result) {
-        for (let i = 0; i < currentListStructure
+        for (let i = 0; i < sessionCards
             .length; i++) {
-            if (currentCard.id == currentListStructure
+            if (currentCard.id == sessionCards
             [i].id) {  //Sucht aktuelle im Set nach id
 
                 //Je nach richtiger oder falscher Antwort wird die Karte Level auf bzw. abgestuft
                 if (result === true) {
-                    if (currentListStructure
+                    if (sessionCards
                     [i].cardLevel < maxCardLevel) {
-                        currentListStructure
+                        sessionCards
                         [i].cardLevel += +1
                     }
                 } else {
-                    if (currentListStructure
+                    if (sessionCards
                     [i].cardLevel > minCardLevel) {
-                        currentListStructure
+                        sessionCards
                         [i].cardLevel += -1
                     }
                 }
@@ -209,7 +198,8 @@ export default function CardScreen({ route, navigation }) {
                     _shuffleArray: _shuffleArray,
                     _getArrayOfTrueAnswers: _getArrayOfTrueAnswers,
                     answers: answers,
-                    setAnswers: setAnswers
+                    setAnswers: setAnswers,
+
 
                 }}>
                     <MultipleChoiceCard card={currentCard} />
@@ -238,15 +228,15 @@ export default function CardScreen({ route, navigation }) {
 
 
     function _nextCard() {
-        if (currentCardindex < currentListStructure
+        if (currentCardindex < sessionCards
             .length - 1) {
             let nextIndex = 1
-            while (currentListStructure
+            while (sessionCards
             [currentCardindex + nextIndex].cardLevel === maxCardLevel) {
                 nextIndex = nextIndex + 1
             }
             setCurrendCardIndex(currentCardindex + nextIndex)
-            setCurrentCard(currentListStructure
+            setCurrentCard(sessionCards
             [currentCardindex + nextIndex])
 
             let newAnswers = _createRandomAnswers(currentCardindex + nextIndex)
@@ -260,23 +250,6 @@ export default function CardScreen({ route, navigation }) {
     }
 
 
-    function _setSessionOptionsAndStart() {
-        //Mischt die Karten
-        if (shuffleCards == true) {
-            currentListStructure = _shuffleArray(currentListStructure, false)
-            setCurrentCard(currentListStructure[currentCardindex])
-        }
-
-        //Maximale Kartenlevel abfragen
-        if (maxLevelIncluded == false) {
-            if (currentCard.cardLevel === maxCardLevel) {
-                _nextCard()
-
-            }
-        }
-
-        setStartSession(true)
-    }
 
 
     function _ifcurrentModeSoloCard() {
@@ -289,26 +262,18 @@ export default function CardScreen({ route, navigation }) {
 
     return (
         <View style={styles.container}>
-            {startSession || _ifcurrentModeSoloCard() ?
-                <View style={styles.cardScreen}>
-                    <View style={styles.questionView}>
-                        <View style={styles.cardInfos}>
-                            {/* <View style={styles.topic}><Text style={{ color: 'white' }}>{currentListStructure[currentCardindex].cardTopic}</Text></View> */}
-                            <View style={styles.level}><Text style={{ color: 'white' }}>{currentCard.cardLevel}</Text></View>
-                        </View>
-                        <Text style={styles.questionText}>{currentCard.questionText}</Text>
+            <View style={styles.cardScreen}>
+                <View style={styles.questionView}>
+                    <View style={styles.cardInfos}>
+                        {/* <View style={styles.topic}><Text style={{ color: 'white' }}>{sessionCards[currentCardindex].cardTopic}</Text></View> */}
+                        <View style={styles.level}><Text style={{ color: 'white' }}>{currentCard.cardLevel}</Text></View>
                     </View>
-                    <View style={styles.answer}>
-                        {_renderTheRightCard()}
-                    </View>
+                    <Text style={styles.questionText}>{currentCard.questionText}</Text>
                 </View>
-                :
-                <SessionOptionsPage
-                    onStartSession={_setSessionOptionsAndStart}
-                    onsetMaxLevelIncluded={setMaxLevelIncluded}
-                    onsetShuffleCards={setShuffleCards}
-                    maxLevelIncluded={maxLevelIncluded}
-                    shuffleCards={shuffleCards} />}
+                <View style={styles.answer}>
+                    {_renderTheRightCard()}
+                </View>
+            </View>
         </View >
     )
 }
