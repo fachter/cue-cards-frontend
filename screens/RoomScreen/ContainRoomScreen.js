@@ -1,91 +1,204 @@
-import React, {useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { TouchableOpacity, Button, StyleSheet, FlatList, View, Text, BackHandler } from 'react-native';
 import { FontAwesome5, Entypo } from '@expo/vector-icons';
 import AddSetWindow from './AddSetWindow'
 import RoomSetListItem from './RoomSetListItem';
 import { Searchbar } from 'react-native-paper';
 import Drawer from 'react-native-drawer';
+import DeleteWindow from '../HomeScreen/DeleteWindow';
+import NewCardWindow from '../HomeScreen/NewCardWindow'
+import { useNavigation } from '@react-navigation/native';
+
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CopyPasteContext } from '../HomeScreen/CopyPasteProvider'
 import HomeScreen from '../HomeScreen/HomeScreen';
-import  {ListStructureContext}   from '../HomeScreen/ListStructureProvider';
+import { RoomListStructureContext } from './RoomListStructureProvider';
+import RoomChooseFolderSetWindow from './RoomChooseFolderSetWindow';
 
-export default function ContainRoomScreen() {
+export default function ContainRoomScreen({drawer}) {
     return (
- <SetDataList/>
+        <SetDataList />
     )
 }
 
-const SetDataList = () =>{
+const SetDataList = () => {
     const {
-    setHistoryArray,
-    currentSetStructure,
-    setCurrentSetStructure,
-    updateSetHistory,
-    _getLastSetFolderStructure
-} = useContext(ListStructureContext)
+        updateFolderHistory,
+        listRoomHistoryArray,
+        _getLastFolderStructure,
+        currentRoomStructure,
+        setCurrentRoomStructure,
+        isRoomFolder,
+        setIsRoomFolder,
+        CreateRoomFileWindowVisible,
+        setRoomCreateFileWindowVisible,
+        CreateRoomNewCardWindowVisible,
+        setRoomCreateNewCardWindowVisible,
+        ContainRoomVisible,
+        setContainRoomVisible,
+        storeDataOnDevice,
+        retrieveDataFromDevice,
+        dataIsLoading,
+        setRoomQuery,
+        setFulldata,
+        getQuery
+    } = useContext(RoomListStructureContext)
 
-const initialFriendState = [
-    {
-        id: '1',
-        title: 'Philip'
-    },
-    {
-        id: '2',
-        title: 'Matze'
-    },
-    {
-        id: '3',
-        title: 'Darius'
-    }
-]
 
-const initialSets= [
-    {
-        id: '1',
-        set: 'Set'
-    }
-]
+    const { someThingIsCopied, copyData, setSomeThingIsCopied } = useContext(CopyPasteContext)
+
+
+    const initialFriendState = [
+        {
+            id: '1',
+            title: 'Philip'
+        },
+        {
+            id: '2',
+            title: 'Matze'
+        },
+        {
+            id: '3',
+            title: 'Darius'
+        }
+    ]
+
+    const initialSets = [
+        {
+            id: '1',
+            set: 'Set'
+        }
+    ]
 
 
     //static contextType = CopyPasteContext
 
+    const navigation = useNavigation()
+
     const [search, setSearch] = useState('');
     const [showAddSetWindow, setShowAddSetWindow] = useState(false);
     const [friends, setFriends] = useState(initialFriendState)
+    const [onDeleteItem, setOnDeleteItem] = useState(null)
+    const [deleteWindowVisible, SetDeleteWindowVisible] = useState(false)
+
+
     //const [sets, setSets] = useState(initialSets)
 
-    
 
 
-   /*  function updateRoomList() {
-        const copyPaste = context
-        console.log(copyPaste.copyData)
 
-        let copy = currentSetStructure
-        copy.push(copyPaste.copyData)
-        setState({ currentSetStructure: copy })
-    } */
+    /*  function updateRoomList() {
+         const copyPaste = context
+         console.log(copyPaste.copyData)
+ 
+         let copy = currentListStructure
+         copy.push(copyPaste.copyData)
+         setState({ currentListStructure: copy })
+     } */
 
 
-   /*  useEffect(() => {
+    useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
     }, []);
 
     function _backButtonPressed() {
         //Holt sich die state "isFolder" der Vorherigen Ordnerstruktur
 
-        if (setHistoryArray.length > 0) {
-            var lastSetFolderStructure = _getLastSetFolderStructure()
-            setCurrentSetStructure(lastSetFolderStructure)
+        if (listRoomHistoryArray.length > 0) {
+            var lastSetFolderStructure = _getLastFolderStructure()
+            setCurrentRoomStructure(lastSetFolderStructure)
             return true
         } else {
             return false
         }
     }
- */
-    
+
+
+    function editCard(item) {
+        const mode = "editMode"
+
+        if (item.roomCardType === 'MC') {
+            navigation.navigate('RoomMultipleChoice',
+                {
+                    roomId: item.roomId,
+                    roomCardType: item.roomCardType,
+                    roomQuestionText: item.roomQuestionText,
+                    roomCardLevel: item.roomCardLevel,
+                    roomCardTopic: item.roomCardTopic,
+                    roomNumberofRightroomAnswers: item.roomNumberofRightroomAnswers,
+                    roomAnswers: item.roomAnswers,
+                    mode: mode
+                })
+        } else if (item.roomCardType === 'FT') {
+            navigation.navigate('RoomFreetext',
+                {
+                    roomId: item.roomId,
+                    roomCardType: item.roomCardType,
+                    roomQuestionText: item.roomQuestionText,
+                    roomCardLevel: item.roomCardLevel,
+                    roomSolution: item.roomSolution,
+                    mode: mode
+                })
+        } else if (item.roomCardType === "SC") {
+            navigation.navigate('RoomSingleChoice',
+                {
+                    roomId: item.roomId,
+                    roomCardType: item.roomCardType,
+                    roomQuestionText: item.roomQuestionText,
+                    roomCardLevel: item.roomCardLevel,
+                    roomCardTopic: item.roomCardTopic,
+                    roomAnswers: item.roomAnswers,
+                    mode: mode
+                })
+        }
+        SetDeleteWindowVisible(false)
+    }
+
+
+    function _getClickedItem(item) {
+
+        updateFolderHistory()
+        if (item.isRoomFolder) {
+            //durchsucht das Array nach dem Item und ruft die OrdnerStruktur auf
+            let indexOfItem = currentRoomStructure.indexOf(item)
+            let subStructure = currentRoomStructure[indexOfItem].subFolders
+            setCurrentRoomStructure(subStructure)
+        } else {
+            //durchsucht das Array nach dem Item und ruft die OrdnerStruktur auf
+            let indexOfItem = currentRoomStructure.indexOf(item)
+            let subStructure = currentRoomStructure[indexOfItem].cards
+            setCurrentRoomStructure(subStructure)
+        }
+
+        if (item.isRoomFolder == undefined) {
+            setIsRoomFolder(null)
+        } else if (item.isRoomFolder == true) {
+            setIsRoomFolder(true)
+        } else {
+            setIsRoomFolder(false)
+        }
+    }
+
+    function plusButtonClicked() {
+        if (isRoomFolder === true) {
+            setRoomCreateFileWindowVisible(true)
+        } else {
+            setRoomCreateNewCardWindowVisible(true)
+        }
+    }
+
+    function createNewCard(roomCardType) {
+        if (roomCardType === "MC") {
+            navigation.navigate('RoomMultipleChoice', { mode: "createMode" })
+        } else if (roomCardType === "SC") {
+            navigation.navigate('RoomSingleChoice', { mode: "createMode" })
+        } else if (roomCardType === "FT") {
+            navigation.navigate('RoomFreetext', { mode: "createMode" })
+        }
+        setRoomCreateNewCardWindowVisible(false)
+        setContainRoomVisible(true)
+    }
 
     function _showAddSetWindow() {
         if (showAddSetWindow === false) {
@@ -97,18 +210,52 @@ const initialSets= [
     }
 
     function handleSetAdd(newListItem) {
-        const copy = currentSetStructure
-        copy.push({ id: copy.length, set: newListItem })
-        setCurrentSetStructure(copy)
-        setShowAddSetWindow(false)
+        const copy = currentRoomStructure
+        copy.push({ id: copy.length, name: newListItem })
+        setCurrentRoomStructure(copy)
+        setRoomCreateFileWindowVisible(false)
     }
 
-   /*  function handleAdd(newListItem) {
-        let copy = rooms
-        copy.push({ ID: copy.length, title: newListItem })
-        setRooms(copy)
-        setAddRoomWindowVisibility(false)
-    } */
+    function _showDeleteWindow(item) {
+        setOnDeleteItem(item)
+        SetDeleteWindowVisible(true)
+
+    }
+
+    function _navigateToCardScreen(item) {
+        navigation.navigate('CardScreen', { card: item, mode: "soloCard" })
+    }
+
+    function _navigateToSession(item) {
+
+        if (item.cards.length > 0) {
+            setCurrentRoomStructure(item.cards)
+            updateFolderHistory(item.cards)
+            navigation.navigate('CardScreen', { mode: "sessionMode", card: item.cards[0] })
+
+        } else {
+            alert('Füge deinem Set Karten hinzu um eine Session zu starten')
+        }
+    }
+
+    function pasteTheCopiedData() {
+        let copy = currentRoomStructure
+        copy.push(copyData)
+        setCurrentRoomStructure(copy)
+    }
+
+    function _deleteItemById(id) {
+        var copy = currentRoomStructure
+        var index
+
+        for (var i = 0; i < copy.length; i++) {  //Sucht den Index des Items im Array nach id
+            if (copy[i].id === id)
+                index = i
+        }
+        copy.splice(index, 1)  //schmeißt das Item mit dem Index raus
+        setCurrentRoomStructure(copy)
+        SetDeleteWindowVisible(false)
+    }
 
 
     function renderDrawer() {
@@ -116,36 +263,38 @@ const initialSets= [
         //const { search } = state;
 
         return (
-            
-                <View style={styles.menuContainer}>
-                    <Text style={styles.textStyle}>Freund einladen</Text>
-                    <Searchbar
-                        placeholder="Freund ID eingeben"
-                        //onChangeText={_updateSearch()}
-                        value={search}
-                    />
-                    <FlatList
-                        style={{ flex: 1.0 }}
-                        data={friends}
-                        //extraData={state}
-                        renderItem={({ item, index }) => {
-                            return (
-                                <TouchableOpacity style={styles.menuTitleContainer}>
-                                    <Text style={styles.menuTitle}
-                                        key={index}>
-                                        {item.title}
-                                    </Text>
-                                </TouchableOpacity>
-                            )
-                        }} />
 
-                </View>
-                
+            <View style={styles.menuContainer}>
+                <Text style={styles.textStyle}>Freund einladen</Text>
+                <Searchbar
+                    placeholder="Freund ID eingeben"
+                    //onChangeText={_updateSearch()}
+                    value={search}
+                />
+                <FlatList
+                    style={{ flex: 1.0 }}
+                    data={friends}
+                    //extraData={state}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <TouchableOpacity style={styles.menuTitleContainer}>
+                                <Text style={styles.menuTitle}
+                                    key={index}>
+                                    {item.title}
+                                </Text>
+                            </TouchableOpacity>
+                        )
+                    }} />
+
+
+            </View>
+
         )
     }
 
     function openDrawer() {
-        drawer.open()
+        //drawer.open()
+        openDrawer()
     }
 
     function closeDrawer() {
@@ -153,72 +302,91 @@ const initialSets= [
     }
 
 
-        //const copyPaste = context
+    //const copyPaste = context
 
-        return (
-            <Drawer
-                ref={(ref) => { drawer = ref }}
-                type="overlay"
-                tapToClose={true}
-                openDrawerOffset={0.35}
-                content={renderDrawer()}
-                style={styles.drawer}
-                side="right"
-            >
-                <View style={styles.container}>
+    return (
+         /*  <Drawer
+              //ref={(ref) => { drawer = ref }}
+              type="overlay"
+              tapToClose={true}
+              openDrawerOffset={0.35}
+              content={renderDrawer()}
+              style={styles.drawer}
+              side="right"
+          > */
+        <View style={styles.container}>
 
 
-                    {/* {copyPaste.someThingIsCopied ? <View style={styles.copyPasteView}>
-                        <Text>Einfügen</Text>
-                        <Icon.Button
-                            name="ios-copy"
-                            size={23} color="black"
-                            backgroundColor="white"
-                            onPress={() => updateRoomList()}
+            {someThingIsCopied ? <View style={styles.copyPasteView}>
+                <Text>Einfügen</Text>
+                <Icon.Button
+                    name="ios-copy"
+                    size={23} color="black"
+                    backgroundColor="white"
+                    onPress={() => pasteCopiedData()}
+                />
+                <Icon.Button
+                    style={{ alignSelf: 'flex-start' }}
+                    name="ios-close"
+                    size={23} color="black"
+                    backgroundColor="white"
+                    onPress={() => setSomeThingIsCopied(false)} />
+            </View> : null}
+
+
+            <FlatList
+                data={currentRoomStructure}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) =>
+                    (
+                        <RoomSetListItem
+                            item={item}
+                            callBackItem={_getClickedItem}
+                            onDeleteWindow={_showDeleteWindow.bind(this)}
+                            onNavigateToCardScreen={_navigateToCardScreen}
+                            onNavigateToSession={_navigateToSession}
                         />
-                        <Icon.Button
-                            style={{ alignSelf: 'flex-start' }}
-                            name="ios-close"
-                            size={23} color="black"
-                            backgroundColor="white"
-                            onPress={() => copyPaste.setSomeThingIsCopied(false)} />
-                    </View> : null} */}
+                    )}
+            />
+
+            {showAddSetWindow ?
+                <AddSetWindow
+                    showAddSetWindow={_showAddSetWindow}
+                    onAdd={handleSetAdd}
+
+                /> : null}
+
+            {deleteWindowVisible ?
+                <DeleteWindow
+                    onDeleteWindow={() => SetDeleteWindowVisible(false)}
+                    onNavigateToCardCreator={editCard}
+                    item={onDeleteItem}
+                    onDelete={_deleteItemById} /> : null}
+
+            <RoomChooseFolderSetWindow
+                visible={CreateRoomFileWindowVisible}
+            />
+            <NewCardWindow
+                visible={CreateRoomNewCardWindowVisible}
+                onNavigateToCardCreator={createNewCard}
+                onSetVisibility={setRoomCreateNewCardWindowVisible}
+            />
+            <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
+                <Entypo name="plus" size={45} color="#008FD3" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.friendsButton} onPress={() => openDrawer()} >
+                <Entypo name="users" size={30} color="#008FD3" />
+
+            </TouchableOpacity>
 
 
-                    <FlatList
-                        data={currentSetStructure}
-                        keyExtractor={item => item.id}
-                        renderItem={({ item }) =>
-                            (
-                                <RoomSetListItem
-                                    item={item}
-                                />
-                            )}
-                    />
-                    {showAddSetWindow ?
-                        <AddSetWindow
-                            showAddSetWindow={_showAddSetWindow}
-                            onAdd={handleSetAdd}
-
-                        /> : null}
+        </View>
+       //  </Drawer>
 
 
-                    <TouchableOpacity style={styles.plusButton} onPress={() => setShowAddSetWindow(true)} >
-                        <Entypo name="plus" size={45} color="#008FD3" />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.friendsButton} onPress={() => openDrawer()} >
-                        <Entypo name="users" size={30} color="#008FD3" />
+    )
+}
 
-                    </TouchableOpacity>
-
-
-                </View>
-              </Drawer>
-
-
-        )
-        }
-    
 
 const styles = StyleSheet.create({
     container: {

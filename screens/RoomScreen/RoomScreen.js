@@ -7,7 +7,7 @@ import DeleteRoomWindow from './DeleteRoomWindow';
 import { Searchbar } from 'react-native-paper';
 import { v4 as uuidv4 } from 'uuid';
 import ContainRoomScreen from './ContainRoomScreen';
-import {ListStructureContext} from '../HomeScreen/ListStructureProvider';
+import {RoomListStructureContext, RoomListStructureProvider} from './RoomListStructureProvider';
 
 
 const initialRoomState = [
@@ -28,11 +28,14 @@ export default function RoomScreen() {
         const {
             setHistoryArray,
             currentSetStructure,
+            setCurrentListStructure,
             currentListStructure,
             setCurrentSetStructure,
             updateSetHistory,
-            _getLastSetFolderStructure
-        } = useContext(ListStructureContext)
+            _getLastSetFolderStructure,
+            ContainRoomVisible,
+            setContainRoomVisible
+        } = useContext(RoomListStructureContext)
 
             const[containRoomScreenVisibility, setContainRoomVisibility] = useState(false);
             const[roomsVisibility, setRoomsVisibility] = useState(false);
@@ -94,21 +97,17 @@ export default function RoomScreen() {
     }
 
 
-function updateFolderHistory ()  {
-    setHistoryArray.push(currentSetStructure)
-}
 
-function _getClickedItem(item) {
-    let indexOfItem = currentSetStructure.indexOf(item)
-    let subStructure = currentSetStructure[indexOfItem]
-    setCurrentSetStructure(subStructure)
-} 
+/*  function _getClickedItem(item) {
+    let indexOfItem = rooms.indexOf(item)
+    let subStructure = rooms[indexOfItem]
+    setCurrentListStructure(subStructure)
+}   */
 
     function _showContainRoomScreen() {
-        setContainRoomVisibility(true)
+        setContainRoomVisible(true)
         setRoomsVisibility(false)
-        updateFolderHistory()
-        _getClickedItem()
+        //_getClickedItem()
     }
 
 
@@ -118,7 +117,7 @@ function _getClickedItem(item) {
 
     
         //const { search } = state;
-        if (containRoomScreenVisibility === false) {
+        if (ContainRoomVisible === false) {
             return (
 
                 <View style={styles.container}>
@@ -169,7 +168,7 @@ function _getClickedItem(item) {
             );
         }
 
-        else if (containRoomScreenVisibility === true) {
+        else if (ContainRoomVisible === true) {
             return (
                 <ContainRoomScreen
                     //showContainRoomScreen={() => setState({ containRoomScreenVisible: true })}

@@ -177,6 +177,10 @@ const RoomStackScreen = ({ navigation }) => (
         headerTintColor: "white"
     }}>
         <RoomStack.Screen name="Räume" component={RoomScreen} options={headerOptionsFirstPage} />
+        <RoomStack.Screen name="RoomMultipleChoice" component={MultipleChoice} options={headerOptions}></RoomStack.Screen>
+        <RoomStack.Screen name="RoomSingleChoice" component={SingleChoice} options={headerOptions}></RoomStack.Screen>
+        <RoomStack.Screen name="RoomFreetext" component={Freetext} options={headerOptions}></RoomStack.Screen>
+        <RoomStack.Screen name="RoomCardScreen" component={CardScreen} options={headerOptions}></RoomStack.Screen>
     </RoomStack.Navigator>
 );
 

@@ -7,6 +7,7 @@ import { InternetConnectionProvider } from './API/InternetConnection'
 import { UserProvider, UserContext } from './screens/LoginRegistrationScreen/UserProvider'
 import { SettingsProvider } from './screens/SettingsScreen/SettingsProvider'
 import { ListStructureProvider } from './screens/HomeScreen/ListStructureProvider'
+import { RoomListStructureProvider } from './screens/RoomScreen/RoomListStructureProvider'
 import { CopyPasteProvider } from './screens/HomeScreen/CopyPasteProvider'
 import Database from './API/Database'
 
@@ -16,6 +17,7 @@ import { AsyncStorage, AppState } from 'react-native'
 import axios from 'axios'
 import Sidebar from './navigation/Sidebar'
 import { LoginRegistrationStackScreen } from './navigation/Sidebar';
+import { RoomListStructureContext } from './screens/RoomScreen/RoomListStructureProvider';
 
 
 const StartStack = createStackNavigator()
@@ -54,6 +56,7 @@ export default class App extends React.Component {
   render() {
 
     return (
+      <RoomListStructureProvider>
       <CopyPasteProvider>
         <ListStructureProvider>
           <SettingsProvider>
@@ -65,6 +68,7 @@ export default class App extends React.Component {
           </SettingsProvider>
         </ListStructureProvider>
       </CopyPasteProvider>
+      </RoomListStructureProvider>
     )
   }
 }
