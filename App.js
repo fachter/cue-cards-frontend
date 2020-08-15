@@ -6,12 +6,8 @@ import React, { useEffect, useState, useCallback, useContext } from 'react';
 import { InternetConnectionProvider, InternetConnectionContext } from './API/InternetConnection'
 import { UserProvider, UserContext } from './screens/LoginRegistrationScreen/UserProvider'
 import { SettingsProvider } from './screens/SettingsScreen/SettingsProvider'
-<<<<<<< HEAD
 import { ListStructureProvider } from './screens/HomeScreen/ListStructureProvider'
 import { RoomListStructureProvider } from './screens/RoomScreen/RoomListStructureProvider'
-=======
-import { ListStructureProvider, ListStructureContext } from './screens/HomeScreen/ListStructureProvider'
->>>>>>> d1433f680701de7f614d5e71d60ab0be34a5ad67
 import { CopyPasteProvider } from './screens/HomeScreen/CopyPasteProvider'
 import storeDataOnDB from './API/Database'
 
