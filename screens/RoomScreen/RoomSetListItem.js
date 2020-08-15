@@ -18,11 +18,11 @@ export default class RoomSetListItem extends React.Component {
         }
 
 
-        if (this.props.item.isRoomFolder == true) {
+        if (this.props.item.isFolder == true) {
             this.state.isFolder = true
-        } else if (this.props.item.isRoomFolder == false) {
+        } else if (this.props.item.isFolder == false) {
             this.state.isSet = true
-        } else if (this.props.item.isRoomFolder == undefined) {
+        } else if (this.props.item.isFolder == undefined) {
             this.state.isCard = true
         }
 

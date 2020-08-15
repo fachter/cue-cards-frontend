@@ -9,6 +9,7 @@ import DeleteWindow from '../HomeScreen/DeleteWindow';
 import NewCardWindow from '../HomeScreen/NewCardWindow'
 import { useNavigation } from '@react-navigation/native';
 
+import { SettingsContext } from '../SettingsScreen/SettingsProvider'
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CopyPasteContext } from '../HomeScreen/CopyPasteProvider'
@@ -29,8 +30,8 @@ const SetDataList = () => {
         _getLastFolderStructure,
         currentRoomStructure,
         setCurrentRoomStructure,
-        isRoomFolder,
-        setIsRoomFolder,
+        isFolder,
+        setIsFolder,
         CreateRoomFileWindowVisible,
         setRoomCreateFileWindowVisible,
         CreateRoomNewCardWindowVisible,
@@ -45,6 +46,7 @@ const SetDataList = () => {
         getQuery
     } = useContext(RoomListStructureContext)
 
+    const { shuffleCards } = useContext(SettingsContext)
 
     const { someThingIsCopied, copyData, setSomeThingIsCopied } = useContext(CopyPasteContext)
 
@@ -118,37 +120,37 @@ const SetDataList = () => {
     function editCard(item) {
         const mode = "editMode"
 
-        if (item.roomCardType === 'MC') {
-            navigation.navigate('RoomMultipleChoice',
+        if (item.cardType === 'MC') {
+            navigation.navigate('MultipleChoice',
                 {
-                    roomId: item.roomId,
-                    roomCardType: item.roomCardType,
-                    roomQuestionText: item.roomQuestionText,
-                    roomCardLevel: item.roomCardLevel,
-                    roomCardTopic: item.roomCardTopic,
-                    roomNumberofRightroomAnswers: item.roomNumberofRightroomAnswers,
-                    roomAnswers: item.roomAnswers,
+                    id: item.id,
+                    cardType: item.cardType,
+                    questionText: item.questionText,
+                    cardLevel: item.cardLevel,
+                    cardTopic: item.cardTopic,
+                    numberOfRightAnswers: item.numberOfRightAnswers,
+                    answers: item.answers,
                     mode: mode
                 })
-        } else if (item.roomCardType === 'FT') {
-            navigation.navigate('RoomFreetext',
+        } else if (item.cardType === 'FT') {
+            navigation.navigate('Freetext',
                 {
-                    roomId: item.roomId,
-                    roomCardType: item.roomCardType,
-                    roomQuestionText: item.roomQuestionText,
-                    roomCardLevel: item.roomCardLevel,
-                    roomSolution: item.roomSolution,
+                    id: item.id,
+                    cardType: item.cardType,
+                    questionText: item.questionText,
+                    cardLevel: item.cardLevel,
+                    solution: item.solution,
                     mode: mode
                 })
-        } else if (item.roomCardType === "SC") {
-            navigation.navigate('RoomSingleChoice',
+        } else if (item.cardType === "SC") {
+            navigation.navigate('SingleChoice',
                 {
-                    roomId: item.roomId,
-                    roomCardType: item.roomCardType,
-                    roomQuestionText: item.roomQuestionText,
-                    roomCardLevel: item.roomCardLevel,
-                    roomCardTopic: item.roomCardTopic,
-                    roomAnswers: item.roomAnswers,
+                    id: item.id,
+                    cardType: item.cardType,
+                    questionText: item.questionText,
+                    cardLevel: item.cardLevel,
+                    cardTopic: item.cardTopic,
+                    answers: item.answers,
                     mode: mode
                 })
         }
@@ -159,7 +161,7 @@ const SetDataList = () => {
     function _getClickedItem(item) {
 
         updateFolderHistory()
-        if (item.isRoomFolder) {
+        if (item.isFolder) {
             //durchsucht das Array nach dem Item und ruft die OrdnerStruktur auf
             let indexOfItem = currentRoomStructure.indexOf(item)
             let subStructure = currentRoomStructure[indexOfItem].subFolders
@@ -171,17 +173,17 @@ const SetDataList = () => {
             setCurrentRoomStructure(subStructure)
         }
 
-        if (item.isRoomFolder == undefined) {
-            setIsRoomFolder(null)
-        } else if (item.isRoomFolder == true) {
-            setIsRoomFolder(true)
+        if (item.isFolder == undefined) {
+            setIsFolder(null)
+        } else if (item.isFolder == true) {
+            setIsFolder(true)
         } else {
-            setIsRoomFolder(false)
+            setIsFolder(false)
         }
     }
 
     function plusButtonClicked() {
-        if (isRoomFolder === true) {
+        if (isFolder === true) {
             setRoomCreateFileWindowVisible(true)
         } else {
             setRoomCreateNewCardWindowVisible(true)
@@ -190,11 +192,11 @@ const SetDataList = () => {
 
     function createNewCard(roomCardType) {
         if (roomCardType === "MC") {
-            navigation.navigate('RoomMultipleChoice', { mode: "createMode" })
+            navigation.navigate('RoomMultipleChoice', { mode: "createMode", screen: "room", onSave: currentRoomStructure, onSetSave: setCurrentRoomStructure})
         } else if (roomCardType === "SC") {
-            navigation.navigate('RoomSingleChoice', { mode: "createMode" })
+            navigation.navigate('RoomSingleChoice', { mode: "createMode", screen: "room", onSave: currentRoomStructure, onSetSave: setCurrentRoomStructure })
         } else if (roomCardType === "FT") {
-            navigation.navigate('RoomFreetext', { mode: "createMode" })
+            navigation.navigate('RoomFreetext', { mode: "createMode", screen: "room", onSave: currentRoomStructure, onSetSave: setCurrentRoomStructure })
         }
         setRoomCreateNewCardWindowVisible(false)
         setContainRoomVisible(true)
@@ -228,14 +230,21 @@ const SetDataList = () => {
 
     function _navigateToSession(item) {
 
+        let sessionCards = item.cards
+
+        if (shuffleCards === true) {
+            sessionCards = _shuffleArray(item.cards)
+        }
+
         if (item.cards.length > 0) {
             setCurrentRoomStructure(item.cards)
-            updateFolderHistory(item.cards)
-            navigation.navigate('CardScreen', { mode: "sessionMode", card: item.cards[0] })
+            //updateFolderHistory(item.cards)
+            navigation.navigate('CardScreen', { mode: "sessionMode", card: item.cards[0], sessionCards: sessionCards })
 
         } else {
             alert('Füge deinem Set Karten hinzu um eine Session zu starten')
         }
+        console.log(item)
     }
 
     function pasteTheCopiedData() {

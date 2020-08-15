@@ -10,7 +10,7 @@ const FileContext = createContext()
 
 
 export default function RoomChooseFolderSetWindow() {
-    const { currentRoomStructure, setCurrentRoomStructure, isRoomFolder, setRoomCreateFileWindowVisible, CreateRoomFileWindowVisible, storeRoomDataOnDevice } = useContext(RoomListStructureContext)
+    const { currentRoomStructure, setCurrentRoomStructure, isFolder: isFolder, setRoomCreateFileWindowVisible, CreateRoomFileWindowVisible, storeRoomDataOnDevice } = useContext(RoomListStructureContext)
     const [newFileName, setNewFileName] = useState(null)
     const [isNewFileFolder, setIsNewFileFolder] = useState(null)
 
@@ -19,7 +19,7 @@ export default function RoomChooseFolderSetWindow() {
         let newid = uuid.v1()
         let newListItem = {
             id: newid,
-            isRoomFolder: isNewFileFolder,
+            isFolder: isNewFileFolder,
             name: newFileName,
             subFolders: [],
             cards: []
@@ -39,7 +39,7 @@ export default function RoomChooseFolderSetWindow() {
 
 
 
-    if (isRoomFolder == false) {
+    if (isFolder == false) {
         return (
             <FileContext.Provider value={{
                 setNewFileName: setNewFileName,
@@ -85,8 +85,8 @@ function CreateFolderOrSet() {
     const { setIsNewFileFolder } = useContext(FileContext)
     const {setRoomCreateFileWindowVisible } = useContext(RoomListStructureContext)
 
-    function _setFileType(isRoomFolder) {
-        setIsNewFileFolder(isRoomFolder)
+    function _setFileType(isFolder) {
+        setIsNewFileFolder(isFolder)
         setShowFileNameWindow(true)
 
     }
@@ -123,7 +123,7 @@ function CreateFolderOrSet() {
 function FileNameWindow() {
 
     const navigation = useNavigation()
-    const { setRoomCreateFileWindowVisible, isRoomFolder } = useContext(RoomListStructureContext)
+    const { setRoomCreateFileWindowVisible, isFolder } = useContext(RoomListStructureContext)
     const { newFileName, setNewFileName, isNewFileFolder, _save } = useContext(FileContext)
     const [save, setSave] = useState(false)
 
@@ -135,7 +135,7 @@ function FileNameWindow() {
     });
 
     function _saveButtonClicked() {
-        if (isRoomFolder == false) {
+        if (isFolder == false) {
             setRoomCreateFileWindowVisible(false)
             navigation.navigate('CardCreator', { mode: "createMode" })
             return

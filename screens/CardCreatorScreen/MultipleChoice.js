@@ -22,6 +22,7 @@ export default class MultipleChoice extends React.Component {
         cardTopic: this._isValueNull(this.props.route.params.cardTopic) ? '' : this.props.route.params.cardTopic,
         answers: this._isValueNull(this.props.route.params.answers) ? [] : this.props.route.params.answers,
         questionInputHeight: 0,
+        onSave: this._isValueNull(this.props.route.params.onSave) ? null : this.props.route.params.onSave
     }
 
 
@@ -49,8 +50,7 @@ export default class MultipleChoice extends React.Component {
 
     _save() {
         const { id, cardType, questionText, cardTopic, answers } = this.state
-        const updateCards = this.context
-
+        
         let newCard = {
             id: id,
             cardType: cardType,
@@ -60,11 +60,10 @@ export default class MultipleChoice extends React.Component {
             answers: answers
         }
 
-        let copy = updateCards.currentListStructure
-
+        let copy = this.state.onSave
         if (this.props.route.params.mode == "createMode") { // neue Karte erstellen
             copy.push(newCard)
-            updateCards.setCurrentListStructure(copy)
+            this.props.route.params.onSetSave(copy)
 
         } else if (this.props.route.params.mode == "editMode") {   //alte Karte aktualisieren
             var index

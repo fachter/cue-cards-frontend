@@ -244,11 +244,11 @@ const DataList = () => {
 
     function createNewCard(cardType) {
         if (cardType === "MC") {
-            navigation.navigate('MultipleChoice', { mode: "createMode" })
+            navigation.navigate('MultipleChoice', { mode: "createMode", onSave: currentListStructure, onSetSave: setCurrentListStructure })
         } else if (cardType === "SC") {
-            navigation.navigate('SingleChoice', { mode: "createMode" })
+            navigation.navigate('SingleChoice', { mode: "createMode", onSave: currentListStructure, onSetSave: setCurrentListStructure  })
         } else if (cardType === "FT") {
-            navigation.navigate('Freetext', { mode: "createMode" })
+            navigation.navigate('Freetext', { mode: "createMode", onSave: currentListStructure, onSetSave: setCurrentListStructure  })
         }
         setCreateNewCardWindowVisible(false)
     }

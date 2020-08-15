@@ -11,7 +11,7 @@ class RoomListStructureProvider extends React.Component {
 
     state = {
         listRoomHistoryArray: [],
-        isRoomFolder: true,
+        isFolder: true,
         CreateRoomFileWindowVisible: false,  //PopupFenster um neue Datei anzuulegen
         CreateRoomNewCardWindowVisible: false,
         dataRoomIsLoading: true,
@@ -70,8 +70,8 @@ class RoomListStructureProvider extends React.Component {
         return this.state.listRoomHistoryArray.pop()
     }
 
-    setIsRoomFolder = (isRoomFolder) => {
-        this.setState({ isRoomFolder })
+    setIsFolder = (isFolder) => {
+        this.setState({ isFolder })
     }
 
     setRoomCreateFileWindowVisible = (CreateRoomFileWindowVisible) => {
@@ -135,8 +135,8 @@ class RoomListStructureProvider extends React.Component {
                 _getLastFolderStructure: this._getLastFolderStructure,
                 currentRoomStructure: this.state.currentRoomStructure,
                 setCurrentRoomStructure: this.setCurrentRoomStructure,
-                isRoomFolder: this.state.isRoomFolder,
-                setIsRoomFolder: this.setIsRoomFolder,
+                isFolder: this.state.isFolder,
+                setIsFolder: this.setIsFolder,
                 CreateRoomFileWindowVisible: this.state.CreateRoomFileWindowVisible,
                 setRoomCreateFileWindowVisible: this.setRoomCreateFileWindowVisible,
                 CreateRoomNewCardWindowVisible: this.state.CreateRoomNewCardWindowVisible,
