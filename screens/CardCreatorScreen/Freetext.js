@@ -132,7 +132,9 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         alignSelf: 'center',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginTop: 40,
+        marginHorizontal: 7
 
     },
     questionInput: {
@@ -153,7 +155,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#C7C7C7'
     },
     bottomView: {
-        flex: 1,
         flexDirection: 'row',
         justifyContent: 'center'
     },

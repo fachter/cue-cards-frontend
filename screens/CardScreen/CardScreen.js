@@ -293,6 +293,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     questionText: {
+        flex: 1,
         fontSize: 23,
         color: 'white'
     },
