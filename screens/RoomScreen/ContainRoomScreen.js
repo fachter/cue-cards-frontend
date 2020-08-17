@@ -17,11 +17,14 @@ import HomeScreen from '../HomeScreen/HomeScreen';
 import { RoomListStructureContext } from './RoomListStructureProvider';
 import RoomChooseFolderSetWindow from './RoomChooseFolderSetWindow';
 
+
 export default function ContainRoomScreen({drawer}) {
     return (
         <SetDataList />
     )
 }
+
+
 
 const SetDataList = () => {
     const {
@@ -84,6 +87,7 @@ const SetDataList = () => {
     const [onDeleteItem, setOnDeleteItem] = useState(null)
     const [deleteWindowVisible, SetDeleteWindowVisible] = useState(false)
 
+    const [sideBarOpen, setSideBarOpen] = useState(false)
 
     //const [sets, setSets] = useState(initialSets)
 
@@ -294,35 +298,29 @@ const SetDataList = () => {
                             </TouchableOpacity>
                         )
                     }} />
-
+                <Button
+                title="Schließen"
+                onPress={()=> setSideBarOpen(false)}
+                ></Button>
 
             </View>
 
         )
     }
 
-    function openDrawer() {
-        //drawer.open()
-        openDrawer()
-    }
-
-    function closeDrawer() {
-        drawer.close()
-    }
-
 
     //const copyPaste = context
 
     return (
-         /*  <Drawer
-              //ref={(ref) => { drawer = ref }}
+           <Drawer
+            open={sideBarOpen}
               type="overlay"
-              tapToClose={true}
+              tapToClose={false}
               openDrawerOffset={0.35}
               content={renderDrawer()}
               style={styles.drawer}
               side="right"
-          > */
+          > 
         <View style={styles.container}>
 
 
@@ -383,14 +381,14 @@ const SetDataList = () => {
             <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
                 <Entypo name="plus" size={45} color="#008FD3" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.friendsButton} onPress={() => openDrawer()} >
+            <TouchableOpacity style={styles.friendsButton} onPress={() => setSideBarOpen(true)} >
                 <Entypo name="users" size={30} color="#008FD3" />
 
             </TouchableOpacity>
 
 
         </View>
-       //  </Drawer>
+         </Drawer>
 
 
     )
