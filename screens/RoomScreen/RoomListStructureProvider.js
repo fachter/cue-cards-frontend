@@ -12,14 +12,18 @@ class RoomListStructureProvider extends React.Component {
     state = {
         listRoomHistoryArray: [],
         isFolder: true,
+        isRoom: true,
         CreateRoomFileWindowVisible: false,  //PopupFenster um neue Datei anzuulegen
         CreateRoomNewCardWindowVisible: false,
+        CreateRoomNewRoomWindowVisible: false,
         dataRoomIsLoading: true,
         roomQuery: "",
         fullRoomData: [],
         setRoomHistoryArray: [],
         currentRoomStructure: [],
-        ContainRoomVisible: false
+        rooms: [],
+        ContainRoomVisible: false,
+        itemIndex: 0
     }
 
     storeRoomDataOnDevice = async () => {
@@ -58,6 +62,14 @@ class RoomListStructureProvider extends React.Component {
         this.setState({ currentRoomStructure: newListStructure })
     }
 
+    setRooms = (newRooms) => {
+        this.setState({rooms:newRooms })
+    }
+
+    setItemIndex = (itemIndex) => {
+        this.setState({itemIndex})
+    }                                                          
+
     setContainRoomVisible = (ContainRoomVisible) => {
         this.setState({ ContainRoomVisible })
     }
@@ -73,10 +85,18 @@ class RoomListStructureProvider extends React.Component {
     setIsFolder = (isFolder) => {
         this.setState({ isFolder })
     }
+    setIsRoom = (isRoom) => {
+        this.setState({ isRoom })
+    }
 
     setRoomCreateFileWindowVisible = (CreateRoomFileWindowVisible) => {
         this.setState({ CreateRoomFileWindowVisible })
     }
+
+    setRoomCreateNewRoomWindowVisible = (CreateRoomNewRoomWindowVisible) => {
+        this.setState({ CreateRoomNewRoomWindowVisible })
+    }
+
 
     setRoomCreateNewCardWindowVisible = (value) => {
         this.setState({ CreateRoomNewCardWindowVisible: value })
@@ -135,10 +155,18 @@ class RoomListStructureProvider extends React.Component {
                 _getLastFolderStructure: this._getLastFolderStructure,
                 currentRoomStructure: this.state.currentRoomStructure,
                 setCurrentRoomStructure: this.setCurrentRoomStructure,
+                rooms: this.state.rooms,
+                setRooms: this.setRooms,
+                itemIndex: this.state.itemIndex,
+                setItemIndex: this.setItemIndex,
                 isFolder: this.state.isFolder,
                 setIsFolder: this.setIsFolder,
+                isRoom: this.state.isRoom,
+                setIsRoom: this.setIsRoom,
                 CreateRoomFileWindowVisible: this.state.CreateRoomFileWindowVisible,
                 setRoomCreateFileWindowVisible: this.setRoomCreateFileWindowVisible,
+                CreateRoomNewRoomWindowVisible: this.state.CreateRoomNewRoomWindowVisible,
+                setRoomCreateNewRoomWindowVisible: this.setRoomCreateNewRoomWindowVisible,
                 CreateRoomNewCardWindowVisible: this.state.CreateRoomNewCardWindowVisible,
                 setRoomCreateNewCardWindowVisible: this.setRoomCreateNewCardWindowVisible,
                 storeRoomDataOnDevice: this.storeRoomDataOnDevice,

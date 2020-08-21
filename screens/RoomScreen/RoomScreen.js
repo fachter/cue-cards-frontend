@@ -5,17 +5,19 @@ import AddRoomWindow from './AddRoomWindow';
 import RoomListItem from './RoomListItem';
 import DeleteRoomWindow from './DeleteRoomWindow';
 import { Searchbar } from 'react-native-paper';
-import { v4 as uuidv4 } from 'uuid';
+import uuid from 'react-native-uuid'
 import ContainRoomScreen from './ContainRoomScreen';
 import {RoomListStructureContext, RoomListStructureProvider} from './RoomListStructureProvider';
+import { useNavigation } from '@react-navigation/native';
 
 
-const initialRoomState = [
+/* const initialRoomState = [
     {
         id: '1',
-        title: 'Raum'
+        title: 'Raum',
+        roomsSubFolders: []
     }
-]
+] */
 
 export default function RoomScreen() {
 
@@ -28,11 +30,16 @@ export default function RoomScreen() {
         const {
             setHistoryArray,
             currentSetStructure,
-            setCurrentListStructure,
+            setCurrentRoomStructure,
+            currentRoomStructure,
+            rooms,
+            setRooms,
             currentListStructure,
             setCurrentSetStructure,
             updateSetHistory,
             _getLastSetFolderStructure,
+            itemIndex,
+            setItemIndex,
             ContainRoomVisible,
             setContainRoomVisible
         } = useContext(RoomListStructureContext)
@@ -43,21 +50,29 @@ export default function RoomScreen() {
             const[deleteWindowVisibility, setDeleteWindowVisibility] =useState(false);
             const[onDeleteItem, setOnDeleteItem] = useState(false);
             const[search, setSearch] = useState('');
-            const[rooms, setRooms] = useState(initialRoomState);
+            //const [rooms, setRooms] = useState(initialRoomState);
+
             
-            
+        const navigation = useNavigation()
+
 
 
 
     function handleAdd(newListItem) {
         let copy = rooms
+        
         copy.push({ ID: copy.length, title: newListItem })
 
         setRooms(copy)
+
         setAddRoomWindowVisibility(false)
+        _addNewRoomToList(newRoom)
 
     }
 
+    function _addNewRoomToList(newRoom){
+        rooms.push(newRoom)
+    }
    
 
     function componentDidUpdate() {
@@ -97,17 +112,24 @@ export default function RoomScreen() {
     }
 
 
-
-/*  function _getClickedItem(item) {
+/* 
+   function _getClickedItem(item) {
     let indexOfItem = rooms.indexOf(item)
     let subStructure = rooms[indexOfItem]
-    setCurrentListStructure(subStructure)
-}   */
+    setCurrentRoomStructure(subStructure)
+}     */
 
-    function _showContainRoomScreen() {
+     function _showContainRoomScreen(item) {
+        /*let indexOfItem = rooms.indexOf(item)
+        setItemIndex(indexOfItem)
+         let copy = rooms[itemIndex].roomsSubFolders
+        setRooms(copy) 
+        setCurrentRoomStructure(copy) */
+        //setCurrentRoomStructure(currentRoomStructure[itemIndex])
         setContainRoomVisible(true)
         setRoomsVisibility(false)
-        //_getClickedItem()
+        
+        //navigation.navigate('ContainRoomScreen')
     }
 
 

@@ -13,7 +13,7 @@ export default class RoomListItem extends React.Component {
         return (
             <TouchableOpacity
                 onLongPress={() => this.props.onDeleteWindow(this.props.item)}
-                onPress={() => this.props.showContainRoomScreen()}
+                onPress={() => this.props.showContainRoomScreen(this.props.item)}
             >
                 <View style={styles.container}>
                     <MaterialCommunityIcons

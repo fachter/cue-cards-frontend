@@ -5,14 +5,17 @@ import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import uuid from 'react-native-uuid'
 import { RoomListStructureContext } from './RoomListStructureProvider';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 
 const FileContext = createContext()
 
 
 export default function RoomChooseFolderSetWindow() {
-    const { currentRoomStructure, setCurrentRoomStructure, isFolder: isFolder, setRoomCreateFileWindowVisible, CreateRoomFileWindowVisible, storeRoomDataOnDevice } = useContext(RoomListStructureContext)
+    const { currentRoomStructure, setCurrentRoomStructure, isRoom, setIsRoom, itemIndex, CreateRoomNewRoomWindowVisible, setCreateRoomNewRoomWindowVisible, setItemIndex, isFolder, setRoomCreateFileWindowVisible, CreateRoomFileWindowVisible, storeRoomDataOnDevice, rooms, setRooms } = useContext(RoomListStructureContext)
     const [newFileName, setNewFileName] = useState(null)
     const [isNewFileFolder, setIsNewFileFolder] = useState(null)
+    const [newRoomName, setNewRoomName] = useState(null)
 
 
     function _save() {
@@ -21,8 +24,10 @@ export default function RoomChooseFolderSetWindow() {
             id: newid,
             isFolder: isNewFileFolder,
             name: newFileName,
+            isRoom: newRoomName,
             subFolders: [],
-            cards: []
+            cards: [],
+             
         }
 
 
@@ -31,10 +36,19 @@ export default function RoomChooseFolderSetWindow() {
     }
 
     function _addNewSetItemTolist(newListItem) {
-        let copy = currentRoomStructure
+        let copy = currentRoomStructure[itemIndex]
         console.log(copy)
-
+        console.log(currentRoomStructure)
+        console.log(itemIndex)
         currentRoomStructure.push(newListItem)
+         //if(currentRoomStructure.length === 0){
+       // rooms[0].roomsSubFolders.push(newListItem)
+       /*  }
+        else{
+        currentRoomStructure.splice(itemIndex, 0, newListItem)
+        } 
+        console.log(currentRoomStructure[itemIndex])
+ */
     }
 
 
@@ -57,6 +71,25 @@ export default function RoomChooseFolderSetWindow() {
                 </View>
             </FileContext.Provider>
         )
+/*     }
+    else if(isRoom == true){
+        return(
+            <FileContext.Provider value={{
+                setNewFileName: setNewFileName,
+                setNewRoomName: setNewRoomName,
+                _save: _save
+            }}>
+                <View style={styles.container} >
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={CreateRoomFileWindowVisible}
+                        onRequestClose={() => setRoomCreateNewRoomWindowVisible(false)}>
+                        <AddRoomWindow />
+                    </Modal>
+                </View>
+            </FileContext.Provider>
+        ) */
     } else {
         return (
             <FileContext.Provider value={{
@@ -124,7 +157,7 @@ function FileNameWindow() {
 
     const navigation = useNavigation()
     const { setRoomCreateFileWindowVisible, isFolder } = useContext(RoomListStructureContext)
-    const { newFileName, setNewFileName, isNewFileFolder, _save } = useContext(FileContext)
+    const { newFileName, setNewRoomName, setNewFileName, isNewFileFolder, _save } = useContext(FileContext)
     const [save, setSave] = useState(false)
 
     useEffect(() => {
@@ -164,7 +197,89 @@ function FileNameWindow() {
     )
 }
 
+/* function AddRoomWindow(){
+    const { newFileName, setNewRoomName, setNewFileName, isNewFileFolder, _save } = useContext(FileContext)
+    const [save, setSave] = useState(false)
+    const { setRoomCreateFileWindowVisible, isFolder } = useContext(RoomListStructureContext)
 
+
+
+    useEffect(() => {
+        if (save) {
+            _saveButtonClicked()
+            _setFileType
+        }
+
+    });
+
+    function _saveButtonClicked() {
+        if (isFolder == false) {
+            setRoomCreateFileWindowVisible(false)
+            navigation.navigate('CardCreator', { mode: "createMode" })
+            return
+        }
+        _save()
+    }
+
+    function _setFileType(isRoom) {
+        setIsNewRoom(isRoom)
+
+    }
+
+
+    return(
+/*     <Modal
+        animationType="fade"
+        transparent={true}
+        //visible={this.props.addRoomWindowVisibility}
+        onRequestClose={() => this.props.onSetVisibility()}>
+        <View style={styles.background}>
+            <View style={styles.window}>
+                <TouchableOpacity style={styles.cancelButton} onPress={() => addRoomWindowVisibility(false)}>
+                    <AntDesign name="closecircleo" size={24} color="grey" />
+                </TouchableOpacity>
+                <Text
+                    style={styles.headingText}>Raumname oder RaumID</Text>
+                <TextInput
+                    style={styles.friendName}
+                    placeholder="z.B. #Lerngruppe1234"
+                    placeholderTextColor="grey"
+                    onChangeText={text => setNewRoomName(text)}>
+                </TextInput>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.saveButton} onPress={() => setSave(true)}>
+                        <MaterialCommunityIcons name="import" size={25} color="white" />
+                        <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Beitreten</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.saveButton} onPress={() => setSave(true)}>
+                        <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
+                        <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Erstellen</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+    </Modal> 
+        <View style={styles.background}>
+            <Text
+                style={styles.headingText}>Raumname eingeben:</Text>
+            <TextInput
+                style={styles.fileNameTextInput}
+                onChangeText={text => setNewFileName(text)}
+                placeholder="z.B. Raum1"
+                placeholderTextColor="grey"
+            >
+            </TextInput>
+            <TouchableOpacity onPress={() => setSave(true)} >
+
+                <View style={styles.saveButton}>
+                    <Icon.Feather name="check" size={35} color="#008FD3" />
+                </View>
+            </TouchableOpacity>
+        </View>
+    )
+}
+
+ */
 
 
 const styles = StyleSheet.create({
