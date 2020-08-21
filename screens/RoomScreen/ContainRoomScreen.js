@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { TouchableOpacity, Button, StyleSheet, FlatList, View, Text, BackHandler } from 'react-native';
-import { FontAwesome5, Entypo } from '@expo/vector-icons';
+import { TouchableOpacity, Image, Button, StyleSheet, FlatList, View, Text, BackHandler } from 'react-native';
+import { FontAwesome5, Entypo, AntDesign } from '@expo/vector-icons';
 import AddSetWindow from './AddSetWindow'
 import RoomSetListItem from './RoomSetListItem';
 import { Searchbar } from 'react-native-paper';
@@ -8,6 +8,7 @@ import Drawer from 'react-native-drawer';
 import DeleteWindow from '../HomeScreen/DeleteWindow';
 import NewCardWindow from '../HomeScreen/NewCardWindow'
 import { useNavigation } from '@react-navigation/native';
+import logo from '../../assets/Logo_grau.png';
 
 import { SettingsContext } from '../SettingsScreen/SettingsProvider'
 
@@ -18,7 +19,7 @@ import { RoomListStructureContext } from './RoomListStructureProvider';
 import RoomChooseFolderSetWindow from './RoomChooseFolderSetWindow';
 
 
-export default function ContainRoomScreen({drawer}) {
+export default function ContainRoomScreen({ drawer }) {
     return (
         <SetDataList />
     )
@@ -196,7 +197,7 @@ const SetDataList = () => {
 
     function createNewCard(roomCardType) {
         if (roomCardType === "MC") {
-            navigation.navigate('RoomMultipleChoice', { mode: "createMode", screen: "room", onSave: currentRoomStructure, onSetSave: setCurrentRoomStructure})
+            navigation.navigate('RoomMultipleChoice', { mode: "createMode", screen: "room", onSave: currentRoomStructure, onSetSave: setCurrentRoomStructure })
         } else if (roomCardType === "SC") {
             navigation.navigate('RoomSingleChoice', { mode: "createMode", screen: "room", onSave: currentRoomStructure, onSetSave: setCurrentRoomStructure })
         } else if (roomCardType === "FT") {
@@ -278,14 +279,17 @@ const SetDataList = () => {
         return (
 
             <View style={styles.menuContainer}>
-                <Text style={styles.textStyle}>Freund einladen</Text>
+                <TouchableOpacity style={styles.cancelButton} onPress={() => setSideBarOpen(false)}>
+                    <AntDesign name="closecircleo" size={24} color="grey" />
+                </TouchableOpacity>
                 <Searchbar
-                    placeholder="Freund ID eingeben"
+                    style={styles.searchBar}
+                    placeholder="ID des Freundes"
                     //onChangeText={_updateSearch()}
                     value={search}
                 />
                 <FlatList
-                    style={{ flex: 1.0 }}
+                    style={styles.flatList}
                     data={friends}
                     //extraData={state}
                     renderItem={({ item, index }) => {
@@ -298,10 +302,10 @@ const SetDataList = () => {
                             </TouchableOpacity>
                         )
                     }} />
-                <Button
-                title="Schließen"
-                onPress={()=> setSideBarOpen(false)}
-                ></Button>
+                {/* <Button
+                    title="Schließen"
+                    onPress={() => setSideBarOpen(false)}
+                ></Button> */}
 
             </View>
 
@@ -312,83 +316,82 @@ const SetDataList = () => {
     //const copyPaste = context
 
     return (
-           <Drawer
+        <Drawer
             open={sideBarOpen}
-              type="overlay"
-              tapToClose={false}
-              openDrawerOffset={0.35}
-              content={renderDrawer()}
-              style={styles.drawer}
-              side="right"
-          > 
-        <View style={styles.container}>
+            type="overlay"
+            tapToClose={false}
+            openDrawerOffset={0.35}
+            content={renderDrawer()}
+            style={styles.drawer}
+            side="right"
+        >
+            <View style={styles.container}>
 
 
-            {someThingIsCopied ? <View style={styles.copyPasteView}>
-                <Text>Einfügen</Text>
-                <Icon.Button
-                    name="ios-copy"
-                    size={23} color="black"
-                    backgroundColor="white"
-                    onPress={() => pasteCopiedData()}
+                {someThingIsCopied ? <View style={styles.copyPasteView}>
+                    <Text>Einfügen</Text>
+                    <Icon.Button
+                        name="ios-copy"
+                        size={23} color="black"
+                        backgroundColor="white"
+                        onPress={() => pasteCopiedData()}
+                    />
+                    <Icon.Button
+                        style={{ alignSelf: 'flex-start' }}
+                        name="ios-close"
+                        size={23} color="black"
+                        backgroundColor="white"
+                        onPress={() => setSomeThingIsCopied(false)} />
+                </View> : null}
+
+
+                <FlatList
+                    data={currentRoomStructure}
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) =>
+                        (
+                            <RoomSetListItem
+                                item={item}
+                                callBackItem={_getClickedItem}
+                                onDeleteWindow={_showDeleteWindow.bind(this)}
+                                onNavigateToCardScreen={_navigateToCardScreen}
+                                onNavigateToSession={_navigateToSession}
+                            />
+                        )}
                 />
-                <Icon.Button
-                    style={{ alignSelf: 'flex-start' }}
-                    name="ios-close"
-                    size={23} color="black"
-                    backgroundColor="white"
-                    onPress={() => setSomeThingIsCopied(false)} />
-            </View> : null}
 
+                {showAddSetWindow ?
+                    <AddSetWindow
+                        showAddSetWindow={_showAddSetWindow}
+                        onAdd={handleSetAdd}
 
-            <FlatList
-                data={currentRoomStructure}
-                keyExtractor={item => item.id}
-                renderItem={({ item }) =>
-                    (
-                        <RoomSetListItem
-                            item={item}
-                            callBackItem={_getClickedItem}
-                            onDeleteWindow={_showDeleteWindow.bind(this)}
-                            onNavigateToCardScreen={_navigateToCardScreen}
-                            onNavigateToSession={_navigateToSession}
-                        />
-                    )}
-            />
+                    /> : null}
 
-            {showAddSetWindow ?
-                <AddSetWindow
-                    showAddSetWindow={_showAddSetWindow}
-                    onAdd={handleSetAdd}
+                {deleteWindowVisible ?
+                    <DeleteWindow
+                        onDeleteWindow={() => SetDeleteWindowVisible(false)}
+                        onNavigateToCardCreator={editCard}
+                        item={onDeleteItem}
+                        onDelete={_deleteItemById} /> : null}
 
-                /> : null}
+                <RoomChooseFolderSetWindow
+                    visible={CreateRoomFileWindowVisible}
+                />
+                <NewCardWindow
+                    visible={CreateRoomNewCardWindowVisible}
+                    onNavigateToCardCreator={createNewCard}
+                    onSetVisibility={setRoomCreateNewCardWindowVisible}
+                />
+                <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
+                    <Entypo name="plus" size={45} color="#008FD3" />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.friendsButton} onPress={() => setSideBarOpen(true)} >
+                    <AntDesign name="adduser" size={40} color="#008FD3" />
 
-            {deleteWindowVisible ?
-                <DeleteWindow
-                    onDeleteWindow={() => SetDeleteWindowVisible(false)}
-                    onNavigateToCardCreator={editCard}
-                    item={onDeleteItem}
-                    onDelete={_deleteItemById} /> : null}
-
-            <RoomChooseFolderSetWindow
-                visible={CreateRoomFileWindowVisible}
-            />
-            <NewCardWindow
-                visible={CreateRoomNewCardWindowVisible}
-                onNavigateToCardCreator={createNewCard}
-                onSetVisibility={setRoomCreateNewCardWindowVisible}
-            />
-            <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
-                <Entypo name="plus" size={45} color="#008FD3" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.friendsButton} onPress={() => setSideBarOpen(true)} >
-                <Entypo name="users" size={30} color="#008FD3" />
-
-            </TouchableOpacity>
-
-
-        </View>
-         </Drawer>
+                </TouchableOpacity>
+                <Image source={logo} style={styles.logo} />
+            </View>
+        </Drawer>
 
 
     )
@@ -429,9 +432,17 @@ const styles = StyleSheet.create({
     },
     menuContainer: {
         flex: 1.0,
-        backgroundColor: 'black',
+        backgroundColor: '#202225',
     },
-
+    cancelButton: {
+        width: 30,
+        height: 30,
+        borderRadius: 5,
+        alignSelf: 'flex-start',
+        margin: 5,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     menuTitle: {
         width: '100%',
         color: 'white',
@@ -439,13 +450,29 @@ const styles = StyleSheet.create({
         fontSize: 17,
         alignSelf: 'center',
     },
-    textStyle: {
-        color: 'white'
-    },
     copyPasteView: {
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row'
-    }
+    },
+    flatList: {
+
+    },
+    searchBar: {
+        //marginVertical: 15,
+        borderRadius: 10,
+        color: 'black',
+        marginHorizontal: 15,
+        fontSize: 15,
+        fontStyle: 'italic',
+        backgroundColor: '#C7C7C7'
+    },
+    logo: {
+        position: 'absolute',
+        width: 110,
+        height: 42,
+        bottom: -5,
+        alignSelf: 'center',
+    },
 
 })

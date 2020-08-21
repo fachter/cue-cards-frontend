@@ -1,8 +1,8 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image } from 'react-native'
 import * as Icon from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons';
-
+import logo from '../../assets/Logo_grau.png';
 
 
 
@@ -70,6 +70,7 @@ export default class Freetext extends React.Component {
                         <Icon.Feather name="check" size={40} color='#008FD3' />
                     </TouchableOpacity >
                 </View> : null}
+                <Image source={logo} style={styles.logo} />
             </View >
         )
     }
@@ -108,8 +109,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         margin: 10,
+        marginBottom: 35,
         borderWidth: 0.5,
         borderColor: 'grey',
+    },
+    logo: {
+        position: 'absolute',
+        width: 110,
+        height: 42,
+        bottom: -5,
+        alignSelf: 'center',
     },
 
 });

@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
-import { View, StyleSheet, TextInput, Dimensions, TouchableOpacity, Text } from 'react-native'
+import { View, StyleSheet, TextInput, Dimensions, TouchableOpacity, Text, Image } from 'react-native'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import ImagePickerButton from '../../API/ImagePicker'
+import logo from '../../assets/Logo_grau.png';
 
 import uuid from 'react-native-uuid'
 
@@ -112,6 +113,7 @@ export default class Vocable extends React.Component {
                         <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern und Neu</Text>
                     </TouchableOpacity>
                 </View>
+                <Image source={logo} style={styles.logo} />
             </View >
 
         )
@@ -157,5 +159,12 @@ const styles = StyleSheet.create({
     bottomView: {
         flexDirection: 'row',
         justifyContent: 'center'
+    },
+    logo: {
+        position: 'absolute',
+        width: 110,
+        height: 42,
+        bottom: -5,
+        alignSelf: 'center',
     },
 });

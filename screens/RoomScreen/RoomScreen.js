@@ -1,5 +1,5 @@
-import React, {useState, useContext, useEffect} from 'react';
-import { View, Text, StyleSheet, FlatList, Button, TouchableOpacity, SectionList, BackHandler } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, Image, Text, StyleSheet, FlatList, Button, TouchableOpacity, SectionList, BackHandler } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import AddRoomWindow from './AddRoomWindow';
 import RoomListItem from './RoomListItem';
@@ -7,7 +7,8 @@ import DeleteRoomWindow from './DeleteRoomWindow';
 import { Searchbar } from 'react-native-paper';
 import { v4 as uuidv4 } from 'uuid';
 import ContainRoomScreen from './ContainRoomScreen';
-import {RoomListStructureContext, RoomListStructureProvider} from './RoomListStructureProvider';
+import { RoomListStructureContext, RoomListStructureProvider } from './RoomListStructureProvider';
+import logo from '../../assets/Logo_grau.png';
 
 
 const initialRoomState = [
@@ -20,32 +21,32 @@ const initialRoomState = [
 export default function RoomScreen() {
 
     return (
-        <SetDataList/>
+        <SetDataList />
     )
 }
 
-    const SetDataList = () => {
-        const {
-            setHistoryArray,
-            currentSetStructure,
-            setCurrentListStructure,
-            currentListStructure,
-            setCurrentSetStructure,
-            updateSetHistory,
-            _getLastSetFolderStructure,
-            ContainRoomVisible,
-            setContainRoomVisible
-        } = useContext(RoomListStructureContext)
+const SetDataList = () => {
+    const {
+        setHistoryArray,
+        currentSetStructure,
+        setCurrentListStructure,
+        currentListStructure,
+        setCurrentSetStructure,
+        updateSetHistory,
+        _getLastSetFolderStructure,
+        ContainRoomVisible,
+        setContainRoomVisible
+    } = useContext(RoomListStructureContext)
 
-            const[containRoomScreenVisibility, setContainRoomVisibility] = useState(false);
-            const[roomsVisibility, setRoomsVisibility] = useState(false);
-            const[addRoomWindowVisibility, setAddRoomWindowVisibility] = useState(false);
-            const[deleteWindowVisibility, setDeleteWindowVisibility] =useState(false);
-            const[onDeleteItem, setOnDeleteItem] = useState(false);
-            const[search, setSearch] = useState('');
-            const[rooms, setRooms] = useState(initialRoomState);
-            
-            
+    const [containRoomScreenVisibility, setContainRoomVisibility] = useState(false);
+    const [roomsVisibility, setRoomsVisibility] = useState(false);
+    const [addRoomWindowVisibility, setAddRoomWindowVisibility] = useState(false);
+    const [deleteWindowVisibility, setDeleteWindowVisibility] = useState(false);
+    const [onDeleteItem, setOnDeleteItem] = useState(false);
+    const [search, setSearch] = useState('');
+    const [rooms, setRooms] = useState(initialRoomState);
+
+
 
 
 
@@ -58,7 +59,7 @@ export default function RoomScreen() {
 
     }
 
-   
+
 
     function componentDidUpdate() {
         console.log(rooms)
@@ -98,11 +99,11 @@ export default function RoomScreen() {
 
 
 
-/*  function _getClickedItem(item) {
-    let indexOfItem = rooms.indexOf(item)
-    let subStructure = rooms[indexOfItem]
-    setCurrentListStructure(subStructure)
-}   */
+    /*  function _getClickedItem(item) {
+        let indexOfItem = rooms.indexOf(item)
+        let subStructure = rooms[indexOfItem]
+        setCurrentListStructure(subStructure)
+    }   */
 
     function _showContainRoomScreen() {
         setContainRoomVisible(true)
@@ -112,75 +113,70 @@ export default function RoomScreen() {
 
 
 
-       
-
-
-    
-        //const { search } = state;
-        if (ContainRoomVisible === false) {
-            return (
-
-                <View style={styles.container}>
-
-
-                    <Text>Gebe die 6-stellige Raum-ID ein, um einem Raum beizutreten
-
-                </Text>
-
-
-                    <Searchbar
-                        placeholder="Raum beitreten"
-                        //onChangeText={_updateSearch()}
-                        value={search}
-
-                    />
-
-
-                    <FlatList
-                        data={rooms}
-                        keyExtractor={item => item.ID}
-                        renderItem={({ item }) => (
-                            <RoomListItem
-                                item={item}
-                                onDeleteWindow={_showDeleteWindow}
-                                showContainRoomScreen={_showContainRoomScreen}
-                            />
-                        )}
-                    />
-
-                    <TouchableOpacity style={styles.plusButton} onPress={() => setAddRoomWindowVisibility(true)} >
-                        <Entypo name="plus" size={50} color="black" />
-                    </TouchableOpacity>
-                    <AddRoomWindow
-                        onSetVisibility={_setRoomAddWindowVisibility}
-                        addRoomWindowVisibility={addRoomWindowVisibility}
-                        //name={rooms.ti}
-                        onAdd={handleAdd}
-                    />
-                    {deleteWindowVisibility ?
-                        <DeleteRoomWindow
-                            onDeleteWindow={() => setDeleteWindowVisibility(false)}
-                            onDelete={_deleteItemById}
-                            item={onDeleteItem}
-
-                        /> : null}
-                </View>
-            );
-        }
-
-        else if (ContainRoomVisible === true) {
-            return (
-                <ContainRoomScreen
-                    //showContainRoomScreen={() => setState({ containRoomScreenVisible: true })}
-                    ></ContainRoomScreen>
-            )
-        }
 
 
 
 
+    //const { search } = state;
+    if (ContainRoomVisible === false) {
+        return (
 
+            <View style={styles.container}>
+                <Searchbar
+                    style={styles.suchEingabe}
+                    placeholder="Raum beitreten (6-stellige ID eingeben)"
+                    //onChangeText={_updateSearch()}
+                    value={search}
+
+                />
+
+
+                <FlatList
+                    data={rooms}
+                    keyExtractor={item => item.ID}
+                    renderItem={({ item }) => (
+                        <RoomListItem
+                            item={item}
+                            onDeleteWindow={_showDeleteWindow}
+                            showContainRoomScreen={_showContainRoomScreen}
+                        />
+                    )}
+                />
+
+                <TouchableOpacity style={styles.plusButton} onPress={() => setAddRoomWindowVisibility(true)} >
+                    <Entypo name="plus" size={50} color="#008FD3" />
+                </TouchableOpacity>
+                <AddRoomWindow
+                    onSetVisibility={_setRoomAddWindowVisibility}
+                    addRoomWindowVisibility={addRoomWindowVisibility}
+                    //name={rooms.ti}
+                    onAdd={handleAdd}
+                />
+                {deleteWindowVisibility ?
+                    <DeleteRoomWindow
+                        onDeleteWindow={() => setDeleteWindowVisibility(false)}
+                        onDelete={_deleteItemById}
+                        item={onDeleteItem}
+
+                    /> : null}
+                <Image source={logo} style={styles.logo} />
+            </View>
+        );
     }
+
+    else if (ContainRoomVisible === true) {
+        return (
+            <ContainRoomScreen
+            //showContainRoomScreen={() => setState({ containRoomScreenVisible: true })}
+            ></ContainRoomScreen>
+        )
+    }
+
+
+
+
+
+}
 
 
 
@@ -191,6 +187,15 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#2f3136",
         paddingTop: 10
+    },
+    suchEingabe: {
+        marginVertical: 15,
+        borderRadius: 10,
+        color: 'black',
+        marginHorizontal: 20,
+        fontSize: 15,
+        fontStyle: 'italic',
+        backgroundColor: '#C7C7C7'
     },
     item: {
         backgroundColor: '#f9c2ff',
@@ -220,5 +225,12 @@ const styles = StyleSheet.create({
         bottom: 20,
         right: 20,
         backgroundColor: "#2f3136",
-    }
+    },
+    logo: {
+        position: 'absolute',
+        width: 110,
+        height: 42,
+        bottom: -5,
+        alignSelf: 'center',
+    },
 });

@@ -30,18 +30,18 @@ export default class AddRoomWindow extends React.Component {
                             <AntDesign name="closecircleo" size={24} color="grey" />
                         </TouchableOpacity>
                         <Text
-                            style={styles.headingText}>Raumname oder RaumID</Text>
+                            style={styles.headingText}>Gib deinem Raum einen Namen</Text>
                         <TextInput
                             style={styles.friendName}
-                            placeholder="z.B. #Lerngruppe1234"
+                            placeholder="z.B. Lerngruppe1234"
                             placeholderTextColor="grey"
                             onChangeText={text => this.setState({ roomName: text })}>
                         </TextInput>
                         <View style={styles.buttonContainer}>
-                            <TouchableOpacity style={styles.saveButton} onPress={() => this.props.onAdd(this.state.roomName)}>
+                            {/* <TouchableOpacity style={styles.saveButton} onPress={() => this.props.onAdd(this.state.roomName)}>
                                 <MaterialCommunityIcons name="import" size={25} color="white" />
                                 <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Beitreten</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                             <TouchableOpacity style={styles.saveButton} onPress={() => this.props.onAdd(this.state.roomName)}>
                                 <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
                                 <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Erstellen</Text>
@@ -65,9 +65,9 @@ const styles = StyleSheet.create({
     },
     window: {
         width: '100%',
-        height: '20%',
+        height: '30%',
         borderRadius: 5,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     cancelButton: {
         width: 30,

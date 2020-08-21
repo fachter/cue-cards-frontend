@@ -262,17 +262,15 @@ export default function CardScreen({ route, navigation }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.cardScreen}>
-                <View style={styles.questionView}>
-                    <View style={styles.cardInfos}>
-                        {/* <View style={styles.topic}><Text style={{ color: 'white' }}>{sessionCards[currentCardindex].cardTopic}</Text></View> */}
-                        <View style={styles.level}><Text style={{ color: 'white' }}>{currentCard.cardLevel}</Text></View>
-                    </View>
-                    <Text style={styles.questionText}>{currentCard.questionText}</Text>
+            <View style={styles.questionView}>
+                <View style={styles.cardInfos}>
+                    {/* <View style={styles.topic}><Text style={{ color: 'white' }}>{sessionCards[currentCardindex].cardTopic}</Text></View> */}
+                    <View style={styles.level}><Text style={{ color: 'white' }}>{currentCard.cardLevel}</Text></View>
                 </View>
-                <View style={styles.answer}>
-                    {_renderTheRightCard()}
-                </View>
+                <Text style={styles.questionText}>{currentCard.questionText}</Text>
+            </View>
+            <View style={styles.answer}>
+                {_renderTheRightCard()}
             </View>
         </View >
     )
@@ -289,13 +287,15 @@ const styles = StyleSheet.create({
     questionView: {
         flex: 1,
         backgroundColor: '#2f3136',
-        justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        flexDirection: 'row',
     },
     questionText: {
         flex: 1,
         fontSize: 23,
-        color: 'white'
+        color: 'white',
+        textAlign: 'center',
+        margin: 10
     },
     answer: {
         flex: 4,
@@ -329,8 +329,4 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-
-    cardScreen: {
-        flex: 1,
-    }
 })

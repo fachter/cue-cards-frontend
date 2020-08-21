@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, FlatList, Dimensions, Text, Button, StyleSheet, TouchableOpacity, BackHandler, AppState } from 'react-native';
+import { View, FlatList, Dimensions, Text, Button, StyleSheet, TouchableOpacity, BackHandler, AppState, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import logo from '../../assets/Logo_grau.png';
 
 
 import { Entypo } from '@expo/vector-icons';
@@ -246,9 +247,9 @@ const DataList = () => {
         if (cardType === "MC") {
             navigation.navigate('MultipleChoice', { mode: "createMode", onSave: currentListStructure, onSetSave: setCurrentListStructure })
         } else if (cardType === "SC") {
-            navigation.navigate('SingleChoice', { mode: "createMode", onSave: currentListStructure, onSetSave: setCurrentListStructure  })
+            navigation.navigate('SingleChoice', { mode: "createMode", onSave: currentListStructure, onSetSave: setCurrentListStructure })
         } else if (cardType === "FT") {
-            navigation.navigate('Freetext', { mode: "createMode", onSave: currentListStructure, onSetSave: setCurrentListStructure  })
+            navigation.navigate('Freetext', { mode: "createMode", onSave: currentListStructure, onSetSave: setCurrentListStructure })
         }
         setCreateNewCardWindowVisible(false)
     }
@@ -316,8 +317,9 @@ const DataList = () => {
                     <Entypo name="plus" size={45} color="#008FD3" />
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.plusButton, { left: 10 }]} onPress={() => storeDataOnDB(listHistoryArray, currentListStructure, userToken)} >
-                    <Text>Speichern</Text>
+                    <Text style={{ color: 'white' }}>Speichern</Text>
                 </TouchableOpacity>
+                <Image source={logo} style={styles.logo} />
             </SwipeView>
             {deleteWindowVisible ?
                 <DeleteWindow
@@ -382,7 +384,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row'
-    }
+    },
+    logo: {
+        position: 'absolute',
+        width: 110,
+        height: 42,
+        bottom: -5,
+        alignSelf: 'center',
+    },
 })
 
 

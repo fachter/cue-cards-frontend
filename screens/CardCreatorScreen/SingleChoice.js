@@ -1,9 +1,10 @@
 import React from 'react'
 import uuid from 'react-native-uuid'
 
-import { View, TextInput, StyleSheet, TouchableOpacity, Text } from 'react-native'
+import { View, TextInput, StyleSheet, TouchableOpacity, Text, Image } from 'react-native'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import ImagePickerButton from '../../API/ImagePicker'
+import logo from '../../assets/Logo_grau.png';
 
 
 
@@ -123,6 +124,7 @@ export default class SingleChoice extends React.Component {
                         <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern und Neu</Text>
                     </TouchableOpacity>
                 </View>
+                <Image source={logo} style={styles.logo} />
             </View>
         )
     }
@@ -158,5 +160,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 7
+    },
+    logo: {
+        position: 'absolute',
+        width: 110,
+        height: 42,
+        bottom: -5,
+        alignSelf: 'center',
     },
 });
