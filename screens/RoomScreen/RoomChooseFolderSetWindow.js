@@ -5,7 +5,6 @@ import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import uuid from 'react-native-uuid'
 import { RoomListStructureContext } from './RoomListStructureProvider';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 const FileContext = createContext()

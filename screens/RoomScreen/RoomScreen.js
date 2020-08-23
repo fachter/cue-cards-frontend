@@ -13,13 +13,12 @@ import { useNavigation } from '@react-navigation/native';
 import logo from '../../assets/Logo_grau.png';
 
 
-/* const initialRoomState = [
+ const initialRoomState = [
     {
         id: '1',
         title: 'Raum',
-        roomsSubFolders: []
     }
-] */
+] 
 
 export default function RoomScreen() {
 
@@ -34,8 +33,6 @@ export default function RoomScreen() {
             currentSetStructure,
             setCurrentRoomStructure,
             currentRoomStructure,
-            rooms,
-            setRooms,
             currentListStructure,
             setCurrentSetStructure,
             updateSetHistory,
@@ -52,7 +49,7 @@ export default function RoomScreen() {
             const[deleteWindowVisibility, setDeleteWindowVisibility] =useState(false);
             const[onDeleteItem, setOnDeleteItem] = useState(false);
             const[search, setSearch] = useState('');
-            //const [rooms, setRooms] = useState(initialRoomState);
+            const [rooms, setRooms] = useState(initialRoomState);
 
             
         const navigation = useNavigation()

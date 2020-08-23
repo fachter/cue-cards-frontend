@@ -18,7 +18,7 @@ export default class UserProvider extends React.Component {
         this.setUserToken = this.setUserToken.bind(this)
 
         this.state = {
-            isLoggedin: false,
+            isLoggedin: true,
             userToken: null,
         }
 
