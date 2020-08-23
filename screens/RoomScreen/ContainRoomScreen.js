@@ -8,8 +8,6 @@ import Drawer from 'react-native-drawer';
 import DeleteWindow from '../HomeScreen/DeleteWindow';
 import NewCardWindow from '../HomeScreen/NewCardWindow'
 import { useNavigation } from '@react-navigation/native';
-import SwipeView from '../../components/SwipeView'
-
 import logo from '../../assets/Logo_grau.png';
 
 import { SettingsContext } from '../SettingsScreen/SettingsProvider'
@@ -19,11 +17,6 @@ import { CopyPasteContext } from '../HomeScreen/CopyPasteProvider'
 import HomeScreen from '../HomeScreen/HomeScreen';
 import { RoomListStructureContext } from './RoomListStructureProvider';
 import RoomChooseFolderSetWindow from './RoomChooseFolderSetWindow';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import AddRoomWindow from './AddSetWindow';
-
-
-
 
 
 export default function ContainRoomScreen({ drawer }) {
@@ -47,14 +40,6 @@ const SetDataList = () => {
         setRoomCreateFileWindowVisible,
         CreateRoomNewCardWindowVisible,
         setRoomCreateNewCardWindowVisible,
-        setRoomCreateNewRoomWindowVisible,
-        isRoom,
-        setIsRoom,
-        CreateRoomNewRoomWindowVisible,
-        itemIndex,
-        rooms,
-        setRooms,
-        setItemIndex,
         ContainRoomVisible,
         setContainRoomVisible,
         storeDataOnDevice,
@@ -70,7 +55,7 @@ const SetDataList = () => {
     const { someThingIsCopied, copyData, setSomeThingIsCopied } = useContext(CopyPasteContext)
 
 
-    const initialRoomFriendState = [
+    const initialFriendState = [
         {
             id: '1',
             title: 'Philip'
@@ -85,18 +70,12 @@ const SetDataList = () => {
         }
     ]
 
-    const initialFriendState = [
+    const initialSets = [
         {
             id: '1',
-            title: 'Felix'
-        },
-        {
-            id: '2',
-            title: 'Clara'
+            set: 'Set'
         }
     ]
-
-
 
 
     //static contextType = CopyPasteContext
@@ -105,7 +84,6 @@ const SetDataList = () => {
 
     const [search, setSearch] = useState('');
     const [showAddSetWindow, setShowAddSetWindow] = useState(false);
-    const [roomFriends, setRoomFriends] = useState(initialRoomFriendState)
     const [friends, setFriends] = useState(initialFriendState)
     const [onDeleteItem, setOnDeleteItem] = useState(null)
     const [deleteWindowVisible, SetDeleteWindowVisible] = useState(false)
@@ -133,18 +111,15 @@ const SetDataList = () => {
 
     function _backButtonPressed() {
         //Holt sich die state "isFolder" der Vorherigen Ordnerstruktur
-       // navigation.navigate('Räume')
-         if (listRoomHistoryArray.length > 0) {
-            var lastFolderStructure = _getLastFolderStructure()
-            setCurrentRoomStructure(lastFolderStructure)
-            setIsFolder(true)
+
+        if (listRoomHistoryArray.length > 0) {
+            var lastSetFolderStructure = _getLastFolderStructure()
+            setCurrentRoomStructure(lastSetFolderStructure)
             return true
         } else {
-            navigation.navigate('Räume')
-            //return false
-        } 
+            return false
+        }
     }
-
 
 
     function editCard(item) {
@@ -215,10 +190,7 @@ const SetDataList = () => {
     function plusButtonClicked() {
         if (isFolder === true) {
             setRoomCreateFileWindowVisible(true)
-        } /* else if (isRoom === true){
-            setRoomCreateNewRoomWindowVisible(true)
-        } */
-        else {
+        } else {
             setRoomCreateNewCardWindowVisible(true)
         }
     }
@@ -244,6 +216,12 @@ const SetDataList = () => {
         }
     }
 
+    function handleSetAdd(newListItem) {
+        const copy = currentRoomStructure
+        copy.push({ id: copy.length, name: newListItem })
+        setCurrentRoomStructure(copy)
+        setRoomCreateFileWindowVisible(false)
+    }
 
     function _showDeleteWindow(item) {
         setOnDeleteItem(item)
@@ -299,21 +277,20 @@ const SetDataList = () => {
         //const { search } = state;
 
         return (
-            <>
+
             <View style={styles.menuContainer}>
-                
-                <Text style={styles.textStyle}>Freund einladen</Text>
+                <TouchableOpacity style={styles.cancelButton} onPress={() => setSideBarOpen(false)}>
+                    <AntDesign name="closecircleo" size={24} color="grey" />
+                </TouchableOpacity>
                 <Searchbar
                     style={styles.searchBar}
                     placeholder="ID des Freundes"
                     //onChangeText={_updateSearch()}
                     value={search}
                 />
-                
-                <Text style={styles.textStyle}>Freunde im Raum</Text>
                 <FlatList
-                    style={{ flex: 1.0 }}
-                    data={roomFriends}
+                    style={styles.flatList}
+                    data={friends}
                     //extraData={state}
                     renderItem={({ item, index }) => {
                         return (
@@ -325,42 +302,13 @@ const SetDataList = () => {
                             </TouchableOpacity>
                         )
                     }} />
-                    
-              {/*   <Divider borderColor="#fff" color="#fff" orientation="center">
-                    Divider
-                </Divider>; */}
-                 <Text style={styles.textStyle}>Aus Freunden hinzufügen</Text>
-                <FlatList
-                    style={{ flex: 1.0 }}
-                    data={friends}
-                    //extraData={state}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <>
-                            <TouchableOpacity style={styles.menuTitleContainer}>
-                                <Text style={styles.menuTitle}
-                                    key={index}>
-                                    {item.title}
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.addFriendButton}
-                                onPress={() => this.props.onNavigateToSession(item)}>
-                                <MaterialCommunityIcons
-                                    name="account-plus"
-                                    size={30} color="#008FD3" />
-                            </TouchableOpacity>
-                            </>
-                        )
-                    }} /> 
-                    
-                <Button
-                title="Schließen"
-                onPress={()=> setSideBarOpen(false)}
-                ></Button>
+                {/* <Button
+                    title="Schließen"
+                    onPress={() => setSideBarOpen(false)}
+                ></Button> */}
 
             </View>
-           </> 
+
         )
     }
 
@@ -411,63 +359,39 @@ const SetDataList = () => {
                             />
                         )}
                 />
-                <Icon.Button
-                    style={{ alignSelf: 'flex-start' }}
-                    name="ios-close"
-                    size={23} color="black"
-                    backgroundColor="white"
-                    onPress={() => setSomeThingIsCopied(false)} />
-            </View> 
-                <SwipeView swipeRight={_backButtonPressed}
-                >
 
-            <FlatList
-                //data={currentRoomStructure}
-                data={currentRoomStructure}
-                //data={currentRoomStructure[0]}
-                keyExtractor={item => item.id}
-                renderItem={({ item}) =>
-                    (
-                        <RoomSetListItem
-                            item={item}
-                            callBackItem={_getClickedItem}
-                            onDeleteWindow={_showDeleteWindow.bind(this)}
-                            onNavigateToCardScreen={_navigateToCardScreen}
-                            onNavigateToSession={_navigateToSession}
-                        />
-                    )}
-            />
-            </SwipeView>
+                {showAddSetWindow ?
+                    <AddSetWindow
+                        showAddSetWindow={_showAddSetWindow}
+                        onAdd={handleSetAdd}
 
-            {deleteWindowVisible ?
-                <DeleteWindow
-                    onDeleteWindow={() => SetDeleteWindowVisible(false)}
-                    onNavigateToCardCreator={editCard}
-                    item={onDeleteItem}
-                    onDelete={_deleteItemById} /> : null}
+                    /> : null}
 
-            <RoomChooseFolderSetWindow
-                visible={CreateRoomFileWindowVisible}
-            />
-            <NewCardWindow
-                visible={CreateRoomNewCardWindowVisible}
-                onNavigateToCardCreator={createNewCard}
-                onSetVisibility={setRoomCreateNewCardWindowVisible}
-            />
-            {/* <AddRoomWindow
-            visible={CreateRoomNewRoomWindowVisible}
-            /> */}
-            <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
-                <Entypo name="plus" size={45} color="#008FD3" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.friendsButton} onPress={() => setSideBarOpen(true)} >
-                <Entypo name="users" size={30} color="#008FD3" />
+                {deleteWindowVisible ?
+                    <DeleteWindow
+                        onDeleteWindow={() => SetDeleteWindowVisible(false)}
+                        onNavigateToCardCreator={editCard}
+                        item={onDeleteItem}
+                        onDelete={_deleteItemById} /> : null}
 
-            </TouchableOpacity>
+                <RoomChooseFolderSetWindow
+                    visible={CreateRoomFileWindowVisible}
+                />
+                <NewCardWindow
+                    visible={CreateRoomNewCardWindowVisible}
+                    onNavigateToCardCreator={createNewCard}
+                    onSetVisibility={setRoomCreateNewCardWindowVisible}
+                />
+                <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
+                    <Entypo name="plus" size={45} color="#008FD3" />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.friendsButton} onPress={() => setSideBarOpen(true)} >
+                    <AntDesign name="adduser" size={40} color="#008FD3" />
 
-
-        
-         </Drawer>
+                </TouchableOpacity>
+                <Image source={logo} style={styles.logo} />
+            </View>
+        </Drawer>
 
 
     )
@@ -531,12 +455,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row'
     },
-    addFriendButton: {
-        flex: 1,
-        position: 'absolute',
-        right: 30,
-        height: 30,
-        width: 30,
+    flatList: {
+
     },
     searchBar: {
         //marginVertical: 15,

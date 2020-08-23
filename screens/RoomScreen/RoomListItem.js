@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default class RoomListItem extends React.Component {
 
-
+    
 
     render() {
         return (

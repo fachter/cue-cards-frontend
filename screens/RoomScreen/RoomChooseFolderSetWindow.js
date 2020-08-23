@@ -42,7 +42,6 @@ export default function RoomChooseFolderSetWindow() {
         console.log(itemIndex)
         currentRoomStructure.push(newListItem)
          //if(currentRoomStructure.length === 0){
-       // rooms[0].roomsSubFolders.push(newListItem)
        /*  }
         else{
         currentRoomStructure.splice(itemIndex, 0, newListItem)

@@ -26,6 +26,7 @@ import RegistrationScreen from '../screens/LoginRegistrationScreen/RegistrationS
 import RoomScreen from '../screens/RoomScreen/RoomScreen';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import ContainRoomScreen from '../screens/RoomScreen/ContainRoomScreen';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();
@@ -177,6 +178,10 @@ const RoomStackScreen = ({ navigation }) => (
         headerTintColor: "white"
     }}>
         <RoomStack.Screen name="Räume" component={RoomScreen} options={headerOptionsFirstPage} />
+        <RoomStack.Screen name="ContainRoom" component={ContainRoomScreen} options={{
+            headerLeft: () => (
+                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" onPress={() => navigation.goBack()} />)
+        }} />
         <RoomStack.Screen name="RoomMultipleChoice" component={MultipleChoice} options={headerOptions}></RoomStack.Screen>
         <RoomStack.Screen name="RoomSingleChoice" component={SingleChoice} options={headerOptions}></RoomStack.Screen>
         <RoomStack.Screen name="RoomFreetext" component={Freetext} options={headerOptions}></RoomStack.Screen>

@@ -9,7 +9,7 @@ import uuid from 'react-native-uuid'
 import ContainRoomScreen from './ContainRoomScreen';
 import {RoomListStructureContext, RoomListStructureProvider} from './RoomListStructureProvider';
 import { useNavigation } from '@react-navigation/native';
-import { RoomListStructureContext, RoomListStructureProvider } from './RoomListStructureProvider';
+//import { RoomListStructureContext, RoomListStructureProvider } from './RoomListStructureProvider';
 import logo from '../../assets/Logo_grau.png';
 
 
@@ -127,11 +127,9 @@ export default function RoomScreen() {
          let copy = rooms[itemIndex].roomsSubFolders
         setRooms(copy) 
         setCurrentRoomStructure(copy) */
-        //setCurrentRoomStructure(currentRoomStructure[itemIndex])
-        setContainRoomVisible(true)
-        setRoomsVisibility(false)
+        //setCurrentRoomStructure(item.folders)
         
-        //navigation.navigate('ContainRoomScreen')
+        navigation.navigate('ContainRoom')
     }
 
 
