@@ -197,11 +197,11 @@ const SetDataList = () => {
 
     function createNewCard(roomCardType) {
         if (roomCardType === "MC") {
-            navigation.navigate('RoomMultipleChoice', { mode: "createMode", screen: "room", onSave: currentRoomStructure, onSetSave: setCurrentRoomStructure })
+            navigation.navigate('MultipleChoice', { mode: "createMode", screen: "room", onSave: currentRoomStructure, onSetSave: setCurrentRoomStructure })
         } else if (roomCardType === "SC") {
-            navigation.navigate('RoomSingleChoice', { mode: "createMode", screen: "room", onSave: currentRoomStructure, onSetSave: setCurrentRoomStructure })
+            navigation.navigate('SingleChoice', { mode: "createMode", screen: "room", onSave: currentRoomStructure, onSetSave: setCurrentRoomStructure })
         } else if (roomCardType === "FT") {
-            navigation.navigate('RoomFreetext', { mode: "createMode", screen: "room", onSave: currentRoomStructure, onSetSave: setCurrentRoomStructure })
+            navigation.navigate('Freetext', { mode: "createMode", screen: "room", onSave: currentRoomStructure, onSetSave: setCurrentRoomStructure })
         }
         setRoomCreateNewCardWindowVisible(false)
         setContainRoomVisible(true)

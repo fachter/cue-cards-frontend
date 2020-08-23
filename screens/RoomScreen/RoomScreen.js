@@ -7,7 +7,7 @@ import DeleteRoomWindow from './DeleteRoomWindow';
 import { Searchbar } from 'react-native-paper';
 import uuid from 'react-native-uuid'
 import ContainRoomScreen from './ContainRoomScreen';
-import {RoomListStructureContext, RoomListStructureProvider} from './RoomListStructureProvider';
+import { RoomListStructureContext, RoomListStructureProvider } from './RoomListStructureProvider';
 import { useNavigation } from '@react-navigation/native';
 //import { RoomListStructureContext, RoomListStructureProvider } from './RoomListStructureProvider';
 import logo from '../../assets/Logo_grau.png';
@@ -21,48 +21,48 @@ import logo from '../../assets/Logo_grau.png';
     }
 ] */
 
-export default function RoomScreen() {
+export default function RoomScreen({ navigation }) {
 
     return (
         <SetDataList />
     )
 }
 
-    const SetDataList = () => {
-        const {
-            setHistoryArray,
-            currentSetStructure,
-            setCurrentRoomStructure,
-            currentRoomStructure,
-            rooms,
-            setRooms,
-            currentListStructure,
-            setCurrentSetStructure,
-            updateSetHistory,
-            _getLastSetFolderStructure,
-            itemIndex,
-            setItemIndex,
-            ContainRoomVisible,
-            setContainRoomVisible
-        } = useContext(RoomListStructureContext)
+const SetDataList = () => {
+    const {
+        setHistoryArray,
+        currentSetStructure,
+        setCurrentRoomStructure,
+        currentRoomStructure,
+        rooms,
+        setRooms,
+        currentListStructure,
+        setCurrentSetStructure,
+        updateSetHistory,
+        _getLastSetFolderStructure,
+        itemIndex,
+        setItemIndex,
+        ContainRoomVisible,
+        setContainRoomVisible
+    } = useContext(RoomListStructureContext)
 
-            const[containRoomScreenVisibility, setContainRoomVisibility] = useState(false);
-            const[roomsVisibility, setRoomsVisibility] = useState(false);
-            const[addRoomWindowVisibility, setAddRoomWindowVisibility] = useState(false);
-            const[deleteWindowVisibility, setDeleteWindowVisibility] =useState(false);
-            const[onDeleteItem, setOnDeleteItem] = useState(false);
-            const[search, setSearch] = useState('');
-            //const [rooms, setRooms] = useState(initialRoomState);
+    const [containRoomScreenVisibility, setContainRoomVisibility] = useState(false);
+    const [roomsVisibility, setRoomsVisibility] = useState(false);
+    const [addRoomWindowVisibility, setAddRoomWindowVisibility] = useState(false);
+    const [deleteWindowVisibility, setDeleteWindowVisibility] = useState(false);
+    const [onDeleteItem, setOnDeleteItem] = useState(false);
+    const [headerShown, setHeaderShown] = useState(true)
 
-            
-        const navigation = useNavigation()
+
+
+    const navigation = useNavigation()
 
 
 
 
     function handleAdd(newListItem) {
         let copy = rooms
-        
+
         copy.push({ ID: copy.length, title: newListItem })
 
         setRooms(copy)
@@ -110,21 +110,21 @@ export default function RoomScreen() {
     }
 
 
-/* 
-   function _getClickedItem(item) {
-    let indexOfItem = rooms.indexOf(item)
-    let subStructure = rooms[indexOfItem]
-    setCurrentRoomStructure(subStructure)
-}     */
+    /* 
+       function _getClickedItem(item) {
+        let indexOfItem = rooms.indexOf(item)
+        let subStructure = rooms[indexOfItem]
+        setCurrentRoomStructure(subStructure)
+    }     */
 
-     function _showContainRoomScreen(item) {
+    function _showContainRoomScreen(item) {
         /*let indexOfItem = rooms.indexOf(item)
         setItemIndex(indexOfItem)
          let copy = rooms[itemIndex].roomsSubFolders
         setRooms(copy) 
         setCurrentRoomStructure(copy) */
         //setCurrentRoomStructure(item.folders)
-        
+
         navigation.navigate('ContainRoom')
     }
 
@@ -139,14 +139,9 @@ export default function RoomScreen() {
         return (
 
             <View style={styles.container}>
-                <Searchbar
-                    style={styles.suchEingabe}
-                    placeholder="Raum beitreten (6-stellige ID eingeben)"
-                    //onChangeText={_updateSearch()}
-                    value={search}
-
-                />
-
+                <TouchableOpacity style={styles.myRoomButton} onPress={() => navigation.navigate('MyRoom')}>
+                    <Text>MEIN RAUM</Text>
+                </TouchableOpacity>
 
                 <FlatList
                     data={rooms}
@@ -250,4 +245,8 @@ const styles = StyleSheet.create({
         bottom: -5,
         alignSelf: 'center',
     },
+    myRoomButton: {
+        height: 50,
+        backgroundColor: 'grey'
+    }
 });

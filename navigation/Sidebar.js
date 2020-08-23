@@ -6,6 +6,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 
+
+
 import { ListStructureProvider } from '../screens/HomeScreen/ListStructureProvider'
 import { UserContext } from '../screens/LoginRegistrationScreen/UserProvider';
 
@@ -38,7 +40,10 @@ const LoginRegistrationStack = createStackNavigator();
 const RoomStack = createStackNavigator();
 
 
-const headerOptions = ({ navigation }) => ({
+
+
+const headerOptions = ({ route, navigation }) => ({
+    headerTitle: getHeaderTitle(route),
     headerRight: () => (
         <Icon.Button name="ios-menu" size={25} backgroundColor="#202225" onPress={() => { navigation.openDrawer() }} />
     ),
@@ -47,7 +52,8 @@ const headerOptions = ({ navigation }) => ({
     )
 })
 
-const headerOptionsFirstPage = ({ navigation }) => ({
+const headerOptionsFirstPage = ({ route, navigation }) => ({
+    headerTitle: getHeaderTitle(route),
     headerRight: () => (
         <Icon.Button name="ios-menu" size={25} backgroundColor="#202225" onPress={() => { navigation.openDrawer() }} />
     ),
@@ -55,27 +61,44 @@ const headerOptionsFirstPage = ({ navigation }) => ({
 })
 
 
+function getHeaderTitle(route) {
+    switch (route.name) {
+        case undefined:
+            return ''
+        case 'Rooms':
+            return 'Räumeübersicht'
+        case 'MyRoom':
+            return 'Mein Raum'
+        case 'CardScreen':
+            return "welche Überschrift hier?"
+    }
+}
 
-const HomeStackScreen = ({ navigation }) => (
-
-    <HomeStack.Navigator screenOptions={{
-        //headerTitle: false,
-        headerStyle: {
-            backgroundColor: "#202225"
-        },
-        headerTintColor: "white"
-    }}>
-        <HomeStack.Screen name="Home" component={HomeScreen} options={headerOptionsFirstPage}></HomeStack.Screen>
-        <HomeStack.Screen name="MultipleChoice" component={MultipleChoice} options={headerOptions}></HomeStack.Screen>
-        <HomeStack.Screen name="SingleChoice" component={SingleChoice} options={headerOptions}></HomeStack.Screen>
-        <HomeStack.Screen name="Freetext" component={Freetext} options={headerOptions}></HomeStack.Screen>
-        <HomeStack.Screen name="CardScreen" component={CardScreen} options={headerOptions}></HomeStack.Screen>
-    </HomeStack.Navigator>
+function RoomStackScreen({ navigation, route }) {
 
 
 
-);
+    return (
+        <RoomStack.Navigator initialRouteName="Rooms" screenOptions={{
+            headerStyle: {
+                backgroundColor: "#202225"
 
+            },
+            headerTintColor: "white"
+        }}>
+            <RoomStack.Screen name="Rooms" component={RoomScreen} options={headerOptionsFirstPage} />
+            <RoomStack.Screen name="MyRoom" component={HomeScreen} options={headerOptions} />
+            <RoomStack.Screen name="ContainRoom" component={ContainRoomScreen} options={{
+                headerLeft: () => (
+                    <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" onPress={() => navigation.pop()} />)
+            }} />
+            <HomeStack.Screen name="MultipleChoice" component={MultipleChoice} options={headerOptions}></HomeStack.Screen>
+            <HomeStack.Screen name="SingleChoice" component={SingleChoice} options={headerOptions}></HomeStack.Screen>
+            <HomeStack.Screen name="Freetext" component={Freetext} options={headerOptions}></HomeStack.Screen>
+            <HomeStack.Screen name="CardScreen" component={CardScreen} options={headerOptions}></HomeStack.Screen>
+        </RoomStack.Navigator>
+    );
+}
 
 
 const FriendsStackScreen = ({ navigation }) => (
@@ -155,7 +178,6 @@ export const LoginRegistrationStackScreen = ({ navigation }) => (
     <LoginRegistrationStack.Navigator screenOptions={{
         headerStyle: {
             backgroundColor: "#202225"
-
         },
         headerTintColor: "#202225"
     }}>
@@ -169,36 +191,17 @@ export const LoginRegistrationStackScreen = ({ navigation }) => (
 
 
 
-const RoomStackScreen = ({ navigation }) => (
-    <RoomStack.Navigator screenOptions={{
-        headerStyle: {
-            backgroundColor: "#202225"
 
-        },
-        headerTintColor: "white"
-    }}>
-        <RoomStack.Screen name="Räume" component={RoomScreen} options={headerOptionsFirstPage} />
-        <RoomStack.Screen name="ContainRoom" component={ContainRoomScreen} options={{
-            headerLeft: () => (
-                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" onPress={() => navigation.pop()} />)
-        }} />
-        <RoomStack.Screen name="RoomMultipleChoice" component={MultipleChoice} options={headerOptions}></RoomStack.Screen>
-        <RoomStack.Screen name="RoomSingleChoice" component={SingleChoice} options={headerOptions}></RoomStack.Screen>
-        <RoomStack.Screen name="RoomFreetext" component={Freetext} options={headerOptions}></RoomStack.Screen>
-        <RoomStack.Screen name="RoomCardScreen" component={CardScreen} options={headerOptions}></RoomStack.Screen>
-    </RoomStack.Navigator>
-);
+
+
 
 
 
 
 
 export default class Sidebar extends React.Component {
-
-
     constructor(props) {
         super(props)
-
     }
 
     render() {
@@ -211,13 +214,12 @@ export default class Sidebar extends React.Component {
                     color: 'white'
                 }
             }}>
-                <Drawer.Screen name="Home" component={HomeStackScreen}
+                <Drawer.Screen name="RoomStack" component={RoomStackScreen}
                     options={{
                         drawerIcon: () => (
-                            <Icon name="ios-home" color="white" size={25} />
+                            <Icon name="ios-people" color="white" size={25} />
                         )
-                    }
-                    }
+                    }}
                 />
                 <Drawer.Screen name="Freunde" component={FriendsStackScreen}
                     options={{
@@ -226,13 +228,7 @@ export default class Sidebar extends React.Component {
                         )
                     }}
                 />
-                <Drawer.Screen name="Räume" component={RoomStackScreen}
-                    options={{
-                        drawerIcon: () => (
-                            <Icon name="ios-people" color="white" size={25} />
-                        )
-                    }}
-                />
+
                 <Drawer.Screen name="Karten senden" component={SendCardsStackScreen}
                     options={{
                         drawerIcon: () => (
