@@ -17,6 +17,7 @@ import { CopyPasteContext } from '../HomeScreen/CopyPasteProvider'
 import HomeScreen from '../HomeScreen/HomeScreen';
 import { RoomListStructureContext } from './RoomListStructureProvider';
 import RoomChooseFolderSetWindow from './RoomChooseFolderSetWindow';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 export default function ContainRoomScreen({ drawer }) {
@@ -58,33 +59,47 @@ const SetDataList = () => {
     const initialFriendState = [
         {
             id: '1',
-            title: 'Philip'
+            title: 'Philip',
+            picture: '../../assets/Passbild.jpg'
         },
         {
             id: '2',
-            title: 'Matze'
+            title: 'Matze',
+            picture: '../../assets/Passbild.jpg'
+
         },
         {
             id: '3',
-            title: 'Darius'
+            title: 'Darius',
+            picture: '../../assets/Passbild.jpg'
+
         }
     ]
 
-    const initialSets = [
+    const initialRoomFriendState = [
         {
             id: '1',
-            set: 'Set'
+            title: 'Clara',
+            picture: '../../assets/Passbild.jpg'
+
+        },
+        {
+            id: '2',
+            title: 'Felix',
+            picture: '../../assets/Passbild.jpg'
+
         }
     ]
 
+ 
 
-    //static contextType = CopyPasteContext
 
     const navigation = useNavigation()
 
     const [search, setSearch] = useState('');
     const [showAddSetWindow, setShowAddSetWindow] = useState(false);
     const [friends, setFriends] = useState(initialFriendState)
+    const [roomFriends, setRoomFriends] = useState(initialRoomFriendState)
     const [onDeleteItem, setOnDeleteItem] = useState(null)
     const [deleteWindowVisible, SetDeleteWindowVisible] = useState(false)
 
@@ -119,6 +134,7 @@ const SetDataList = () => {
         } else {
             return false
         }
+
     }
 
 
@@ -289,16 +305,43 @@ const SetDataList = () => {
                     value={search}
                 />
                 <FlatList
-                    style={styles.flatList}
                     data={friends}
                     //extraData={state}
                     renderItem={({ item, index }) => {
                         return (
+                            
                             <TouchableOpacity style={styles.menuTitleContainer}>
+                                <Image style={{ width: 30, height: 30, borderRadius: 40, borderWidth: 1, borderColor: 'white', marginLeft: 5  }}
+                                    source={require('../../assets/Passbild.jpg') }>
+
+                                </Image>
                                 <Text style={styles.menuTitle}
                                     key={index}>
                                     {item.title}
                                 </Text>
+                            </TouchableOpacity>
+                            
+                        )
+                    }} />
+                <FlatList
+                    data={roomFriends}
+                    //extraData={state}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <TouchableOpacity style={styles.menuTitleContainer}>
+                                <Image style={{ width: 30, height: 30, borderRadius: 40, borderWidth: 1, borderColor: 'white', marginLeft: 5 }}
+                                    source={require('../../assets/Passbild.jpg')}>
+
+                                </Image>
+                                <Text style={styles.menuTitle}
+                                    key={index}>
+                                    {item.title}
+                                </Text>
+                                <MaterialCommunityIcons
+                                name="account-plus"
+                                size={25}
+                                color='white'
+                                 />
                             </TouchableOpacity>
                         )
                     }} />
@@ -444,7 +487,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     menuTitle: {
-        width: '100%',
+        width: '70%',
         color: 'white',
         textAlign: 'center',
         fontSize: 17,
@@ -454,9 +497,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row'
-    },
-    flatList: {
-
     },
     searchBar: {
         //marginVertical: 15,
@@ -474,5 +514,9 @@ const styles = StyleSheet.create({
         bottom: -5,
         alignSelf: 'center',
     },
+    menuTitleContainer: {
+        flexDirection: "row",
+        paddingVertical: 5
+    }
 
 })
