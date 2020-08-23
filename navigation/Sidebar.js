@@ -66,7 +66,7 @@ function getHeaderTitle(route) {
         case undefined:
             return ''
         case 'Rooms':
-            return 'Räumeübersicht'
+            return 'House of CueCards'
         case 'MyRoom':
             return 'Mein Raum'
         case 'CardScreen':
