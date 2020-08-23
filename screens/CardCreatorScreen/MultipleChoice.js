@@ -1,8 +1,9 @@
 import React, { useContext, useState } from 'react'
-import { StyleSheet, View, TextInput, FlatList, TouchableOpacity, Dimensions, Text, ScrollView } from 'react-native'
+import { StyleSheet, Image, View, TextInput, FlatList, TouchableOpacity, Dimensions, Text, ScrollView } from 'react-native'
 import ImagePickerButton from '../../API/ImagePicker'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import Icon from 'react-native-vector-icons/Ionicons';
+import logo from '../../assets/Logo_grau.png';
 
 import uuid from 'react-native-uuid'
 
@@ -50,7 +51,7 @@ export default class MultipleChoice extends React.Component {
 
     _save() {
         const { id, cardType, questionText, cardTopic, answers } = this.state
-        
+
         let newCard = {
             id: id,
             cardType: cardType,
@@ -156,6 +157,7 @@ export default class MultipleChoice extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </View>
+                <Image source={logo} style={styles.logo} />
             </View>
         )
     }
@@ -241,7 +243,14 @@ const styles = StyleSheet.create({
     deleteButton: {
         marginRight: 20,
         marginLeft: 10
-    }
+    },
+    logo: {
+        position: 'absolute',
+        width: 110,
+        height: 42,
+        bottom: -5,
+        alignSelf: 'center',
+    },
 
 
 

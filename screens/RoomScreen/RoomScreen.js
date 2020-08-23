@@ -1,5 +1,5 @@
-import React, {useState, useContext, useEffect} from 'react';
-import { View, Text, StyleSheet, FlatList, Button, TouchableOpacity, SectionList, BackHandler } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, Image, Text, StyleSheet, FlatList, Button, TouchableOpacity, SectionList, BackHandler } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import AddRoomWindow from './AddRoomWindow';
 import RoomListItem from './RoomListItem';
@@ -9,6 +9,8 @@ import uuid from 'react-native-uuid'
 import ContainRoomScreen from './ContainRoomScreen';
 import {RoomListStructureContext, RoomListStructureProvider} from './RoomListStructureProvider';
 import { useNavigation } from '@react-navigation/native';
+import { RoomListStructureContext, RoomListStructureProvider } from './RoomListStructureProvider';
+import logo from '../../assets/Logo_grau.png';
 
 
 /* const initialRoomState = [
@@ -22,7 +24,7 @@ import { useNavigation } from '@react-navigation/native';
 export default function RoomScreen() {
 
     return (
-        <SetDataList/>
+        <SetDataList />
     )
 }
 
@@ -66,7 +68,7 @@ export default function RoomScreen() {
         setRooms(copy)
 
         setAddRoomWindowVisibility(false)
-        _addNewRoomToList(newRoom)
+        //_addNewRoomToList(newRoom)
 
     }
 
@@ -134,75 +136,70 @@ export default function RoomScreen() {
 
 
 
-       
-
-
-    
-        //const { search } = state;
-        if (ContainRoomVisible === false) {
-            return (
-
-                <View style={styles.container}>
-
-
-                    <Text>Gebe die 6-stellige Raum-ID ein, um einem Raum beizutreten
-
-                </Text>
-
-
-                    <Searchbar
-                        placeholder="Raum beitreten"
-                        //onChangeText={_updateSearch()}
-                        value={search}
-
-                    />
-
-
-                    <FlatList
-                        data={rooms}
-                        keyExtractor={item => item.ID}
-                        renderItem={({ item }) => (
-                            <RoomListItem
-                                item={item}
-                                onDeleteWindow={_showDeleteWindow}
-                                showContainRoomScreen={_showContainRoomScreen}
-                            />
-                        )}
-                    />
-
-                    <TouchableOpacity style={styles.plusButton} onPress={() => setAddRoomWindowVisibility(true)} >
-                        <Entypo name="plus" size={50} color="black" />
-                    </TouchableOpacity>
-                    <AddRoomWindow
-                        onSetVisibility={_setRoomAddWindowVisibility}
-                        addRoomWindowVisibility={addRoomWindowVisibility}
-                        //name={rooms.ti}
-                        onAdd={handleAdd}
-                    />
-                    {deleteWindowVisibility ?
-                        <DeleteRoomWindow
-                            onDeleteWindow={() => setDeleteWindowVisibility(false)}
-                            onDelete={_deleteItemById}
-                            item={onDeleteItem}
-
-                        /> : null}
-                </View>
-            );
-        }
-
-        else if (ContainRoomVisible === true) {
-            return (
-                <ContainRoomScreen
-                    //showContainRoomScreen={() => setState({ containRoomScreenVisible: true })}
-                    ></ContainRoomScreen>
-            )
-        }
 
 
 
 
+    //const { search } = state;
+    if (ContainRoomVisible === false) {
+        return (
 
+            <View style={styles.container}>
+                <Searchbar
+                    style={styles.suchEingabe}
+                    placeholder="Raum beitreten (6-stellige ID eingeben)"
+                    //onChangeText={_updateSearch()}
+                    value={search}
+
+                />
+
+
+                <FlatList
+                    data={rooms}
+                    keyExtractor={item => item.ID}
+                    renderItem={({ item }) => (
+                        <RoomListItem
+                            item={item}
+                            onDeleteWindow={_showDeleteWindow}
+                            showContainRoomScreen={_showContainRoomScreen}
+                        />
+                    )}
+                />
+
+                <TouchableOpacity style={styles.plusButton} onPress={() => setAddRoomWindowVisibility(true)} >
+                    <Entypo name="plus" size={50} color="#008FD3" />
+                </TouchableOpacity>
+                <AddRoomWindow
+                    onSetVisibility={_setRoomAddWindowVisibility}
+                    addRoomWindowVisibility={addRoomWindowVisibility}
+                    //name={rooms.ti}
+                    onAdd={handleAdd}
+                />
+                {deleteWindowVisibility ?
+                    <DeleteRoomWindow
+                        onDeleteWindow={() => setDeleteWindowVisibility(false)}
+                        onDelete={_deleteItemById}
+                        item={onDeleteItem}
+
+                    /> : null}
+                <Image source={logo} style={styles.logo} />
+            </View>
+        );
     }
+
+    else if (ContainRoomVisible === true) {
+        return (
+            <ContainRoomScreen
+            //showContainRoomScreen={() => setState({ containRoomScreenVisible: true })}
+            ></ContainRoomScreen>
+        )
+    }
+
+
+
+
+
+}
 
 
 
@@ -213,6 +210,15 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#2f3136",
         paddingTop: 10
+    },
+    suchEingabe: {
+        marginVertical: 15,
+        borderRadius: 10,
+        color: 'black',
+        marginHorizontal: 20,
+        fontSize: 15,
+        fontStyle: 'italic',
+        backgroundColor: '#C7C7C7'
     },
     item: {
         backgroundColor: '#f9c2ff',
@@ -242,5 +248,12 @@ const styles = StyleSheet.create({
         bottom: 20,
         right: 20,
         backgroundColor: "#2f3136",
-    }
+    },
+    logo: {
+        position: 'absolute',
+        width: 110,
+        height: 42,
+        bottom: -5,
+        alignSelf: 'center',
+    },
 });

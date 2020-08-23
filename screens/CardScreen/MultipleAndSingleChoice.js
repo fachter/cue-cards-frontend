@@ -1,7 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { View, StyleSheet, Text, FlatList, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image } from 'react-native'
 import * as Icon from '@expo/vector-icons'
 import { CardScreenContext } from './CardScreen'
+import logo from '../../assets/Logo_grau.png';
 
 import AnswerListItem from './AnswerListItem'
 import { set } from 'react-native-reanimated'
@@ -125,6 +126,7 @@ export default function MulitpleChoiceCard() {
                 <TouchableOpacity style={styles.buttons} onPress={() => _checkTheChoice()}>
                     <Icon.Feather name="check" size={45} color='#008FD3' />
                 </TouchableOpacity>}
+            <Image source={logo} style={styles.logo} />
         </View >
 
     )
@@ -153,12 +155,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         marginTop: 10,
-        bottom: 20,
+        bottom: 35,
     },
     listSeperator: {
         height: StyleSheet.hairlineWidth,
         backgroundColor: 'grey',
         width: '94%',
         alignSelf: 'center'
+    },
+    logo: {
+        position: 'absolute',
+        width: 110,
+        height: 42,
+        bottom: -5,
+        alignSelf: 'center',
     },
 });

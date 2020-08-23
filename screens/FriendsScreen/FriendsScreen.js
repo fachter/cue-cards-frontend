@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Text } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Text, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-
+import logo from '../../assets/Logo_grau.png';
 import FriendListItem from './FriendListItem'
 import AddFriendWindow from './AddFriendWindow'
 import FriendOptionsWindow from './FriendOptionsWindow'
@@ -92,6 +92,7 @@ export default function FriendsScreen() {
                 </TouchableOpacity>
                 <AddFriendWindow onSetVisibility={_setAddWindowVisibility.bind(this)} addWindowVisibility={addWindowVisibility} />
                 {friendOptionsWindowVisibility ? <FriendOptionsWindow onSetVisibility={_setFriendOptionsWindowVisibility} /> : null}
+                <Image source={logo} style={styles.logo} />
             </View>
 
         );
@@ -126,5 +127,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 20,
         right: 20
+    },
+    logo: {
+        position: 'absolute',
+        width: 110,
+        height: 42,
+        bottom: -5,
+        alignSelf: 'center',
     },
 });

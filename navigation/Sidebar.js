@@ -58,13 +58,13 @@ const headerOptionsFirstPage = ({ navigation }) => ({
 const HomeStackScreen = ({ navigation }) => (
 
     <HomeStack.Navigator screenOptions={{
-        headerTitle: false,
+        //headerTitle: false,
         headerStyle: {
             backgroundColor: "#202225"
         },
         headerTintColor: "white"
     }}>
-        <HomeStack.Screen name="ListOverView" component={HomeScreen} options={headerOptionsFirstPage}></HomeStack.Screen>
+        <HomeStack.Screen name="Home" component={HomeScreen} options={headerOptionsFirstPage}></HomeStack.Screen>
         <HomeStack.Screen name="MultipleChoice" component={MultipleChoice} options={headerOptions}></HomeStack.Screen>
         <HomeStack.Screen name="SingleChoice" component={SingleChoice} options={headerOptions}></HomeStack.Screen>
         <HomeStack.Screen name="Freetext" component={Freetext} options={headerOptions}></HomeStack.Screen>
