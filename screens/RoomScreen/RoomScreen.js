@@ -72,10 +72,6 @@ export default function RoomScreen() {
 
     }
 
-    function _addNewRoomToList(newRoom){
-        rooms.push(newRoom)
-    }
-   
 
     function componentDidUpdate() {
         console.log(rooms)
