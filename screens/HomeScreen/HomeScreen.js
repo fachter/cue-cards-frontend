@@ -261,13 +261,6 @@ const DataList = () => {
     }
 
 
-    function _allowedToPasteCard() {
-        if (copiedItemIsCard && isFolder === false) {
-            return true
-        }
-        return false
-    }
-
     return (
         <View style={styles.container}>
             {someThingIsCopied ? <View style={styles.copyPasteView}>

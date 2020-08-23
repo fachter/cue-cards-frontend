@@ -7,7 +7,7 @@ import DeleteRoomWindow from './DeleteRoomWindow';
 import { Searchbar } from 'react-native-paper';
 import uuid from 'react-native-uuid'
 import ContainRoomScreen from './ContainRoomScreen';
-import {RoomListStructureContext, RoomListStructureProvider} from './RoomListStructureProvider';
+import { RoomListStructureContext, RoomListStructureProvider } from './RoomListStructureProvider';
 import { useNavigation } from '@react-navigation/native';
 //import { RoomListStructureContext, RoomListStructureProvider } from './RoomListStructureProvider';
 import logo from '../../assets/Logo_grau.png';
@@ -20,7 +20,7 @@ import logo from '../../assets/Logo_grau.png';
     }
 ] 
 
-export default function RoomScreen() {
+export default function RoomScreen({ navigation }) {
 
     return (
         <SetDataList />
@@ -59,7 +59,7 @@ export default function RoomScreen() {
 
     function handleAdd(newListItem) {
         let copy = rooms
-        
+
         copy.push({ ID: copy.length, title: newListItem })
 
         setRooms(copy)
@@ -107,21 +107,21 @@ export default function RoomScreen() {
     }
 
 
-/* 
-   function _getClickedItem(item) {
-    let indexOfItem = rooms.indexOf(item)
-    let subStructure = rooms[indexOfItem]
-    setCurrentRoomStructure(subStructure)
-}     */
+    /* 
+       function _getClickedItem(item) {
+        let indexOfItem = rooms.indexOf(item)
+        let subStructure = rooms[indexOfItem]
+        setCurrentRoomStructure(subStructure)
+    }     */
 
-     function _showContainRoomScreen(item) {
+    function _showContainRoomScreen(item) {
         /*let indexOfItem = rooms.indexOf(item)
         setItemIndex(indexOfItem)
          let copy = rooms[itemIndex].roomsSubFolders
         setRooms(copy) 
         setCurrentRoomStructure(copy) */
         //setCurrentRoomStructure(item.folders)
-        
+
         navigation.navigate('ContainRoom')
     }
 
@@ -131,11 +131,14 @@ export default function RoomScreen() {
 
 
 
+    //const { search } = state;
+    if (ContainRoomVisible === false) {
         return (
 
             <View style={styles.container}>
-               
-
+                <TouchableOpacity style={styles.myRoomButton} onPress={() => navigation.navigate('MyRoom')}>
+                    <Text>MEIN RAUM</Text>
+                </TouchableOpacity>
 
                 <FlatList
                     data={rooms}
@@ -168,7 +171,15 @@ export default function RoomScreen() {
                 <Image source={logo} style={styles.logo} />
             </View>
         );
- 
+    }
+
+    else if (ContainRoomVisible === true) {
+        return (
+            <ContainRoomScreen
+            //showContainRoomScreen={() => setState({ containRoomScreenVisible: true })}
+            ></ContainRoomScreen>
+        )
+    }
 
 
 
@@ -231,4 +242,8 @@ const styles = StyleSheet.create({
         bottom: -5,
         alignSelf: 'center',
     },
+    myRoomButton: {
+        height: 50,
+        backgroundColor: 'grey'
+    }
 });

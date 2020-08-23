@@ -23,7 +23,6 @@ export default class MultipleChoice extends React.Component {
         cardTopic: this._isValueNull(this.props.route.params.cardTopic) ? '' : this.props.route.params.cardTopic,
         answers: this._isValueNull(this.props.route.params.answers) ? [] : this.props.route.params.answers,
         questionInputHeight: 0,
-        onSave: this._isValueNull(this.props.route.params.onSave) ? null : this.props.route.params.onSave
     }
 
 
