@@ -62,11 +62,11 @@ export default class Vocable extends React.Component {
             solution: solution
         }
 
-        let copy = updateCards.currentListStructure
+        let copy = this.props.route.params.onSave
 
         if (this.props.route.params.mode == "createMode") { // neue Karte erstellen
             copy.push(newCard)
-            updateCards.setCurrentListStructure(copy)
+            this.props.route.params.onSetSave(copy)
 
         } else if (this.props.route.params.mode == "editMode") {   //alte Karte aktualisieren
             var index

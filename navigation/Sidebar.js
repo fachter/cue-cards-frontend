@@ -191,14 +191,6 @@ export const LoginRegistrationStackScreen = ({ navigation }) => (
 
 
 
-
-
-
-
-
-
-
-
 export default class Sidebar extends React.Component {
     constructor(props) {
         super(props)
@@ -216,35 +208,40 @@ export default class Sidebar extends React.Component {
             }}>
                 <Drawer.Screen name="RoomStack" component={RoomStackScreen}
                     options={{
+                        title: "House of CueCards",
                         drawerIcon: () => (
                             <Icon name="ios-people" color="white" size={25} />
                         )
                     }}
                 />
-                <Drawer.Screen name="Freunde" component={FriendsStackScreen}
+                <Drawer.Screen name="FriendsStack" component={FriendsStackScreen}
                     options={{
+                        title: "Freunde",
                         drawerIcon: () => (
                             <Icon name="md-person" color="white" size={25} />
                         )
                     }}
                 />
 
-                <Drawer.Screen name="Karten senden" component={SendCardsStackScreen}
+                <Drawer.Screen name="SendCardsStack" component={SendCardsStackScreen}
                     options={{
+                        title: "Karten senden",
                         drawerIcon: () => (
                             <Icon name="ios-share" color="white" size={25} />
                         )
                     }}
                 />
-                <Drawer.Screen name="Statistiken" component={StatisticsStackScreen}
+                <Drawer.Screen name="StatisticStack" component={StatisticsStackScreen}
                     options={{
+                        title: "Statistiken",
                         drawerIcon: () => (
                             <Icon name="ios-stats" color="white" size={25} />
                         )
                     }}
                 />
-                <Drawer.Screen name="Einstellungen" component={SettingsStackScreen}
+                <Drawer.Screen name="SettingsStack" component={SettingsStackScreen}
                     options={{
+                        title: "Einstellungen",
                         drawerIcon: () => (
                             <Icon name="ios-settings" color="white" size={25} />
                         )

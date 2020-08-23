@@ -1,25 +1,18 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Image, Text, StyleSheet, FlatList, Button, TouchableOpacity, SectionList, BackHandler } from 'react-native';
+import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import logo from '../../assets/Logo_grau.png';
 import { Entypo } from '@expo/vector-icons';
+
 import AddRoomWindow from './AddRoomWindow';
 import RoomListItem from './RoomListItem';
 import DeleteRoomWindow from './DeleteRoomWindow';
-import { Searchbar } from 'react-native-paper';
-import uuid from 'react-native-uuid'
 import ContainRoomScreen from './ContainRoomScreen';
-import { RoomListStructureContext, RoomListStructureProvider } from './RoomListStructureProvider';
-import { useNavigation } from '@react-navigation/native';
-//import { RoomListStructureContext, RoomListStructureProvider } from './RoomListStructureProvider';
-import logo from '../../assets/Logo_grau.png';
+
+import { RoomListStructureContext } from './RoomListStructureProvider';
+import { InternetConnectionContext } from '../../API/InternetConnection'
 
 
-/* const initialRoomState = [
-    {
-        id: '1',
-        title: 'Raum',
-        roomsSubFolders: []
-    }
-] */
 
 export default function RoomScreen({ navigation }) {
 
@@ -28,33 +21,35 @@ export default function RoomScreen({ navigation }) {
     )
 }
 
+
+
 const SetDataList = () => {
     const {
-        setHistoryArray,
-        currentSetStructure,
-        setCurrentRoomStructure,
-        currentRoomStructure,
         rooms,
         setRooms,
-        currentListStructure,
-        setCurrentSetStructure,
-        updateSetHistory,
         _getLastSetFolderStructure,
-        itemIndex,
-        setItemIndex,
         ContainRoomVisible,
-        setContainRoomVisible
     } = useContext(RoomListStructureContext)
 
-    const [containRoomScreenVisibility, setContainRoomVisibility] = useState(false);
-    const [roomsVisibility, setRoomsVisibility] = useState(false);
+    const { checkIfConnected, isConnected } = useContext(InternetConnectionContext)
+
+
     const [addRoomWindowVisibility, setAddRoomWindowVisibility] = useState(false);
     const [deleteWindowVisibility, setDeleteWindowVisibility] = useState(false);
     const [onDeleteItem, setOnDeleteItem] = useState(false);
-
-
-
     const navigation = useNavigation()
+
+
+    useEffect(() => {
+        checkIfConnected().then(() => {
+            retrieveRoomData()
+        })
+    })
+
+    function retrieveRoomData() {
+
+    }
+
 
 
 
@@ -68,22 +63,12 @@ const SetDataList = () => {
 
         setAddRoomWindowVisibility(false)
         //_addNewRoomToList(newRoom)
-
     }
-
-
-    function componentDidUpdate() {
-        console.log(rooms)
-    }
-
-
 
     function _showDeleteWindow(item) {
         setOnDeleteItem(item)
         setDeleteWindowVisibility(true)
     }
-
-
 
     function _setRoomAddWindowVisibility() {
         if (addRoomWindowVisibility == true) {
@@ -130,62 +115,62 @@ const SetDataList = () => {
 
 
 
+    function renderRoomsFromServer() {
+        if (isConnected === true) {
+            return (
+                <View>
+                    <FlatList
+                        data={rooms}
+                        keyExtractor={item => item.ID}
+                        renderItem={({ item }) => (
+                            <RoomListItem
+                                item={item}
+                                onDeleteWindow={_showDeleteWindow}
+                                showContainRoomScreen={_showContainRoomScreen}
+                            />
+                        )}
+                    />
+
+                    {deleteWindowVisibility ?
+                        <DeleteRoomWindow
+                            onDeleteWindow={() => setDeleteWindowVisibility(false)}
+                            onDelete={_deleteItemById}
+                            item={onDeleteItem}
+
+                        /> : null}
+                    <Image source={logo} style={styles.logo} />
+                </View>
+            )
+        } else {
+            return (
+                <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+
+                    <Text style={{ fontSize: 20, fontStyle: 'italic', color: 'white', margin: 10 }}>Prüfe Netzwerkverbindung</Text>
+                    <ActivityIndicator size="large" color="white" />
+                </View>
+            )
+
+        }
 
 
-
-    //const { search } = state;
-    if (ContainRoomVisible === false) {
-        return (
-
-            <View style={styles.container}>
-                <TouchableOpacity style={styles.myRoomButton} onPress={() => navigation.navigate('MyRoom')}>
-                    <Text>MEIN RAUM</Text>
-                </TouchableOpacity>
-
-                <FlatList
-                    data={rooms}
-                    keyExtractor={item => item.ID}
-                    renderItem={({ item }) => (
-                        <RoomListItem
-                            item={item}
-                            onDeleteWindow={_showDeleteWindow}
-                            showContainRoomScreen={_showContainRoomScreen}
-                        />
-                    )}
-                />
-
-                <TouchableOpacity style={styles.plusButton} onPress={() => setAddRoomWindowVisibility(true)} >
-                    <Entypo name="plus" size={50} color="#008FD3" />
-                </TouchableOpacity>
-                <AddRoomWindow
-                    onSetVisibility={_setRoomAddWindowVisibility}
-                    addRoomWindowVisibility={addRoomWindowVisibility}
-                    //name={rooms.ti}
-                    onAdd={handleAdd}
-                />
-                {deleteWindowVisibility ?
-                    <DeleteRoomWindow
-                        onDeleteWindow={() => setDeleteWindowVisibility(false)}
-                        onDelete={_deleteItemById}
-                        item={onDeleteItem}
-
-                    /> : null}
-                <Image source={logo} style={styles.logo} />
-            </View>
-        );
     }
 
-    else if (ContainRoomVisible === true) {
-        return (
-            <ContainRoomScreen
-            //showContainRoomScreen={() => setState({ containRoomScreenVisible: true })}
-            ></ContainRoomScreen>
-        )
-    }
-
-
-
-
+    return (
+        <View style={styles.container}>
+            <TouchableOpacity style={styles.myRoomButton} onPress={() => navigation.navigate('MyRoom')}>
+                <Text>MEIN RAUM</Text>
+            </TouchableOpacity>
+            {renderRoomsFromServer()}
+            <AddRoomWindow
+                onSetVisibility={_setRoomAddWindowVisibility}
+                addRoomWindowVisibility={addRoomWindowVisibility}
+                onAdd={handleAdd}
+            />
+            <TouchableOpacity style={styles.plusButton} onPress={() => setAddRoomWindowVisibility(true)} >
+                <Entypo name="plus" size={50} color="#008FD3" />
+            </TouchableOpacity>
+        </View>
+    )
 
 }
 

@@ -19,10 +19,9 @@ import { SettingsContext } from '../SettingsScreen/SettingsProvider'
 
 import SwipeView from '../../components/SwipeView'
 import { useNavigation } from '@react-navigation/native';
-import { Searchbar } from 'react-native-paper';
 import { UserContext } from '../LoginRegistrationScreen/UserProvider';
 
-import { storeDataOnDB } from '../../API/Database'
+import { storeMyRoomDataOnDB } from '../../API/Database'
 
 
 const { width: WidTH } = Dimensions.get('window')
@@ -48,17 +47,11 @@ const DataList = () => {
         setCreateFileWindowVisible,
         CreateNewCardWindowVisible,
         setCreateNewCardWindowVisible,
-        storeDataOnDevice,
-        dataIsLoading,
-        setQuery,
-        setFulldata,
-        getQuery
     } = useContext(ListStructureContext)
 
     const { someThingIsCopied, copyData, setSomeThingIsCopied, copiedItemIsCard } = useContext(CopyPasteContext)
     const { shuffleCards } = useContext(SettingsContext)
 
-    const { userToken } = useContext(UserContext)
 
     const navigation = useNavigation()
     const [deleteWindowVisible, SetDeleteWindowVisible] = useState(false)
@@ -68,6 +61,7 @@ const DataList = () => {
 
 
     useEffect(() => {
+        console.log(currentListStructure)
         BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
     }, []);
 
@@ -222,16 +216,6 @@ const DataList = () => {
     }
 
 
-    function renderHeader() {
-        return (
-            <Searchbar
-                placeholder="Suche"
-                onChangeText={handleSearch}
-                value={getQuery}
-            />
-        )
-    }
-
 
     function plusButtonClicked() {
         if (isFolder === true) {
@@ -309,7 +293,7 @@ const DataList = () => {
                 <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
                     <Entypo name="plus" size={45} color="#008FD3" />
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.plusButton, { left: 10 }]} onPress={() => storeDataOnDB(listHistoryArray, currentListStructure, userToken)} >
+                <TouchableOpacity style={[styles.plusButton, { left: 10 }]} onPress={() => storeMyRoomDataOnDB(listHistoryArray, currentListStructure)} >
                     <Text style={{ color: 'white' }}>Speichern</Text>
                 </TouchableOpacity>
                 <Image source={logo} style={styles.logo} />

@@ -24,7 +24,6 @@ export default class UserProvider extends React.Component {
 
     }
 
-
     static getUserToken() {
         return this.state.userToken
     }
@@ -93,12 +92,12 @@ export default class UserProvider extends React.Component {
                 if (loginData != null) {
                     let data = JSON.parse(loginData)
                     if (data.stayLoggedin === true) {
-                        console.log("Nutzerdaten sind gespeichert worden und werden genutzt.")
+                        console.log("Nutzerdaten sind für Login gespeichert worden ... logge ein..")
                         resolve(true)
                     }
                 }
             } catch (error) {
-                console.log("Nutzerdaten sind nicht gespeichert worden, bitte einloggen.")
+                console.log("Es wurden keine Daten für Login gespeichert, einloggen notwendig.")
                 reject(false)
             }
         })

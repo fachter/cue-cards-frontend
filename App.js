@@ -9,15 +9,13 @@ import { SettingsProvider } from './screens/SettingsScreen/SettingsProvider'
 import { ListStructureProvider } from './screens/HomeScreen/ListStructureProvider'
 import { RoomListStructureProvider } from './screens/RoomScreen/RoomListStructureProvider'
 import { CopyPasteProvider } from './screens/HomeScreen/CopyPasteProvider'
-import storeDataOnDB from './API/Database'
+import storeMyRoomDataOnDB from './API/Database'
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { AsyncStorage, AppState } from 'react-native'
-import axios from 'axios'
+import { AppState } from 'react-native'
 import Sidebar from './navigation/Sidebar'
 import { LoginRegistrationStackScreen } from './navigation/Sidebar';
-import { RoomListStructureContext } from './screens/RoomScreen/RoomListStructureProvider';
 
 
 const StartStack = createStackNavigator()
@@ -49,7 +47,7 @@ export default class App extends React.Component {
   _handleAppStateChange = (nextAppState) => {
     console.log(nextAppState)
     if (nextAppState === 'background') {
-      // Database.storeDataOnDB()
+      storeMyRoomDataOnDB()
     }
   }
 
@@ -57,17 +55,17 @@ export default class App extends React.Component {
 
     return (
       <RoomListStructureProvider>
-      <CopyPasteProvider>
-        <ListStructureProvider>
-          <SettingsProvider>
-            <UserProvider>
-              <InternetConnectionProvider>
-                <StartScreen />
-              </InternetConnectionProvider>
-            </UserProvider >
-          </SettingsProvider>
-        </ListStructureProvider>
-      </CopyPasteProvider>
+        <CopyPasteProvider>
+          <ListStructureProvider>
+            <SettingsProvider>
+              <UserProvider>
+                <InternetConnectionProvider>
+                  <StartScreen />
+                </InternetConnectionProvider>
+              </UserProvider >
+            </SettingsProvider>
+          </ListStructureProvider>
+        </CopyPasteProvider>
       </RoomListStructureProvider>
     )
   }

@@ -22,15 +22,14 @@ export default function LoginScreen({ navigation }) {
     const [username, setUnsername] = useState('')
     const [password, setPassword] = useState('')
     const [stayLoggedin, setStayLoggedin] = useState(false)
-    const [screenIsMounted, setScreenIsMouted] = useState(false)
+    const [screenIsMounted, setScreenIsMounted] = useState(false)
 
 
     useEffect(() => {
-
         if (screenIsMounted === false) {
             checkIfUserStayedLoggedin().then(savedLoginState => {
                 userLogin(savedLoginState)
-                setScreenIsMouted(true)
+                setScreenIsMounted(true)
             })
         }
     })
@@ -59,10 +58,12 @@ export default function LoginScreen({ navigation }) {
 
         }).catch(err => {
             if (savedLoginState === true) {
-                console.log("Verbindung zur Datenbank fehlgeschlagen, logge ein mit Lokalen daten: " + err)
+                console.log('Einloggen mit gespeicherten Userdaten')
                 retrieveSettignsfromDevice()
                 setCurrentListStructure(deviceData)
                 login()
+            } else {
+                console.log('Authentifizierung ' + res)
             }
 
         })

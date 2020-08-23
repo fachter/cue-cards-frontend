@@ -26,6 +26,7 @@ export default class MultipleChoice extends React.Component {
     }
 
 
+
     _isValueNull(value) {
         if (value === undefined) {
             return true
@@ -60,7 +61,7 @@ export default class MultipleChoice extends React.Component {
             answers: answers
         }
 
-        let copy = this.state.onSave
+        let copy = this.props.route.params.onSave
         if (this.props.route.params.mode == "createMode") { // neue Karte erstellen
             copy.push(newCard)
             this.props.route.params.onSetSave(copy)
