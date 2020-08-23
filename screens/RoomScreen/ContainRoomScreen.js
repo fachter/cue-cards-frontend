@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { TouchableOpacity, Image, Button, StyleSheet, FlatList, View, Text, BackHandler } from 'react-native';
-import { FontAwesome5, Entypo, AntDesign } from '@expo/vector-icons';
+import { Entypo, AntDesign } from '@expo/vector-icons';
 import AddSetWindow from './AddSetWindow'
 import RoomSetListItem from './RoomSetListItem';
 import { Searchbar } from 'react-native-paper';

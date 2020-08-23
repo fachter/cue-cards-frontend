@@ -158,7 +158,11 @@ const styles = StyleSheet.create({
     },
     bottomView: {
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: 30,
+        alignSelf: 'center'
+
     },
     logo: {
         position: 'absolute',

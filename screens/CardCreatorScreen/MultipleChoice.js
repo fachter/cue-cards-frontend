@@ -148,16 +148,17 @@ export default class MultipleChoice extends React.Component {
                             ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
                         />
                     </ScrollView>
-                    <View style={styles.bottomView} >
-                        <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
-                            <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
-                            <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern und Neu</Text>
-                        </TouchableOpacity>
-                    </View>
+
                 </View>
                 <Image source={logo} style={styles.logo} />
+                <View style={styles.bottomView} >
+                    <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
+                        <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
+                        <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern und Neu</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         )
     }
@@ -215,9 +216,11 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     bottomView: {
-        flex: 1,
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: 30,
+        alignSelf: 'center'
     },
     saveButton: {
         backgroundColor: '#008FD3',

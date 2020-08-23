@@ -17,7 +17,6 @@ export default class FolderListItem extends React.Component {
             isSet: false
         }
 
-
         if (this.props.item.isFolder == true) {
             this.state.isFolder = true
         } else if (this.props.item.isFolder == false) {
@@ -25,14 +24,11 @@ export default class FolderListItem extends React.Component {
         } else if (this.props.item.isFolder == undefined) {
             this.state.isCard = true
         }
-
     }
-
 
 
     render() {
         const { item, callBackItem, onNavigateToCardScreen, onDeleteWindow } = this.props
-
         return (
             <View>
                 {this.state.isCard ?
@@ -44,7 +40,10 @@ export default class FolderListItem extends React.Component {
                                 style={styles.folderButton}
                                 name="credit-card-multiple-outline"
                                 size={25} color="white" />
-                            <Text style={styles.fontStyle}>{item.questionText}</Text>
+                            <Text style={styles.fontStyle}
+                                numberOfLines={1}
+                                ellipsizeMode="clip"
+                            >{item.questionText}</Text>
                         </View>
                     </TouchableOpacity > : null}
                 {this.state.isFolder ?
@@ -58,7 +57,10 @@ export default class FolderListItem extends React.Component {
                                 size={25} color="white"
                                 backgroundColor="#2f3136"
                             />
-                            <Text style={styles.fontStyle}>{item.name}</Text>
+                            <Text style={styles.fontStyle}
+                                numberOfLines={1}
+                                ellipsizeMode="clip">{item.name}
+                            </Text>
                         </View>
                     </TouchableOpacity> : null}
                 {
@@ -73,7 +75,9 @@ export default class FolderListItem extends React.Component {
                                         style={styles.stackButton}
                                         name="cards-outline"
                                         size={25} color="white" />
-                                    <Text style={styles.fontStyle}>{item.name}</Text>
+                                    <Text style={styles.fontStyle}
+                                        numberOfLines={1}
+                                        ellipsizeMode="clip">{item.name}</Text>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity
