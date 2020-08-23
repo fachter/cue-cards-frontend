@@ -48,7 +48,6 @@ export default function RegistrationScreen({ navigation }) {
     }
 
     function _checkIfNull(value) {
-
         return new Promise((resolve, reject) => {
             if (value != null) {
                 resolve(value)
@@ -58,7 +57,6 @@ export default function RegistrationScreen({ navigation }) {
         })
     }
 
-
     function _checkValidityOfAllValues() {
         _checkIfNull(username).then(() => {
             _checkIfNull(password1).then(() => {
@@ -67,7 +65,6 @@ export default function RegistrationScreen({ navigation }) {
                         _checkIfNull(email).then(() => {
                             _checkIfNull(firstName).then(() => {
                                 _checkIfNull(lastName).then(() => {
-
                                     this.props.navigation.navigate('Login')
 
                                 }).catch(error => console.log('Lastname ungültig: ' + error))

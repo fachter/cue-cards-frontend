@@ -7,19 +7,22 @@ const ListStructureContext = React.createContext()
 
 
 class ListStructureProvider extends React.Component {
+    constructor(props) {
+        super(props)
 
-
-    state = {
-        listHistoryArray: [],
-        currentListStructure: [],
-        isFolder: true,
-        CreateFileWindowVisible: false,  //PopupFenster um neue Datei anzuulegen
-        CreateNewCardWindowVisible: false,
-        dataIsLoading: true,
-        query: "",
-        fullData: [],
-        setHistoryArray: [],
-        currentSetStructure: []
+        this.state = {
+            listHistoryArray: [],
+            currentListStructure: [],
+            isFolder: true,
+            CreateFileWindowVisible: false,  //PopupFenster um neue Datei anzuulegen
+            CreateNewCardWindowVisible: false,
+            dataIsLoading: true,
+            query: "",
+            fullData: [],
+            setHistoryArray: [],
+            currentSetStructure: []
+        }
+        this.storeDataOnDevice = this.storeDataOnDevice.bind(this)
     }
 
 
@@ -41,7 +44,6 @@ class ListStructureProvider extends React.Component {
             console.log("Daten wurden auf dem Gerät gespeichert")
         } catch (error) {
             console.log("Fehler speichern der Daten auf das Gerät: " + error)
-
         }
     }
 

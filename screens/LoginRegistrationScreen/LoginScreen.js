@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Button, FlatList, StyleSheet, CheckBox } from 'react-native';
+import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Button, FlatList, StyleSheet } from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 import { UserContext } from './UserProvider'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import { SettingsContext } from '../SettingsScreen/SettingsProvider'
@@ -94,7 +95,6 @@ export default function LoginScreen({ navigation }) {
                 <CheckBox
                     value={stayLoggedin}
                     onValueChange={value => setStayLoggedin(value)}
-                    style={styles.checkbox}
                 />
                 <Text style={{ color: 'white', marginLeft: 5 }}>eingeloggt bleiben</Text>
             </View>
@@ -155,7 +155,5 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
         textAlign: 'center'
     },
-    checkbox: {
 
-    }
 })
