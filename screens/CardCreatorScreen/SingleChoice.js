@@ -147,10 +147,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#C7C7C7'
     },
     bottomView: {
-        flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: 30
+        position: 'absolute',
+        bottom: 30,
+        alignSelf: 'center'
     },
     saveButton: {
         backgroundColor: '#008FD3',

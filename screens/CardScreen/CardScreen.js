@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, ScrollView } from 'react-native'
 
 
 import MultipleChoiceCard from './MultipleAndSingleChoice'
@@ -24,7 +24,6 @@ export default function CardScreen({ route, navigation }) {
 
     function _getArrayOfTrueAnswers() {
         let trueAnswers = []
-
         for (let i = 0; i < currentCard.answers.length; i++) {
             trueAnswers.push(currentCard.answers[i])
         }
@@ -205,21 +204,6 @@ export default function CardScreen({ route, navigation }) {
                     <MultipleChoiceCard card={currentCard} />
                 </CardScreenContext.Provider>
             )
-            // } else if (currentCard.cardType === "SC") {
-            //     return (
-            //         <CardScreenContext.Provider value={{
-            //             currentCard: currentCard,
-            //             _updateCardValues: _updateCardValues,
-            //             _createRandomAnswers: _createRandomAnswers,
-            //             _shuffleArray: _shuffleArray,
-            //             _getArrayOfTrueAnswers: _getArrayOfTrueAnswers,
-            //             answers: answers,
-            //             setAnswers: setAnswers
-
-            //         }}>
-            //             <SingleChoiceCard card={currentCard} />
-            //         </CardScreenContext.Provider >
-            //     )
         } else if (currentCard.cardType == 'FT')
             return (
                 <FreetextCard card={currentCard} getCardBack={_updateCardValues} />
@@ -264,10 +248,11 @@ export default function CardScreen({ route, navigation }) {
         <View style={styles.container}>
             <View style={styles.questionView}>
                 <View style={styles.cardInfos}>
-                    {/* <View style={styles.topic}><Text style={{ color: 'white' }}>{sessionCards[currentCardindex].cardTopic}</Text></View> */}
                     <View style={styles.level}><Text style={{ color: 'white' }}>{currentCard.cardLevel}</Text></View>
                 </View>
-                <Text style={styles.questionText}>{currentCard.questionText}</Text>
+                <ScrollView>
+                    <Text style={styles.questionText}>{currentCard.questionText}</Text>
+                </ScrollView>
             </View>
             <View style={styles.answer}>
                 {_renderTheRightCard()}
