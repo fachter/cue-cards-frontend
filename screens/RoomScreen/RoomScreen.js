@@ -51,7 +51,6 @@ const SetDataList = () => {
     const [addRoomWindowVisibility, setAddRoomWindowVisibility] = useState(false);
     const [deleteWindowVisibility, setDeleteWindowVisibility] = useState(false);
     const [onDeleteItem, setOnDeleteItem] = useState(false);
-    const [headerShown, setHeaderShown] = useState(true)
 
 
 
