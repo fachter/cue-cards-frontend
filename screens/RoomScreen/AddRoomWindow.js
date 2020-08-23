@@ -26,7 +26,7 @@ export default class AddRoomWindow extends React.Component {
                 onRequestClose={() => this.props.onSetVisibility()}>
                 <View style={styles.background}>
                     <View style={styles.window}>
-                        <TouchableOpacity style={styles.cancelButton} onPress={() => addRoomWindowVisibility(false)}>
+                        <TouchableOpacity style={styles.cancelButton} onPress={() => this.props.onSetVisibility()}>
                             <AntDesign name="closecircleo" size={24} color="grey" />
                         </TouchableOpacity>
                         <Text

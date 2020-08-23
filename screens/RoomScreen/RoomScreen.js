@@ -134,18 +134,10 @@ export default function RoomScreen() {
 
 
 
-    //const { search } = state;
-    if (ContainRoomVisible === false) {
         return (
 
             <View style={styles.container}>
-                <Searchbar
-                    style={styles.suchEingabe}
-                    placeholder="Raum beitreten (6-stellige ID eingeben)"
-                    //onChangeText={_updateSearch()}
-                    value={search}
-
-                />
+               
 
 
                 <FlatList
@@ -179,15 +171,7 @@ export default function RoomScreen() {
                 <Image source={logo} style={styles.logo} />
             </View>
         );
-    }
-
-    else if (ContainRoomVisible === true) {
-        return (
-            <ContainRoomScreen
-            //showContainRoomScreen={() => setState({ containRoomScreenVisible: true })}
-            ></ContainRoomScreen>
-        )
-    }
+ 
 
 
 
