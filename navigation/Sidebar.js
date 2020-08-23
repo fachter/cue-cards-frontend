@@ -180,7 +180,7 @@ const RoomStackScreen = ({ navigation }) => (
         <RoomStack.Screen name="Räume" component={RoomScreen} options={headerOptionsFirstPage} />
         <RoomStack.Screen name="ContainRoom" component={ContainRoomScreen} options={{
             headerLeft: () => (
-                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" onPress={() => navigation.goBack()} />)
+                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" onPress={() => navigation.pop()} />)
         }} />
         <RoomStack.Screen name="RoomMultipleChoice" component={MultipleChoice} options={headerOptions}></RoomStack.Screen>
         <RoomStack.Screen name="RoomSingleChoice" component={SingleChoice} options={headerOptions}></RoomStack.Screen>
