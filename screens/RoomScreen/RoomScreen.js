@@ -3,6 +3,7 @@ import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndi
 import { useNavigation } from '@react-navigation/native';
 import logo from '../../assets/Logo_grau.png';
 import home from '../../assets/Home.png';
+import newRoom from '../../assets/newRoom.png';
 import { Entypo } from '@expo/vector-icons';
 
 import AddRoomWindow from './AddRoomWindow';
@@ -160,7 +161,9 @@ const SetDataList = () => {
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.navigate('MyRoom')}>
                 <Image source={home} style={styles.home} />
-                {/* <Text>MEIN RAUM</Text> */}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setAddRoomWindowVisibility(true)}>
+                <Image source={newRoom} style={styles.home} />
             </TouchableOpacity>
             {renderRoomsFromServer()}
             <AddRoomWindow
@@ -233,6 +236,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 80,
         resizeMode: 'stretch',
-        marginTop: -10
+        //marginTop: -10
     }
 });
