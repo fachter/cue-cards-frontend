@@ -160,7 +160,7 @@ const SetDataList = () => {
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.navigate('MyRoom')}>
-                <Image source={home} style={styles.home} />
+                <Image source={home} style={[styles.home, { marginTop: -10 }]} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setAddRoomWindowVisibility(true)}>
                 <Image source={newRoom} style={styles.home} />
