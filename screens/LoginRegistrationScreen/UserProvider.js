@@ -1,8 +1,6 @@
 import React from 'react'
-import { AsyncStorage, AppState } from 'react-native'
+import { AsyncStorage } from 'react-native'
 import { ListStructureContext, ListStructureProvider } from '../HomeScreen/ListStructureProvider'
-import NetInfo from "@react-native-community/netinfo";
-import { storeDataOnDB } from '../../API/Database'
 import axios from 'axios';
 
 

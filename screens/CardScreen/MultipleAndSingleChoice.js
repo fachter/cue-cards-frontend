@@ -3,9 +3,7 @@ import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image } from 'react
 import * as Icon from '@expo/vector-icons'
 import { CardScreenContext } from './CardScreen'
 import logo from '../../assets/Logo_grau.png';
-
 import AnswerListItem from './AnswerListItem'
-import { set } from 'react-native-reanimated'
 
 
 

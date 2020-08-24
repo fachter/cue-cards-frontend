@@ -52,7 +52,6 @@ export default class Vocable extends React.Component {
     _save() {
 
         const { id, cardType, questionText, solution } = this.state
-        const updateCards = this.context
 
         let newCard = {
             id: id,

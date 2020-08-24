@@ -201,7 +201,7 @@ export default function CardScreen({ route, navigation }) {
 
 
                 }}>
-                    <MultipleChoiceCard card={currentCard} />
+                    <MultipleChoiceCard context={CardScreenContext} />
                 </CardScreenContext.Provider>
             )
         } else if (currentCard.cardType == 'FT')
