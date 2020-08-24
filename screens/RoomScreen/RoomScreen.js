@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import logo from '../../assets/Logo_grau.png';
+import home from '../../assets/Home.png';
+import newRoom from '../../assets/newRoom.png';
 import { Entypo } from '@expo/vector-icons';
 
 import AddRoomWindow from './AddRoomWindow';
@@ -138,7 +140,7 @@ const SetDataList = () => {
                             item={onDeleteItem}
 
                         /> : null}
-                    <Image source={logo} style={styles.logo} />
+
                 </View>
             )
         } else {
@@ -157,8 +159,11 @@ const SetDataList = () => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.myRoomButton} onPress={() => navigation.navigate('MyRoom')}>
-                <Text>MEIN RAUM</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('MyRoom')}>
+                <Image source={home} style={[styles.home, { marginTop: -10 }]} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setAddRoomWindowVisibility(true)}>
+                <Image source={newRoom} style={styles.home} />
             </TouchableOpacity>
             {renderRoomsFromServer()}
             <AddRoomWindow
@@ -169,12 +174,10 @@ const SetDataList = () => {
             <TouchableOpacity style={styles.plusButton} onPress={() => setAddRoomWindowVisibility(true)} >
                 <Entypo name="plus" size={50} color="#008FD3" />
             </TouchableOpacity>
+            <Image source={logo} style={styles.logo} />
         </View>
     )
-
 }
-
-
 
 
 
@@ -182,7 +185,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#2f3136",
-        paddingTop: 10
+        paddingTop: 10,
     },
     suchEingabe: {
         marginVertical: 15,
@@ -229,8 +232,10 @@ const styles = StyleSheet.create({
         bottom: -5,
         alignSelf: 'center',
     },
-    myRoomButton: {
-        height: 50,
-        backgroundColor: 'grey'
+    home: {
+        width: '100%',
+        height: 80,
+        resizeMode: 'stretch',
+        //marginTop: -10
     }
 });
