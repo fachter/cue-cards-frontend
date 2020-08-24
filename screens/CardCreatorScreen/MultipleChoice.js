@@ -7,7 +7,7 @@ import logo from '../../assets/Logo_grau.png';
 
 import uuid from 'react-native-uuid'
 
-module.exports = { v4: jest.fn(() => 1) }
+
 
 const windowWidth = Dimensions.get('window').width;
 const data = [

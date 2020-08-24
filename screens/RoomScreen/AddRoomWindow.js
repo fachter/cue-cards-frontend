@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Modal, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native'
+import { View, Modal, StyleSheet, Text, TextInput, TouchableOpacity, Switch } from 'react-native'
 import * as Icon from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
@@ -7,17 +7,31 @@ import { AntDesign } from '@expo/vector-icons';
 
 
 export default class AddRoomWindow extends React.Component {
+    constructor(props) {
+        super(props)
 
-    state = {
-        roomName: null
+        this.state = {
+            roomName: null,
+            roomID: null,
+            createRoomVisible: false,
+            buttonTitle: 'Suchen'
+        }
     }
+
+    componentDidUpdate() {
+
+    }
+
+
+    toggleSwitch() {
+        this.setState({ createRoomVisible: !this.state.createRoomVisible })
+    }
+
+
 
     render() {
 
-
-
-
-
+        const { createRoomVisible } = this.state
         return (
             <Modal
                 animationType="fade"
@@ -25,10 +39,10 @@ export default class AddRoomWindow extends React.Component {
                 visible={this.props.addRoomWindowVisibility}
                 onRequestClose={() => this.props.onSetVisibility()}>
                 <View style={styles.background}>
-                    <View style={styles.window}>
-                        <TouchableOpacity style={styles.cancelButton} onPress={() => this.props.onSetVisibility()}>
-                            <AntDesign name="closecircleo" size={24} color="grey" />
-                        </TouchableOpacity>
+                    <TouchableOpacity style={styles.cancelButton} onPress={() => this.props.onSetVisibility()}>
+                        <AntDesign name="closecircleo" size={24} color="grey" />
+                    </TouchableOpacity>
+                    {this.state.createRoomVisible ? <View style={styles.window}>
                         <Text
                             style={styles.headingText}>Gib deinem Raum einen Namen</Text>
                         <TextInput
@@ -38,15 +52,43 @@ export default class AddRoomWindow extends React.Component {
                             onChangeText={text => this.setState({ roomName: text })}>
                         </TextInput>
                         <View style={styles.buttonContainer}>
-                            {/* <TouchableOpacity style={styles.saveButton} onPress={() => this.props.onAdd(this.state.roomName)}>
-                                <MaterialCommunityIcons name="import" size={25} color="white" />
-                                <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Beitreten</Text>
-                            </TouchableOpacity> */}
+
                             <TouchableOpacity style={styles.saveButton} onPress={() => this.props.onAdd(this.state.roomName)}>
                                 <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
                                 <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Erstellen</Text>
                             </TouchableOpacity>
-                        </View>
+                        </View >
+                    </View> :
+                        <View style={styles.window}>
+                            <Text
+                                style={styles.headingText}>Geb die ID des Raumes ein</Text>
+                            <TextInput
+                                style={styles.friendName}
+                                placeholder="z.B. {Beispiel nach ID anpassen}"
+                                placeholderTextColor="grey"
+                                onChangeText={text => this.setState({ roomName: text })}>
+                            </TextInput>
+                            <View style={styles.buttonContainer}>
+
+                                <TouchableOpacity style={styles.saveButton} onPress={() => this.props.onJoin(this.state.roomID)}>
+                                    <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
+                                    <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Beitreten</Text>
+                                </TouchableOpacity>
+                            </View >
+                        </View>}
+                    <View style={styles.switchView}>
+                        {createRoomVisible ? <Text style={[styles.switchText, { position: 'absolute', left: 100 }]}>beitreten</Text> : null}
+                        <Switch
+                            style={{ alignSelf: 'center' }}
+                            trackColor={{
+                                false: "grey", true: "grey"
+                            }}
+                            thumbColor='#008FD3'
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={() => this.toggleSwitch()}
+                            value={createRoomVisible}
+                        />
+                        {createRoomVisible ? null : <Text style={[styles.switchText, { position: 'absolute', right: 100 }]} >erstellen</Text>}
                     </View>
                 </View>
             </Modal>
@@ -103,10 +145,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         margin: 10,
-        backgroundColor: 'green',
     },
     saveButton: {
-
         borderColor: '#008FD3',
         borderWidth: 1,
         flexDirection: 'row',
@@ -118,5 +158,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: 40,
         marginHorizontal: 7
+    },
+    switchView: {
+        width: '100%',
+        flexDirection: 'row',
+        marginTop: 50,
+        justifyContent: 'center'
+    },
+    switchText: {
+        color: '#008FD3'
     }
+
+
 });

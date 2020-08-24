@@ -293,9 +293,6 @@ const DataList = () => {
                 <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
                     <Entypo name="plus" size={45} color="#008FD3" />
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.plusButton, { left: 10 }]} onPress={() => storeMyRoomDataOnDB(listHistoryArray, currentListStructure)} >
-                    <Text style={{ color: 'white' }}>Speichern</Text>
-                </TouchableOpacity>
                 <Image source={logo} style={styles.logo} />
             </SwipeView>
             {deleteWindowVisible ?

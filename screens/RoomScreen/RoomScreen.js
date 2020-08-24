@@ -116,6 +116,12 @@ const SetDataList = () => {
 
 
 
+    function tryToJoinRoom(roomID) {
+
+
+    }
+
+
 
     function renderRoomsFromServer() {
         if (isConnected === true) {
@@ -170,10 +176,8 @@ const SetDataList = () => {
                 onSetVisibility={_setRoomAddWindowVisibility}
                 addRoomWindowVisibility={addRoomWindowVisibility}
                 onAdd={handleAdd}
+                onJoin={tryToJoinRoom}
             />
-            <TouchableOpacity style={styles.plusButton} onPress={() => setAddRoomWindowVisibility(true)} >
-                <Entypo name="plus" size={50} color="#008FD3" />
-            </TouchableOpacity>
             <Image source={logo} style={styles.logo} />
         </View>
     )
