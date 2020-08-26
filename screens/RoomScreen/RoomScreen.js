@@ -167,9 +167,11 @@ const SetDataList = () => {
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.navigate('MyRoom')}>
                 <Image source={home} style={[styles.home, { marginTop: -10 }]} />
+                <Text style={[styles.fontStyle, { color: 'white', top: 20 }]}>Mein Raum</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setAddRoomWindowVisibility(true)}>
                 <Image source={newRoom} style={styles.home} />
+                <Text style={styles.fontStyle}>+ Raum hinzufügen</Text>
             </TouchableOpacity>
             {renderRoomsFromServer()}
             <AddRoomWindow
@@ -241,5 +243,13 @@ const styles = StyleSheet.create({
         height: 80,
         resizeMode: 'stretch',
         //marginTop: -10
-    }
+    },
+    fontStyle: {
+        position: 'absolute',
+        left: 75,
+        top: 27,
+        fontWeight: "bold",
+        color: "#008FD3",
+        fontSize: 20
+    },
 });

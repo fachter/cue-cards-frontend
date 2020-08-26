@@ -42,6 +42,22 @@ export default class AddRoomWindow extends React.Component {
                     <TouchableOpacity style={styles.cancelButton} onPress={() => this.props.onSetVisibility()}>
                         <AntDesign name="closecircleo" size={24} color="grey" />
                     </TouchableOpacity>
+                    <View style={styles.switchView}>
+                        {/* {createRoomVisible ? <Text style={[styles.switchText, { position: 'absolute', right: 100 }]} >Erstellen</Text> : null}
+                        {createRoomVisible ? null : <Text style={[styles.switchText, { position: 'absolute', left: 100 }]}>Beitreten</Text>} */}
+                        <Text style={[styles.switchText, { position: 'absolute', right: 80 }]} >Erstellen</Text>
+                        <Text style={[styles.switchText, { position: 'absolute', left: 80 }]}>Beitreten</Text>
+                        <Switch
+                            style={{ alignSelf: 'center' }}
+                            trackColor={{
+                                false: "grey", true: "grey"
+                            }}
+                            thumbColor='#008FD3'
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={() => this.toggleSwitch()}
+                            value={createRoomVisible}
+                        />
+                    </View>
                     {this.state.createRoomVisible ? <View style={styles.window}>
                         <Text
                             style={styles.headingText}>Gib deinem Raum einen Namen</Text>
@@ -76,20 +92,6 @@ export default class AddRoomWindow extends React.Component {
                                 </TouchableOpacity>
                             </View >
                         </View>}
-                    <View style={styles.switchView}>
-                        {createRoomVisible ? <Text style={[styles.switchText, { position: 'absolute', left: 100 }]}>beitreten</Text> : null}
-                        <Switch
-                            style={{ alignSelf: 'center' }}
-                            trackColor={{
-                                false: "grey", true: "grey"
-                            }}
-                            thumbColor='#008FD3'
-                            ios_backgroundColor="#3e3e3e"
-                            onValueChange={() => this.toggleSwitch()}
-                            value={createRoomVisible}
-                        />
-                        {createRoomVisible ? null : <Text style={[styles.switchText, { position: 'absolute', right: 100 }]} >erstellen</Text>}
-                    </View>
                 </View>
             </Modal>
         )
@@ -103,13 +105,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'black',
-        opacity: 0.9
+        opacity: 0.85
+
     },
     window: {
         width: '100%',
         height: '30%',
-        borderRadius: 5,
         alignItems: 'center',
+
     },
     cancelButton: {
         width: 30,
@@ -119,11 +122,12 @@ const styles = StyleSheet.create({
         margin: 5,
         justifyContent: 'center',
         alignItems: 'center'
+
     },
     headingText: {
         color: 'white',
         margin: 10,
-        fontSize: 23,
+        fontSize: 20,
     },
     friendName: {
         width: '85%',
@@ -160,14 +164,18 @@ const styles = StyleSheet.create({
         marginHorizontal: 7
     },
     switchView: {
-        width: '100%',
+        width: '90%',
         flexDirection: 'row',
         marginTop: 50,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        borderColor: 'grey',
+        borderBottomWidth: 1,
+        paddingBottom: 10,
+        marginBottom: 50
     },
     switchText: {
-        color: '#008FD3'
-    }
-
-
+        color: 'white',
+        marginTop: 5,
+        fontSize: 20
+    },
 });
