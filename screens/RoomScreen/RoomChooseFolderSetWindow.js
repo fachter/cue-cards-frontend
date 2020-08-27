@@ -32,7 +32,7 @@ export default function RoomChooseFolderSetWindow() {
             isRoom: newRoomName,
             subFolders: [],
             cards: [],
-            picture: () => getRaumvorlage(),
+            picture: getRaumvorlage(),
 
 
         }
