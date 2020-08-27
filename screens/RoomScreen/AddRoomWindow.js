@@ -128,7 +128,6 @@ export default class AddRoomWindow extends React.Component {
                                     </View >
                                 </View>}
                         </View>}
-<<<<<<< HEAD
 
                     <View style={styles.switchView}>
                         {createRoomVisible ? <Text style={[styles.switchText, { position: 'absolute', left: 100 }]}>beitreten</Text> : null}
@@ -144,8 +143,6 @@ export default class AddRoomWindow extends React.Component {
                         />
                         {createRoomVisible ? null : <Text style={[styles.switchText, { position: 'absolute', right: 100 }]} >erstellen</Text>}
                     </View>
-=======
->>>>>>> 37f6ba6105cab2399f2347b81fb959bfe33ffcce
                 </View>
             </Modal >
         )
