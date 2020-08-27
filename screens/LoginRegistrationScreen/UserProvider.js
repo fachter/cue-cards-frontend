@@ -1,14 +1,12 @@
 import React from 'react'
 import { AsyncStorage } from 'react-native'
-import { ListStructureContext, ListStructureProvider } from '../HomeScreen/ListStructureProvider'
 import axios from 'axios';
-
+import { connect } from 'react-redux'
+import { updateUserToken } from '../../API/redux/actions/user';
 
 const UserContext = React.createContext()
 
-export default class UserProvider extends React.Component {
-    static contextType = ListStructureContext
-
+class UserProvider extends React.Component {
     constructor(props) {
         super(props)
 
@@ -16,10 +14,9 @@ export default class UserProvider extends React.Component {
         this.setUserToken = this.setUserToken.bind(this)
 
         this.state = {
-            isLoggedin: true,
+            isLoggedin: false,
             userToken: null,
         }
-
     }
 
     static getUserToken() {
@@ -91,12 +88,12 @@ export default class UserProvider extends React.Component {
                     let data = JSON.parse(loginData)
                     if (data.stayLoggedin === true) {
                         console.log("Nutzerdaten sind für Login gespeichert worden ... logge ein..")
-                        resolve(true)
+                        resolve('erfolgreich')
                     }
                 }
             } catch (error) {
                 console.log("Es wurden keine Daten für Login gespeichert, einloggen notwendig.")
-                reject(false)
+                reject('fehlgeschlagen ' + error)
             }
         })
     }
@@ -111,23 +108,19 @@ export default class UserProvider extends React.Component {
                 password: 'xx',
             })
                 .then((res) => {
-                    console.log("Authentifizierung erfolgreich")
                     this.setState({ userToken: res.data.jwt })
                     axios.get("https://cue-cards-app.herokuapp.com/get-users-data", {
                         headers: {
                             'Authorization': "Bearer " + res.data.jwt
                         }
-                    }).then(resp => {
-                        console.log("Laden der Nutzerdaten erfolgreich")
+                    }).then(() => {
                         if (stayLoggedin === true) {
                             user.saveUserOnDevice(stayLoggedin, username, password)
                         }
-
-                        resolve(resp.data)
+                        resolve('erfolgreich')
                     })
                         .catch((err) => {
-                            reject()
-                            console.log("Laden der Nutzerdaten fehlgeschlagen " + err)
+                            reject('fehlgeschlagen')
                         })
                 }).catch(err => {
                     console.log("Authentifizierung fehlgeschlagen: " + err)
@@ -138,14 +131,14 @@ export default class UserProvider extends React.Component {
 
     async loadingDataAndSettings() {
 
-        return new Promise(async (resolve, reject) => {
-            let response = await ListStructureProvider.retrieveDataFromDevice()
-            if (response === true) {
-                resolve()
-            } else {
-                reject()
-            }
-        }).catch(error => console.log(error))
+        // return new Promise(async (resolve, reject) => {
+        //     let response = await ListStructureProvider.retrieveDataFromDevice()
+        //     if (response === true) {
+        //         resolve()
+        //     } else {
+        //         reject()
+        //     }
+        // }).catch(error => console.log(error))
     }
 
 
@@ -171,4 +164,13 @@ export default class UserProvider extends React.Component {
 }
 
 
-export { UserProvider, UserContext }
+
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateUserToken: () => dispatch(updateUserToken())
+    }
+}
+
+export default UserProvider
+export { UserContext }

@@ -34,10 +34,8 @@ export default function ChooseFolderSetWindow() {
 
     function _addNewItemToList(newListItem) {
         let copy = currentListStructure
-        console.log(copy)
-        currentListStructure.push(newListItem)
-        // setCurrentListStructure(copy)
-        // storeDataOnDevice()
+        copy.push(newListItem)
+        setCurrentListStructure(copy)
     }
 
 

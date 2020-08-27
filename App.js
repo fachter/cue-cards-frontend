@@ -1,21 +1,27 @@
 
-import React, { useEffect, useState, useCallback, useContext } from 'react';
+import React, { useContext } from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 
 
-import { InternetConnectionProvider, InternetConnectionContext } from './API/InternetConnection'
-import { UserProvider, UserContext } from './screens/LoginRegistrationScreen/UserProvider'
+import { InternetConnectionProvider } from './API/InternetConnection'
+import UserProvider from './screens/LoginRegistrationScreen/UserProvider'
+import { UserContext } from './screens/LoginRegistrationScreen/UserProvider'
 import { SettingsProvider } from './screens/SettingsScreen/SettingsProvider'
 import { ListStructureProvider } from './screens/HomeScreen/ListStructureProvider'
 import { RoomListStructureProvider } from './screens/RoomScreen/RoomListStructureProvider'
 import { CopyPasteProvider } from './screens/HomeScreen/CopyPasteProvider'
-import storeMyRoomDataOnDB from './API/Database'
+import DatabaseProvider from './API/Database'
 
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { AppState } from 'react-native'
 import Sidebar from './navigation/Sidebar'
 import { LoginRegistrationStackScreen } from './navigation/Sidebar';
+
+// import { Provider } from 'react-redux'
+// import { configureStore } from './API/redux/store/store'
+
+// const store = configureStore
+
 
 
 const StartStack = createStackNavigator()
@@ -37,43 +43,41 @@ const StartScreen = () => {
 }
 
 
-export default class App extends React.Component {
+
+
+class App extends React.Component {
   constructor(props) {
     super(props)
-    AppState.addEventListener('change', this._handleAppStateChange);
   }
 
 
-  _handleAppStateChange = (nextAppState) => {
-    console.log(nextAppState)
-    if (nextAppState === 'background') {
-      storeMyRoomDataOnDB()
-    }
-  }
+
 
   render() {
 
     return (
-      <RoomListStructureProvider>
+      <UserProvider>
         <CopyPasteProvider>
-          <ListStructureProvider>
-            <SettingsProvider>
-              <UserProvider>
-                <InternetConnectionProvider>
-                  <StartScreen />
-                </InternetConnectionProvider>
-              </UserProvider >
-            </SettingsProvider>
-          </ListStructureProvider>
+          <RoomListStructureProvider>
+            <DatabaseProvider>
+              <ListStructureProvider>
+                <SettingsProvider>
+                  <InternetConnectionProvider>
+                    <StartScreen />
+                  </InternetConnectionProvider>
+                </SettingsProvider>
+              </ListStructureProvider>
+            </DatabaseProvider>
+          </RoomListStructureProvider>
         </CopyPasteProvider>
-      </RoomListStructureProvider>
+      </UserProvider >
     )
   }
 }
 
 
 
-
+export default (App)
 
 
 

@@ -1,12 +1,15 @@
 import React from 'react'
 import { View, Modal, StyleSheet, Text, TextInput, TouchableOpacity, Switch } from 'react-native'
-import * as Icon from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import { DatabaseContext } from '../../API/Database';
 
 
 
 export default class AddRoomWindow extends React.Component {
+
+    static contextType = DatabaseContext
+
     constructor(props) {
         super(props)
 
@@ -14,12 +17,9 @@ export default class AddRoomWindow extends React.Component {
             roomName: null,
             roomID: null,
             createRoomVisible: false,
-            buttonTitle: 'Suchen'
+            showPasswordView: false,
+            password: null,
         }
-    }
-
-    componentDidUpdate() {
-
     }
 
 
@@ -28,11 +28,25 @@ export default class AddRoomWindow extends React.Component {
     }
 
 
+    tryToJoinRoom(roomID) {
+        const database = this.context
+
+        database.asyncAxiosPost('link', 'RoomScreen', roomID)
+            .then(res => {
+                if (res.password) {
+                    this.setState({ showPasswordView: true })
+                }
+                //erneuter Post zur bestätigung Password richtig falsch
+                // oder
+                //res.password sagt aus das Passwort notwendig ist -> neuer Post schicken des eingegebenen Passwords
+            })
+    }
+
 
     render() {
-
-        const { createRoomVisible } = this.state
+        const { createRoomVisible, showPasswordView } = this.state
         return (
+
             <Modal
                 animationType="fade"
                 transparent={true}
@@ -58,24 +72,46 @@ export default class AddRoomWindow extends React.Component {
                                 <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Erstellen</Text>
                             </TouchableOpacity>
                         </View >
-                    </View> :
+                    </View>
+                        :
                         <View style={styles.window}>
-                            <Text
-                                style={styles.headingText}>Geb die ID des Raumes ein</Text>
-                            <TextInput
-                                style={styles.friendName}
-                                placeholder="z.B. {Beispiel nach ID anpassen}"
-                                placeholderTextColor="grey"
-                                onChangeText={text => this.setState({ roomName: text })}>
-                            </TextInput>
-                            <View style={styles.buttonContainer}>
+                            {showPasswordView ?
+                                <View style={styles.window}>
+                                    <Text
+                                        style={styles.headingText}>Password notwendig:</Text>
+                                    <TextInput
+                                        style={styles.friendName}
+                                        placeholderTextColor="grey"
+                                        onChangeText={text => this.state.password = text}>
+                                    </TextInput>
+                                    <View style={styles.buttonContainer}>
 
-                                <TouchableOpacity style={styles.saveButton} onPress={() => this.props.onJoin(this.state.roomID)}>
-                                    <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
-                                    <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Beitreten</Text>
-                                </TouchableOpacity>
-                            </View >
+                                        <TouchableOpacity style={styles.saveButton} onPress={() => console.log("")}>
+                                            <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
+                                            <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Beitreten</Text>
+                                        </TouchableOpacity>
+                                    </View >
+                                </View>
+                                :
+                                <View style={styles.window}>
+                                    <Text
+                                        style={styles.headingText}>Geb die ID des Raumes ein</Text>
+                                    <TextInput
+                                        style={styles.friendName}
+                                        placeholder="z.B. {Beispiel nach ID anpassen}"
+                                        placeholderTextColor="grey"
+                                        onChangeText={text => this.setState({ roomName: text })}>
+                                    </TextInput>
+                                    <View style={styles.buttonContainer}>
+
+                                        <TouchableOpacity style={styles.saveButton} onPress={() => console.log("")}>
+                                            <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
+                                            <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Beitreten</Text>
+                                        </TouchableOpacity>
+                                    </View >
+                                </View>}
                         </View>}
+
                     <View style={styles.switchView}>
                         {createRoomVisible ? <Text style={[styles.switchText, { position: 'absolute', left: 100 }]}>beitreten</Text> : null}
                         <Switch
@@ -91,7 +127,7 @@ export default class AddRoomWindow extends React.Component {
                         {createRoomVisible ? null : <Text style={[styles.switchText, { position: 'absolute', right: 100 }]} >erstellen</Text>}
                     </View>
                 </View>
-            </Modal>
+            </Modal >
         )
     };
 }

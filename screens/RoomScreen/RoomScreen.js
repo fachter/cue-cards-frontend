@@ -1,18 +1,20 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
+
 import logo from '../../assets/Logo_grau.png';
 import home from '../../assets/Home.png';
 import newRoom from '../../assets/newRoom.png';
-import { Entypo } from '@expo/vector-icons';
 
 import AddRoomWindow from './AddRoomWindow';
 import RoomListItem from './RoomListItem';
 import DeleteRoomWindow from './DeleteRoomWindow';
-import ContainRoomScreen from './ContainRoomScreen';
+import AsyncAxiosGet from './../../API/Database'
 
 import { RoomListStructureContext } from './RoomListStructureProvider';
 import { InternetConnectionContext } from '../../API/InternetConnection'
+import { DatabaseContext } from '../../API/Database'
 
 
 
@@ -30,7 +32,6 @@ const SetDataList = () => {
         rooms,
         setRooms,
         _getLastSetFolderStructure,
-        ContainRoomVisible,
     } = useContext(RoomListStructureContext)
 
     const { checkIfConnected, isConnected } = useContext(InternetConnectionContext)
@@ -116,11 +117,6 @@ const SetDataList = () => {
 
 
 
-    function tryToJoinRoom(roomID) {
-
-
-    }
-
 
 
     function renderRoomsFromServer() {
@@ -176,7 +172,6 @@ const SetDataList = () => {
                 onSetVisibility={_setRoomAddWindowVisibility}
                 addRoomWindowVisibility={addRoomWindowVisibility}
                 onAdd={handleAdd}
-                onJoin={tryToJoinRoom}
             />
             <Image source={logo} style={styles.logo} />
         </View>

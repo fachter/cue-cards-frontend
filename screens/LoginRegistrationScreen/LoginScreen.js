@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Button, FlatList, StyleSheet } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { UserContext } from './UserProvider'
-import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import { SettingsContext } from '../SettingsScreen/SettingsProvider'
 import { InternetConnectionContext } from '../../API/InternetConnection'
 import logo from '../../assets/Logo.png';
@@ -16,7 +15,6 @@ const { width: WidTH } = Dimensions.get('window')
 export default function LoginScreen({ navigation }) {
 
     const { checkIfUserStayedLoggedin, _authenticateAcc, login } = useContext(UserContext)
-    const { setCurrentListStructure, retrieveDataFromDevice } = useContext(ListStructureContext)
     const { retrieveSettignsfromDevice } = useContext(SettingsContext)
     const { isConnected } = useContext(InternetConnectionContext)
     const [username, setUnsername] = useState('')
@@ -27,46 +25,25 @@ export default function LoginScreen({ navigation }) {
 
     useEffect(() => {
         if (screenIsMounted === false) {
-            checkIfUserStayedLoggedin().then(savedLoginState => {
-                userLogin(savedLoginState)
-                setScreenIsMounted(true)
-            })
+            checkIfUserStayedLoggedin()
+                .then(res => {
+                    userLogin()
+                    console.log("Logindaten wurden zuvor gespeichert. Login " + res)
+                })
+            setScreenIsMounted(true)
         }
     })
 
-
-    async function userLogin(savedLoginState) {
-
-        //var deviceData = await retrieveDataFromDevice()
-
-        _authenticateAcc(stayLoggedin, username, password).then(async (data) => {
-
-            let networkData = data.folders
-
-            // //prüft ob die Daten auf dem Gerät oder aus dem Netz aktuell sind und läd diese dementsprechend
-            // if (deviceData.date < networkData.date) {
-            //     setCurrentListStructure(data.folders)
-            // } else {
-            //     setCurrentListStructure(deviceData)
-            // }
-
-            retrieveSettignsfromDevice()
-            setCurrentListStructure(data.folders)
-
-        }).then(() => {
-            login()
-
-        }).catch(err => {
-            if (savedLoginState === true) {
-                console.log('Einloggen mit gespeicherten Userdaten')
-                retrieveSettignsfromDevice()
-                setCurrentListStructure(deviceData)
+    function userLogin() {
+        _authenticateAcc(stayLoggedin, username, password)
+            .then(res => {
                 login()
-            } else {
-                console.log('Authentifizierung ' + res)
-            }
+                retrieveSettignsfromDevice()
+                console.log("Authentifizierung " + res)
+            }).catch(err => {
+                console.log('Authentifizierung ' + err)
 
-        })
+            })
     }
 
 

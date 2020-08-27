@@ -1,12 +1,14 @@
 import React from 'react'
 import { AsyncStorage } from 'react-native'
+import { UserContext } from '../LoginRegistrationScreen/UserProvider'
+import { storeMyRoomDataOnDB } from '../../API/Database'
 
 const ListStructureContext = React.createContext()
 
 
 
-
 class ListStructureProvider extends React.Component {
+    static contextType = UserContext
     constructor(props) {
         super(props)
 
@@ -65,6 +67,9 @@ class ListStructureProvider extends React.Component {
 
     setCurrentListStructure = (newListStructure) => {
         this.setState({ currentListStructure: newListStructure })
+
+        const user = this.context
+        storeMyRoomDataOnDB(this.state.listHistoryArray, this.state.currentListStructure, user.userToken)
         this.storeDataOnDevice(newListStructure)
     }
 
@@ -95,42 +100,6 @@ class ListStructureProvider extends React.Component {
 
 
 
-
-
-    setCurrentSetStructure = (newSetStructure) => {
-        this.setState({ currentSetStructure: newSetStructure })
-    }
-
-    updateSetHistory = () => {
-        this.state.setHistoryArray.push(this.state.currentSetStructure)
-    }
-
-    _getLastSetFolderStructure = () => {
-        return this.state.setHistoryArray.pop()
-    }
-
-
-
-
-
-
-
-
-
-
-    setQuery = (query) => {
-        this.setState({ query })
-    }
-
-    setFullDat = (fullData) => {
-        this.setState({ fullData })
-    }
-
-    getQuery = (query) => {
-        return this.state.query
-    }
-
-
     render() {
         return (
             <ListStructureContext.Provider value={{
@@ -151,20 +120,7 @@ class ListStructureProvider extends React.Component {
                 retrieveDataFromDevice: this.retrieveDataFromDevice,
                 dataIsLoading: this.state.dataIsLoading,
                 setDataIsLoading: this.setDataIsLoading,
-                // for Rooms
-                setHistoryArray: this.state.setHistoryArray,
-                currentSetStructure: this.state.currentSetStructure,
-                setCurrentSetStructure: this.setCurrentSetStructure,
-                updateSetHistory: this.updateSetHistory,
-                _getLastSetFolderStructure: this._getLastSetFolderStructure,
 
-
-
-                query: this.state.query,
-                setQuery: this.setQuery,
-                fullData: this.state.fullData,
-                setFullData: this.setFullData,
-                getQuery: this.getQuery,
 
             }}>
                 {this.props.children}
