@@ -2,51 +2,97 @@ import React from 'react'
 import { View, Modal, StyleSheet, Text, TextInput, TouchableOpacity, Switch } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-import { DatabaseContext } from '../../API/Database';
+import Axios from 'axios'
+
+import { UserContext } from '../../LoginRegistrationScreen/UserProvider';
+
+import SuccesView from './SuccesView'
+import ActivityIndicatorView from './ActivityIndicatorView'
+import PasswordView from './PasswordView'
+import RoomIDView from './RoomIDView'
+import CreatRoomView from './CreatRoomView'
+
 
 
 
 export default class AddRoomWindow extends React.Component {
-
-    static contextType = DatabaseContext
-
+    static contextType = UserContext
     constructor(props) {
         super(props)
 
         this.state = {
             roomName: null,
             roomID: null,
+
             createRoomVisible: false,
             showPasswordView: false,
+            showActivityIndicator: false,
+            showJoinRoomSuccesView: false,
+            showJoinRoomFailedView: false,
+            waitForPasswordResult: true,
+
             password: null,
         }
     }
-
 
     toggleSwitch() {
         this.setState({ createRoomVisible: !this.state.createRoomVisible })
     }
 
 
-    tryToJoinRoom(roomID) {
-        const database = this.context
 
-        database.asyncAxiosPost('link', 'RoomScreen', roomID)
-            .then(res => {
-                if (res.password) {
+
+    askingForRoom(roomID) {
+        const user = this.context
+        return new Promise((resolve, reject) => {
+            Axios.post('ROOMIDLINK', { data }, {
+                headers: {
+                    'Authorization': "Bearer " + user.userToken
+                }
+            }).then(res => {
+                if (res.status === 200) {
+                    resolve()
+                    console.log(`Beitreten des Raumes mit der ID ${roomID} ` + res)
+                    this.setState({ showJoinRoomSuccesView: true })
+
+                } else if (res.status === 202) {
                     this.setState({ showPasswordView: true })
                 }
-                //erneuter Post zur bestätigung Password richtig falsch
-                // oder
-                //res.password sagt aus das Passwort notwendig ist -> neuer Post schicken des eingegebenen Passwords
+            }).catch(err => {
+                alert(`Der Raum mit der ID ${roomID} ist nicht vorhanden`)
+                console.log(`Beitreten des Raumes mit der ID ${roomID} ` + res)
+                reject()
+
             })
+        })
+    }
+
+
+    askingServerForRightPassword() {
+        this.state.showPasswordView = false
+        this.setState({ showActivityIndicator: true })
+
+        return new Promise((resolve, reject) => {
+            Axios.post('PASSWORDLINK', { data }, {
+                headers: {
+                    'Authorization': "Bearer " + user.userToken
+                }
+            }).then(res => {
+                this.state.showActivityIndicator = false
+                this.setState({ showJoinRoomSuccesView: true })
+                resolve('erfolgreich ' + res)
+            }).catch(err => {
+                this.state.showActivityIndicator = false
+                this.setState({ showJoinRoomFailedView: true })
+                reject('fehlgeschlagen ' + err)
+            })
+        })
     }
 
 
     render() {
         const { createRoomVisible, showPasswordView } = this.state
         return (
-
             <Modal
                 animationType="fade"
                 transparent={true}
@@ -86,8 +132,7 @@ export default class AddRoomWindow extends React.Component {
                                         onChangeText={text => this.state.password = text}>
                                     </TextInput>
                                     <View style={styles.buttonContainer}>
-
-                                        <TouchableOpacity style={styles.saveButton} onPress={() => console.log("")}>
+                                        <TouchableOpacity style={styles.saveButton} onPress={() => this.askingServerForRightPassword(this.state.password)}>
                                             <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
                                             <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Beitreten</Text>
                                         </TouchableOpacity>
@@ -101,11 +146,11 @@ export default class AddRoomWindow extends React.Component {
                                         style={styles.friendName}
                                         placeholder="z.B. {Beispiel nach ID anpassen}"
                                         placeholderTextColor="grey"
-                                        onChangeText={text => this.setState({ roomName: text })}>
+                                        onChangeText={text => this.state.roomID = text}>
                                     </TextInput>
                                     <View style={styles.buttonContainer}>
 
-                                        <TouchableOpacity style={styles.saveButton} onPress={() => console.log("")}>
+                                        <TouchableOpacity style={styles.saveButton} onPress={() => this.askingForRoom(this.state.roomID)}>
                                             <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
                                             <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Beitreten</Text>
                                         </TouchableOpacity>

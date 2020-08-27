@@ -5,7 +5,6 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 
 
-import { InternetConnectionProvider } from './API/InternetConnection'
 import UserProvider from './screens/LoginRegistrationScreen/UserProvider'
 import { UserContext } from './screens/LoginRegistrationScreen/UserProvider'
 import { SettingsProvider } from './screens/SettingsScreen/SettingsProvider'
@@ -62,9 +61,7 @@ class App extends React.Component {
             <DatabaseProvider>
               <ListStructureProvider>
                 <SettingsProvider>
-                  <InternetConnectionProvider>
-                    <StartScreen />
-                  </InternetConnectionProvider>
+                  <StartScreen />
                 </SettingsProvider>
               </ListStructureProvider>
             </DatabaseProvider>

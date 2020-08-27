@@ -3,7 +3,6 @@ import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Button, Fla
 import CheckBox from '@react-native-community/checkbox';
 import { UserContext } from './UserProvider'
 import { SettingsContext } from '../SettingsScreen/SettingsProvider'
-import { InternetConnectionContext } from '../../API/InternetConnection'
 import logo from '../../assets/Logo.png';
 
 
@@ -16,7 +15,6 @@ export default function LoginScreen({ navigation }) {
 
     const { checkIfUserStayedLoggedin, _authenticateAcc, login } = useContext(UserContext)
     const { retrieveSettignsfromDevice } = useContext(SettingsContext)
-    const { isConnected } = useContext(InternetConnectionContext)
     const [username, setUnsername] = useState('')
     const [password, setPassword] = useState('')
     const [stayLoggedin, setStayLoggedin] = useState(false)

@@ -26,6 +26,43 @@ function storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken) 
 }
 
 
+function syncAxiosPost(link, sourceName, data, userToken) {
+
+    return new Promise((resolve, reject) => {
+        Axios.post(link, { data }, {
+            headers: {
+                'Authorization': "Bearer " + userToken
+            }
+        }).then(() => {
+            console.log(`Axios Get, Quelldatei: ${sourceName} - erfolgreich:`)
+            resolve('erfolgreich')
+        }).catch(() => {
+            console.log(`Axios Post, Quelldatei: ${sourceName} - fehlgeschlagen:` + error)
+            reject('fehlgeschlagen')
+        })
+    })
+}
+
+
+async function asyncAxiosPost(link, sourceName, data) {
+    const user = this.context
+
+    return new Promise((resolve, reject) => {
+
+        Axios.post(link, { data }, {
+            headers: {
+                'Authorization': "Bearer " + user.userToken
+            }
+        }).then(res => {
+            resolve(res)
+            console.log(`Axios Get, Quelldatei: ${sourceName} - erfolgreich:`)
+        }).catch(error => {
+            reject()
+            console.log(`Axios Post, Quelldatei: ${sourceName} - fehlgeschlagen:` + error)
+        })
+    })
+}
+
 
 
 
@@ -37,70 +74,14 @@ class DatabaseProvider extends React.Component {
         super(props)
     }
 
-    storeMyRoomDataOnDB(listHistoryArray, currentListStructure) {
-
-        const user = this.context
-        console.log(user.userToken)
-
-        // let folders = null
-        // if (listHistoryArray.length > 0) {
-        //     folders = listHistoryArray[0]
-        // } else {
-        //     folders = currentListStructure
-        // }
-
-        // Axios.post('https://cue-cards-app.herokuapp.com/save-users-data', { folders: folders }, {
-        //     headers: {
-        //         'Authorization': "Bearer " + user.userToken
-        //     }
-        // }).then(result => {
-        //     console.log("Die Daten wurden erfolgreich auf dem Server gespeichert:")
-        //     console.log(result.config.data)
-        // }).catch(error => {
-        //     console.log("Fehler beim speichern der Daten auf dem Server: " + error)
-        // })
-    }
 
 
 
 
 
-    asyncAxiosPost = async (link, sourceName, data) => {
-        const user = this.context
-
-        return new Promise((resolve, reject) => {
-
-            Axios.post(link, { data }, {
-                headers: {
-                    'Authorization': "Bearer " + user.userToken
-                }
-            }).then(res => {
-                resolve(res)
-                console.log(`Axios Get, Quelldatei: ${sourceName} - erfolgreich:`)
-            }).catch(error => {
-                reject()
-                console.log(`Axios Post, Quelldatei: ${sourceName} - fehlgeschlagen:` + error)
-            })
-        })
-    }
 
 
 
-    syncAxiosPost(link, sourceName, data) {
-        const user = this.context
-
-        const response = Axios.post(link, { data }, {
-            headers: {
-                'Authorization': "Bearer " + user.userToken
-            }
-        }).then(result => {
-            console.log(`Axios Get, Quelldatei: ${sourceName} - erfolgreich:`)
-        }).catch(error => {
-            console.log(`Axios Post, Quelldatei: ${sourceName} - fehlgeschlagen:` + error)
-        })
-
-        return response
-    }
 
 
 
@@ -111,10 +92,10 @@ class DatabaseProvider extends React.Component {
             headers: {
                 'Authorization': "Bearer " + user.userToken
             }
-        }).then(result => {
-            console.log(`Axios Post, Quelldatei: ${sourceName} - erfolgreich:`)
+        }).then(() => {
+            console.log(`Axios Get, Quelldatei: ${sourceName} - erfolgreich:`)
         }).catch(error => {
-            console.log(`Axios Post, Quelldatei: ${sourceName} - fehlgeschlagen:` + error)
+            console.log(`Axios Get, Quelldatei: ${sourceName} - fehlgeschlagen:` + error)
         })
 
         return response
@@ -140,9 +121,7 @@ class DatabaseProvider extends React.Component {
     render() {
         return (
             <DatabaseContext.Provider value={{
-                storeMyRoomDataOnDB: this.storeMyRoomDataOnDB,
                 asyncAxiosPost: this.asyncAxiosPost,
-                syncAxiosPost: this.syncAxiosPost,
                 asyncAxiosGet: this.asyncAxiosGet,
                 syncAxiosGet: this.syncAxiosGet
             }}>
@@ -164,7 +143,7 @@ class DatabaseProvider extends React.Component {
 
 
 export default DatabaseProvider
-export { DatabaseContext, storeMyRoomDataOnDB }
+export { DatabaseContext, storeMyRoomDataOnDB, syncAxiosPost, asyncAxiosPost }
 
 
 
