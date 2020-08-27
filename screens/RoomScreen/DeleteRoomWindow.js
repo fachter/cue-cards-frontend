@@ -12,7 +12,7 @@ export default class DeleteRoomWindow extends React.Component {
         const { item, onDeleteWindow, onDelete } = this.props
         return (
             <Modal
-                animationType="slide"
+                animationType="fade"
                 transparent={true}>
                 <View style={styles.background}>
                     <View style={styles.window}>
@@ -36,7 +36,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#000000aa',
+        backgroundColor: 'black',
+        opacity: 0.8
 
     },
     window: {

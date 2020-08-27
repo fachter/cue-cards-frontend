@@ -70,7 +70,7 @@ function getHeaderTitle(route) {
         case 'MyRoom':
             return 'Mein Raum'
         case 'CardScreen':
-            return "welche Überschrift hier?"
+            return "Befragung"
     }
 }
 

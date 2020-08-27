@@ -6,6 +6,11 @@ import { useNavigation } from '@react-navigation/native';
 import uuid from 'react-native-uuid'
 import { RoomListStructureContext } from './RoomListStructureProvider';
 
+import RaumVorlage1 from '../../assets/RaumVorlage1.png';
+import RaumVorlage2 from '../../assets/RaumVorlage2.png';
+import RaumVorlage3 from '../../assets/RaumVorlage3.png';
+import RaumVorlage4 from '../../assets/RaumVorlage4.png';
+
 
 const FileContext = createContext()
 
@@ -17,6 +22,7 @@ export default function RoomChooseFolderSetWindow() {
     const [newRoomName, setNewRoomName] = useState(null)
 
 
+
     function _save() {
         let newid = uuid.v1()
         let newListItem = {
@@ -26,12 +32,19 @@ export default function RoomChooseFolderSetWindow() {
             isRoom: newRoomName,
             subFolders: [],
             cards: [],
-             
+            picture: getRaumvorlage(),
+
+
         }
 
 
         setRoomCreateFileWindowVisible(false)
         _addNewSetItemTolist(newListItem)
+    }
+
+    function getRaumvorlage() {
+        const pictures = [RaumVorlage1, RaumVorlage2, RaumVorlage3, RaumVorlage4];
+        return pictures[Math.floor(Math.random() * 4)];
     }
 
     function _addNewSetItemTolist(newListItem) {
@@ -40,13 +53,13 @@ export default function RoomChooseFolderSetWindow() {
         console.log(currentRoomStructure)
         console.log(itemIndex)
         currentRoomStructure.push(newListItem)
-         //if(currentRoomStructure.length === 0){
-       /*  }
-        else{
-        currentRoomStructure.splice(itemIndex, 0, newListItem)
-        } 
-        console.log(currentRoomStructure[itemIndex])
- */
+        //if(currentRoomStructure.length === 0){
+        /*  }
+         else{
+         currentRoomStructure.splice(itemIndex, 0, newListItem)
+         } 
+         console.log(currentRoomStructure[itemIndex])
+  */
     }
 
 
@@ -60,7 +73,7 @@ export default function RoomChooseFolderSetWindow() {
             }}>
                 <View style={styles.container} >
                     <Modal
-                        animationType="slide"
+                        animationType="fade"
                         transparent={true}
                         visible={CreateRoomFileWindowVisible}
                         onRequestClose={() => setRoomCreateFileWindowVisible(false)}>
@@ -69,25 +82,25 @@ export default function RoomChooseFolderSetWindow() {
                 </View>
             </FileContext.Provider>
         )
-/*     }
-    else if(isRoom == true){
-        return(
-            <FileContext.Provider value={{
-                setNewFileName: setNewFileName,
-                setNewRoomName: setNewRoomName,
-                _save: _save
-            }}>
-                <View style={styles.container} >
-                    <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={CreateRoomFileWindowVisible}
-                        onRequestClose={() => setRoomCreateNewRoomWindowVisible(false)}>
-                        <AddRoomWindow />
-                    </Modal>
-                </View>
-            </FileContext.Provider>
-        ) */
+        /*     }
+            else if(isRoom == true){
+                return(
+                    <FileContext.Provider value={{
+                        setNewFileName: setNewFileName,
+                        setNewRoomName: setNewRoomName,
+                        _save: _save
+                    }}>
+                        <View style={styles.container} >
+                            <Modal
+                                animationType="slide"
+                                transparent={true}
+                                visible={CreateRoomFileWindowVisible}
+                                onRequestClose={() => setRoomCreateNewRoomWindowVisible(false)}>
+                                <AddRoomWindow />
+                            </Modal>
+                        </View>
+                    </FileContext.Provider>
+                ) */
     } else {
         return (
             <FileContext.Provider value={{
@@ -114,7 +127,7 @@ export default function RoomChooseFolderSetWindow() {
 function CreateFolderOrSet() {
     const [showFileNameWindow, setShowFileNameWindow] = useState(false)
     const { setIsNewFileFolder } = useContext(FileContext)
-    const {setRoomCreateFileWindowVisible } = useContext(RoomListStructureContext)
+    const { setRoomCreateFileWindowVisible } = useContext(RoomListStructureContext)
 
     function _setFileType(isFolder) {
         setIsNewFileFolder(isFolder)

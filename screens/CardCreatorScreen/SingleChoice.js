@@ -149,8 +149,6 @@ const styles = StyleSheet.create({
     bottomView: {
         flexDirection: 'row',
         justifyContent: 'center',
-        position: 'absolute',
-        bottom: 30,
         alignSelf: 'center'
     },
     saveButton: {
