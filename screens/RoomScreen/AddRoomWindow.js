@@ -63,6 +63,7 @@ export default class AddRoomWindow extends React.Component {
                             style={styles.headingText}>Gib deinem Raum einen Namen</Text>
                         <TextInput
                             style={styles.friendName}
+                            maxLength={20}
                             placeholder="z.B. Lerngruppe1234"
                             placeholderTextColor="grey"
                             onChangeText={text => this.setState({ roomName: text })}>
@@ -137,7 +138,8 @@ const styles = StyleSheet.create({
         color: 'white',
         backgroundColor: '#202225',
         padding: 10,
-        margin: 5
+        margin: 5,
+
     },
     buttonContainer: {
         flexDirection: 'row'

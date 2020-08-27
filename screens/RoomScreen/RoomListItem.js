@@ -1,14 +1,18 @@
 import React from 'react'
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { max } from 'react-native-reanimated';
+import DeleteRoomWindow from './DeleteRoomWindow';
+
 import RaumVorlage1 from '../../assets/RaumVorlage1.png';
-//import DeleteRoomWindow from './DeleteRoomWindow';
+import RaumVorlage2 from '../../assets/RaumVorlage2.png';
+import RaumVorlage3 from '../../assets/RaumVorlage3.png';
+import RaumVorlage4 from '../../assets/RaumVorlage4.png';
+
 
 
 
 export default class RoomListItem extends React.Component {
-
-
 
     render() {
         return (
@@ -24,7 +28,7 @@ export default class RoomListItem extends React.Component {
                         color="white"
                     /> */}
                     <Text style={styles.fontStyle}>{this.props.item.title}</Text>
-                    <Image source={RaumVorlage1} style={styles.home} />
+                    <Image source={this.props.item.picture} style={styles.home} />
                     <Text style={styles.fontStyle}>{this.props.item.title}</Text>
                 </View>
             </TouchableOpacity>
@@ -50,11 +54,12 @@ const styles = StyleSheet.create({
         left: 75,
         fontWeight: "bold",
         color: "white",
-        fontSize: 20
+        fontSize: 20,
+        right: 175,
     },
     home: {
         width: '100%',
-        height: 80,
+        height: 90,
         resizeMode: 'stretch',
     }
 });

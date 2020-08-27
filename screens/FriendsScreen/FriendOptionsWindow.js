@@ -7,7 +7,7 @@ export default class FriendOptionsWindow extends React.Component {
     render() {
         return (
             <Modal
-                animationType="slide"
+                animationType="fade"
                 transparent={true}
                 visible={this.props.visible}
                 onRequestClose={() => onSetVisibility(false)}

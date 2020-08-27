@@ -50,7 +50,7 @@ export default function ChooseFolderSetWindow() {
             }}>
                 <View style={styles.container} >
                     <Modal
-                        animationType="slide"
+                        animationType="fade"
                         transparent={true}
                         visible={CreateFileWindowVisible}
                         onRequestClose={() => setCreateFileWindowVisible(false)}>
