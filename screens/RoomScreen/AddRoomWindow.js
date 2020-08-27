@@ -56,22 +56,6 @@ export default class AddRoomWindow extends React.Component {
                     <TouchableOpacity style={styles.cancelButton} onPress={() => this.props.onSetVisibility()}>
                         <AntDesign name="closecircleo" size={24} color="grey" />
                     </TouchableOpacity>
-                    <View style={styles.switchView}>
-                        {/* {createRoomVisible ? <Text style={[styles.switchText, { position: 'absolute', right: 100 }]} >Erstellen</Text> : null}
-                        {createRoomVisible ? null : <Text style={[styles.switchText, { position: 'absolute', left: 100 }]}>Beitreten</Text>} */}
-                        <Text style={[styles.switchText, { position: 'absolute', right: 80 }]} >Erstellen</Text>
-                        <Text style={[styles.switchText, { position: 'absolute', left: 80 }]}>Beitreten</Text>
-                        <Switch
-                            style={{ alignSelf: 'center' }}
-                            trackColor={{
-                                false: "grey", true: "grey"
-                            }}
-                            thumbColor='#008FD3'
-                            ios_backgroundColor="#3e3e3e"
-                            onValueChange={() => this.toggleSwitch()}
-                            value={createRoomVisible}
-                        />
-                    </View>
                     {this.state.createRoomVisible ? <View style={styles.window}>
                         <Text
                             style={styles.headingText}>Gib deinem Raum einen Namen</Text>
@@ -130,7 +114,7 @@ export default class AddRoomWindow extends React.Component {
                         </View>}
 
                     <View style={styles.switchView}>
-                        {createRoomVisible ? <Text style={[styles.switchText, { position: 'absolute', left: 100 }]}>beitreten</Text> : null}
+                        {createRoomVisible ? <Text style={[styles.switchText, { position: 'absolute', left: 50 }]}>beitreten</Text> : null}
                         <Switch
                             style={{ alignSelf: 'center' }}
                             trackColor={{
@@ -141,7 +125,7 @@ export default class AddRoomWindow extends React.Component {
                             onValueChange={() => this.toggleSwitch()}
                             value={createRoomVisible}
                         />
-                        {createRoomVisible ? null : <Text style={[styles.switchText, { position: 'absolute', right: 100 }]} >erstellen</Text>}
+                        {createRoomVisible ? null : <Text style={[styles.switchText, { position: 'absolute', right: 50 }]} >erstellen</Text>}
                     </View>
                 </View>
             </Modal >
