@@ -20,6 +20,7 @@ import Freetext from '../screens/CardCreatorScreen/Freetext';
 
 
 import FriendsScreen from '../screens/FriendsScreen/FriendsScreen';
+import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
 import SettingsScreen from '../screens/SettingsScreen/SettingsScreen';
 import StatisticsScreen from '../screens/StatisticsScreen/StatisticsScreen';
 import SendCardsScreen from '../screens/SendCardsScreen/SendCardsScreen';
@@ -28,10 +29,13 @@ import RegistrationScreen from '../screens/LoginRegistrationScreen/RegistrationS
 import RoomScreen from '../screens/RoomScreen/RoomScreen';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ContainRoomScreen from '../screens/RoomScreen/ContainRoomScreen';
+import EditProfileScreen from '../screens/ProfileScreen/EditProfileScreen';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
 const FriendsStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
 const StatisticsStack = createStackNavigator();
@@ -99,6 +103,26 @@ function RoomStackScreen({ navigation, route }) {
         </RoomStack.Navigator>
     );
 }
+
+const ProfileStackScreen = ({ navigation }) => (
+    <FriendsStack.Navigator screenOptions={{
+        headerStyle: {
+            backgroundColor: "#202225"
+
+        },
+        headerTintColor: "white"
+    }}>
+        <FriendsStack.Screen name="Profil" component={ProfileScreen} options={headerOptionsFirstPage}
+            options={{
+                headerLeft: () => (
+                    <MaterialCommunityIcons.Button name="account-edit" size={25} backgroundColor="#202225" onPress={() => navigation.navigate('Profil bearbeiten')} />),
+                headerRight: () => (
+                    <Icon.Button name="ios-menu" size={25} backgroundColor="#202225" onPress={() => { navigation.openDrawer() }} />
+                )
+            }} />
+        <FriendsStack.Screen name="Profil bearbeiten" component={EditProfileScreen} options={headerOptions}/>
+    </FriendsStack.Navigator>
+);
 
 
 const FriendsStackScreen = ({ navigation }) => (
@@ -210,7 +234,15 @@ export default class Sidebar extends React.Component {
                     options={{
                         title: "House of CueCards",
                         drawerIcon: () => (
-                            <Icon name="ios-people" color="white" size={25} />
+                            <Icon name="ios-home" color="white" size={25} />
+                        )
+                    }}
+                />
+                <Drawer.Screen name="ProfileStack" component={ProfileStackScreen}
+                    options={{
+                        title: "Profile",
+                        drawerIcon: () => (
+                            <Icon name="md-person" color="white" size={25} />
                         )
                     }}
                 />
@@ -218,7 +250,7 @@ export default class Sidebar extends React.Component {
                     options={{
                         title: "Freunde",
                         drawerIcon: () => (
-                            <Icon name="md-person" color="white" size={25} />
+                            <Icon name="ios-people" color="white" size={25} />
                         )
                     }}
                 />
