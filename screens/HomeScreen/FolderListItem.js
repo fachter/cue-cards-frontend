@@ -52,7 +52,7 @@ export default class FolderListItem extends React.Component {
                         onLongPress={() => onDeleteWindow(item)}>
                         <View style={styles.container}>
                             <Icon.Button
-                                style={styles.folderButton} a
+                                style={styles.folderButton}
                                 name="ios-folder"
                                 size={25} color="white"
                                 backgroundColor="#2f3136"

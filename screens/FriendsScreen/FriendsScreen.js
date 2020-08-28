@@ -6,14 +6,14 @@ import FriendListItem from './FriendListItem'
 import AddFriendWindow from './AddFriendWindow'
 import FriendOptionsWindow from './FriendOptionsWindow'
 
-import { InternetConnectionContext } from '../../API/InternetConnection'
+import { UserContext } from '../LoginRegistrationScreen/UserProvider'
 import { CopyPasteContext } from '../HomeScreen/CopyPasteProvider'
 
 
 
 export default function FriendsScreen() {
 
-    const { checkIfConnected, isConnected } = useContext(InternetConnectionContext)
+    const { checkIfConnected, isConnected } = useContext(UserContext)
     const { someThingIsCopied } = useContext(CopyPasteContext)
     const [addWindowVisibility, setAddWindowVisibility] = useState(false)
     const [friendOptionsWindowVisibility, setfriendOptionWindowVisibility] = useState(false)

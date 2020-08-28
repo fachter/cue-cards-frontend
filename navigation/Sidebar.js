@@ -71,7 +71,7 @@ function getHeaderTitle(route) {
             return ''
         case 'Rooms':
             return 'House of CueCards'
-        case 'MyRoom':
+        case 'Room':
             return 'Mein Raum'
         case 'CardScreen':
             return "Befragung"
@@ -91,7 +91,7 @@ function RoomStackScreen({ navigation, route }) {
             headerTintColor: "white"
         }}>
             <RoomStack.Screen name="Rooms" component={RoomScreen} options={headerOptionsFirstPage} />
-            <RoomStack.Screen name="MyRoom" component={HomeScreen} options={headerOptions} />
+            <RoomStack.Screen name="Room" component={HomeScreen} options={headerOptions} />
             <RoomStack.Screen name="ContainRoom" component={ContainRoomScreen} options={{
                 headerLeft: () => (
                     <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" onPress={() => navigation.pop()} />)

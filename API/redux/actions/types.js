@@ -1,0 +1,2 @@
+export const UPDATE_USERTOKEN = 'UPDATE_USERTOKEN'
+
