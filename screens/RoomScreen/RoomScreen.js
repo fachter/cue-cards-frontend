@@ -15,6 +15,7 @@ import DeleteRoomWindow from './DeleteRoomWindow';
 import { RoomListStructureContext } from './RoomListStructureProvider';
 import { UserContext } from '../LoginRegistrationScreen/UserProvider'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 export default function RoomScreen() {
@@ -58,8 +59,6 @@ const SetDataList = () => {
 
 
 
-
-
     function handleAdd(newListItem) {
         let copy = rooms
 
@@ -83,19 +82,6 @@ const SetDataList = () => {
             setAddRoomWindowVisibility(true)
         }
     }
-
-    // function _deleteItemById(id) {
-    //     const copy = rooms
-    //     var index
-
-    //     for (var i = 0; i < copy.length; i++) {  //Sucht den Index des Items im Array nach id
-    //         if (copy[i].id === id)
-    //             index = i
-    //     }
-    //     copy.splice(index, 1)  //schmeißt das Item mit dem Index raus
-    //     setRooms(copy)
-    //     setDeleteWindowVisibility(false)
-    // }
 
 
 
@@ -143,17 +129,19 @@ const SetDataList = () => {
         if (isConnected === true) {
             return (
                 <View>
-                    <FlatList
-                        data={rooms}
-                        keyExtractor={item => item.ID}
-                        renderItem={({ item }) => (
-                            <RoomListItem
-                                item={item}
-                                onDeleteWindow={_showDeleteWindow}
-                                onNavigate={_navigateToFolderScreen}
-                            />
-                        )}
-                    />
+                    <ScrollView>
+                        <FlatList
+                            data={rooms}
+                            keyExtractor={item => item.ID}
+                            renderItem={({ item }) => (
+                                <RoomListItem
+                                    item={item}
+                                    onDeleteWindow={_showDeleteWindow}
+                                    onNavigate={_navigateToFolderScreen}
+                                />
+                            )}
+                        />
+                    </ScrollView>
                     {deleteWindowVisibility ?
                         <DeleteRoomWindow
                             onDeleteWindow={() => setDeleteWindowVisibility(false)}

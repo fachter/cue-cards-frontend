@@ -1,7 +1,12 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default class CreateRoomView extends React.Component {
+
+    state = {
+        roomName: null,
+    }
 
     render() {
         return (
@@ -29,7 +34,6 @@ export default class CreateRoomView extends React.Component {
 const styles = StyleSheet.create({
     window: {
         width: '100%',
-        height: '30%',
         alignItems: 'center',
 
     },

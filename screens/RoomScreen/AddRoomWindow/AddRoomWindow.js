@@ -6,11 +6,10 @@ import Axios from 'axios'
 
 import { UserContext } from '../../LoginRegistrationScreen/UserProvider';
 
-import SuccesView from './SuccesView'
-import ActivityIndicatorView from './ActivityIndicatorView'
+import ResultView from './SuccesView'
 import PasswordView from './PasswordView'
 import RoomIDView from './RoomIDView'
-import CreatRoomView from './CreatRoomView'
+import CreateRoomView from './CreatRoomView';
 
 
 
@@ -21,18 +20,14 @@ export default class AddRoomWindow extends React.Component {
         super(props)
 
         this.state = {
-            roomName: null,
-            roomID: null,
-
             createRoomVisible: false,
             showPasswordView: false,
             showActivityIndicator: false,
-            showJoinRoomSuccesView: false,
-            showJoinRoomFailedView: false,
-            waitForPasswordResult: true,
-
-            password: null,
+            showResultView: false,
+            JoinSucces: false,
         }
+
+
     }
 
     toggleSwitch() {
@@ -44,6 +39,7 @@ export default class AddRoomWindow extends React.Component {
 
     askingForRoom(roomID) {
         const user = this.context
+
         return new Promise((resolve, reject) => {
             Axios.post('ROOMIDLINK', { data }, {
                 headers: {
@@ -53,7 +49,7 @@ export default class AddRoomWindow extends React.Component {
                 if (res.status === 200) {
                     resolve()
                     console.log(`Beitreten des Raumes mit der ID ${roomID} ` + res)
-                    this.setState({ showJoinRoomSuccesView: true })
+                    this.setState({ showResultView: true })
 
                 } else if (res.status === 202) {
                     this.setState({ showPasswordView: true })
@@ -68,8 +64,8 @@ export default class AddRoomWindow extends React.Component {
     }
 
 
+
     askingServerForRightPassword() {
-        this.state.showPasswordView = false
         this.setState({ showActivityIndicator: true })
 
         return new Promise((resolve, reject) => {
@@ -78,85 +74,69 @@ export default class AddRoomWindow extends React.Component {
                     'Authorization': "Bearer " + user.userToken
                 }
             }).then(res => {
-                this.state.showActivityIndicator = false
-                this.setState({ showJoinRoomSuccesView: true })
+                this.state.PasswordView = false
+                this.state.JoinSucces = true
+                this.setState({ showResultView: true })
+
                 resolve('erfolgreich ' + res)
             }).catch(err => {
-                this.state.showActivityIndicator = false
-                this.setState({ showJoinRoomFailedView: true })
+                this.state.PasswordView = false
+                this.state.JoinSucces = true
+                this.setState({ showResultView: true })
                 reject('fehlgeschlagen ' + err)
             })
         })
     }
 
 
+
+    closeWindow() {
+        this.state.createRoomVisible = false
+        this.state.showPasswordView = false
+        this.state.showActivityIndicator = false
+        this.state.showResultView = false
+        this.setState({ waitForPasswordResult: true })
+        this.props.onSetVisibility()
+    }
+
     render() {
-        const { createRoomVisible, showPasswordView } = this.state
+        const { createRoomVisible, showPasswordView, showResultView } = this.state
         return (
             <Modal
                 animationType="fade"
                 transparent={true}
                 visible={this.props.addRoomWindowVisibility}
-                onRequestClose={() => this.props.onSetVisibility()}>
+                onRequestClose={() => this.closeWindow()}>
                 <View style={styles.background}>
-                    <TouchableOpacity style={styles.cancelButton} onPress={() => this.props.onSetVisibility()}>
+                    <TouchableOpacity style={styles.cancelButton} onPress={() => this.closeWindow()}>
                         <AntDesign name="closecircleo" size={24} color="grey" />
                     </TouchableOpacity>
-                    {this.state.createRoomVisible ? <View style={styles.window}>
-                        <Text
-                            style={styles.headingText}>Gib deinem Raum einen Namen</Text>
-                        <TextInput
-                            style={styles.friendName}
-                            maxLength={20}
-                            placeholder="z.B. Lerngruppe1234"
-                            placeholderTextColor="grey"
-                            onChangeText={text => this.setState({ roomName: text })}>
-                        </TextInput>
-                        <View style={styles.buttonContainer}>
+                    <View style={styles.window}>
 
-                            <TouchableOpacity style={styles.saveButton} onPress={() => this.props.onAdd(this.state.roomName)}>
-                                <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
-                                <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Erstellen</Text>
-                            </TouchableOpacity>
-                        </View >
-                    </View>
-                        :
-                        <View style={styles.window}>
-                            {showPasswordView ?
-                                <View style={styles.window}>
-                                    <Text
-                                        style={styles.headingText}>Password notwendig:</Text>
-                                    <TextInput
-                                        style={styles.friendName}
-                                        placeholderTextColor="grey"
-                                        onChangeText={text => this.state.password = text}>
-                                    </TextInput>
-                                    <View style={styles.buttonContainer}>
-                                        <TouchableOpacity style={styles.saveButton} onPress={() => this.askingServerForRightPassword(this.state.password)}>
-                                            <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
-                                            <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Beitreten</Text>
-                                        </TouchableOpacity>
-                                    </View >
-                                </View>
+                        {
+                            createRoomVisible ?
+                                <CreateRoomView onAdd={this.props.onAdd} />
                                 :
-                                <View style={styles.window}>
-                                    <Text
-                                        style={styles.headingText}>Geb die ID des Raumes ein</Text>
-                                    <TextInput
-                                        style={styles.friendName}
-                                        placeholder="z.B. {Beispiel nach ID anpassen}"
-                                        placeholderTextColor="grey"
-                                        onChangeText={text => this.state.roomID = text}>
-                                    </TextInput>
-                                    <View style={styles.buttonContainer}>
-
-                                        <TouchableOpacity style={styles.saveButton} onPress={() => this.askingForRoom(this.state.roomID)}>
-                                            <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
-                                            <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Beitreten</Text>
-                                        </TouchableOpacity>
-                                    </View >
-                                </View>}
-                        </View>}
+                                <View >
+                                    {
+                                        showResultView ?
+                                            <ResultView />
+                                            :
+                                            <View >
+                                                {
+                                                    showPasswordView ?
+                                                        <PasswordView
+                                                            onAskingServerForRightPassword={this.askingServerForRightPassword.bind(this)}
+                                                            onShowActicityIndicator={this.state.showActivityIndicator}
+                                                            onResult={this.state.JoinSucces} />
+                                                        :
+                                                        <RoomIDView onAskingForRoom={this.askingForRoom.bind(this)} />
+                                                }
+                                            </View>
+                                    }
+                                </View>
+                        }
+                    </View >
 
                     <View style={styles.switchView}>
                         {createRoomVisible ? <Text style={[styles.switchText, { position: 'absolute', left: 50 }]}>beitreten</Text> : null}
