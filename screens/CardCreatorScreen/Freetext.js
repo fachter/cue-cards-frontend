@@ -76,9 +76,7 @@ export default class Vocable extends React.Component {
                 copy[index] = newCard
             }
         }
-
     }
-
 
 
     render() {

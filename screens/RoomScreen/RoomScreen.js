@@ -1,22 +1,24 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+
+
 import logo from '../../assets/Logo_grau.png';
 import home from '../../assets/Home.png';
 import newRoom from '../../assets/newRoom.png';
-import { Entypo } from '@expo/vector-icons';
 
-import AddRoomWindow from './AddRoomWindow';
+import AddRoomWindow from './AddRoomWindow/AddRoomWindow';
 import RoomListItem from './RoomListItem';
 import DeleteRoomWindow from './DeleteRoomWindow';
-import ContainRoomScreen from './ContainRoomScreen';
 
 import { RoomListStructureContext } from './RoomListStructureProvider';
-import { InternetConnectionContext } from '../../API/InternetConnection'
+import { UserContext } from '../LoginRegistrationScreen/UserProvider'
+import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
+import { ScrollView } from 'react-native-gesture-handler';
 
 
-
-export default function RoomScreen({ navigation }) {
+export default function RoomScreen() {
 
     return (
         <SetDataList />
@@ -30,10 +32,13 @@ const SetDataList = () => {
         rooms,
         setRooms,
         _getLastSetFolderStructure,
-        ContainRoomVisible,
     } = useContext(RoomListStructureContext)
 
-    const { checkIfConnected, isConnected } = useContext(InternetConnectionContext)
+    const { checkIfConnected, isConnected, userToken } = useContext(UserContext)
+    const {
+        setIsLocationMyRoom,
+        setCurrentListStructure,
+        retrieveDataFromDevice } = useContext(ListStructureContext)
 
 
     const [addRoomWindowVisibility, setAddRoomWindowVisibility] = useState(false);
@@ -51,8 +56,6 @@ const SetDataList = () => {
     function retrieveRoomData() {
 
     }
-
-
 
 
 
@@ -80,46 +83,45 @@ const SetDataList = () => {
         }
     }
 
-    function _deleteItemById(id) {
-        const copy = rooms
-        var index
 
-        for (var i = 0; i < copy.length; i++) {  //Sucht den Index des Items im Array nach id
-            if (copy[i].id === id)
-                index = i
 
+
+    async function _navigateToFolderScreen(isLocationMyRoom, folders) {
+        setIsLocationMyRoom(isLocationMyRoom)
+        if (isLocationMyRoom === true) {
+            await loadMyRoomData()
+        } else {
+            await loadNetworkRoomData(folders)
         }
-        copy.splice(index, 1)  //schmeißt das Item mit dem Index raus
-        setRooms(copy)
-        setDeleteWindowVisibility(false)
-
-    }
-
-
-    /* 
-       function _getClickedItem(item) {
-        let indexOfItem = rooms.indexOf(item)
-        let subStructure = rooms[indexOfItem]
-        setCurrentRoomStructure(subStructure)
-    }     */
-
-    function _showContainRoomScreen(item) {
-        /*let indexOfItem = rooms.indexOf(item)
-        setItemIndex(indexOfItem)
-         let copy = rooms[itemIndex].roomsSubFolders
-        setRooms(copy) 
-        setCurrentRoomStructure(copy) */
-        //setCurrentRoomStructure(item.folders)
-
-        navigation.navigate('ContainRoom')
+        navigation.navigate('Room')
     }
 
 
 
-    function tryToJoinRoom(roomID) {
+    function loadMyRoomData() {
+        axios.get("https://cue-cards-app.herokuapp.com/get-users-data", {
+            headers: {
+                'Authorization': "Bearer " + userToken
+            }
+        }).then(async (res) => {
+            console.log(res.data.folders)
+            let serverData = await res.data.folders
+            let localData = await retrieveDataFromDevice()
 
+            //vergleiche Datum 
+            //Lade Local oder aus dem Netzwerk, je nach letzten Bearbeitungsdatum
+            //durch setCurrentListStructure wird im Falle das die Localen Daten aktuller sind
+            //die Daten auf dem Server sofort geupdatet 
 
+            setCurrentListStructure(serverData)
+        })
     }
+
+
+    function loadNetworkRoomData(folders) {
+        setCurrentListStructure(folders)
+    }
+
 
 
 
@@ -127,18 +129,19 @@ const SetDataList = () => {
         if (isConnected === true) {
             return (
                 <View>
-                    <FlatList
-                        data={rooms}
-                        keyExtractor={item => item.ID}
-                        renderItem={({ item }) => (
-                            <RoomListItem
-                                item={item}
-                                onDeleteWindow={_showDeleteWindow}
-                                showContainRoomScreen={_showContainRoomScreen}
-                            />
-                        )}
-                    />
-
+                    <ScrollView>
+                        <FlatList
+                            data={rooms}
+                            keyExtractor={item => item.ID}
+                            renderItem={({ item }) => (
+                                <RoomListItem
+                                    item={item}
+                                    onDeleteWindow={_showDeleteWindow}
+                                    onNavigate={_navigateToFolderScreen}
+                                />
+                            )}
+                        />
+                    </ScrollView>
                     {deleteWindowVisibility ?
                         <DeleteRoomWindow
                             onDeleteWindow={() => setDeleteWindowVisibility(false)}
@@ -165,7 +168,7 @@ const SetDataList = () => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => navigation.navigate('MyRoom')}>
+            <TouchableOpacity onPress={() => _navigateToFolderScreen(true, null)}>
                 <Image source={home} style={[styles.home, { marginTop: -10 }]} />
                 <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>Mein Raum</Text>
             </TouchableOpacity>
@@ -178,7 +181,6 @@ const SetDataList = () => {
                 onSetVisibility={_setRoomAddWindowVisibility}
                 addRoomWindowVisibility={addRoomWindowVisibility}
                 onAdd={handleAdd}
-                onJoin={tryToJoinRoom}
             />
             <Image source={logo} style={styles.logo} />
         </View>

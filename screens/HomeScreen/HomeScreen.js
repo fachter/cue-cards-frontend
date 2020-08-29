@@ -1,27 +1,24 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, FlatList, Dimensions, Text, Button, StyleSheet, TouchableOpacity, BackHandler, AppState, Image } from 'react-native';
+import { View, FlatList, Dimensions, Text, Button, StyleSheet, TouchableOpacity, BackHandler, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-
-
+import logo from '../../assets/Logo_grau.png';
 import { Entypo } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 
 import ChooseFolderSetWindow from './ChooseFolderSetWindow'
 import FolderListItem from './FolderListItem';
 import DeleteWindow from './DeleteWindow'
 import NewCardWindow from './NewCardWindow'
+import SwipeView from '../../components/SwipeView'
 
 import { ListStructureContext } from './ListStructureProvider'
 import { CopyPasteContext } from './CopyPasteProvider'
 import { SettingsContext } from '../SettingsScreen/SettingsProvider'
 
 
-import SwipeView from '../../components/SwipeView'
-import { useNavigation } from '@react-navigation/native';
-import { UserContext } from '../LoginRegistrationScreen/UserProvider';
 
-import { storeMyRoomDataOnDB } from '../../API/Database'
+
 
 import logo from '../../assets/Logo_grau.png';
 import Raumbild1 from '../../assets/Raumbild1.png';
@@ -31,7 +28,7 @@ import Raumbild2 from '../../assets/Raumbild2.png';
 const { width: WidTH } = Dimensions.get('window')
 
 
-export default function HomeScreen() {
+function HomeScreen() {
     return (
         <DataList />
     )
@@ -65,7 +62,6 @@ const DataList = () => {
 
 
     useEffect(() => {
-        console.log(currentListStructure)
         BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
     }, []);
 
@@ -215,10 +211,6 @@ const DataList = () => {
 
 
 
-    function handleSearch(text) {
-        setQuery({ getQuery: text })
-    }
-
 
 
     function plusButtonClicked() {
@@ -232,12 +224,19 @@ const DataList = () => {
 
 
     function createNewCard(cardType) {
+
+        const params = {
+            mode: "createMode",
+            onSave: currentListStructure,
+            onSetSave: setCurrentListStructure,
+        }
+
         if (cardType === "MC") {
-            navigation.navigate('MultipleChoice', { mode: "createMode", onSave: currentListStructure, onSetSave: setCurrentListStructure })
+            navigation.navigate('MultipleChoice', params)
         } else if (cardType === "SC") {
-            navigation.navigate('SingleChoice', { mode: "createMode", onSave: currentListStructure, onSetSave: setCurrentListStructure })
+            navigation.navigate('SingleChoice', params)
         } else if (cardType === "FT") {
-            navigation.navigate('Freetext', { mode: "createMode", onSave: currentListStructure, onSetSave: setCurrentListStructure })
+            navigation.navigate('Freetext', params)
         }
         setCreateNewCardWindowVisible(false)
     }
@@ -389,3 +388,4 @@ const styles = StyleSheet.create({
 })
 
 
+export default HomeScreen

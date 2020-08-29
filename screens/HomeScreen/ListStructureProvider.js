@@ -1,28 +1,28 @@
 import React from 'react'
 import { AsyncStorage } from 'react-native'
+import { UserContext } from '../LoginRegistrationScreen/UserProvider'
+
+import { storeMyRoomDataOnDB, syncAxiosPost } from '../../API/Database'
 
 const ListStructureContext = React.createContext()
 
-
-
-
 class ListStructureProvider extends React.Component {
+    static contextType = UserContext
+
     constructor(props) {
         super(props)
 
         this.state = {
+            isLocationMyRoom: true,
             listHistoryArray: [],
             currentListStructure: [],
             isFolder: true,
             CreateFileWindowVisible: false,  //PopupFenster um neue Datei anzuulegen
             CreateNewCardWindowVisible: false,
             dataIsLoading: true,
-            query: "",
-            fullData: [],
-            setHistoryArray: [],
-            currentSetStructure: []
         }
         this.storeDataOnDevice = this.storeDataOnDevice.bind(this)
+        this.setIsLocationMyRoom = this.setIsLocationMyRoom.bind(this)
     }
 
 
@@ -65,7 +65,41 @@ class ListStructureProvider extends React.Component {
 
     setCurrentListStructure = (newListStructure) => {
         this.setState({ currentListStructure: newListStructure })
-        this.storeDataOnDevice(newListStructure)
+        this.saveDataLocalOrOnline(newListStructure)
+    }
+
+
+    // Andere Möglichkeit: statt isLocationMyRoom abfragen:
+    // den Link richtigen Link als Parameter mit übergeben
+    async saveDataLocalOrOnline(newListStructure) {
+        const user = this.context
+        const connectingErrorMessage = "Verbindung zum Netzwerk fehlgeschlagen, Daten konnten nicht auf dem Server gespeichert werden"
+
+        if (this.state.isLocationMyRoom === true) {
+            this.storeDataOnDevice(newListStructure)
+            user.checkIfConnected()
+                .then(res => {
+                    console.log('Verbindung zum Netzwerk ' + res)
+                    storeMyRoomDataOnDB(this.state.listHistoryArray, this.state.currentListStructure, user.userToken)
+                })
+                .catch(res => {
+                    console.log('Verbindung zum Server ' + res)
+                    alert(connectingErrorMessage)
+                })
+        } else {
+            user.checkIfConnected()
+                .then(res => {
+                    console.log('Verbindung zum Netzwerk ' + res)
+                    syncAxiosPost('link', 'ListStructureProvider', newListStructure)  //LINK FEHLT !
+                        .catch(mes => {
+                            alert("Verbindung zum Server " + mes)
+                        })
+                }).catch(res => {
+                    console.log('Verbindung zum Netzwerk ' + res)
+                    alert(connectingErrorMessage)
+                })
+
+        }
     }
 
     updateFolderHistory = () => {
@@ -92,42 +126,8 @@ class ListStructureProvider extends React.Component {
         this.setState({ dataIsLoading: value })
     }
 
-
-
-
-
-
-    setCurrentSetStructure = (newSetStructure) => {
-        this.setState({ currentSetStructure: newSetStructure })
-    }
-
-    updateSetHistory = () => {
-        this.state.setHistoryArray.push(this.state.currentSetStructure)
-    }
-
-    _getLastSetFolderStructure = () => {
-        return this.state.setHistoryArray.pop()
-    }
-
-
-
-
-
-
-
-
-
-
-    setQuery = (query) => {
-        this.setState({ query })
-    }
-
-    setFullDat = (fullData) => {
-        this.setState({ fullData })
-    }
-
-    getQuery = (query) => {
-        return this.state.query
+    setIsLocationMyRoom(value) {
+        this.state.isLocationMyRoom = value
     }
 
 
@@ -151,20 +151,9 @@ class ListStructureProvider extends React.Component {
                 retrieveDataFromDevice: this.retrieveDataFromDevice,
                 dataIsLoading: this.state.dataIsLoading,
                 setDataIsLoading: this.setDataIsLoading,
-                // for Rooms
-                setHistoryArray: this.state.setHistoryArray,
-                currentSetStructure: this.state.currentSetStructure,
-                setCurrentSetStructure: this.setCurrentSetStructure,
-                updateSetHistory: this.updateSetHistory,
-                _getLastSetFolderStructure: this._getLastSetFolderStructure,
+                isLocationMyRoom: this.state.isLocationMyRoom,
+                setIsLocationMyRoom: this.setIsLocationMyRoom
 
-
-
-                query: this.state.query,
-                setQuery: this.setQuery,
-                fullData: this.state.fullData,
-                setFullData: this.setFullData,
-                getQuery: this.getQuery,
 
             }}>
                 {this.props.children}
