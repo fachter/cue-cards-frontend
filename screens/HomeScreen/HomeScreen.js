@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { View, FlatList, Dimensions, Text, Button, StyleSheet, TouchableOpacity, BackHandler, AppState, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import logo from '../../assets/Logo_grau.png';
+
 
 
 import { Entypo } from '@expo/vector-icons';
@@ -22,6 +22,10 @@ import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../LoginRegistrationScreen/UserProvider';
 
 import { storeMyRoomDataOnDB } from '../../API/Database'
+
+import logo from '../../assets/Logo_grau.png';
+import Raumbild1 from '../../assets/Raumbild1.png';
+import Raumbild2 from '../../assets/Raumbild2.png';
 
 
 const { width: WidTH } = Dimensions.get('window')
@@ -265,6 +269,8 @@ const DataList = () => {
             </View> : null}
             <SwipeView swipeRight={_backButtonPressed}
             >
+                <Image source={Raumbild2} style={styles.obenRechts} />
+                <Image source={Raumbild1} style={styles.untenLinks} />
                 <FlatList
                     //ListHeaderComponent={renderHeader}
                     data={currentListStructure}
@@ -366,6 +372,20 @@ const styles = StyleSheet.create({
         bottom: -5,
         alignSelf: 'center',
     },
+    untenLinks: {
+        position: 'absolute',
+        width: '25%',
+        height: 70,
+        resizeMode: 'stretch',
+        bottom: 0,
+    },
+    obenRechts: {
+        position: 'absolute',
+        width: 25,
+        height: '20%',
+        resizeMode: 'stretch',
+        right: 10,
+    }
 })
 
 

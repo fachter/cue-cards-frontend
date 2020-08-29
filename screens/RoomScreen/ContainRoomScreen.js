@@ -91,7 +91,7 @@ const SetDataList = () => {
         }
     ]
 
- 
+
 
 
     const navigation = useNavigation()
@@ -296,7 +296,7 @@ const SetDataList = () => {
 
             <View style={styles.menuContainer}>
                 <TouchableOpacity style={styles.cancelButton} onPress={() => setSideBarOpen(false)}>
-                    <AntDesign name="closecircleo" size={24} color="grey" />
+                    <AntDesign name="closecircleo" size={17} color="grey" />
                 </TouchableOpacity>
                 <Searchbar
                     style={styles.searchBar}
@@ -306,13 +306,14 @@ const SetDataList = () => {
                 />
                 <FlatList
                     data={friends}
+                    style={styles.friendList}
                     //extraData={state}
                     renderItem={({ item, index }) => {
                         return (
-                            
+
                             <TouchableOpacity style={styles.menuTitleContainer}>
-                                <Image style={{ width: 30, height: 30, borderRadius: 40, borderWidth: 1, borderColor: 'white', marginLeft: 5  }}
-                                    source={require('../../assets/Passbild.jpg') }>
+                                <Image style={{ width: 30, height: 30, borderRadius: 40, borderWidth: 1, borderColor: 'white', marginLeft: 5 }}
+                                    source={require('../../assets/Passbild.jpg')}>
 
                                 </Image>
                                 <Text style={styles.menuTitle}
@@ -320,10 +321,11 @@ const SetDataList = () => {
                                     {item.title}
                                 </Text>
                             </TouchableOpacity>
-                            
+
                         )
                     }} />
                 <FlatList
+                    style={styles.friendList}
                     data={roomFriends}
                     //extraData={state}
                     renderItem={({ item, index }) => {
@@ -338,10 +340,11 @@ const SetDataList = () => {
                                     {item.title}
                                 </Text>
                                 <MaterialCommunityIcons
-                                name="account-plus"
-                                size={25}
-                                color='white'
-                                 />
+                                    style={styles.addUserButton}
+                                    name="account-plus"
+                                    size={25}
+                                    color='white'
+                                />
                             </TouchableOpacity>
                         )
                     }} />
@@ -447,6 +450,12 @@ const styles = StyleSheet.create({
         backgroundColor: "#2f3136",
         paddingTop: 30
     },
+    friendList: {
+        flex: 1,
+        borderColor: 'red',
+        borderWidth: 2,
+        paddingVertical: -40
+    },
     plusButton: {
         height: 60,
         width: 60,
@@ -482,14 +491,14 @@ const styles = StyleSheet.create({
         height: 30,
         borderRadius: 5,
         alignSelf: 'flex-start',
-        margin: 5,
+        margin: 2,
         justifyContent: 'center',
         alignItems: 'center'
     },
     menuTitle: {
         width: '70%',
         color: 'white',
-        textAlign: 'center',
+        marginLeft: 25,
         fontSize: 17,
         alignSelf: 'center',
     },
@@ -499,13 +508,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     searchBar: {
-        //marginVertical: 15,
         borderRadius: 10,
         color: 'black',
         marginHorizontal: 15,
+        marginBottom: 15,
         fontSize: 15,
         fontStyle: 'italic',
-        backgroundColor: '#C7C7C7'
+        backgroundColor: '#C7C7C7',
     },
     logo: {
         position: 'absolute',
@@ -516,7 +525,11 @@ const styles = StyleSheet.create({
     },
     menuTitleContainer: {
         flexDirection: "row",
-        paddingVertical: 5
+        paddingVertical: 5,
+        marginHorizontal: 15,
+    },
+    addUserButton: {
+        marginLeft: -15
     }
 
 })
