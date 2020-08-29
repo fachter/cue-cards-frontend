@@ -1,6 +1,6 @@
 
 import React, { useContext, useEffect } from 'react';
-import { View, Image, Text, StyleSheet, TextInput } from 'react-native';
+import { View, Image, Text, StyleSheet, TextInput, Switch } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { AntDesign, MaterialCommunityIcons, Entypo, FontAwesome } from '@expo/vector-icons';
@@ -42,21 +42,41 @@ function SettingsScreen() {
             <View style={styles.settingView}>
                 <Entypo name="align-top" size={25} color="grey" style={styles.icons} />
                 <Text style={styles.text}>Alle Karten (inkl. höchster Stufe){"\n"}abfragen? </Text>
-                <CheckBox
+                {/* <CheckBox
                     value={maxCardLevelIncluded}
                     onValueChange={value => setMaxCardLevelIncluded(value)}
                     style={styles.checkbox}
                     tintColors={'white', 'blue'}
+                /> */}
+                <Switch
+                    style={styles.toggle}
+                    trackColor={{
+                        false: "grey", true: "white"
+                    }}
+                    thumbColor='#008FD3'
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={value => setMaxCardLevelIncluded(value)}
+                //value={createRoomVisible}
                 />
             </View>
             <View style={styles.settingView}>
                 <MaterialCommunityIcons name="shuffle" size={25} color="grey" style={styles.icons} />
                 <Text style={styles.text}>Karten beim Abfragen mischen?</Text>
-                <CheckBox
+                {/* <CheckBox
                     value={shuffleCards}
                     onValueChange={value => setShuffleCards(value)}
                     style={styles.checkbox}
                     tintColors={'white', 'blue'}
+                /> */}
+                <Switch
+                    style={styles.toggle}
+                    trackColor={{
+                        false: "grey", true: "white"
+                    }}
+                    thumbColor='#008FD3'
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={value => setShuffleCards(value)}
+                    value={shuffleCards}
                 />
             </View>
             <View style={styles.logoutView}>
@@ -111,9 +131,9 @@ const styles = StyleSheet.create({
         marginTop: 30,
         flexDirection: 'row',
     },
-    checkbox: {
+    toggle: {
         position: 'absolute',
-        right: 30,
+        right: 20,
         alignSelf: 'center'
     },
     logo: {

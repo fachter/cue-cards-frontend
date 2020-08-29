@@ -28,13 +28,10 @@ export default class RoomListItem extends React.Component {
                         color="white"
                     /> */}
                     <Text style={styles.fontStyle}>{this.props.item.title}</Text>
-                    <Image source={this.props.item.picture} style={styles.home} />
+                    <Image source={RaumVorlage2} style={styles.home} />
                     <Text style={styles.fontStyle}>{this.props.item.title}</Text>
                 </View>
             </TouchableOpacity>
-
-
-
         )
     }
 }
