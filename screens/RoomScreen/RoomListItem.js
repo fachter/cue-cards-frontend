@@ -2,7 +2,7 @@ import React from 'react'
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { max } from 'react-native-reanimated';
-import DeleteRoomWindow from './DeleteRoomWindow';
+import DeleteRoomWindow from './EditWindow';
 
 import RaumVorlage1 from '../../assets/RaumVorlage1.png';
 import RaumVorlage2 from '../../assets/RaumVorlage2.png';
@@ -10,9 +10,22 @@ import RaumVorlage3 from '../../assets/RaumVorlage3.png';
 import RaumVorlage4 from '../../assets/RaumVorlage4.png';
 
 
+const pictures = [RaumVorlage1, RaumVorlage2, RaumVorlage3, RaumVorlage4]
 
 
 export default class RoomListItem extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            pictureNumber: this.loadBackgoundPicture()
+        }
+
+    }
+
+    loadBackgoundPicture() {
+        return pictures[this.props.item.pictureNumber]
+    }
 
     render() {
         return (
@@ -28,7 +41,7 @@ export default class RoomListItem extends React.Component {
                         color="white"
                     /> */}
                     <Text style={styles.fontStyle}>{this.props.item.title}</Text>
-                    <Image source={RaumVorlage2} style={styles.home} />
+                    <Image source={this.state.pictureNumber} style={styles.home} />
                     <Text style={styles.fontStyle}>{this.props.item.title}</Text>
                 </View>
             </TouchableOpacity>

@@ -71,10 +71,9 @@ class ListStructureProvider extends React.Component {
 
     // Andere Möglichkeit: statt isLocationMyRoom abfragen:
     // den Link richtigen Link als Parameter mit übergeben
-    async saveDataLocalOrOnline(newListStructure) {
+    saveDataLocalOrOnline(newListStructure) {
         const user = this.context
         const connectingErrorMessage = "Verbindung zum Netzwerk fehlgeschlagen, Daten konnten nicht auf dem Server gespeichert werden"
-
         if (this.state.isLocationMyRoom === true) {
             this.storeDataOnDevice(newListStructure)
             user.checkIfConnected()

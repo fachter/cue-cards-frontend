@@ -1,15 +1,15 @@
 import React from 'react'
-import { View, Modal, StyleSheet, Text, TextInput, TouchableOpacity, Switch } from 'react-native'
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { View, Modal, StyleSheet, Text, TouchableOpacity, Switch } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import Axios from 'axios'
 
 import { UserContext } from '../../LoginRegistrationScreen/UserProvider';
 
-import ResultView from './SuccesView'
+import ResultView from './ResultView'
 import PasswordView from './PasswordView'
 import RoomIDView from './RoomIDView'
-import CreateRoomView from './CreatRoomView';
+import CreateRoomView from './CreateRoomView';
+
 
 
 
@@ -26,14 +26,13 @@ export default class AddRoomWindow extends React.Component {
             showResultView: false,
             JoinSucces: false,
         }
-
-
     }
+
+
 
     toggleSwitch() {
         this.setState({ createRoomVisible: !this.state.createRoomVisible })
     }
-
 
 
 
@@ -101,6 +100,8 @@ export default class AddRoomWindow extends React.Component {
 
     render() {
         const { createRoomVisible, showPasswordView, showResultView } = this.state
+        const user = this.context
+
         return (
             <Modal
                 animationType="fade"
@@ -115,7 +116,7 @@ export default class AddRoomWindow extends React.Component {
 
                         {
                             createRoomVisible ?
-                                <CreateRoomView onAdd={this.props.onAdd} />
+                                <CreateRoomView context={user.context} />
                                 :
                                 <View >
                                     {
@@ -130,7 +131,7 @@ export default class AddRoomWindow extends React.Component {
                                                             onShowActicityIndicator={this.state.showActivityIndicator}
                                                             onResult={this.state.JoinSucces} />
                                                         :
-                                                        <RoomIDView onAskingForRoom={this.askingForRoom.bind(this)} />
+                                                        <RoomIDView onAskingForRoom={this.askingForRoom.bind(this)} internetConnection={user.isConnected} />
                                                 }
                                             </View>
                                     }

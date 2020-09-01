@@ -37,15 +37,19 @@ class UserProvider extends React.Component {
                 else {
                     reject('fehlgeschlagen')
                 }
+
                 if (this.state.isConnected != response.isConnected) {
                     this.setState({ isConnected: response.isConnected })
                 }
-            }).catch(error => {
-                reject(error)
-                console.log("Verbindung zum Netzwerk nicht möglich =>  " + error)
             })
+                .catch(error => {
+                    reject('fehlgeschlagen')
+                    console.log("Verbindung zum Netzwerk nicht möglich =>  " + error)
+                })
         })
     }
+
+
     // async _storeTokenOnDevice(token) {
     //     try {
     //         await AsyncStorage.setItem(

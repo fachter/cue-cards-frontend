@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { View, FlatList, Dimensions, Text, Button, StyleSheet, TouchableOpacity, BackHandler, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import logo from '../../assets/Logo_grau.png';
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
@@ -19,10 +18,10 @@ import { SettingsContext } from '../SettingsScreen/SettingsProvider'
 
 
 
-
 import logo from '../../assets/Logo_grau.png';
 import Raumbild1 from '../../assets/Raumbild1.png';
 import Raumbild2 from '../../assets/Raumbild2.png';
+
 
 
 const { width: WidTH } = Dimensions.get('window')
@@ -62,6 +61,9 @@ const DataList = () => {
 
 
     useEffect(() => {
+        console.log("someThingIsCopied " + someThingIsCopied)
+        console.log("copiedItemIsCard " + copiedItemIsCard)
+        console.log("iFolder " + isFolder)
         BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
     }, []);
 
@@ -207,6 +209,7 @@ const DataList = () => {
         copy.splice(index, 1)  //schmeißt das Item mit dem Index raus
         setCurrentListStructure(copy)
         SetDeleteWindowVisible(false)
+
     }
 
 
@@ -250,22 +253,26 @@ const DataList = () => {
 
     return (
         <View style={styles.container}>
-            {someThingIsCopied ? <View style={styles.copyPasteView}>
-                {copiedItemIsCard ? <View> <Text>Einfügen</Text>
-                    <Icon.Button
-                        name="ios-copy"
-                        size={23} color="black"
-                        backgroundColor="white"
-                        onPress={() => pasteTheCopiedData()} />
-                    <Icon.Button
-                        style={{ alignSelf: 'flex-start' }}
-                        name="ios-close"
-                        size={23} color="black"
-                        backgroundColor="white"
-                        onPress={() => setSomeThingIsCopied(false)} />
-                </View> :
-                    <Text></Text>}
-            </View> : null}
+            {someThingIsCopied ?
+                <View >
+                    {(copiedItemIsCard === true && isFolder === false) || (copiedItemIsCard === false) ?
+                        <View style={styles.copyPasteView}>
+                            <Icon.Button
+                                name="ios-copy"
+                                size={23} color="black"
+                                backgroundColor="white"
+                                onPress={() => pasteTheCopiedData()} />
+                            <Icon.Button
+                                style={{ alignSelf: 'flex-start' }}
+                                name="ios-close"
+                                size={23} color="black"
+                                backgroundColor="white"
+                                onPress={() => setSomeThingIsCopied(false)} />
+                        </View> :
+                        <Text>kopierte Datei kann hier nicht eingefügt werden</Text>}
+                </View>
+                :
+                null}
             <SwipeView swipeRight={_backButtonPressed}
             >
                 <Image source={Raumbild2} style={styles.obenRechts} />

@@ -11,7 +11,6 @@ import { SettingsProvider } from './screens/SettingsScreen/SettingsProvider'
 import { ListStructureProvider } from './screens/HomeScreen/ListStructureProvider'
 import { RoomListStructureProvider } from './screens/RoomScreen/RoomListStructureProvider'
 import { CopyPasteProvider } from './screens/HomeScreen/CopyPasteProvider'
-import DatabaseProvider from './API/Database'
 
 import Sidebar from './navigation/Sidebar'
 import { LoginRegistrationStackScreen } from './navigation/Sidebar';
@@ -58,13 +57,11 @@ class App extends React.Component {
       <UserProvider>
         <CopyPasteProvider>
           <RoomListStructureProvider>
-            <DatabaseProvider>
-              <ListStructureProvider>
-                <SettingsProvider>
-                  <StartScreen />
-                </SettingsProvider>
-              </ListStructureProvider>
-            </DatabaseProvider>
+            <ListStructureProvider>
+              <SettingsProvider>
+                <StartScreen />
+              </SettingsProvider>
+            </ListStructureProvider>
           </RoomListStructureProvider>
         </CopyPasteProvider>
       </UserProvider >
