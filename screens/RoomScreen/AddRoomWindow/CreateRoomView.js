@@ -28,6 +28,7 @@ export default class CreateRoomView extends React.Component {
             roomName: this.state.roomName
         }
 
+
         user.checkIfConnected()
             .then(() => {
                 asyncAxiosPost('addRoomLink', 'CreateRoomView', newRoom, user.userToken)

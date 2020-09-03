@@ -112,11 +112,12 @@ const SetDataList = () => {
 
 
     function loadMyRoomData() {
-        axios.get("https://cue-cards-app.herokuapp.com/get-users-data", {
+        axios.get("https://cue-cards-app.herokuapp.com/api/get-users-data", {
             headers: {
                 'Authorization': "Bearer " + userToken
             }
         }).then(async (res) => {
+
             let serverData = await res.data.folders
             let localData = await retrieveDataFromDevice()
 
@@ -124,7 +125,6 @@ const SetDataList = () => {
             //Lade Local oder aus dem Netzwerk, je nach letzten Bearbeitungsdatum
             //durch setCurrentListStructure wird im Falle das die Localen Daten aktuller sind
             //die Daten auf dem Server sofort geupdatet 
-
             setCurrentListStructure(serverData)
         })
     }

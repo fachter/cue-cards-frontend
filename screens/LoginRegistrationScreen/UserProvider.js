@@ -130,7 +130,7 @@ class UserProvider extends React.Component {
 
 
         return new Promise((resolve, reject) => {
-            axios.post('https://cue-cards-app.herokuapp.com/authenticate', {
+            axios.post('https://cue-cards-app.herokuapp.com/api/authenticate', {
                 username: 'xx',
                 password: 'xx',
             }).then(res => {

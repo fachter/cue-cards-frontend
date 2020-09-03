@@ -22,7 +22,7 @@ export default function RegistrationScreen({ navigation }) {
 
 
     function _regNewAcc() {
-        axios.post('https://cue-cards-app.herokuapp.com/register', {
+        axios.post('https://cue-cards-app.herokuapp.com/api/register', {
             username: 'xx',
             password: 'xx',
             email: 'xx@bla.de',

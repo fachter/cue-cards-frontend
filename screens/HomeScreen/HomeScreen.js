@@ -61,9 +61,6 @@ const DataList = () => {
 
 
     useEffect(() => {
-        console.log("someThingIsCopied " + someThingIsCopied)
-        console.log("copiedItemIsCard " + copiedItemIsCard)
-        console.log("iFolder " + isFolder)
         BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
     }, []);
 

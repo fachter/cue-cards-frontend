@@ -1,8 +1,5 @@
 import React from 'react'
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native'
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { max } from 'react-native-reanimated';
-import DeleteRoomWindow from './EditWindow';
 
 import RaumVorlage1 from '../../assets/RaumVorlage1.png';
 import RaumVorlage2 from '../../assets/RaumVorlage2.png';
