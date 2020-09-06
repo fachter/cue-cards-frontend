@@ -13,6 +13,32 @@ export default class PasswordView extends React.Component {
     }
 
 
+
+    askingServerForRightPassword() {
+        this.setState({ showActivityIndicator: true })
+
+        return new Promise((resolve, reject) => {
+            Axios.post('PASSWORDLINK', { data }, {
+                headers: {
+                    'Authorization': "Bearer " + user.userToken
+                }
+            }).then(res => {
+                this.state.PasswordView = false
+                this.state.JoinSucces = true
+                this.setState({ showResultView: true })
+
+                resolve('erfolgreich ' + res)
+            }).catch(err => {
+                this.state.PasswordView = false
+                this.state.JoinSucces = true
+                this.setState({ showResultView: true })
+                reject('fehlgeschlagen ' + err)
+            })
+        })
+    }
+
+
+
     render() {
         return (
 

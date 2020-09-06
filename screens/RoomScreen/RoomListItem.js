@@ -25,10 +25,11 @@ export default class RoomListItem extends React.Component {
     }
 
     render() {
+        const { item } = this.props
         return (
             <TouchableOpacity
-                onLongPress={() => this.props.onDeleteWindow(this.props.item)}
-                onPress={() => this.props.onNavigate(false, this.props.item)}
+                onLongPress={() => this.props.onDeleteWindow(item)}
+                onPress={() => this.props.onNavigate(item.id, item)}
             >
                 <View style={styles.container}>
                     {/* <MaterialCommunityIcons
@@ -37,9 +38,9 @@ export default class RoomListItem extends React.Component {
                         size={25}
                         color="white"
                     /> */}
-                    <Text style={styles.fontStyle}>{this.props.item.title}</Text>
+                    <Text style={styles.fontStyle}>{item.title}</Text>
                     <Image source={this.state.pictureNumber} style={styles.home} />
-                    <Text style={styles.fontStyle}>{this.props.item.title}</Text>
+                    <Text style={styles.fontStyle}>{item.title}</Text>
                 </View>
             </TouchableOpacity>
         )

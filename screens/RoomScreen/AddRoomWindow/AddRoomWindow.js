@@ -1,12 +1,10 @@
 import React from 'react'
 import { View, Modal, StyleSheet, Text, TouchableOpacity, Switch } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
-import Axios from 'axios'
+
 
 import { UserContext } from '../../LoginRegistrationScreen/UserProvider';
 
-import ResultView from './ResultView'
-import PasswordView from './PasswordView'
 import RoomIDView from './RoomIDView'
 import CreateRoomView from './CreateRoomView';
 
@@ -21,73 +19,13 @@ export default class AddRoomWindow extends React.Component {
 
         this.state = {
             createRoomVisible: false,
-            showPasswordView: false,
-            showActivityIndicator: false,
-            showResultView: false,
-            JoinSucces: false,
         }
     }
-
 
 
     toggleSwitch() {
         this.setState({ createRoomVisible: !this.state.createRoomVisible })
     }
-
-
-
-    askingForRoom(roomID) {
-        const user = this.context
-
-        return new Promise((resolve, reject) => {
-            Axios.post('ROOMIDLINK', { data }, {
-                headers: {
-                    'Authorization': "Bearer " + user.userToken
-                }
-            }).then(res => {
-                if (res.status === 200) {
-                    resolve()
-                    console.log(`Beitreten des Raumes mit der ID ${roomID} ` + res)
-                    this.setState({ showResultView: true })
-
-                } else if (res.status === 202) {
-                    this.setState({ showPasswordView: true })
-                }
-            }).catch(err => {
-                alert(`Der Raum mit der ID ${roomID} ist nicht vorhanden`)
-                console.log(`Beitreten des Raumes mit der ID ${roomID} ` + res)
-                reject()
-
-            })
-        })
-    }
-
-
-
-    askingServerForRightPassword() {
-        this.setState({ showActivityIndicator: true })
-
-        return new Promise((resolve, reject) => {
-            Axios.post('PASSWORDLINK', { data }, {
-                headers: {
-                    'Authorization': "Bearer " + user.userToken
-                }
-            }).then(res => {
-                this.state.PasswordView = false
-                this.state.JoinSucces = true
-                this.setState({ showResultView: true })
-
-                resolve('erfolgreich ' + res)
-            }).catch(err => {
-                this.state.PasswordView = false
-                this.state.JoinSucces = true
-                this.setState({ showResultView: true })
-                reject('fehlgeschlagen ' + err)
-            })
-        })
-    }
-
-
 
     closeWindow() {
         this.state.createRoomVisible = false
@@ -98,10 +36,24 @@ export default class AddRoomWindow extends React.Component {
         this.props.onSetVisibility()
     }
 
-    render() {
-        const { createRoomVisible, showPasswordView, showResultView } = this.state
+    renderWindow() {
+        const { createRoomVisible } = this.state
         const user = this.context
 
+        if (createRoomVisible === true) {
+            return (
+                <CreateRoomView />
+            )
+
+        } else {
+            return (
+                <RoomIDView internetConnection={user.isConnected} />
+            )
+        }
+    }
+
+    render() {
+        const { createRoomVisible } = this.state
         return (
             <Modal
                 animationType="fade"
@@ -113,32 +65,8 @@ export default class AddRoomWindow extends React.Component {
                         <AntDesign name="closecircleo" size={24} color="grey" />
                     </TouchableOpacity>
                     <View style={styles.window}>
-
-                        {
-                            createRoomVisible ?
-                                <CreateRoomView context={user.context} />
-                                :
-                                <View >
-                                    {
-                                        showResultView ?
-                                            <ResultView />
-                                            :
-                                            <View >
-                                                {
-                                                    showPasswordView ?
-                                                        <PasswordView
-                                                            onAskingServerForRightPassword={this.askingServerForRightPassword.bind(this)}
-                                                            onShowActicityIndicator={this.state.showActivityIndicator}
-                                                            onResult={this.state.JoinSucces} />
-                                                        :
-                                                        <RoomIDView onAskingForRoom={this.askingForRoom.bind(this)} internetConnection={user.isConnected} />
-                                                }
-                                            </View>
-                                    }
-                                </View>
-                        }
+                        {this.renderWindow()}
                     </View >
-
                     <View style={styles.switchView}>
                         {createRoomVisible ? <Text style={[styles.switchText, { position: 'absolute', left: 50 }]}>beitreten</Text> : null}
                         <Switch

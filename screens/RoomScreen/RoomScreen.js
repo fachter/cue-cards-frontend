@@ -51,7 +51,7 @@ const SetDataList = () => {
 
     const { checkIfConnected, isConnected, userToken } = useContext(UserContext)
     const {
-        setIsLocationMyRoom,
+        setIsLocationMyRoom: setCurrentRoomID,
         setCurrentListStructure,
         retrieveDataFromDevice } = useContext(ListStructureContext)
 
@@ -61,17 +61,20 @@ const SetDataList = () => {
     useEffect(() => {
         checkIfConnected()
             .then(res => {
-                console.log("Prüfe Netzwerkverbindung: " + res)
-                retrieveAllRooms()
+                if (roomDataMounted === false) {
+                    console.log("Prüfe Netzwerkverbindung: " + res)
+                    retrieveAllRooms()
+                }
             }).catch(err => {
                 console.log("Prüfe Netzwerkverbindung: " + err)
             })
     })
 
     function retrieveAllRooms() {
-        asyncAxiosGet('getAllRoomsLInk', 'RoomScreen', userToken)
+        asyncAxiosGet('https://cue-cards-app.herokuapp.com/api/get-available-rooms', 'RoomScreen', userToken)
             .then(res => {
-                setServerRooms(res)
+                console.log(res.data)
+                setServerRooms(res.data)
                 setRoomDataMounted(true)
             }).catch(error => {
                 setServerProblems(true)
@@ -100,12 +103,12 @@ const SetDataList = () => {
 
 
 
-    async function _navigateToFolderScreen(isLocationMyRoom, folders) {
-        setIsLocationMyRoom(isLocationMyRoom)
-        if (isLocationMyRoom === true) {
+    async function _navigateToFolderScreen(currentRoomID, item) {
+        setCurrentRoomID(currentRoomID)
+        if (currentRoomID === 'myRoom') {
             await loadMyRoomData()
         } else {
-            await loadNetworkRoomData(folders)
+            await loadNetworkRoomData(item.data)
         }
         navigation.navigate('Room')
     }
@@ -163,7 +166,7 @@ const SetDataList = () => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => _navigateToFolderScreen(true, null)}>
+            <TouchableOpacity onPress={() => _navigateToFolderScreen('myRoom', null)}>
                 <Image source={home} style={[styles.home, { marginTop: -10 }]} />
                 <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>Mein Raum</Text>
             </TouchableOpacity>
