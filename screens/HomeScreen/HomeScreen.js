@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { View, FlatList, Dimensions, Text, Button, StyleSheet, TouchableOpacity, BackHandler, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import logo from '../../assets/Logo_grau.png';
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
