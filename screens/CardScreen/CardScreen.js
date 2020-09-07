@@ -236,12 +236,12 @@ export default function CardScreen({ route, navigation }) {
 
 
 
-    function _ifcurrentModeSoloCard() {
-        if (mode == "soloCard") {
-            return true
-        }
-        return false
-    }
+    // function _ifcurrentModeSoloCard() {
+    //     if (mode == "soloCard") {
+    //         return true
+    //     }
+    //     return false
+    // }
 
 
     return (

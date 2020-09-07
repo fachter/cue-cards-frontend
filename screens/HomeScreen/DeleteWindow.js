@@ -36,7 +36,7 @@ export default class DeleteWindow extends React.Component {
                         name="ios-trash"
                         size={30} color="white"
                         backgroundColor="#202225"
-                        onPress={() => onDelete(item.ID)}
+                        onPress={() => onDelete(item.id)}
                     />
                     {/*Kopieren*/}
                     <Icon.Button
@@ -44,7 +44,7 @@ export default class DeleteWindow extends React.Component {
                         name="ios-copy"
                         size={23} color="white"
                         backgroundColor="#202225"
-                        onPress={() => this.copy(item)}
+                        onPress={() => this.copy(item.id)}
                     />
                     {/*Ausschneiden*/}
                     <Icon.Button
@@ -52,7 +52,7 @@ export default class DeleteWindow extends React.Component {
                         name="ios-cut"
                         size={23} color="white"
                         backgroundColor="#202225"
-                        onPress={() => onDelete(item.ID)}
+                        onPress={() => onDelete(item.id)}
                     />
                     {/*Bearbeiten*/}
                     {this._checkIfItemIsFolderOrSet() ? null :

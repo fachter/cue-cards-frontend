@@ -42,12 +42,7 @@ function SettingsScreen() {
             <View style={styles.settingView}>
                 <Entypo name="align-top" size={25} color="grey" style={styles.icons} />
                 <Text style={styles.text}>Alle Karten (inkl. höchster Stufe){"\n"}abfragen? </Text>
-                {/* <CheckBox
-                    value={maxCardLevelIncluded}
-                    onValueChange={value => setMaxCardLevelIncluded(value)}
-                    style={styles.checkbox}
-                    tintColors={'white', 'blue'}
-                /> */}
+
                 <Switch
                     style={styles.toggle}
                     trackColor={{
@@ -62,12 +57,7 @@ function SettingsScreen() {
             <View style={styles.settingView}>
                 <MaterialCommunityIcons name="shuffle" size={25} color="grey" style={styles.icons} />
                 <Text style={styles.text}>Karten beim Abfragen mischen?</Text>
-                {/* <CheckBox
-                    value={shuffleCards}
-                    onValueChange={value => setShuffleCards(value)}
-                    style={styles.checkbox}
-                    tintColors={'white', 'blue'}
-                /> */}
+
                 <Switch
                     style={styles.toggle}
                     trackColor={{
@@ -82,7 +72,6 @@ function SettingsScreen() {
             <View style={styles.logoutView}>
                 <TouchableOpacity style={styles.logoutButton} onPress={() => userLogout()}>
                     <AntDesign name="logout" size={27} color="#008FD3" />
-                    {/* <Text style={{ color: '#C7C7C7', marginTop: 1 }}>Logout</Text> */}
                 </TouchableOpacity>
             </View>
             <Image source={logo} style={styles.logo} />

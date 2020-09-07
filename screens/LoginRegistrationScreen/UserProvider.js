@@ -37,15 +37,19 @@ class UserProvider extends React.Component {
                 else {
                     reject('fehlgeschlagen')
                 }
+
                 if (this.state.isConnected != response.isConnected) {
                     this.setState({ isConnected: response.isConnected })
                 }
-            }).catch(error => {
-                reject(error)
-                console.log("Verbindung zum Netzwerk nicht möglich =>  " + error)
             })
+                .catch(error => {
+                    reject('fehlgeschlagen')
+                    console.log("Verbindung zum Netzwerk nicht möglich =>  " + error)
+                })
         })
     }
+
+
     // async _storeTokenOnDevice(token) {
     //     try {
     //         await AsyncStorage.setItem(
@@ -126,7 +130,7 @@ class UserProvider extends React.Component {
 
 
         return new Promise((resolve, reject) => {
-            axios.post('https://cue-cards-app.herokuapp.com/authenticate', {
+            axios.post('https://cue-cards-app.herokuapp.com/api/authenticate', {
                 username: 'xx',
                 password: 'xx',
             }).then(res => {

@@ -6,9 +6,11 @@ import {
     ImageBackground,
     TextInput,
     StyleSheet,
+    Modal
 } from 'react-native';
 
 import { useTheme } from 'react-native-paper';
+import { AntDesign } from '@expo/vector-icons';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -19,17 +21,32 @@ import Animated from 'react-native-reanimated';
 
 
 import ImagePicker from 'react-native-image-crop-picker';
+import AddImage from './AddImage';
 
 
 
-const EditProfileScreen = () => {
+export default class EditProfileScreen extends React.Component{
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            showAddImage: false,
+
+        }
 
 
+    }
+
+
+    _closeAddImage() {
+        this.setState({ showAddImage: false })
+    }
+
+render(){
     
 
-    
 
-  
 
 
     return (
@@ -47,7 +64,7 @@ const EditProfileScreen = () => {
                 //opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
             }}>
                 <View style={{ alignItems: 'center' }}>
-                    <TouchableOpacity /* onPress={() => this.bs.current.snapTo(0)} */>
+                    <TouchableOpacity  onPress={() => this.setState({showAddImage: true})}>
                         <View
                             style={{
                                 height: 100,
@@ -120,15 +137,21 @@ const EditProfileScreen = () => {
                         ]}
                     />
                 </View>
+                
+                <AddImage
+                showAddImage={this.state.showAddImage}
+                close={this._closeAddImage.bind(this)}
+                />
+                
                 <TouchableOpacity>
                     <Text style={styles.fontStyle}>Submit</Text>
                 </TouchableOpacity>
             </Animated.View>
         </View>
     );
-};
+}
+}
 
-export default EditProfileScreen;
 
 const styles = StyleSheet.create({
     container: {

@@ -240,7 +240,7 @@ export default class Sidebar extends React.Component {
                 />
                 <Drawer.Screen name="ProfileStack" component={ProfileStackScreen}
                     options={{
-                        title: "Profile",
+                        title: "Profil",
                         drawerIcon: () => (
                             <Icon name="md-person" color="white" size={25} />
                         )

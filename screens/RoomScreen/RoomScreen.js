@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
@@ -10,12 +10,20 @@ import newRoom from '../../assets/newRoom.png';
 
 import AddRoomWindow from './AddRoomWindow/AddRoomWindow';
 import RoomListItem from './RoomListItem';
-import DeleteRoomWindow from './DeleteRoomWindow';
+import EditWindow from './EditWindow';
 
-import { RoomListStructureContext } from './RoomListStructureProvider';
 import { UserContext } from '../LoginRegistrationScreen/UserProvider'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
-import { ScrollView } from 'react-native-gesture-handler';
+import { asyncAxiosGet } from '../../API/Database'
+
+
+const rooms = [
+    { pictureNumber: 0, title: "ich bin hardgecoded" },
+    { pictureNumber: 1, title: "ich auch" },
+    { pictureNumber: 2, title: "ich auch" },
+    { pictureNumber: 3, title: "ich auch" },
+
+]
 
 
 export default function RoomScreen() {
@@ -28,52 +36,62 @@ export default function RoomScreen() {
 
 
 const SetDataList = () => {
-    const {
-        rooms,
-        setRooms,
-        _getLastSetFolderStructure,
-    } = useContext(RoomListStructureContext)
+
+
+
+    const [addRoomWindowVisibility, setAddRoomWindowVisibility] = useState(false);
+    const [editWindowVisibility, setEditWindowVisibility] = useState(false);
+    const [onDeleteItem, setOnDeleteItem] = useState(false);
+
+    ///////////////////////////////////////////////////
+
+    const [serverRooms, setServerRooms] = useState([])
+    const [roomDataMounted, setRoomDataMounted] = useState(false)
+    const [serverProblems, setServerProblems] = useState(false)
 
     const { checkIfConnected, isConnected, userToken } = useContext(UserContext)
     const {
-        setIsLocationMyRoom,
+        setIsLocationMyRoom: setCurrentRoomID,
         setCurrentListStructure,
         retrieveDataFromDevice } = useContext(ListStructureContext)
 
 
-    const [addRoomWindowVisibility, setAddRoomWindowVisibility] = useState(false);
-    const [deleteWindowVisibility, setDeleteWindowVisibility] = useState(false);
-    const [onDeleteItem, setOnDeleteItem] = useState(false);
     const navigation = useNavigation()
 
-
     useEffect(() => {
-        checkIfConnected().then(() => {
-            retrieveRoomData()
-        })
+        checkIfConnected()
+            .then(res => {
+                if (roomDataMounted === false) {
+                    console.log("Prüfe Netzwerkverbindung: " + res)
+                    retrieveAllRooms()
+                }
+            }).catch(err => {
+                console.log("Prüfe Netzwerkverbindung: " + err)
+            })
     })
 
-    function retrieveRoomData() {
+    function retrieveAllRooms() {
+        asyncAxiosGet('https://cue-cards-app.herokuapp.com/api/get-available-rooms', 'RoomScreen', userToken)
+            .then(res => {
+                console.log(res.data)
+                setServerRooms(res.data)
+                setRoomDataMounted(true)
+            }).catch(error => {
+                setServerProblems(true)
+                console.log("Fehler beim Laden der Räume " + error)
+            })
 
-    }
-
-
-
-    function handleAdd(newListItem) {
-        let copy = rooms
-
-        copy.push({ ID: copy.length, title: newListItem })
-
-        setRooms(copy)
-
-        setAddRoomWindowVisibility(false)
-        //_addNewRoomToList(newRoom)
     }
 
     function _showDeleteWindow(item) {
-        setOnDeleteItem(item)
-        setDeleteWindowVisibility(true)
+        setEditWindowVisibility(true)
     }
+
+
+    ////////////////////////////////////////////////////////////////////
+
+
+
 
     function _setRoomAddWindowVisibility() {
         if (addRoomWindowVisibility == true) {
@@ -85,26 +103,24 @@ const SetDataList = () => {
 
 
 
-
-    async function _navigateToFolderScreen(isLocationMyRoom, folders) {
-        setIsLocationMyRoom(isLocationMyRoom)
-        if (isLocationMyRoom === true) {
+    async function _navigateToFolderScreen(currentRoomID, item) {
+        setCurrentRoomID(currentRoomID)
+        if (currentRoomID === 'myRoom') {
             await loadMyRoomData()
         } else {
-            await loadNetworkRoomData(folders)
+            await loadNetworkRoomData(item.data)
         }
         navigation.navigate('Room')
     }
 
 
-
     function loadMyRoomData() {
-        axios.get("https://cue-cards-app.herokuapp.com/get-users-data", {
+        axios.get("https://cue-cards-app.herokuapp.com/api/get-users-data", {
             headers: {
                 'Authorization': "Bearer " + userToken
             }
         }).then(async (res) => {
-            console.log(res.data.folders)
+
             let serverData = await res.data.folders
             let localData = await retrieveDataFromDevice()
 
@@ -112,7 +128,6 @@ const SetDataList = () => {
             //Lade Local oder aus dem Netzwerk, je nach letzten Bearbeitungsdatum
             //durch setCurrentListStructure wird im Falle das die Localen Daten aktuller sind
             //die Daten auf dem Server sofort geupdatet 
-
             setCurrentListStructure(serverData)
         })
     }
@@ -125,34 +140,17 @@ const SetDataList = () => {
 
 
 
-    function renderRoomsFromServer() {
-        if (isConnected === true) {
+    function renderErrorMessageView() {
+        if (isConnected === true && serverProblems === true) {
             return (
-                <View>
-                    <ScrollView>
-                        <FlatList
-                            data={rooms}
-                            keyExtractor={item => item.ID}
-                            renderItem={({ item }) => (
-                                <RoomListItem
-                                    item={item}
-                                    onDeleteWindow={_showDeleteWindow}
-                                    onNavigate={_navigateToFolderScreen}
-                                />
-                            )}
-                        />
-                    </ScrollView>
-                    {deleteWindowVisibility ?
-                        <DeleteRoomWindow
-                            onDeleteWindow={() => setDeleteWindowVisibility(false)}
-                            onDelete={_deleteItemById}
-                            item={onDeleteItem}
+                <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
 
-                        /> : null}
-
+                    <Text style={{ fontSize: 15, fontStyle: 'italic', color: 'white', margin: 8, textAlign: 'center' }}>Es gibt ein Problem beim Verbinden mit dem Server.</Text>
+                    <Text style={{ fontSize: 15, fontStyle: 'italic', color: 'white', margin: 8 }}>Bitte probiere es später erneut.</Text>
                 </View>
             )
-        } else {
+        }
+        else if (isConnected === false) {
             return (
                 <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
 
@@ -168,19 +166,40 @@ const SetDataList = () => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => _navigateToFolderScreen(true, null)}>
+            <TouchableOpacity onPress={() => _navigateToFolderScreen('myRoom', null)}>
                 <Image source={home} style={[styles.home, { marginTop: -10 }]} />
                 <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>Mein Raum</Text>
             </TouchableOpacity>
-            {renderRoomsFromServer()}
+            <View>
+                <ScrollView>
+                    <FlatList
+                        data={rooms}
+                        keyExtractor={item => item.ID}
+                        renderItem={({ item }) => (
+                            <RoomListItem
+                                item={item}
+                                onDeleteWindow={_showDeleteWindow}
+                                onNavigate={_navigateToFolderScreen}
+                            />
+                        )}
+                    />
+                </ScrollView>
+                {editWindowVisibility ?
+                    <EditWindow
+                        onSetVisibility={() => setDeleteWindowVisibility(false)}
+                        item={onDeleteItem}
+
+                    /> : null}
+
+            </View>
             <TouchableOpacity onPress={() => setAddRoomWindowVisibility(true)}>
                 <Image source={newRoom} style={styles.home} />
                 <Text style={styles.fontStyle}>+ Raum hinzufügen</Text>
             </TouchableOpacity>
+            {renderErrorMessageView()}
             <AddRoomWindow
                 onSetVisibility={_setRoomAddWindowVisibility}
                 addRoomWindowVisibility={addRoomWindowVisibility}
-                onAdd={handleAdd}
             />
             <Image source={logo} style={styles.logo} />
         </View>

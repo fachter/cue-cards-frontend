@@ -1,6 +1,4 @@
-import React from 'react'
 import Axios from 'axios'
-import { UserContext } from '../screens/LoginRegistrationScreen/UserProvider'
 
 
 
@@ -28,36 +26,32 @@ function storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken) 
 
 function syncAxiosPost(link, sourceName, data, userToken) {
 
-    return new Promise((resolve, reject) => {
-        Axios.post(link, { data }, {
-            headers: {
-                'Authorization': "Bearer " + userToken
-            }
-        }).then(() => {
-            console.log(`Axios Get, Quelldatei: ${sourceName} - erfolgreich:`)
-            resolve('erfolgreich')
-        }).catch(() => {
-            console.log(`Axios Post, Quelldatei: ${sourceName} - fehlgeschlagen:` + error)
-            reject('fehlgeschlagen')
-        })
+    Axios.post(link, { data }, {
+        headers: {
+            'Authorization': "Bearer " + userToken
+        }
+    }).then(() => {
+        console.log(`Axios Get, Quelldatei: ${sourceName} - erfolgreich:`)
+    }).catch(error => {
+        console.log(`Axios Post, Quelldatei: ${sourceName} - fehlgeschlagen:` + error)
     })
+
 }
 
 
-async function asyncAxiosPost(link, sourceName, data) {
-    const user = this.context
+async function asyncAxiosPost(link, sourceName, data, userToken) {
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
-        Axios.post(link, { data }, {
+        await Axios.post(link, { data }, {
             headers: {
-                'Authorization': "Bearer " + user.userToken
+                'Authorization': "Bearer " + userToken
             }
         }).then(res => {
             resolve(res)
             console.log(`Axios Get, Quelldatei: ${sourceName} - erfolgreich:`)
         }).catch(error => {
-            reject()
+            reject(error)
             console.log(`Axios Post, Quelldatei: ${sourceName} - fehlgeschlagen:` + error)
         })
     })
@@ -66,84 +60,42 @@ async function asyncAxiosPost(link, sourceName, data) {
 
 
 
-const DatabaseContext = React.createContext()
+async function asyncAxiosGet(link, sourceName, userToken) {
+    return new Promise(async (resolve, reject) => {
 
-class DatabaseProvider extends React.Component {
-    static contextType = UserContext
-    constructor(props) {
-        super(props)
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-    asyncAxiosGet = async (link, sourceName) => {
-        const user = this.context
-
-        const response = await Axios.get(link, {
+        await Axios.get(link, {
             headers: {
-                'Authorization': "Bearer " + user.userToken
+                'Authorization': "Bearer " + userToken
             }
-        }).then(() => {
+        }).then(res => {
+            resolve(res)
             console.log(`Axios Get, Quelldatei: ${sourceName} - erfolgreich:`)
         }).catch(error => {
+            reject(error)
             console.log(`Axios Get, Quelldatei: ${sourceName} - fehlgeschlagen:` + error)
         })
-
-        return response
-
-    }
-
-    syncAxiosGet(link, sourceName) {
-        const user = this.context
-
-        const response = Axios.get(link, {
-            headers: {
-                'Authorization': "Bearer " + user.userToken
-            }
-        }).then(result => {
-            console.log(`Axios Post, Quelldatei: ${sourceName} - erfolgreich:`)
-        }).catch(error => {
-            console.log(`Axios Post, Quelldatei: ${sourceName} - fehlgeschlagen:` + error)
-        })
-        return response
-    }
-
-
-    render() {
-        return (
-            <DatabaseContext.Provider value={{
-                asyncAxiosPost: this.asyncAxiosPost,
-                asyncAxiosGet: this.asyncAxiosGet,
-                syncAxiosGet: this.syncAxiosGet
-            }}>
-                {this.props.children}
-            </DatabaseContext.Provider>
-        )
-    }
+    })
 }
 
 
 
-// const mapStateToProps = (state) => {
-//     return {
-//         userToken: state.userToken
-//     }
-// }
+function syncAxiosGet(link, sourceName, userToken) {
+    Axios.get(link, {
+        headers: {
+            'Authorization': "Bearer " + userToken
+        }
+    }).then(result => {
+        console.log(`Axios Post, Quelldatei: ${sourceName} - erfolgreich:`)
+    }).catch(error => {
+        console.log(`Axios Post, Quelldatei: ${sourceName} - fehlgeschlagen:` + error)
+    })
+}
 
 
 
 
-export default DatabaseProvider
-export { DatabaseContext, storeMyRoomDataOnDB, syncAxiosPost, asyncAxiosPost }
+
+export { storeMyRoomDataOnDB, syncAxiosPost, asyncAxiosPost, asyncAxiosGet, syncAxiosGet }
 
 
 

@@ -2,9 +2,12 @@ import React, { useState, createContext, useContext, useEffect } from 'react'
 import { View, Modal, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native'
 import * as Icon from '@expo/vector-icons'
 import { AntDesign } from '@expo/vector-icons';
-import { ListStructureContext, ListStructureProvider } from './ListStructureProvider'
+import { ListStructureContext } from './ListStructureProvider'
 import { useNavigation } from '@react-navigation/native';
 import uuid from 'react-native-uuid'
+
+
+
 
 const FileContext = createContext()
 
@@ -23,7 +26,7 @@ export default function ChooseFolderSetWindow() {
             isFolder: isNewFileFolder,
             name: newFileName,
             subFolders: [],
-            cards: []
+            cards: [],
         }
         setCreateFileWindowVisible(false)
         _addNewItemToList(newListItem)
@@ -31,12 +34,13 @@ export default function ChooseFolderSetWindow() {
     }
 
 
-
     function _addNewItemToList(newListItem) {
         let copy = currentListStructure
         copy.push(newListItem)
         setCurrentListStructure(copy)
     }
+
+
 
 
     if (isFolder == false) {

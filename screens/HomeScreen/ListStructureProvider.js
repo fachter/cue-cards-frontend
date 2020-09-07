@@ -13,7 +13,7 @@ class ListStructureProvider extends React.Component {
         super(props)
 
         this.state = {
-            isLocationMyRoom: true,
+            currentRoomID: null,
             listHistoryArray: [],
             currentListStructure: [],
             isFolder: true,
@@ -22,7 +22,7 @@ class ListStructureProvider extends React.Component {
             dataIsLoading: true,
         }
         this.storeDataOnDevice = this.storeDataOnDevice.bind(this)
-        this.setIsLocationMyRoom = this.setIsLocationMyRoom.bind(this)
+        this.setIsLocationMyRoom = this.setCurrentRoomID.bind(this)
     }
 
 
@@ -71,11 +71,10 @@ class ListStructureProvider extends React.Component {
 
     // Andere Möglichkeit: statt isLocationMyRoom abfragen:
     // den Link richtigen Link als Parameter mit übergeben
-    async saveDataLocalOrOnline(newListStructure) {
+    saveDataLocalOrOnline(newListStructure) {
         const user = this.context
         const connectingErrorMessage = "Verbindung zum Netzwerk fehlgeschlagen, Daten konnten nicht auf dem Server gespeichert werden"
-
-        if (this.state.isLocationMyRoom === true) {
+        if (this.state.currentRoomID === 'myRoom') {
             this.storeDataOnDevice(newListStructure)
             user.checkIfConnected()
                 .then(res => {
@@ -90,7 +89,7 @@ class ListStructureProvider extends React.Component {
             user.checkIfConnected()
                 .then(res => {
                     console.log('Verbindung zum Netzwerk ' + res)
-                    syncAxiosPost('link', 'ListStructureProvider', newListStructure)  //LINK FEHLT !
+                    syncAxiosPost(`https://cue-cards-app.herokuapp.com/api/room/${currentRoom}`, 'ListStructureProvider', newListStructure)  //LINK FEHLT !
                         .catch(mes => {
                             alert("Verbindung zum Server " + mes)
                         })
@@ -126,8 +125,8 @@ class ListStructureProvider extends React.Component {
         this.setState({ dataIsLoading: value })
     }
 
-    setIsLocationMyRoom(value) {
-        this.state.isLocationMyRoom = value
+    setCurrentRoomID(value) {
+        this.state.currentRoomID = value
     }
 
 
@@ -151,8 +150,8 @@ class ListStructureProvider extends React.Component {
                 retrieveDataFromDevice: this.retrieveDataFromDevice,
                 dataIsLoading: this.state.dataIsLoading,
                 setDataIsLoading: this.setDataIsLoading,
-                isLocationMyRoom: this.state.isLocationMyRoom,
-                setIsLocationMyRoom: this.setIsLocationMyRoom
+                isLocationMyRoom: this.state.currentRoomID,
+                setIsLocationMyRoom: this.setCurrentRoomID
 
 
             }}>
