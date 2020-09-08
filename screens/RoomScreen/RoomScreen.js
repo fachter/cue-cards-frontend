@@ -173,7 +173,7 @@ const SetDataList = () => {
             <View>
                 <ScrollView>
                     <FlatList
-                        data={rooms}
+                        data={serverRooms}
                         keyExtractor={item => item.ID}
                         renderItem={({ item }) => (
                             <RoomListItem

@@ -38,9 +38,8 @@ export default class RoomListItem extends React.Component {
                         size={25}
                         color="white"
                     /> */}
-                    <Text style={styles.fontStyle}>{item.title}</Text>
+                    <Text style={styles.fontStyle}>{item.name}</Text>
                     <Image source={this.state.pictureNumber} style={styles.home} />
-                    <Text style={styles.fontStyle}>{item.title}</Text>
                 </View>
             </TouchableOpacity>
         )

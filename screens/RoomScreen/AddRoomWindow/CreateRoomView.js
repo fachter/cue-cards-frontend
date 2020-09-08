@@ -38,7 +38,7 @@ export default class CreateRoomView extends React.Component {
         console.log(newRoom)
         user.checkIfConnected()
             .then(() => {
-                asyncAxiosPost('https://cue-cards-app.herokuapp.com/api/room', 'CreateRoomView', { newRoom }, user.userToken)
+                asyncAxiosPost('https://cue-cards-app.herokuapp.com/api/room', 'CreateRoomView', newRoom, user.userToken)
                     .then(() => {
                         this.state.resultSucces = true
                         this.state.resultMessage = 'Raum wurde erstellt'

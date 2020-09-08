@@ -11,7 +11,7 @@ function storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken) 
         folders = currentListStructure
     }
 
-    Axios.post('https://cue-cards-app.herokuapp.com/save-users-data', { folders: folders }, {
+    Axios.post('https://cue-cards-app.herokuapp.com/api/save-users-data', { folders: folders }, {
         headers: {
             'Authorization': "Bearer " + userToken
         }
@@ -43,7 +43,7 @@ async function asyncAxiosPost(link, sourceName, data, userToken) {
 
     return new Promise(async (resolve, reject) => {
 
-        await Axios.post(link, { data }, {
+        await Axios.post(link, data, {
             headers: {
                 'Authorization': "Bearer " + userToken
             }
