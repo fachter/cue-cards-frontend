@@ -3,8 +3,8 @@ import { View, Modal, StyleSheet, Text, TextInput, TouchableOpacity, Switch } fr
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import * as Icon from '@expo/vector-icons';
-
-
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
 
 
 
@@ -13,9 +13,51 @@ import * as Icon from '@expo/vector-icons';
 
 export default class AddImage extends React.Component {
     
+    state = {
+        image: null,
+    };
+    
+    componentDidMount() {
+        this.getPermissionAsync();
+    }
 
+    getPermissionAsync = async () => {
+        if (Platform.OS !== 'web') {
+            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+            if (status !== 'granted') {
+                alert('Sorry, we need camera roll permissions to make this work!');
+            }
+        }
+    };
+
+    _pickImage = async () => {
+        try {
+            let result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                allowsEditing: true,
+                aspect: [4, 3],
+                quality: 1,
+            });
+            if (!result.cancelled) {
+                this.setState({ image: result.uri });
+            }
+
+            console.log(result);
+        } catch (E) {
+            console.log(E);
+        }
+    };
 
     render() {
+
+        
+
+        
+
+        
+
+        
+    
         return (
             <Modal
                 animationType='fade'
@@ -32,7 +74,7 @@ export default class AddImage extends React.Component {
                             <Icon.AntDesign name="camera" size={35} color='#008FD3' />
                             <Text style={styles.buttonText}>Kamera</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.windowButtons]} >
+                        <TouchableOpacity style={[styles.windowButtons]}  onPress={()=> this._pickImage()} >
                             <Icon.AntDesign name="picture" size={35} color='#008FD3' />
                             <Text style={styles.buttonText}>Galerie</Text>
                         </TouchableOpacity>
