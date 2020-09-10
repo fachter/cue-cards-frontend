@@ -134,10 +134,9 @@ const DataList = () => {
     async function _navigateToSession(item) {
 
         let sessionCards = item.cards
-        // console.log(shuffleCards)
-        // if (shuffleCards === true) {
-        //     sessionCards = await _shuffleArray(item.cards, true)
-        // }
+        if (shuffleCards === true) {
+            sessionCards = await _shuffleArray(item.cards, true)
+        }
 
         if (item.cards.length > 0) {
             navigation.navigate('CardScreen', { mode: "sessionMode", card: item.cards[0], sessionCards: sessionCards })

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useReducer } from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 
 
@@ -10,10 +10,14 @@ import { storeMyRoomDataOnDB } from '../../API/Database'
 
 const CardScreenContext = React.createContext()
 
+
 export default function CardScreen({ route, navigation }) {
+
+
 
     const { storeDataOnDevice } = useContext(ListStructureContext)
     const { maxCardLevel, shuffleCards } = useContext(SettingsContext)
+
     const [sessionCards, setSessionCards] = useState(route.params.sessionCards)
     const [currentCard, setCurrentCard] = useState(route.params.card)
     const [currentCardindex, setCurrendCardIndex] = useState(0)
@@ -157,8 +161,8 @@ export default function CardScreen({ route, navigation }) {
                     _nextCard()
 
                 }
-                // storeDataOnDevice()
-                // storeMyRoomDataOnDB()
+                storeDataOnDevice()
+                storeMyRoomDataOnDB()
             }
         }
     }

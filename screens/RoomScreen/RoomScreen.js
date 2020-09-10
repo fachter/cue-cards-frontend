@@ -18,19 +18,6 @@ import { asyncAxiosGet } from '../../API/Database'
 
 
 
-const RoomContext = React.createContext()
-
-const rooms = [
-    { pictureNumber: 0, title: "ich bin hardgecoded" },
-    { pictureNumber: 1, title: "ich auch" },
-    { pictureNumber: 2, title: "ich auch" },
-    { pictureNumber: 3, title: "ich auch" },
-
-]
-
-
-
-
 export default function RoomScreen() {
 
 
@@ -55,16 +42,17 @@ export default function RoomScreen() {
 
     useEffect(() => {
         if (roomDataMounted === false) {
-            retrieveAllRooms()
+            updateRooms()
         }
 
     })
 
-    async function retrieveAllRooms() {
+    async function updateRooms() {
         checkIfConnected()
             .then(() => {
                 asyncAxiosGet('https://cue-cards-app.herokuapp.com/api/get-available-rooms', 'RoomScreen', userToken)
                     .then(res => {
+                        console.log(res.data)
                         setServerRooms(res.data)
                         setRoomDataMounted(true)
                     }).catch(error => {
@@ -121,18 +109,10 @@ export default function RoomScreen() {
                 'Authorization': "Bearer " + userToken
             }
         }).then(async (res) => {
-            console.log("##########################################")
-            console.log("Laden")
-            console.log("##########################################")
             console.log(res.data.folders)
             let serverData = await res
             let localData = await retrieveDataFromDevice()
-
             let newListStructure = await compareDates(serverData, localData)
-            console.log("##########################################")
-            console.log("NEWNEWNEW")
-            console.log("##########################################")
-            console.log(newListStructure)
 
             setCurrentListStructure(newListStructure)
         })
@@ -149,7 +129,6 @@ export default function RoomScreen() {
 
 
     function loadNetworkRoomData(folders) {
-        updateFolderHistory(folders)
         setCurrentListStructure(folders)
     }
 
@@ -178,53 +157,50 @@ export default function RoomScreen() {
     }
 
     return (
-        <RoomContext.Provider value={{
-            retrieveAllRooms: retrieveAllRooms
-        }}>
-            <View style={styles.container}>
-                <TouchableOpacity onPress={() => _navigateToFolderScreen('myRoom', null)}>
-                    <Image source={home} style={[styles.home, { marginTop: -10 }]} />
-                    <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>Mein Raum</Text>
-                </TouchableOpacity>
-                <View>
-                    <ScrollView>
-                        <FlatList
-                            data={serverRooms}
-                            keyExtractor={item => item.id}
-                            renderItem={({ item }) => (
-                                <RoomListItem
-                                    item={item}
-                                    onLeaveRoomWindowVisibility={showLeaveRoomWindow}
-                                    onNavigate={_navigateToFolderScreen}
-                                />
-                            )}
-                        />
-                    </ScrollView>
-                </View>
-                <TouchableOpacity onPress={() => setAddRoomWindowVisibility(true)}>
-                    <Image source={newRoom} style={styles.home} />
-                    <Text style={styles.fontStyle}>+ Raum hinzufügen</Text>
-                </TouchableOpacity>
-                {renderErrorMessageView()}
-                <AddRoomWindow
-                    onSetVisibility={_setRoomAddWindowVisibility}
-                    addRoomWindowVisibility={addRoomWindowVisibility}
-                />
-                {leaveRoomWindowVisibility ?
-                    <LeaveRoomWindow
-                        onSetVisibility={SetleaveRoomWindowVisibility}
-                        onLeaveRoom={showLeaveRoomWindow}
-                        item={clickedRoom.current}
-                    /> : null}
 
-                <Image source={logo} style={styles.logo} />
+        <View style={styles.container}>
+            <TouchableOpacity onPress={() => _navigateToFolderScreen('myRoom', null)}>
+                <Image source={home} style={[styles.home, { marginTop: -10 }]} />
+                <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>Mein Raum</Text>
+            </TouchableOpacity>
+            <View>
+                <ScrollView>
+                    <FlatList
+                        data={serverRooms}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item }) => (
+                            <RoomListItem
+                                item={item}
+                                onLeaveRoomWindowVisibility={showLeaveRoomWindow}
+                                onNavigate={_navigateToFolderScreen}
+                            />
+                        )}
+                    />
+                </ScrollView>
             </View>
-        </RoomContext.Provider>
+            <TouchableOpacity onPress={() => setAddRoomWindowVisibility(true)}>
+                <Image source={newRoom} style={styles.home} />
+                <Text style={styles.fontStyle}>+ Raum hinzufügen</Text>
+            </TouchableOpacity>
+            {renderErrorMessageView()}
+            <AddRoomWindow
+                onSetVisibility={_setRoomAddWindowVisibility}
+                addRoomWindowVisibility={addRoomWindowVisibility}
+                updateRooms={updateRooms}
+            />
+            {leaveRoomWindowVisibility ?
+                <LeaveRoomWindow
+                    onSetVisibility={SetleaveRoomWindowVisibility}
+                    onLeaveRoom={showLeaveRoomWindow}
+                    item={clickedRoom.current}
+                /> : null}
+
+            <Image source={logo} style={styles.logo} />
+        </View>
     )
 }
 
 
-export { RoomContext }
 
 
 const styles = StyleSheet.create({
@@ -293,3 +269,14 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
 });
+
+
+
+import { YellowBox } from 'react-native'
+
+
+
+YellowBox.ignoreWarnings([
+    'VirtualizedLists should never be nested', // TODO: Remove when fixed
+])
+

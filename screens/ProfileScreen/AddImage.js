@@ -12,11 +12,11 @@ import * as Permissions from 'expo-permissions';
 
 
 export default class AddImage extends React.Component {
-    
+
     state = {
         image: null,
     };
-    
+
     componentDidMount() {
         this.getPermissionAsync();
     }
@@ -50,14 +50,14 @@ export default class AddImage extends React.Component {
 
     render() {
 
-        
 
-        
 
-        
 
-        
-    
+
+
+
+
+
         return (
             <Modal
                 animationType='fade'
@@ -74,7 +74,7 @@ export default class AddImage extends React.Component {
                             <Icon.AntDesign name="camera" size={35} color='#008FD3' />
                             <Text style={styles.buttonText}>Kamera</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.windowButtons]}  onPress={()=> this._pickImage()} >
+                        <TouchableOpacity style={[styles.windowButtons]} onPress={() => this._pickImage()} >
                             <Icon.AntDesign name="picture" size={35} color='#008FD3' />
                             <Text style={styles.buttonText}>Galerie</Text>
                         </TouchableOpacity>

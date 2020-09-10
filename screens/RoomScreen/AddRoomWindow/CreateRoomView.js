@@ -4,10 +4,9 @@ import ResultView from './ResultView'
 import { asyncAxiosPost } from '../../../API/Database'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { RoomContext } from '../RoomScreen'
 import { UserContext } from '../../LoginRegistrationScreen/UserProvider'
 
-export default function CreateRoomView() {
+export default function CreateRoomView({ updateRooms }) {
 
     const [roomName, setRoomName] = useState(null)
     const [passwordToggle, setPasswordToggle] = useState(false)
@@ -17,7 +16,6 @@ export default function CreateRoomView() {
     const resultMessage = useRef('')
 
 
-    const { retrieveAllRooms } = useContext(RoomContext)
     const { userToken, checkIfConnected } = useContext(UserContext)
 
     function toggleSwitch() {
@@ -34,7 +32,6 @@ export default function CreateRoomView() {
 
 
     function sendRoomToServer(newRoom) {
-
         checkIfConnected()
             .then(() => {
                 asyncAxiosPost('https://cue-cards-app.herokuapp.com/api/room', 'CreateRoomView', newRoom, userToken)
@@ -42,7 +39,7 @@ export default function CreateRoomView() {
                         resultSucces.current = true
                         resultMessage.current = 'Raum wurde erstellt'
                         setShowResultView(true)
-                        retrieveAllRooms()
+                        updateRooms()
                     })
                     .catch(() => {
                         resultSucces.current = false
