@@ -10,7 +10,7 @@ import logo from '../../assets/Logo.png';
 
 function SettingsScreen() {
 
-    const { maxCardLevel, setMaxCardLevel, maxCardLevelIncluded, setMaxCardLevelIncluded, shuffleArray: shuffleCards, setShuffleCards } = useContext(SettingsContext)
+    const { maxCardLevel, setMaxCardLevel, maxCardLevelIncluded, setMaxCardLevelIncluded, shuffleCards, setShuffleCards } = useContext(SettingsContext)
     const { logout } = useContext(UserContext)
 
 
@@ -19,6 +19,13 @@ function SettingsScreen() {
     }
 
 
+    const toggleMaxLevelIncluded = (value) => {
+        setMaxCardLevelIncluded(value)
+    }
+
+    const toggleShuffleCards = (value) => {
+        setShuffleCards(value)
+    }
 
     function checkCardLevelValidity(level) {
         if (level != "" && level < 10 && level > 0) {
@@ -50,14 +57,13 @@ function SettingsScreen() {
                     }}
                     thumbColor='#008FD3'
                     ios_backgroundColor="#3e3e3e"
-                    onValueChange={value => setMaxCardLevelIncluded(value)}
-                //value={createRoomVisible}
+                    onValueChange={value => toggleMaxLevelIncluded(value)}
+                    value={maxCardLevelIncluded}
                 />
             </View>
             <View style={styles.settingView}>
                 <MaterialCommunityIcons name="shuffle" size={25} color="grey" style={styles.icons} />
                 <Text style={styles.text}>Karten beim Abfragen mischen?</Text>
-
                 <Switch
                     style={styles.toggle}
                     trackColor={{
@@ -65,7 +71,7 @@ function SettingsScreen() {
                     }}
                     thumbColor='#008FD3'
                     ios_backgroundColor="#3e3e3e"
-                    onValueChange={value => setShuffleCards(value)}
+                    onValueChange={value => toggleShuffleCards(value)}
                     value={shuffleCards}
                 />
             </View>

@@ -22,7 +22,7 @@ class ListStructureProvider extends React.Component {
             dataIsLoading: true,
         }
         this.storeDataOnDevice = this.storeDataOnDevice.bind(this)
-        this.setIsLocationMyRoom = this.setCurrentRoomID.bind(this)
+        this.setCurrentRoomID = this.setCurrentRoomID.bind(this)
     }
 
 
@@ -30,15 +30,21 @@ class ListStructureProvider extends React.Component {
         try {
             if (this.state.listHistoryArray.length > 0) {
                 AsyncStorage.setItem(
-                    'mainListStructure', JSON.stringify({
-                        Folders: this.state.listHistoryArray[0],
-                        lastEdit: new Date().getTime()
-
+                    'myRoomData', JSON.stringify({
+                        data: {
+                            folders: this.state.listHistoryArray[0],
+                            lastModified: new Date
+                        }
                     }),
                 )
             } else {
                 AsyncStorage.setItem(
-                    'mainListStructure', JSON.stringify(newListStructure),
+                    'myRoomData', JSON.stringify({
+                        data: {
+                            folders: newListStructure,
+                            lastModified: new Date
+                        }
+                    }),
                 )
             }
             console.log("Daten wurden auf dem Gerät gespeichert")
@@ -50,7 +56,7 @@ class ListStructureProvider extends React.Component {
 
     retrieveDataFromDevice = async () => {
         try {
-            const value = await AsyncStorage.getItem('mainListStructure');
+            const value = await AsyncStorage.getItem('myRoomData');
             if (value != null) {
                 let data = JSON.parse(value)
                 console.log("Daten wurden vom gerät geladen")
@@ -63,43 +69,62 @@ class ListStructureProvider extends React.Component {
     }
 
 
+
     setCurrentListStructure = (newListStructure) => {
+
         this.setState({ currentListStructure: newListStructure })
-        this.saveDataLocalOrOnline(newListStructure)
-    }
 
-
-    // Andere Möglichkeit: statt isLocationMyRoom abfragen:
-    // den Link richtigen Link als Parameter mit übergeben
-    saveDataLocalOrOnline(newListStructure) {
-        const user = this.context
-        const connectingErrorMessage = "Verbindung zum Netzwerk fehlgeschlagen, Daten konnten nicht auf dem Server gespeichert werden"
         if (this.state.currentRoomID === 'myRoom') {
-            this.storeDataOnDevice(newListStructure)
-            user.checkIfConnected()
-                .then(res => {
-                    console.log('Verbindung zum Netzwerk ' + res)
-                    storeMyRoomDataOnDB(this.state.listHistoryArray, this.state.currentListStructure, user.userToken)
-                })
-                .catch(res => {
-                    console.log('Verbindung zum Server ' + res)
-                    alert(connectingErrorMessage)
-                })
-        } else {
-            user.checkIfConnected()
-                .then(res => {
-                    console.log('Verbindung zum Netzwerk ' + res)
-                    syncAxiosPost(`https://cue-cards-app.herokuapp.com/api/room/${currentRoom}`, 'ListStructureProvider', newListStructure)  //LINK FEHLT !
-                        .catch(mes => {
-                            alert("Verbindung zum Server " + mes)
-                        })
-                }).catch(res => {
-                    console.log('Verbindung zum Netzwerk ' + res)
-                    alert(connectingErrorMessage)
-                })
+            this.saveMyData(newListStructure)
 
+        } else {
+            // this.saveRoomData(newListStructure)
         }
     }
+
+
+    saveMyData(newListStructure) {
+        const { listHistoryArray } = this.state
+        const user = this.context
+        this.storeDataOnDevice(newListStructure)
+        user.checkIfConnected()
+            .then(res => {
+                console.log('Verbindung zum Netzwerk ' + res)
+                storeMyRoomDataOnDB(listHistoryArray, newListStructure, user.userToken)
+            })
+            .catch(res => {
+                console.log('Verbindung zum Server ' + res)
+                alert("Verbindung zum Netzwerk fehlgeschlagen, Daten konnten nicht auf dem Server gespeichert werden")
+            })
+    }
+
+
+    saveRoomData(newListStructure) {
+        const { currentRoomID } = this.state
+        const user = this.context
+
+        let updatetData = {
+            folders: newListStructure,
+            lastModified: new Date
+        }
+
+        user.checkIfConnected()
+            .then(res => {
+                console.log("AAA")
+                console.log('Verbindung zum Netzwerk ' + res)
+                syncAxiosPost(`https://cue-cards-app.herokuapp.com/api/room/${currentRoomID}`, 'ListStructureProvider', updatetData, user.userToken)  //LINK FEHLT !
+                    .catch(mes => {
+                        console.log('Verbindung zum Server' + mes)
+                        alert("Verbindung zum Sever fehlgeschlagen. Probleme beim speichern/laden der Daten")
+                    })
+            }).catch(res => {
+                console.log("BBB")
+                console.log('Verbindung zum Netzwerk ' + res)
+                alert("Verbindung zum Sever fehlgeschlagen. Probleme beim speichern/laden der Daten")
+            })
+    }
+
+
 
     updateFolderHistory = () => {
         this.state.listHistoryArray.push(this.state.currentListStructure)
@@ -150,8 +175,8 @@ class ListStructureProvider extends React.Component {
                 retrieveDataFromDevice: this.retrieveDataFromDevice,
                 dataIsLoading: this.state.dataIsLoading,
                 setDataIsLoading: this.setDataIsLoading,
-                isLocationMyRoom: this.state.currentRoomID,
-                setIsLocationMyRoom: this.setCurrentRoomID
+                currentRoomID: this.state.currentRoomID,
+                setCurrentRoomID: this.setCurrentRoomID,
 
 
             }}>

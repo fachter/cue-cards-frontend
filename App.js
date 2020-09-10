@@ -1,15 +1,12 @@
 
 import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-
-
+import { NavigationContainer } from '@react-navigation/native';
 
 import UserProvider from './screens/LoginRegistrationScreen/UserProvider'
 import { UserContext } from './screens/LoginRegistrationScreen/UserProvider'
 import { SettingsProvider } from './screens/SettingsScreen/SettingsProvider'
 import { ListStructureProvider } from './screens/HomeScreen/ListStructureProvider'
-import { RoomListStructureProvider } from './screens/RoomScreen/RoomListStructureProvider'
 import { CopyPasteProvider } from './screens/HomeScreen/CopyPasteProvider'
 
 import Sidebar from './navigation/Sidebar'
@@ -19,6 +16,10 @@ import { LoginRegistrationStackScreen } from './navigation/Sidebar';
 // import { configureStore } from './API/redux/store/store'
 
 // const store = configureStore
+
+
+
+
 
 
 
@@ -48,21 +49,16 @@ class App extends React.Component {
     super(props)
   }
 
-
-
-
   render() {
 
     return (
       <UserProvider>
         <CopyPasteProvider>
-          <RoomListStructureProvider>
-            <ListStructureProvider>
-              <SettingsProvider>
-                <StartScreen />
-              </SettingsProvider>
-            </ListStructureProvider>
-          </RoomListStructureProvider>
+          <ListStructureProvider>
+            <SettingsProvider>
+              <StartScreen />
+            </SettingsProvider>
+          </ListStructureProvider>
         </CopyPasteProvider>
       </UserProvider >
     )
@@ -76,3 +72,9 @@ export default (App)
 
 
 
+
+import { YellowBox } from 'react-native'
+
+YellowBox.ignoreWarnings([
+  'VirtualizedLists should never be nested', // Gibt derzeit keine Lösung laut Community
+])

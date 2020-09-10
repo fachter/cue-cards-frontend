@@ -28,18 +28,12 @@ export default class RoomListItem extends React.Component {
         const { item } = this.props
         return (
             <TouchableOpacity
-                onLongPress={() => this.props.onDeleteWindow(item)}
+                onLongPress={() => this.props.onLeaveRoomWindowVisibility(item)}
                 onPress={() => this.props.onNavigate(item.id, item)}
             >
                 <View style={styles.container}>
-                    {/* <MaterialCommunityIcons
-                        style={styles.folderButton}
-                        name="account-group-outline"
-                        size={25}
-                        color="white"
-                    /> */}
-                    <Text style={styles.fontStyle}>{item.name}</Text>
-                    <Image source={this.state.pictureNumber} style={styles.home} />
+                    <Image source={this.state.pictureNumber} style={[styles.home, { marginTop: -10 }]} />
+                    <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>{item.name}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -56,17 +50,18 @@ const styles = StyleSheet.create({
     folderButton: {
         marginRight: 20
     },
-    fontStyle: {
-        position: 'absolute',
-        left: 75,
-        fontWeight: "bold",
-        color: "white",
-        fontSize: 20,
-        right: 175,
-    },
     home: {
         width: '100%',
         height: 90,
         resizeMode: 'stretch',
-    }
+        //marginTop: -10
+    },
+    fontStyle: {
+        position: 'absolute',
+        left: 75,
+        top: 33,
+        fontWeight: "bold",
+        color: "#008FD3",
+        fontSize: 20
+    },
 });

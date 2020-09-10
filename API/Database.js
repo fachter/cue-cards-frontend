@@ -4,20 +4,30 @@ import Axios from 'axios'
 
 function storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken) {
 
-    let folders = null
-    if (listHistoryArray.length > 0) {
-        folders = listHistoryArray[0]
-    } else {
-        folders = currentListStructure
-    }
+    let updatedData = null
 
-    Axios.post('https://cue-cards-app.herokuapp.com/api/save-users-data', { folders: folders }, {
+    if (listHistoryArray.length > 0) {
+        updatedData = {
+            folders: listHistoryArray[0],
+            lastModified: new Date
+        }
+    } else {
+        updatedData = {
+            folders: currentListStructure,
+            lastModified: new Date
+        }
+    }
+    console.log("##########################################")
+    console.log("Speichern")
+    console.log("##########################################")
+
+    console.log(updatedData)
+    Axios.post('https://cue-cards-app.herokuapp.com/api/save-users-data', updatedData, {
         headers: {
             'Authorization': "Bearer " + userToken
         }
     }).then(result => {
         console.log("Die Daten wurden erfolgreich auf dem Server gespeichert:")
-        console.log(result.config.data)
     }).catch(error => {
         console.log("Fehler beim speichern der Daten auf dem Server: " + error)
     })
@@ -26,7 +36,7 @@ function storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken) 
 
 function syncAxiosPost(link, sourceName, data, userToken) {
 
-    Axios.post(link, { data }, {
+    Axios.post(link, data, {
         headers: {
             'Authorization': "Bearer " + userToken
         }

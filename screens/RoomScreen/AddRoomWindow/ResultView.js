@@ -7,6 +7,7 @@ export default class SuccesView extends React.Component {
 
 
     render() {
+
         return (
             <View>
                 <Text style={{ color: 'white' }}>{this.props.resultMessage}</Text>

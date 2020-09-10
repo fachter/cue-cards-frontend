@@ -3,7 +3,6 @@ import { View, Modal, StyleSheet, Text, TouchableOpacity, Switch } from 'react-n
 import { AntDesign } from '@expo/vector-icons';
 
 
-import { UserContext } from '../../LoginRegistrationScreen/UserProvider';
 
 import RoomIDView from './RoomIDView'
 import CreateRoomView from './CreateRoomView';
@@ -13,7 +12,6 @@ import CreateRoomView from './CreateRoomView';
 
 
 export default class AddRoomWindow extends React.Component {
-    static contextType = UserContext
     constructor(props) {
         super(props)
 
@@ -38,7 +36,6 @@ export default class AddRoomWindow extends React.Component {
 
     renderWindow() {
         const { createRoomVisible } = this.state
-        const user = this.context
 
         if (createRoomVisible === true) {
             return (
@@ -47,7 +44,7 @@ export default class AddRoomWindow extends React.Component {
 
         } else {
             return (
-                <RoomIDView internetConnection={user.isConnected} />
+                <RoomIDView />
             )
         }
     }

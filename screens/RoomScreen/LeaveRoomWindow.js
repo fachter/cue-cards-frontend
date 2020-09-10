@@ -7,7 +7,7 @@ import { asyncAxiosPost } from '../../API/Database'
 import { UserContext } from '../LoginRegistrationScreen/UserProvider'
 
 
-export default class DeleteRoomWindow extends React.Component {
+export default class LeaveRoomWindow extends React.Component {
     static contextType = UserContext
 
     state = {
@@ -17,14 +17,16 @@ export default class DeleteRoomWindow extends React.Component {
         showActicityIndicator: false
     }
 
-    removeRoom() {
+    leaveRoom() {
         const user = this.context
         this.setState({ showActicityIndicator: true })
 
+        console.log(this.props.item.id)
+
         user.checkIfConnected()
             .then(() => {
-                asyncAxiosPost('delteRoomlink', 'EditRoomWindow', 'id??', user.userToken)
-                    .then(() => {
+                asyncAxiosPost(`https://cue-cards-app.herokuapp.com//api/leave-room/${this.props.item.id}`, 'EditRoomWindow', null, user.userToken)
+                    .then(res => {
                         this.state.resultSucces = true
                         this.state.resultMessage = 'Raum wurde gelöscht'
                         this.state.showActicityIndicator = false
@@ -35,7 +37,6 @@ export default class DeleteRoomWindow extends React.Component {
                         this.state.resultMessage = 'Probleme mit dem Server'
                         this.state.showActicityIndicator = false
                         this.setState({ showResultView: true })
-                        console.log('Fehler beim erstellen des Raumes')
                     })
 
             }).catch(() => {
@@ -47,26 +48,28 @@ export default class DeleteRoomWindow extends React.Component {
 
     }
 
+
     render() {
+        const { showResultView, resultSucces, resultMessage, showActicityIndicator } = this.state
         return (
             <Modal
                 animationType="fade"
                 transparent={true}>
                 <View style={styles.background}>
                     <View style={styles.window}>
+                        <TouchableOpacity style={styles.cancelButton} onPress={() => this.props.onSetVisibility(false)}>
+                            <AntDesign name="closecircleo" size={24} color="white" />
+                        </TouchableOpacity>
                         {showResultView ?
-                            <ResultView resultSucces={this.state.resultSucces} resultMessage={this.state.resultMessage} />
+                            <ResultView resultSucces={resultSucces} resultMessage={resultMessage} />
                             :
                             <View>
                                 {showActicityIndicator ?
                                     <ActicityIndicatorView />
                                     :
                                     <View>
-                                        <TouchableOpacity style={styles.cancelButton} onPress={() => onSetVisibility()}>
-                                            <AntDesign name="closecircleo" size={24} color="white" />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.button} onPress={() => this.removeRoom(this.props.item)}>
-                                            <Text style={styles.buttonText}>löschen</Text>
+                                        <TouchableOpacity style={styles.button} onPress={() => this.leaveRoom(this.props.item)}>
+                                            <Text style={styles.buttonText}>Raum verlassen</Text>
                                         </TouchableOpacity>
                                     </View >
                                 }
@@ -87,7 +90,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'black',
-        opacity: 0.8
+
 
     },
     window: {

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useMemo, useRef } from 'react';
 import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -10,12 +10,15 @@ import newRoom from '../../assets/newRoom.png';
 
 import AddRoomWindow from './AddRoomWindow/AddRoomWindow';
 import RoomListItem from './RoomListItem';
-import EditWindow from './EditWindow';
+import LeaveRoomWindow from './LeaveRoomWindow';
 
 import { UserContext } from '../LoginRegistrationScreen/UserProvider'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import { asyncAxiosGet } from '../../API/Database'
 
+
+
+const RoomContext = React.createContext()
 
 const rooms = [
     { pictureNumber: 0, title: "ich bin hardgecoded" },
@@ -26,69 +29,64 @@ const rooms = [
 ]
 
 
+
+
 export default function RoomScreen() {
 
-    return (
-        <SetDataList />
-    )
-}
-
-
-
-const SetDataList = () => {
-
-
-
-    const [addRoomWindowVisibility, setAddRoomWindowVisibility] = useState(false);
-    const [editWindowVisibility, setEditWindowVisibility] = useState(false);
-    const [onDeleteItem, setOnDeleteItem] = useState(false);
-
-    ///////////////////////////////////////////////////
-
-    const [serverRooms, setServerRooms] = useState([])
-    const [roomDataMounted, setRoomDataMounted] = useState(false)
-    const [serverProblems, setServerProblems] = useState(false)
 
     const { checkIfConnected, isConnected, userToken } = useContext(UserContext)
     const {
-        setIsLocationMyRoom: setCurrentRoomID,
+        setCurrentRoomID,
         setCurrentListStructure,
         retrieveDataFromDevice } = useContext(ListStructureContext)
 
 
+    const [addRoomWindowVisibility, setAddRoomWindowVisibility] = useState(false);
+    const [leaveRoomWindowVisibility, SetleaveRoomWindowVisibility] = useState(false);
+    const [serverRooms, setServerRooms] = useState([])
+    const clickedRoom = useRef(null)
+
+    ///////////////////////////////////////////////////
+    const [roomDataMounted, setRoomDataMounted] = useState(false)
+    const [serverProblems, setServerProblems] = useState(false)
+
     const navigation = useNavigation()
 
+
     useEffect(() => {
-        checkIfConnected()
-            .then(res => {
-                if (roomDataMounted === false) {
-                    console.log("Prüfe Netzwerkverbindung: " + res)
-                    retrieveAllRooms()
-                }
-            }).catch(err => {
-                console.log("Prüfe Netzwerkverbindung: " + err)
-            })
+        if (roomDataMounted === false) {
+            retrieveAllRooms()
+        }
+
     })
 
-    function retrieveAllRooms() {
-        asyncAxiosGet('https://cue-cards-app.herokuapp.com/api/get-available-rooms', 'RoomScreen', userToken)
-            .then(res => {
-                console.log(res.data)
-                setServerRooms(res.data)
-                setRoomDataMounted(true)
-            }).catch(error => {
-                setServerProblems(true)
-                console.log("Fehler beim Laden der Räume " + error)
+    async function retrieveAllRooms() {
+        checkIfConnected()
+            .then(() => {
+                asyncAxiosGet('https://cue-cards-app.herokuapp.com/api/get-available-rooms', 'RoomScreen', userToken)
+                    .then(res => {
+                        setServerRooms(res.data)
+                        setRoomDataMounted(true)
+                    }).catch(error => {
+                        setServerProblems(true)
+                        console.log("Fehler beim Laden der Räume " + error)
+                    })
+
+            }).catch(err => {
+                console.log("Prüfe Netzwerkverbindung: " + err)
             })
 
     }
 
-    function _showDeleteWindow(item) {
-        setEditWindowVisibility(true)
+    function showLeaveRoomWindow(item) {
+        clickedRoom.current = item
+        SetleaveRoomWindowVisibility(true)
+
     }
 
 
     ////////////////////////////////////////////////////////////////////
+
 
 
 
@@ -108,10 +106,13 @@ const SetDataList = () => {
         if (currentRoomID === 'myRoom') {
             await loadMyRoomData()
         } else {
-            await loadNetworkRoomData(item.data)
+            await loadNetworkRoomData(item.data.folders)
         }
+
         navigation.navigate('Room')
     }
+
+
 
 
     function loadMyRoomData() {
@@ -120,20 +121,35 @@ const SetDataList = () => {
                 'Authorization': "Bearer " + userToken
             }
         }).then(async (res) => {
-
-            let serverData = await res.data.folders
+            console.log("##########################################")
+            console.log("Laden")
+            console.log("##########################################")
+            console.log(res.data.folders)
+            let serverData = await res
             let localData = await retrieveDataFromDevice()
 
-            //vergleiche Datum 
-            //Lade Local oder aus dem Netzwerk, je nach letzten Bearbeitungsdatum
-            //durch setCurrentListStructure wird im Falle das die Localen Daten aktuller sind
-            //die Daten auf dem Server sofort geupdatet 
-            setCurrentListStructure(serverData)
+            let newListStructure = await compareDates(serverData, localData)
+            console.log("##########################################")
+            console.log("NEWNEWNEW")
+            console.log("##########################################")
+            console.log(newListStructure)
+
+            setCurrentListStructure(newListStructure)
         })
+    }
+
+    function compareDates(serverData, localData) {
+
+        if (serverData.data.lastModified > localData.data.lastModified) {
+            return serverData.data.folders
+        }
+
+        return localData.data.folders
     }
 
 
     function loadNetworkRoomData(folders) {
+        updateFolderHistory(folders)
         setCurrentListStructure(folders)
     }
 
@@ -158,54 +174,57 @@ const SetDataList = () => {
                     <ActivityIndicator size="large" color="white" />
                 </View>
             )
-
         }
-
-
     }
 
     return (
-        <View style={styles.container}>
-            <TouchableOpacity onPress={() => _navigateToFolderScreen('myRoom', null)}>
-                <Image source={home} style={[styles.home, { marginTop: -10 }]} />
-                <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>Mein Raum</Text>
-            </TouchableOpacity>
-            <View>
-                <ScrollView>
-                    <FlatList
-                        data={serverRooms}
-                        keyExtractor={item => item.ID}
-                        renderItem={({ item }) => (
-                            <RoomListItem
-                                item={item}
-                                onDeleteWindow={_showDeleteWindow}
-                                onNavigate={_navigateToFolderScreen}
-                            />
-                        )}
-                    />
-                </ScrollView>
-                {editWindowVisibility ?
-                    <EditWindow
-                        onSetVisibility={() => setDeleteWindowVisibility(false)}
-                        item={onDeleteItem}
-
+        <RoomContext.Provider value={{
+            retrieveAllRooms: retrieveAllRooms
+        }}>
+            <View style={styles.container}>
+                <TouchableOpacity onPress={() => _navigateToFolderScreen('myRoom', null)}>
+                    <Image source={home} style={[styles.home, { marginTop: -10 }]} />
+                    <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>Mein Raum</Text>
+                </TouchableOpacity>
+                <View>
+                    <ScrollView>
+                        <FlatList
+                            data={serverRooms}
+                            keyExtractor={item => item.id}
+                            renderItem={({ item }) => (
+                                <RoomListItem
+                                    item={item}
+                                    onLeaveRoomWindowVisibility={showLeaveRoomWindow}
+                                    onNavigate={_navigateToFolderScreen}
+                                />
+                            )}
+                        />
+                    </ScrollView>
+                </View>
+                <TouchableOpacity onPress={() => setAddRoomWindowVisibility(true)}>
+                    <Image source={newRoom} style={styles.home} />
+                    <Text style={styles.fontStyle}>+ Raum hinzufügen</Text>
+                </TouchableOpacity>
+                {renderErrorMessageView()}
+                <AddRoomWindow
+                    onSetVisibility={_setRoomAddWindowVisibility}
+                    addRoomWindowVisibility={addRoomWindowVisibility}
+                />
+                {leaveRoomWindowVisibility ?
+                    <LeaveRoomWindow
+                        onSetVisibility={SetleaveRoomWindowVisibility}
+                        onLeaveRoom={showLeaveRoomWindow}
+                        item={clickedRoom.current}
                     /> : null}
 
+                <Image source={logo} style={styles.logo} />
             </View>
-            <TouchableOpacity onPress={() => setAddRoomWindowVisibility(true)}>
-                <Image source={newRoom} style={styles.home} />
-                <Text style={styles.fontStyle}>+ Raum hinzufügen</Text>
-            </TouchableOpacity>
-            {renderErrorMessageView()}
-            <AddRoomWindow
-                onSetVisibility={_setRoomAddWindowVisibility}
-                addRoomWindowVisibility={addRoomWindowVisibility}
-            />
-            <Image source={logo} style={styles.logo} />
-        </View>
+        </RoomContext.Provider>
     )
 }
 
+
+export { RoomContext }
 
 
 const styles = StyleSheet.create({

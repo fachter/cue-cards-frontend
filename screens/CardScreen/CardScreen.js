@@ -6,6 +6,7 @@ import MultipleChoiceCard from './MultipleAndSingleChoice'
 import FreetextCard from './FreetextCard'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import { SettingsContext } from '../SettingsScreen/SettingsProvider'
+import { storeMyRoomDataOnDB } from '../../API/Database'
 
 const CardScreenContext = React.createContext()
 
@@ -29,6 +30,9 @@ export default function CardScreen({ route, navigation }) {
         }
         return trueAnswers
     }
+
+
+
 
 
     function _createRandomAnswers(cardIndex) {
@@ -129,8 +133,7 @@ export default function CardScreen({ route, navigation }) {
 
 
     function _updateCardValues(result) {
-        for (let i = 0; i < sessionCards
-            .length; i++) {
+        for (let i = 0; i < sessionCards.length; i++) {
             if (currentCard.id == sessionCards
             [i].id) {  //Sucht aktuelle im Set nach id
 
@@ -154,7 +157,8 @@ export default function CardScreen({ route, navigation }) {
                     _nextCard()
 
                 }
-                storeDataOnDevice()
+                // storeDataOnDevice()
+                // storeMyRoomDataOnDB()
             }
         }
     }

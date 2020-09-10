@@ -1,15 +1,11 @@
 import React from 'react'
 
 
-import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 
 
-
-import { ListStructureProvider } from '../screens/HomeScreen/ListStructureProvider'
-import { UserContext } from '../screens/LoginRegistrationScreen/UserProvider';
 
 import HomeScreen from '../screens/HomeScreen/HomeScreen'
 import CardScreen from '../screens/CardScreen/CardScreen'
@@ -30,7 +26,6 @@ import RoomScreen from '../screens/RoomScreen/RoomScreen';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import ContainRoomScreen from '../screens/RoomScreen/ContainRoomScreen';
 import EditProfileScreen from '../screens/ProfileScreen/EditProfileScreen';
 
 const Drawer = createDrawerNavigator();
@@ -92,10 +87,6 @@ function RoomStackScreen({ navigation, route }) {
         }}>
             <RoomStack.Screen name="Rooms" component={RoomScreen} options={headerOptionsFirstPage} />
             <RoomStack.Screen name="Room" component={HomeScreen} options={headerOptions} />
-            <RoomStack.Screen name="ContainRoom" component={ContainRoomScreen} options={{
-                headerLeft: () => (
-                    <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" onPress={() => navigation.pop()} />)
-            }} />
             <HomeStack.Screen name="MultipleChoice" component={MultipleChoice} options={headerOptions}></HomeStack.Screen>
             <HomeStack.Screen name="SingleChoice" component={SingleChoice} options={headerOptions}></HomeStack.Screen>
             <HomeStack.Screen name="Freetext" component={Freetext} options={headerOptions}></HomeStack.Screen>
@@ -120,7 +111,7 @@ const ProfileStackScreen = ({ navigation }) => (
                     <Icon.Button name="ios-menu" size={25} backgroundColor="#202225" onPress={() => { navigation.openDrawer() }} />
                 )
             }} />
-        <FriendsStack.Screen name="Profil bearbeiten" component={EditProfileScreen} options={headerOptions}/>
+        <FriendsStack.Screen name="Profil bearbeiten" component={EditProfileScreen} options={headerOptions} />
     </FriendsStack.Navigator>
 );
 

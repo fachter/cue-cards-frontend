@@ -30,18 +30,19 @@ class UserProvider extends React.Component {
 
     checkIfConnected() {
         return new Promise((resolve, reject) => {
-            NetInfo.fetch().then((response) => {
-                if (response.isConnected === true) {
-                    resolve('erfolgreich')
-                }
-                else {
-                    reject('fehlgeschlagen')
-                }
+            NetInfo.fetch().
+                then((response) => {
+                    if (response.isConnected === true) {
+                        resolve('erfolgreich')
+                    }
+                    else {
+                        reject('fehlgeschlagen')
+                    }
 
-                if (this.state.isConnected != response.isConnected) {
-                    this.setState({ isConnected: response.isConnected })
-                }
-            })
+                    if (this.state.isConnected != response.isConnected) {
+                        this.setState({ isConnected: response.isConnected })
+                    }
+                })
                 .catch(error => {
                     reject('fehlgeschlagen')
                     console.log("Verbindung zum Netzwerk nicht möglich =>  " + error)
@@ -50,27 +51,6 @@ class UserProvider extends React.Component {
     }
 
 
-    // async _storeTokenOnDevice(token) {
-    //     try {
-    //         await AsyncStorage.setItem(
-    //             'userToken', token
-    //         );
-    //     } catch (error) {
-    //         console.log("Fehler beim speichern des Tokens: " + error)
-    //     }
-    // }
-
-    // async retrievetTokenFromDevice() {
-    //     try {
-    //         const token = await AsyncStorage.getItem('userToken')
-    //         console.log(token)
-    //         if (token != null) {
-    //             return token
-    //         }
-    //     } catch (error) {
-    //         console.log("Error by retrieve token:" + error)
-    //     }
-    // }
 
 
     login = () => {
@@ -78,9 +58,11 @@ class UserProvider extends React.Component {
     }
 
     logout = () => {
-        this.setState({ isLoggedin: false })
+        this.state.stayLoggedin = false
+        this.state.username = false
+        this.state.password = false
         this.saveUserOnDevice(false, '', '')
-        console.log("")
+        this.setState({ isLoggedin: false })
     }
 
     setUserToken(token) {
@@ -91,12 +73,13 @@ class UserProvider extends React.Component {
         this.setState({ dataIsLoading: value })
     }
 
-    saveUserOnDevice = async (boolean, username, password) => {
+    saveUserOnDevice = (stayLoggedin, username, password) => {
+        console.log(stayLoggedin + username + password)
         try {
-            await AsyncStorage.setItem(
+            AsyncStorage.setItem(
                 'loginData',
                 JSON.stringify({
-                    stayLoggedin: boolean,
+                    stayLoggedin: stayLoggedin,
                     username: username,
                     password: password
                 })

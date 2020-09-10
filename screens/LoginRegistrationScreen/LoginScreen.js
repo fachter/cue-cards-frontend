@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Button, FlatList, StyleSheet } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Switch, StyleSheet } from 'react-native';
 import { UserContext } from './UserProvider'
 import { SettingsContext } from '../SettingsScreen/SettingsProvider'
 import logo from '../../assets/Logo.png';
@@ -13,7 +12,7 @@ const { width: WidTH } = Dimensions.get('window')
 
 export default function LoginScreen({ navigation }) {
 
-    const { checkIfUserStayedLoggedin, _authenticateAcc, login } = useContext(UserContext)
+    const { checkIfUserStayedLoggedin, _authenticateAcc, login, saveUserOnDevice } = useContext(UserContext)
     const { retrieveSettignsfromDevice } = useContext(SettingsContext)
     const [username, setUnsername] = useState('')
     const [password, setPassword] = useState('')
@@ -25,12 +24,20 @@ export default function LoginScreen({ navigation }) {
         if (screenIsMounted === false) {
             checkIfUserStayedLoggedin()
                 .then(res => {
+                    setStayLoggedin(true)
+                    saveUserOnDevice(true, password, username)
                     userLogin()
                     console.log("Logindaten wurden zuvor gespeichert. Login " + res)
                 })
             setScreenIsMounted(true)
         }
     })
+
+    function toggleSwitch() {
+        setStayLoggedin(!stayLoggedin)
+
+    }
+
 
     function userLogin() {
         _authenticateAcc(stayLoggedin, username, password)
@@ -68,9 +75,15 @@ export default function LoginScreen({ navigation }) {
                 />
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                <CheckBox
+                <Switch
+                    style={{ alignSelf: 'center' }}
+                    trackColor={{
+                        false: "grey", true: "grey"
+                    }}
+                    thumbColor='#008FD3'
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={() => toggleSwitch()}
                     value={stayLoggedin}
-                    onValueChange={value => setStayLoggedin(value)}
                 />
                 <Text style={{ color: 'white', marginLeft: 5 }}>eingeloggt bleiben</Text>
             </View>

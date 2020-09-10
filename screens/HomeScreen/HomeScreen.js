@@ -110,8 +110,15 @@ const DataList = () => {
 
 
 
-    function _shuffleArray(cards) {
-        let copy = cards
+
+    function _shuffleArray(array, createCopyWithReference) {
+        let copy
+        if (createCopyWithReference === false) {
+            copy = JSON.parse(JSON.stringify(array))
+        } else {
+            copy = array
+        }
+
         var i,
             j,
             temp;
@@ -124,18 +131,15 @@ const DataList = () => {
         return copy
     }
 
-
-    function _navigateToSession(item) {
+    async function _navigateToSession(item) {
 
         let sessionCards = item.cards
-
-        if (shuffleCards === true) {
-            sessionCards = _shuffleArray(item.cards)
-        }
+        // console.log(shuffleCards)
+        // if (shuffleCards === true) {
+        //     sessionCards = await _shuffleArray(item.cards, true)
+        // }
 
         if (item.cards.length > 0) {
-            setCurrentListStructure(item.cards)
-            updateFolderHistory(item.cards)
             navigation.navigate('CardScreen', { mode: "sessionMode", card: item.cards[0], sessionCards: sessionCards })
 
         } else {
@@ -266,7 +270,15 @@ const DataList = () => {
                                 backgroundColor="white"
                                 onPress={() => setSomeThingIsCopied(false)} />
                         </View> :
-                        <Text>kopierte Datei kann hier nicht eingefügt werden</Text>}
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text>kopierte Datei kann hier nicht eingefügt werden</Text>
+                            <Icon.Button
+                                style={{ alignSelf: 'flex-start' }}
+                                name="ios-close"
+                                size={23} color="black"
+                                backgroundColor="white"
+                                onPress={() => setSomeThingIsCopied(false)} />
+                        </View>}
                 </View>
                 :
                 null}

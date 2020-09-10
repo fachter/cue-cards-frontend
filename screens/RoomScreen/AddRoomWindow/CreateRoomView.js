@@ -1,31 +1,30 @@
-import React from 'react'
+import React, { useContext, useState, useRef } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Switch } from 'react-native'
 import ResultView from './ResultView'
-import ActicityIndicatorView from './ActivityIndicatorView'
 import { asyncAxiosPost } from '../../../API/Database'
-import { UserContext } from '../../LoginRegistrationScreen/UserProvider';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-export default class CreateRoomView extends React.Component {
+import { RoomContext } from '../RoomScreen'
+import { UserContext } from '../../LoginRegistrationScreen/UserProvider'
 
-    static contextType = UserContext
-    state = {
-        roomName: null,
-        passwordToggle: false,
-        password: null,
-        resultSucces: false,
-        resultMessage: '',
-        showResultView: false,
-        showActivityIndicator: false
+export default function CreateRoomView() {
+
+    const [roomName, setRoomName] = useState(null)
+    const [passwordToggle, setPasswordToggle] = useState(false)
+    const [password, setPassword] = useState(null)
+    const [showResultView, setShowResultView] = useState(false)
+    const resultSucces = useRef(false)
+    const resultMessage = useRef('')
+
+
+    const { retrieveAllRooms } = useContext(RoomContext)
+    const { userToken, checkIfConnected } = useContext(UserContext)
+
+    function toggleSwitch() {
+        setPasswordToggle(!passwordToggle)
     }
 
-
-
-    toggleSwitch() {
-        this.setState({ passwordToggle: !this.state.passwordToggle })
-    }
-
-    checkPasswordValidity(password) {
+    function checkPasswordValidity() {
         if (password.length >= 6 && password != null) {
             return true
         }
@@ -33,40 +32,37 @@ export default class CreateRoomView extends React.Component {
     }
 
 
-    sendRoomToServer(newRoom) {
-        const user = this.context
-        console.log(newRoom)
-        user.checkIfConnected()
+
+    function sendRoomToServer(newRoom) {
+
+        checkIfConnected()
             .then(() => {
-                asyncAxiosPost('https://cue-cards-app.herokuapp.com/api/room', 'CreateRoomView', newRoom, user.userToken)
+                asyncAxiosPost('https://cue-cards-app.herokuapp.com/api/room', 'CreateRoomView', newRoom, userToken)
                     .then(() => {
-                        this.state.resultSucces = true
-                        this.state.resultMessage = 'Raum wurde erstellt'
-                        this.state.showActivityIndicator = false
-                        this.setState({ showResultView: true })
+                        resultSucces.current = true
+                        resultMessage.current = 'Raum wurde erstellt'
+                        setShowResultView(true)
+                        retrieveAllRooms()
                     })
                     .catch(() => {
-                        this.state.resultSucces = false
-                        this.state.resultMessage = 'Probleme mit dem Server'
-                        this.state.showActivityIndicator = false
-                        this.setState({ showResultView: true })
+                        resultSucces.current = false
+                        resultMessage.current = 'Probleme mit dem Server'
+                        setShowResultView(true)
                         console.log('Fehler beim erstellen des Raumes')
                     })
 
             }).catch(() => {
-                this.state.resultSucces = false
-                this.state.resultMessage = 'Netzwerkfehler'
-                this.state.showActivityIndicator = false
-                this.setState({ showResultView: true })
+                resultSucces.current = false
+                resultMessage.current = 'Netzwerkfehler'
+                setShowResultView(true)
             })
 
     }
 
 
-    createNewRoom() {
+    function createNewRoom() {
         const numberOfPictures = 4
-        const { password, roomName, passwordToggle } = this.state
-        this.setState({ showActicityIndicator: true })
+
         let randomPictureNumber = Math.floor(Math.random() * numberOfPictures)
 
         let newRoom = {
@@ -77,9 +73,9 @@ export default class CreateRoomView extends React.Component {
 
 
         if (passwordToggle === true) {
-            if (this.checkPasswordValidity(password) === true) {
+            if (checkPasswordValidity() === true) {
                 if (roomName != null) {
-                    this.sendRoomToServer(newRoom)
+                    sendRoomToServer(newRoom)
                 } else {
                     alert("Geb deinen Raum einen Namen")
 
@@ -89,7 +85,7 @@ export default class CreateRoomView extends React.Component {
             }
         } else {
             if (roomName != null) {
-                this.sendRoomToServer(newRoom)
+                sendRoomToServer(newRoom)
             } else {
                 alert("Geb deinen Raum einen Namen")
             }
@@ -98,8 +94,8 @@ export default class CreateRoomView extends React.Component {
     }
 
 
-    renderWindow() {
-        const { showResultView, resultMessage, resultSucces, passwordToggle } = this.state
+    function renderWindow() {
+
 
         if (showResultView === false) {
             return (
@@ -111,7 +107,7 @@ export default class CreateRoomView extends React.Component {
                         maxLength={20}
                         placeholder="z.B. Lerngruppe1234"
                         placeholderTextColor="grey"
-                        onChangeText={text => this.setState({ roomName: text })}>
+                        onChangeText={text => setRoomName(text)}>
                     </TextInput>
                     <View>
                         <View style={{ flexDirection: 'row' }}>
@@ -123,7 +119,7 @@ export default class CreateRoomView extends React.Component {
                                 }}
                                 thumbColor='#008FD3'
                                 ios_backgroundColor="#3e3e3e"
-                                onValueChange={() => this.toggleSwitch()}
+                                onValueChange={() => toggleSwitch()}
                                 value={passwordToggle}
                             />
 
@@ -135,13 +131,13 @@ export default class CreateRoomView extends React.Component {
                                     maxLength={20}
                                     placeholder="Password"
                                     placeholderTextColor="grey"
-                                    onChangeText={text => this.setState({ password: text })}>
+                                    onChangeText={text => setPassword(text)}>
                                 </TextInput>
                                 : null
                         }
                     </View>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.saveButton} onPress={() => this.createNewRoom()}>
+                        <TouchableOpacity style={styles.saveButton} onPress={() => createNewRoom()}>
                             <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
                             <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Erstellen</Text>
                         </TouchableOpacity>
@@ -150,17 +146,16 @@ export default class CreateRoomView extends React.Component {
             )
         } else {
             return (
-                <ResultView resultMessage={resultMessage} resultSucces={resultSucces} />
+                <ResultView resultMessage={resultMessage.current} resultSucces={resultSucces.current} />
             )
         }
     }
 
 
-    render() {
-        return (
-            <View>{this.renderWindow()}</View>
-        )
-    }
+    return (
+        <View>{renderWindow()}</View>
+    )
+
 }
 
 const styles = StyleSheet.create({
