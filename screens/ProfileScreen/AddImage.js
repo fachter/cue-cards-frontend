@@ -1,27 +1,32 @@
-import React from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { View, Modal, StyleSheet, Text, TextInput, TouchableOpacity, Switch } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import * as Icon from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import { ProfileContext } from './ProfileProvider'
 
 
 
 
 
+export default function AddImage(){
 
-export default class AddImage extends React.Component {
+    //const [image, setImage] = useState(null)
 
-    state = {
-        image: null,
-    };
+    const {
+        image,
+        setImage,
+        showAddImage,
+        setShowAddImage
+    } = useContext(ProfileContext)
 
-    componentDidMount() {
-        this.getPermissionAsync();
-    }
+    useEffect(()=>{
+        getPermissionAsync
+    },[])
 
-    getPermissionAsync = async () => {
+    const getPermissionAsync = async () => {
         if (Platform.OS !== 'web') {
             const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
             if (status !== 'granted') {
@@ -30,7 +35,7 @@ export default class AddImage extends React.Component {
         }
     };
 
-    _pickImage = async () => {
+    const _pickImage = async () => {
         try {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -39,7 +44,7 @@ export default class AddImage extends React.Component {
                 quality: 1,
             });
             if (!result.cancelled) {
-                this.setState({ image: result.uri });
+                setImage(result.uri);
             }
 
             console.log(result);
@@ -48,24 +53,16 @@ export default class AddImage extends React.Component {
         }
     };
 
-    render() {
-
-
-
-
-
-
-
 
 
         return (
             <Modal
                 animationType='fade'
                 transparent={true}
-                visible={this.props.showAddImage}
-                onRequestClose={() => this.props.close()}>
+                visible={showAddImage}
+                onRequestClose={() => close()}>
                 <View style={styles.background}>
-                    <TouchableOpacity style={styles.cancelButton} onPress={() => this.props.close()}>
+                    <TouchableOpacity style={styles.cancelButton} onPress={() => setShowAddImage(false)}>
                         <AntDesign name="closecircleo" size={24} color="grey" />
                     </TouchableOpacity>
                     <Text style={styles.headingText}>Profilbild hochladen</Text>
@@ -74,7 +71,7 @@ export default class AddImage extends React.Component {
                             <Icon.AntDesign name="camera" size={35} color='#008FD3' />
                             <Text style={styles.buttonText}>Kamera</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.windowButtons]} onPress={() => this._pickImage()} >
+                        <TouchableOpacity style={[styles.windowButtons]} onPress={() => _pickImage()} >
                             <Icon.AntDesign name="picture" size={35} color='#008FD3' />
                             <Text style={styles.buttonText}>Galerie</Text>
                         </TouchableOpacity>
@@ -83,7 +80,7 @@ export default class AddImage extends React.Component {
             </Modal>
         )
     }
-}
+
 
 
 const styles = StyleSheet.create({

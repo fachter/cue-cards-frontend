@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
     View,
     Text,
@@ -19,6 +19,7 @@ import Feather from 'react-native-vector-icons/Feather';
 
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
+import { ProfileContext } from './ProfileProvider'
 
 
 import ImagePicker from 'react-native-image-crop-picker';
@@ -26,127 +27,123 @@ import AddImage from './AddImage';
 
 
 
-export default class EditProfileScreen extends React.Component {
-
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            showAddImage: false,
-
-        }
+export default function EditProfileScreen() {
 
 
+
+    //const [showAddImage, setShowAddImage] = useState(null);
+
+
+    const {
+        image,
+        setImage,
+        showAddImage,
+        setShowAddImage
+    } = useContext(ProfileContext)
+
+
+    function _closeAddImage() {
+        setShowAddImage(false);
     }
 
-
-    _closeAddImage() {
-        this.setState({ showAddImage: false })
-    }
-
-    render() {
-
+    return (
+        <View style={styles.container}>
+            <BottomSheet
+                /*  ref={this.bs} */
+                snapPoints={[330, 0]}
 
 
-
-
-        return (
-            <View style={styles.container}>
-                <BottomSheet
-                    /*  ref={this.bs} */
-                    snapPoints={[330, 0]}
-
-
-                    //callbackNode={this.fall}
-                    enabledGestureInteraction={true}
-                />
-                <Animated.View style={{
-                    margin: 20,
-                    //opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
-                }}>
-                    <TouchableOpacity
-                        style={{ alignItems: 'center', marginBottom: 35 }}
-                        onPress={() => this.setState({ showAddImage: true })}>
-                        <ImageBackground
-                            source={require('../../assets/Passbild.jpg')}
-                            style={{ height: 160, width: 160 }}
-                            imageStyle={{ borderRadius: 80 }}
-                        >
-                            <View
-                                style={styles.picture}>
-                                <Icon
-                                    name="camera"
-                                    size={27}
-                                    color="white"
-                                />
-                            </View>
-                        </ImageBackground>
-                    </TouchableOpacity>
-
-                    <View style={styles.action}>
-                        <FontAwesome
-                            name="user-o"
-                            color="lightgrey"
-                            size={21}
-                            style={styles.feldIcon}
-                        />
-                        <Text style={styles.feldbezeichner}>Name</Text>
-                        <TextInput
-                            placeholder="Mathias Meyer"
-                            placeholderTextColor="white"
-                            autoCorrect={false}
-                            style={styles.textInput}
-                        />
-                    </View>
-
-                    <View style={styles.action}>
-                        <FontAwesome
-                            name="envelope-o"
-                            color="lightgrey"
-                            size={21}
-                            style={styles.feldIcon}
-                        />
-                        <Text style={styles.feldbezeichner}>Email</Text>
-                        <TextInput
-                            placeholder="Matze.stinkt@DariusIstAwsome.de"
-                            placeholderTextColor="white"
-                            keyboardType="email-address"
-                            autoCorrect={false}
-                            style={styles.textInput}
-                        />
-                    </View>
-
-                    <View style={styles.action}>
-                        <Icon
-                            name="lock-outline"
-                            color="lightgrey"
-                            size={23}
-                            style={styles.feldIcon}
-                        />
-                        <Text style={styles.feldbezeichner}>Passwort</Text>
-                        <Text style={[styles.textInput, { marginTop: 9 }]}>°°°°°°°°°°°°°°</Text>
-                        <TouchableOpacity style={styles.bearbeitenKnopf}>
+                //callbackNode={this.fall}
+                enabledGestureInteraction={true}
+            />
+            <Animated.View style={{
+                margin: 20,
+                //opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
+            }}>
+                <TouchableOpacity
+                    style={{ alignItems: 'center', marginBottom: 35 }}
+                    onPress={() => this.setState({ showAddImage: true })}>
+                    <ImageBackground
+                        source={require('../../assets/Passbild.jpg')}
+                        style={{ height: 160, width: 160 }}
+                        imageStyle={{ borderRadius: 80 }}
+                    >
+                        <View
+                            style={styles.picture}>
                             <Icon
-                                name="pencil"
-                                color="#008FD3"
-                                size={23}
+                                name="camera"
+                                size={27}
+                                color="white"
                             />
-                        </TouchableOpacity>
-                    </View>
+                        </View>
+                    </ImageBackground>
+                </TouchableOpacity>
 
-                    <AddImage
-                        showAddImage={this.state.showAddImage}
-                        close={this._closeAddImage.bind(this)}
+                <View style={styles.action}>
+                    <FontAwesome
+                        name="user-o"
+                        color="lightgrey"
+                        size={21}
+                        style={styles.feldIcon}
                     />
+                    <Text style={styles.feldbezeichner}>Name</Text>
+                    <TextInput
+                        placeholder="Mathias Meyer"
+                        placeholderTextColor="white"
+                        autoCorrect={false}
+                        style={styles.textInput}
+                    />
+                </View>
 
-                    <TouchableOpacity style={styles.saveButton} >
-                        <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
+                <View style={styles.action}>
+                    <FontAwesome
+                        name="envelope-o"
+                        color="lightgrey"
+                        size={21}
+                        style={styles.feldIcon}
+                    />
+                    <Text style={styles.feldbezeichner}>Email</Text>
+                    <TextInput
+                        placeholder="Matze.stinkt@DariusIstAwsome.de"
+                        placeholderTextColor="white"
+                        keyboardType="email-address"
+                        autoCorrect={false}
+                        style={styles.textInput}
+                    />
+                </View>
+
+                <View style={styles.action}>
+                    <Icon
+                        name="lock-outline"
+                        color="lightgrey"
+                        size={23}
+                        style={styles.feldIcon}
+                    />
+                    <Text style={styles.feldbezeichner}>Passwort</Text>
+                    <Text style={[styles.textInput, { marginTop: 9 }]}>°°°°°°°°°°°°°°</Text>
+                    <TouchableOpacity style={styles.bearbeitenKnopf}>
+                        <Icon
+                            name="pencil"
+                            color="#008FD3"
+                            size={23}
+                        />
                     </TouchableOpacity>
-                </Animated.View >
-            </View >
-        );
-    }
+
+                </View>
+
+                <AddImage
+                    showAddImage={showAddImage}
+                    close={_closeAddImage}
+                />
+
+                <TouchableOpacity style={styles.saveButton} >
+                    <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
+                </TouchableOpacity>
+            </Animated.View>
+        </View>
+    );
 }
+
 
 
 const styles = StyleSheet.create({

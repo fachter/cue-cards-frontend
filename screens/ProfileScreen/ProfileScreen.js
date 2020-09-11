@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { View, SafeAreaView, StyleSheet } from 'react-native';
 import {
     Avatar,
@@ -10,27 +10,20 @@ import {
 } from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { ProfileContext } from './ProfileProvider'
 
-//import Share from 'react-native-share';
 
-//import files from '../assets/filesBase64';
+
 
 const ProfileScreen = () => {
 
-    /* const myCustomShare = async () => {
-        const shareOptions = {
-            message: 'Order your next meal from FoodFinder App. I\'ve already ordered more than 10 meals on it.',
-            url: files.appLogo,
-            // urls: [files.image1, files.image2]
-        }
-
-        try {
-            const ShareResponse = await Share.open(shareOptions);
-            console.log(JSON.stringify(ShareResponse));
-        } catch (error) {
-            console.log('Error => ', error);
-        }
-    } */;
+    const {
+        image,
+        setImage,
+        showAddImage,
+        setShowAddImage
+    } = useContext(ProfileContext)
+    
 
     return (
         <SafeAreaView style={styles.container}>
@@ -39,7 +32,7 @@ const ProfileScreen = () => {
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
                     <Avatar.Image
                         source={
-                            require('../../assets/Passbild.jpg')
+                            image
                         }
                         size={80}
                     />
