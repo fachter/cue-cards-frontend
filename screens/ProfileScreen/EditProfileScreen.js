@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
     View,
     Text,
@@ -18,6 +18,7 @@ import Feather from 'react-native-vector-icons/Feather';
 
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
+import { ProfileContext } from './ProfileProvider'
 
 
 import ImagePicker from 'react-native-image-crop-picker';
@@ -25,25 +26,25 @@ import AddImage from './AddImage';
 
 
 
-export default class EditProfileScreen extends React.Component{
+export default function EditProfileScreen(){
 
-    constructor(props) {
-        super(props)
+   
 
-        this.state = {
-            showAddImage: false,
-
-        }
+   //const [showAddImage, setShowAddImage] = useState(null);
 
 
-    }
+    const {
+        image,
+        setImage,
+        showAddImage,
+        setShowAddImage
+    } = useContext(ProfileContext)
 
 
-    _closeAddImage() {
-        this.setState({ showAddImage: false })
-    }
+     function _closeAddImage() {
+        setShowAddImage(false);
+    } 
 
-render(){
     
 
 
@@ -64,7 +65,7 @@ render(){
                 //opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
             }}>
                 <View style={{ alignItems: 'center' }}>
-                    <TouchableOpacity  onPress={() => this.setState({showAddImage: true})}>
+                    <TouchableOpacity  onPress={() => setShowAddImage(true)}>
                         <View
                             style={{
                                 height: 100,
@@ -75,7 +76,7 @@ render(){
                             }}>
                             <ImageBackground
                                 source={
-                                    require('../../assets/Passbild.jpg')
+                                    image
                                 }
                                 style={{ height: 100, width: 100 }}
                                 imageStyle={{ borderRadius: 15 }}>
@@ -138,10 +139,10 @@ render(){
                     />
                 </View>
                 
-                <AddImage
-                showAddImage={this.state.showAddImage}
-                close={this._closeAddImage.bind(this)}
-                />
+             <AddImage
+                showAddImage={showAddImage}
+                close={_closeAddImage}
+                /> 
                 
                 <TouchableOpacity>
                     <Text style={styles.fontStyle}>Submit</Text>
@@ -150,7 +151,7 @@ render(){
         </View>
     );
 }
-}
+
 
 
 const styles = StyleSheet.create({
