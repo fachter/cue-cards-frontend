@@ -21,6 +21,7 @@ import { SettingsContext } from '../SettingsScreen/SettingsProvider'
 import logo from '../../assets/Logo_grau.png';
 import Raumbild1 from '../../assets/Raumbild1.png';
 import Raumbild2 from '../../assets/Raumbild2.png';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -285,21 +286,24 @@ const DataList = () => {
             >
                 <Image source={Raumbild2} style={styles.obenRechts} />
                 <Image source={Raumbild1} style={styles.untenLinks} />
-                <FlatList
-                    //ListHeaderComponent={renderHeader}
-                    data={currentListStructure}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item }) => (
-                        <FolderListItem
-                            item={item}
-                            callBackItem={_getClickedItem}
-                            onDeleteWindow={_showDeleteWindow.bind(this)}
-                            onNavigateToCardScreen={_navigateToCardScreen}
-                            onNavigateToSession={_navigateToSession}
-                        />
-                    )}
-                    ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
-                />
+                <ScrollView>
+                    <FlatList
+                        //ListHeaderComponent={renderHeader}
+                        data={currentListStructure}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item }) => (
+                            <FolderListItem
+                                item={item}
+                                callBackItem={_getClickedItem}
+                                onDeleteWindow={_showDeleteWindow.bind(this)}
+                                onNavigateToCardScreen={_navigateToCardScreen}
+                                onNavigateToSession={_navigateToSession}
+                            />
+                        )}
+                        ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
+                    />
+                    <View style={styles.platzhalter}></View>
+                </ScrollView>
                 <View>
                     <ChooseFolderSetWindow
                         visible={CreateFileWindowVisible}
@@ -399,7 +403,11 @@ const styles = StyleSheet.create({
         height: '20%',
         resizeMode: 'stretch',
         right: 10,
-    }
+    },
+    platzhalter: {
+        height: 80,
+        width: '100%',
+    },
 })
 
 
