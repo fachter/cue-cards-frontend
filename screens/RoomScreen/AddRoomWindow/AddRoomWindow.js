@@ -61,11 +61,8 @@ export default class AddRoomWindow extends React.Component {
                     <TouchableOpacity style={styles.cancelButton} onPress={() => this.closeWindow()}>
                         <AntDesign name="closecircleo" size={24} color="grey" />
                     </TouchableOpacity>
-                    <View style={styles.window}>
-                        {this.renderWindow()}
-                    </View >
                     <View style={styles.switchView}>
-                        {createRoomVisible ? <Text style={[styles.switchText, { position: 'absolute', left: 50 }]}>beitreten</Text> : null}
+                        <Text style={[styles.switchText, { position: 'absolute', left: 50 }]}>Beitreten</Text>
                         <Switch
                             style={{ alignSelf: 'center' }}
                             trackColor={{
@@ -76,8 +73,12 @@ export default class AddRoomWindow extends React.Component {
                             onValueChange={() => this.toggleSwitch()}
                             value={createRoomVisible}
                         />
-                        {createRoomVisible ? null : <Text style={[styles.switchText, { position: 'absolute', right: 50 }]} >erstellen</Text>}
+                        <Text style={[styles.switchText, { position: 'absolute', right: 50 }]} >Erstellen</Text>
                     </View>
+                    <View style={styles.window}>
+                        {this.renderWindow()}
+                    </View >
+
                 </View>
             </Modal >
         )
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
     },
     window: {
         width: '100%',
-        height: '30%',
+        //height: '30%',
         alignItems: 'center',
 
     },
@@ -156,9 +157,9 @@ const styles = StyleSheet.create({
         marginTop: 50,
         justifyContent: 'center',
         borderColor: 'grey',
-        borderBottomWidth: 1,
+        borderBottomWidth: 0.7,
         paddingBottom: 10,
-        marginBottom: 50
+        marginBottom: 30
     },
     switchText: {
         color: 'white',

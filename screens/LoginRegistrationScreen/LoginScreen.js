@@ -109,14 +109,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#202225',
-        paddingTop: 25
+        justifyContent: 'center',
+        marginTop: -50
     },
     logo: {
         width: 300,
         height: 120,
         marginBottom: 30,
-        marginTop: 90,
-        alignSelf: 'center'
+        alignSelf: 'center',
     },
     input: {
         width: WidTH - 55,

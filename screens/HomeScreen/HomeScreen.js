@@ -21,6 +21,7 @@ import { SettingsContext } from '../SettingsScreen/SettingsProvider'
 import logo from '../../assets/Logo_grau.png';
 import Raumbild1 from '../../assets/Raumbild1.png';
 import Raumbild2 from '../../assets/Raumbild2.png';
+import LeererRaum from '../../assets/LeererRaum.png';
 import { ScrollView } from 'react-native-gesture-handler';
 
 
@@ -286,6 +287,9 @@ const DataList = () => {
             >
                 <Image source={Raumbild2} style={styles.obenRechts} />
                 <Image source={Raumbild1} style={styles.untenLinks} />
+                <View style={styles.bildcontainer}>
+                    <Image source={LeererRaum} style={styles.leererRaum} />
+                </View>
                 <ScrollView>
                     <FlatList
                         //ListHeaderComponent={renderHeader}
@@ -399,7 +403,7 @@ const styles = StyleSheet.create({
     },
     obenRechts: {
         position: 'absolute',
-        width: 25,
+        width: '5%',
         height: '20%',
         resizeMode: 'stretch',
         right: 10,
@@ -408,6 +412,19 @@ const styles = StyleSheet.create({
         height: 80,
         width: '100%',
     },
+    bildcontainer: {
+        flex: 1,
+        width: '95%',
+        alignSelf: 'flex-end',
+        marginTop: '34%',
+    },
+    leererRaum: {
+        alignSelf: 'center',
+        width: '100%',
+        maxWidth: 600,
+        maxHeight: 300,
+        resizeMode: 'contain',
+    }
 })
 
 

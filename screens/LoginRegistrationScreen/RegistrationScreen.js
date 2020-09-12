@@ -3,6 +3,7 @@ import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, StyleSheet 
 import logo from '../../assets/Logo.png'
 import axios from 'axios';
 import { UserContext } from './UserProvider';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -78,64 +79,66 @@ export default function RegistrationScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Image source={logo} style={styles.logo} />
-            <View>
-                <TextInput
-                    style={styles.input}
-                    placeholder={'Benutzername'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    onChangeText={text => setUsername(text)}
-                />
-            </View>
-            <View>
-                <TextInput
-                    style={styles.input}
-                    placeholder={'Nickname'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    secureTextEntry={true}
-                    onChangeText={text => setFullname(text)}
-                />
-            </View>
-            <View>
-                <TextInput
-                    style={styles.input}
-                    placeholder={'E-Mail'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    secureTextEntry={true}
-                    onChangeText={text => setEmail(text)}
-                />
-            </View>
-            <View>
-                <TextInput
-                    style={styles.input}
-                    placeholder={'Passwort'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    secureTextEntry={true}
-                    onChangeText={text => setPassword1(text)}
-                />
-            </View>
-            <View>
-                <TextInput
-                    style={styles.input}
-                    placeholder={'Passwort wiederholen'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    secureTextEntry={true}
-                    onChangeText={text => setPassword2(text)}
-                />
-            </View>
+            <ScrollView >
+                <Image source={logo} style={styles.logo} />
+                <View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Benutzername'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        onChangeText={text => setUsername(text)}
+                    />
+                </View>
+                <View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Nickname'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        secureTextEntry={true}
+                        onChangeText={text => setFullname(text)}
+                    />
+                </View>
+                <View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'E-Mail'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        secureTextEntry={true}
+                        onChangeText={text => setEmail(text)}
+                    />
+                </View>
+                <View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Passwort'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        secureTextEntry={true}
+                        onChangeText={text => setPassword1(text)}
+                    />
+                </View>
+                <View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Passwort wiederholen'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        secureTextEntry={true}
+                        onChangeText={text => setPassword2(text)}
+                    />
+                </View>
 
 
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => _regNewAcc()}
-            >
-                <Text style={styles.text}>Registrieren</Text>
-            </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => _regNewAcc()}
+                >
+                    <Text style={styles.text}>Registrieren</Text>
+                </TouchableOpacity>
+            </ScrollView>
         </View>
     )
 }
@@ -146,12 +149,11 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#202225',
-        paddingTop: 25
     },
     logo: {
+        alignSelf: 'center',
         width: 250,
         height: 100,
-        marginBottom: 40
     },
     input: {
         width: WidTH - 55,

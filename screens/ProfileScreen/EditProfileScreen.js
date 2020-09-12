@@ -24,6 +24,7 @@ import { ProfileContext } from './ProfileProvider'
 
 import ImagePicker from 'react-native-image-crop-picker';
 import AddImage from './AddImage';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -47,100 +48,104 @@ export default function EditProfileScreen() {
     }
 
     return (
+
         <View style={styles.container}>
-            <BottomSheet
-                /*  ref={this.bs} */
-                snapPoints={[330, 0]}
+            <ScrollView>
+                <BottomSheet
+                    /*  ref={this.bs} */
+                    snapPoints={[330, 0]}
 
 
-                //callbackNode={this.fall}
-                enabledGestureInteraction={true}
-            />
-            <Animated.View style={{
-                margin: 20,
-                //opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
-            }}>
-                <TouchableOpacity
-                    style={{ alignItems: 'center', marginBottom: 35 }}
-                    onPress={() => this.setState({ showAddImage: true })}>
-                    <ImageBackground
-                        source={require('../../assets/Passbild.jpg')}
-                        style={{ height: 160, width: 160 }}
-                        imageStyle={{ borderRadius: 80 }}
-                    >
-                        <View
-                            style={styles.picture}>
-                            <Icon
-                                name="camera"
-                                size={27}
-                                color="white"
-                            />
-                        </View>
-                    </ImageBackground>
-                </TouchableOpacity>
-
-                <View style={styles.action}>
-                    <FontAwesome
-                        name="user-o"
-                        color="lightgrey"
-                        size={21}
-                        style={styles.feldIcon}
-                    />
-                    <Text style={styles.feldbezeichner}>Name</Text>
-                    <TextInput
-                        placeholder="Mathias Meyer"
-                        placeholderTextColor="white"
-                        autoCorrect={false}
-                        style={styles.textInput}
-                    />
-                </View>
-
-                <View style={styles.action}>
-                    <FontAwesome
-                        name="envelope-o"
-                        color="lightgrey"
-                        size={21}
-                        style={styles.feldIcon}
-                    />
-                    <Text style={styles.feldbezeichner}>Email</Text>
-                    <TextInput
-                        placeholder="Matze.stinkt@DariusIstAwsome.de"
-                        placeholderTextColor="white"
-                        keyboardType="email-address"
-                        autoCorrect={false}
-                        style={styles.textInput}
-                    />
-                </View>
-
-                <View style={styles.action}>
-                    <Icon
-                        name="lock-outline"
-                        color="lightgrey"
-                        size={23}
-                        style={styles.feldIcon}
-                    />
-                    <Text style={styles.feldbezeichner}>Passwort</Text>
-                    <Text style={[styles.textInput, { marginTop: 9 }]}>°°°°°°°°°°°°°°</Text>
-                    <TouchableOpacity style={styles.bearbeitenKnopf}>
-                        <Icon
-                            name="pencil"
-                            color="#008FD3"
-                            size={23}
-                        />
+                    //callbackNode={this.fall}
+                    enabledGestureInteraction={true}
+                />
+                <Animated.View style={{
+                    margin: 20,
+                    //opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
+                }}>
+                    <TouchableOpacity
+                        style={{ alignItems: 'center', marginBottom: 35 }}
+                        onPress={() => this.setState({ showAddImage: true })}>
+                        <ImageBackground
+                            source={require('../../assets/Passbild.jpg')}
+                            style={{ height: 160, width: 160 }}
+                            imageStyle={{ borderRadius: 80 }}
+                        >
+                            <View
+                                style={styles.picture}>
+                                <Icon
+                                    name="camera"
+                                    size={27}
+                                    color="white"
+                                />
+                            </View>
+                        </ImageBackground>
                     </TouchableOpacity>
 
-                </View>
+                    <View style={styles.action}>
+                        <FontAwesome
+                            name="user-o"
+                            color="lightgrey"
+                            size={21}
+                            style={styles.feldIcon}
+                        />
+                        <Text style={styles.feldbezeichner}>Name</Text>
+                        <TextInput
+                            placeholder="Mathias Meyer"
+                            placeholderTextColor="white"
+                            autoCorrect={false}
+                            style={styles.textInput}
+                        />
+                    </View>
 
-                <AddImage
-                    showAddImage={showAddImage}
-                    close={_closeAddImage}
-                />
+                    <View style={styles.action}>
+                        <FontAwesome
+                            name="envelope-o"
+                            color="lightgrey"
+                            size={21}
+                            style={styles.feldIcon}
+                        />
+                        <Text style={styles.feldbezeichner}>Email</Text>
+                        <TextInput
+                            placeholder="Matze.stinkt@DariusIstAwsome.de"
+                            placeholderTextColor="white"
+                            keyboardType="email-address"
+                            autoCorrect={false}
+                            style={styles.textInput}
+                        />
+                    </View>
 
-                <TouchableOpacity style={styles.saveButton} >
-                    <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
-                </TouchableOpacity>
-            </Animated.View>
-        </View>
+                    <View style={styles.action}>
+                        <Icon
+                            name="lock-outline"
+                            color="lightgrey"
+                            size={23}
+                            style={styles.feldIcon}
+                        />
+                        <Text style={styles.feldbezeichner}>Passwort</Text>
+                        <Text style={[styles.textInput, { marginTop: 9 }]}>°°°°°°°°°°°°°°</Text>
+                        <TouchableOpacity style={styles.bearbeitenKnopf}>
+                            <Icon
+                                name="pencil"
+                                color="#008FD3"
+                                size={23}
+                            />
+                        </TouchableOpacity>
+
+                    </View>
+
+                    <AddImage
+                        showAddImage={showAddImage}
+                        close={_closeAddImage}
+                    />
+
+                    <TouchableOpacity style={styles.saveButton} >
+                        <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
+                    </TouchableOpacity>
+                </Animated.View>
+            </ScrollView>
+        </View >
+
     );
 }
 

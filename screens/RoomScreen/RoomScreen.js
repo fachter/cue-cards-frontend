@@ -204,7 +204,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#2f3136",
-        paddingTop: 10,
     },
     suchEingabe: {
         marginVertical: 15,
