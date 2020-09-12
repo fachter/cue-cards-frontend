@@ -25,10 +25,10 @@ export default class LeaveRoomWindow extends React.Component {
 
         user.checkIfConnected()
             .then(() => {
-                asyncAxiosPost(`https://cue-cards-app.herokuapp.com//api/leave-room/${this.props.item.id}`, 'EditRoomWindow', null, user.userToken)
+                asyncAxiosPost(`https://cue-cards-app.herokuapp.com/api/leave-room/${this.props.item.id}`, 'EditRoomWindow', null, user.userToken)
                     .then(res => {
                         this.state.resultSucces = true
-                        this.state.resultMessage = 'Raum wurde gelöscht'
+                        this.state.resultMessage = 'Du hast den raum verlassen'
                         this.state.showActicityIndicator = false
                         this.setState({ showResultView: true })
                     })

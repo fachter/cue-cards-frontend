@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -19,7 +19,6 @@ import { asyncAxiosGet } from '../../API/Database'
 
 
 export default function RoomScreen() {
-
 
     const { checkIfConnected, isConnected, userToken } = useContext(UserContext)
     const {
@@ -52,7 +51,6 @@ export default function RoomScreen() {
             .then(() => {
                 asyncAxiosGet('https://cue-cards-app.herokuapp.com/api/get-available-rooms', 'RoomScreen', userToken)
                     .then(res => {
-                        console.log(res.data)
                         setServerRooms(res.data)
                         setRoomDataMounted(true)
                     }).catch(error => {

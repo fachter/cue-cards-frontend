@@ -32,7 +32,7 @@ export default function RoomIDView() {
     const askingForRoom = () => {
         //this.setState({ showActivityIndicator: true })
 
-        Axios.post(`https://cue-cards-app.herokuapp.com/api/authenticate/join-room/${roomID.current}`, {
+        Axios.get(`https://cue-cards-app.herokuapp.com/api/join-room/${roomID.current}`, {
             headers: {
                 'Authorization': "Bearer " + userToken
             }
@@ -91,7 +91,7 @@ export default function RoomIDView() {
                 } else {
                     if (showActivityIndicator === false) {
                         return (
-                            <PasswordView />
+                            <PasswordView roomID={roomID.current} userToken={userToken} />
                         )
                     } else {
                         return (
