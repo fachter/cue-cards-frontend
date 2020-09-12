@@ -78,7 +78,7 @@ export default function LoginScreen({ navigation }) {
                 <Switch
                     style={{ alignSelf: 'center' }}
                     trackColor={{
-                        false: "grey", true: "grey"
+                        false: "grey", true: "#008FD3"
                     }}
                     thumbColor='#008FD3'
                     ios_backgroundColor="#3e3e3e"

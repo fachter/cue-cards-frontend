@@ -157,29 +157,28 @@ export default function RoomScreen() {
     return (
 
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => _navigateToFolderScreen('myRoom', null)}>
-                <Image source={home} style={[styles.home, { marginTop: -10 }]} />
-                <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>Mein Raum</Text>
-            </TouchableOpacity>
-            <View>
-                <ScrollView>
-                    <FlatList
-                        data={serverRooms}
-                        keyExtractor={item => item.id}
-                        renderItem={({ item }) => (
-                            <RoomListItem
-                                item={item}
-                                onLeaveRoomWindowVisibility={showLeaveRoomWindow}
-                                onNavigate={_navigateToFolderScreen}
-                            />
-                        )}
-                    />
-                </ScrollView>
-            </View>
-            <TouchableOpacity onPress={() => setAddRoomWindowVisibility(true)}>
-                <Image source={newRoom} style={styles.home} />
-                <Text style={styles.fontStyle}>+ Raum hinzufügen</Text>
-            </TouchableOpacity>
+            <ScrollView>
+                <TouchableOpacity onPress={() => _navigateToFolderScreen('myRoom', null)}>
+                    <Image source={home} style={[styles.home, { marginTop: -10 }]} />
+                    <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>Mein Raum</Text>
+                </TouchableOpacity>
+                <FlatList
+                    data={serverRooms}
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) => (
+                        <RoomListItem
+                            item={item}
+                            onLeaveRoomWindowVisibility={showLeaveRoomWindow}
+                            onNavigate={_navigateToFolderScreen}
+                        />
+                    )}
+                />
+                <TouchableOpacity onPress={() => setAddRoomWindowVisibility(true)}>
+                    <Image source={newRoom} style={styles.home} />
+                    <Text style={styles.fontStyle}>+ Raum hinzufügen</Text>
+                </TouchableOpacity>
+                <View style={styles.platzhalter}></View>
+            </ScrollView>
             {renderErrorMessageView()}
             <AddRoomWindow
                 onSetVisibility={_setRoomAddWindowVisibility}
@@ -265,6 +264,10 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "#008FD3",
         fontSize: 20
+    },
+    platzhalter: {
+        height: 40,
+        width: '100%',
     },
 });
 

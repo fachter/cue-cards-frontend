@@ -8,6 +8,7 @@ import { UserContext } from './screens/LoginRegistrationScreen/UserProvider'
 import { SettingsProvider } from './screens/SettingsScreen/SettingsProvider'
 import { ListStructureProvider } from './screens/HomeScreen/ListStructureProvider'
 import { CopyPasteProvider } from './screens/HomeScreen/CopyPasteProvider'
+import { ProfileProvider } from './screens/ProfileScreen/ProfileProvider'
 
 import Sidebar from './navigation/Sidebar'
 import { LoginRegistrationStackScreen } from './navigation/Sidebar';
@@ -52,6 +53,7 @@ class App extends React.Component {
   render() {
 
     return (
+    <ProfileProvider>
       <UserProvider>
         <CopyPasteProvider>
           <ListStructureProvider>
@@ -61,6 +63,7 @@ class App extends React.Component {
           </ListStructureProvider>
         </CopyPasteProvider>
       </UserProvider >
+    </ProfileProvider>
     )
   }
 }

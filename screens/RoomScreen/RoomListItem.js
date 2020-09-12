@@ -32,8 +32,8 @@ export default class RoomListItem extends React.Component {
                 onPress={() => this.props.onNavigate(item.id, item)}
             >
                 <View style={styles.container}>
-                    <Image source={this.state.pictureNumber} style={[styles.home, { marginTop: -10 }]} />
-                    <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>{item.name}</Text>
+                    <Image source={this.state.pictureNumber} style={styles.home} />
+                    <Text style={styles.fontStyle}>{item.name}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -54,14 +54,13 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 90,
         resizeMode: 'stretch',
-        //marginTop: -10
     },
     fontStyle: {
         position: 'absolute',
         left: 75,
         top: 33,
         fontWeight: "bold",
-        color: "#008FD3",
+        color: "white",
         fontSize: 20
     },
 });
