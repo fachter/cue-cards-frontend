@@ -6,6 +6,7 @@ import MultipleChoiceCard from './MultipleAndSingleChoice'
 import FreetextCard from './FreetextCard'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import { SettingsContext } from '../SettingsScreen/SettingsProvider'
+import { UserContext } from '../LoginRegistrationScreen/UserProvider'
 import { storeMyRoomDataOnDB } from '../../API/Database'
 
 const CardScreenContext = React.createContext()
@@ -15,7 +16,8 @@ export default function CardScreen({ route, navigation }) {
 
 
 
-    const { storeDataOnDevice } = useContext(ListStructureContext)
+    const { storeDataOnDevice, listHistoryArray, currentListStructure } = useContext(ListStructureContext)
+    const { userToken } = useContext(UserContext)
     const { maxCardLevel, shuffleCards } = useContext(SettingsContext)
 
     const [sessionCards, setSessionCards] = useState(route.params.sessionCards)
@@ -162,7 +164,8 @@ export default function CardScreen({ route, navigation }) {
 
                 }
                 storeDataOnDevice()
-                storeMyRoomDataOnDB()
+                storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken)
+                // statt currentListstrucutre evtl. Sessioncards . wsl geht aber beides
             }
         }
     }
@@ -243,13 +246,6 @@ export default function CardScreen({ route, navigation }) {
 
 
 
-
-    // function _ifcurrentModeSoloCard() {
-    //     if (mode == "soloCard") {
-    //         return true
-    //     }
-    //     return false
-    // }
 
 
     return (

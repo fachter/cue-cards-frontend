@@ -1,6 +1,8 @@
 import React from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Axios from 'axios'
+
 
 import ActivityIndicatorView from './ActivityIndicatorView'
 
@@ -17,23 +19,31 @@ export default class PasswordView extends React.Component {
     askingServerForRightPassword() {
         this.setState({ showActivityIndicator: true })
 
-        return new Promise((resolve, reject) => {
-            Axios.post('PASSWORDLINK', { data }, {
-                headers: {
-                    'Authorization': "Bearer " + user.userToken
-                }
-            }).then(res => {
-                this.state.PasswordView = false
-                this.state.JoinSucces = true
-                this.setState({ showResultView: true })
 
-                resolve('erfolgreich ' + res)
-            }).catch(err => {
-                this.state.PasswordView = false
-                this.state.JoinSucces = true
-                this.setState({ showResultView: true })
-                reject('fehlgeschlagen ' + err)
-            })
+        let postObject = {
+            password: this.state.password,
+            id: this.props.roomID
+
+        }
+
+        console.log(postObject)
+
+
+        Axios.post(`https://cue-cards-app.herokuapp.com/api/join-room/authenticate`, postObject, {
+            headers: {
+                'Authorization': "Bearer " + this.props.userToken
+            }
+        }).then(res => {
+            console.log(res)
+            this.state.PasswordView = false
+            this.state.JoinSucces = true
+            this.setState({ showResultView: true })
+
+        }).catch(err => {
+            console.log(err)
+            this.state.PasswordView = false
+            this.state.JoinSucces = true
+            this.setState({ showResultView: true })
         })
     }
 
@@ -56,7 +66,7 @@ export default class PasswordView extends React.Component {
                                 onChangeText={text => this.setState({ password: text })}>
                             </TextInput>
                             <View style={styles.buttonContainer}>
-                                <TouchableOpacity style={styles.saveButton} onPress={() => this.props.onAskingServerForRightPassword(this.state.password)}>
+                                <TouchableOpacity style={styles.saveButton} onPress={() => this.askingServerForRightPassword()}>
                                     <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
                                     <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Beitreten</Text>
                                 </TouchableOpacity>
