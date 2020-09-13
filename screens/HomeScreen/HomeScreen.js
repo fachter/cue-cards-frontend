@@ -287,9 +287,10 @@ const DataList = () => {
             >
                 <Image source={Raumbild2} style={styles.obenRechts} />
                 <Image source={Raumbild1} style={styles.untenLinks} />
-                <View style={styles.bildcontainer}>
+                {/* Das ist das Bild, dass erscheinen soll, wenn der Paum noch leer ist */}
+                {/* <View style={styles.bildcontainer}>
                     <Image source={LeererRaum} style={styles.leererRaum} />
-                </View>
+                </View> */}
                 <ScrollView>
                     <FlatList
                         //ListHeaderComponent={renderHeader}
@@ -340,7 +341,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#2f3136",
-
     },
     plusButton: {
         height: 60,
