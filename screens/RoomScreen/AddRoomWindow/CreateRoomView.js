@@ -66,16 +66,6 @@ export default function CreateRoomView({ updateRooms }) {
             pictureNumber: randomPictureNumber,
             name: roomName,
             password: password
-
-
-
-            //id:
-            //data: {
-            //   folders
-            //  lastModified
-            // }
-
-            //https://cue-cards-app.herokuapp.com/api/room
         }
 
 

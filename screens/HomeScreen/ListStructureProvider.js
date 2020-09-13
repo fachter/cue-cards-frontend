@@ -13,7 +13,7 @@ class ListStructureProvider extends React.Component {
         super(props)
 
         this.state = {
-            currentRoomID: null,
+            currentRoomInfo: null,
             listHistoryArray: [],
             currentListStructure: [],
             isFolder: true,
@@ -22,7 +22,8 @@ class ListStructureProvider extends React.Component {
             dataIsLoading: true,
         }
         this.storeDataOnDevice = this.storeDataOnDevice.bind(this)
-        this.setCurrentRoomID = this.setCurrentRoomID.bind(this)
+        this.setCurrentRoomInfo = this.setCurrentRoomInfo.bind(this)
+        this.saveRoomData = this.saveRoomData.bind(this)
     }
 
 
@@ -71,14 +72,13 @@ class ListStructureProvider extends React.Component {
 
 
     setCurrentListStructure = (newListStructure) => {
-
         this.setState({ currentListStructure: newListStructure })
 
-        if (this.state.currentRoomID === 'myRoom') {
+        if (this.state.currentRoomInfo === 'myRoom') {
             this.saveMyData(newListStructure)
 
         } else {
-            // this.saveRoomData(newListStructure)
+            this.saveRoomData(newListStructure)
         }
     }
 
@@ -100,25 +100,30 @@ class ListStructureProvider extends React.Component {
 
 
     saveRoomData(newListStructure) {
-        const { currentRoomID } = this.state
+        const { currentRoomInfo } = this.state
         const user = this.context
 
-        let updatetData = {
-            folders: newListStructure,
-            lastModified: new Date
+        let updatedRoom = {
+            data: {
+                folders: newListStructure,
+                lastModified: new Date
+            },
+            id: currentRoomInfo.id,
+            name: currentRoomInfo.name,
+            pictureNumber: currentRoomInfo.pictureNumber
+
         }
 
         user.checkIfConnected()
             .then(res => {
-                console.log("AAA")
-                console.log('Verbindung zum Netzwerk ' + res)
-                syncAxiosPost(`https://cue-cards-app.herokuapp.com/api/room/${currentRoomID}`, 'ListStructureProvider', updatetData, user.userToken)  //LINK FEHLT !
-                    .catch(mes => {
+                syncAxiosPost(`https://cue-cards-app.herokuapp.com/api/room`, 'ListStructureProvider', updatedRoom, user.userToken)
+                    .then(mes => {
+                        console.log(console.log('Verbindung zum Server ' + mes + '. Daten wurde gespeichert'))
+                    }).catch(mes => {
                         console.log('Verbindung zum Server' + mes)
                         alert("Verbindung zum Sever fehlgeschlagen. Probleme beim speichern/laden der Daten")
                     })
             }).catch(res => {
-                console.log("BBB")
                 console.log('Verbindung zum Netzwerk ' + res)
                 alert("Verbindung zum Sever fehlgeschlagen. Probleme beim speichern/laden der Daten")
             })
@@ -150,8 +155,8 @@ class ListStructureProvider extends React.Component {
         this.setState({ dataIsLoading: value })
     }
 
-    setCurrentRoomID(value) {
-        this.state.currentRoomID = value
+    setCurrentRoomInfo(value) {
+        this.state.currentRoomInfo = value
     }
 
 
@@ -175,8 +180,8 @@ class ListStructureProvider extends React.Component {
                 retrieveDataFromDevice: this.retrieveDataFromDevice,
                 dataIsLoading: this.state.dataIsLoading,
                 setDataIsLoading: this.setDataIsLoading,
-                currentRoomID: this.state.currentRoomID,
-                setCurrentRoomID: this.setCurrentRoomID,
+                currentRoomInfo: this.state.currentRoomInfo,
+                setCurrentRoomInfo: this.setCurrentRoomInfo,
 
 
             }}>

@@ -29,7 +29,7 @@ export default class RoomListItem extends React.Component {
         return (
             <TouchableOpacity
                 onLongPress={() => this.props.onLeaveRoomWindowVisibility(item)}
-                onPress={() => this.props.onNavigate(item.id, item)}
+                onPress={() => this.props.onNavigate(item)}
             >
                 <View style={styles.container}>
                     <Image source={this.state.pictureNumber} style={styles.home} />

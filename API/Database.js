@@ -32,14 +32,20 @@ function storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken) 
 
 function syncAxiosPost(link, sourceName, data, userToken) {
 
-    Axios.post(link, data, {
-        headers: {
-            'Authorization': "Bearer " + userToken
-        }
-    }).then(() => {
-        console.log(`Axios Get, Quelldatei: ${sourceName} - erfolgreich:`)
-    }).catch(error => {
-        console.log(`Axios Post, Quelldatei: ${sourceName} - fehlgeschlagen:` + error)
+    return new Promise((resolve, reject) => {
+        Axios.post(link, data, {
+            headers: {
+                'Authorization': "Bearer " + userToken
+            }
+        }).then(() => {
+            resolve('erfolgreich')
+            console.log(`Axios Post, Quelldatei: ${sourceName} - erfolgreich:`)
+        }).catch(error => {
+            reject('fehlgschlagen')
+            console.log(`Axios Post, Quelldatei: ${sourceName} - fehlgeschlagen:` + error)
+        })
+
+
     })
 
 }

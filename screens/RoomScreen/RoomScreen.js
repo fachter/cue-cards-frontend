@@ -22,7 +22,7 @@ export default function RoomScreen() {
 
     const { checkIfConnected, isConnected, userToken } = useContext(UserContext)
     const {
-        setCurrentRoomID,
+        setCurrentRoomInfo,
         setCurrentListStructure,
         retrieveDataFromDevice } = useContext(ListStructureContext)
 
@@ -33,14 +33,15 @@ export default function RoomScreen() {
     const clickedRoom = useRef(null)
 
     ///////////////////////////////////////////////////
-    const [roomDataMounted, setRoomDataMounted] = useState(false)
+    const roomDataMounted = useRef(false)
     const [serverProblems, setServerProblems] = useState(false)
 
     const navigation = useNavigation()
 
 
     useEffect(() => {
-        if (roomDataMounted === false) {
+        console.log(serverProblems)
+        if (roomDataMounted.current === false) {
             updateRooms()
         }
 
@@ -52,7 +53,7 @@ export default function RoomScreen() {
                 asyncAxiosGet('https://cue-cards-app.herokuapp.com/api/get-available-rooms', 'RoomScreen', userToken)
                     .then(res => {
                         setServerRooms(res.data)
-                        setRoomDataMounted(true)
+                        roomDataMounted.current = true
                     }).catch(error => {
                         setServerProblems(true)
                         console.log("Fehler beim Laden der Räume " + error)
@@ -87,12 +88,12 @@ export default function RoomScreen() {
 
 
 
-    async function _navigateToFolderScreen(currentRoomID, item) {
-        setCurrentRoomID(currentRoomID)
-        if (currentRoomID === 'myRoom') {
+    async function _navigateToFolderScreen(roomInfo) {
+        setCurrentRoomInfo(roomInfo)
+        if (roomInfo === 'myRoom') {
             await loadMyRoomData()
         } else {
-            await loadNetworkRoomData(item.data.folders)
+            await loadNetworkRoomData(roomInfo.data.folders)
         }
 
         navigation.navigate('Room')
@@ -121,7 +122,6 @@ export default function RoomScreen() {
         if (serverData.data.lastModified > localData.data.lastModified) {
             return serverData.data.folders
         }
-
         return localData.data.folders
     }
 
@@ -155,10 +155,9 @@ export default function RoomScreen() {
     }
 
     return (
-
         <View style={styles.container}>
             <ScrollView>
-                <TouchableOpacity onPress={() => _navigateToFolderScreen('myRoom', null)}>
+                <TouchableOpacity onPress={() => _navigateToFolderScreen('myRoom')}>
                     <Image source={home} style={[styles.home, { marginTop: -10 }]} />
                     <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>Mein Raum</Text>
                 </TouchableOpacity>
