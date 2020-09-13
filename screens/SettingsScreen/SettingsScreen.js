@@ -48,12 +48,12 @@ function SettingsScreen() {
             </View>
             <View style={styles.settingView}>
                 <Entypo name="align-top" size={25} color="grey" style={styles.icons} />
-                <Text style={styles.text}>Alle Karten (inkl. höchster Stufe){"\n"}abfragen? </Text>
+                <Text style={styles.text}>Alle Karten (inkl. höchster Stufe) abfragen? </Text>
 
                 <Switch
                     style={styles.toggle}
                     trackColor={{
-                        false: "grey", true: "white"
+                        false: "grey", true: "#008FD3"
                     }}
                     thumbColor='#008FD3'
                     ios_backgroundColor="#3e3e3e"
@@ -67,7 +67,7 @@ function SettingsScreen() {
                 <Switch
                     style={styles.toggle}
                     trackColor={{
-                        false: "grey", true: "white"
+                        false: "grey", true: "#008FD3"
                     }}
                     thumbColor='#008FD3'
                     ios_backgroundColor="#3e3e3e"
@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
     text: {
         position: 'absolute',
         left: 40,
+        width: '70%',
         fontSize: 20,
         color: '#C7C7C7',
         alignSelf: 'center'

@@ -6,6 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 import RoomIDView from './RoomIDView'
 import CreateRoomView from './CreateRoomView';
+import { TextInput } from 'react-native-paper';
 
 
 
@@ -17,12 +18,19 @@ export default class AddRoomWindow extends React.Component {
 
         this.state = {
             createRoomVisible: false,
+            color1: '#008FD3',
+            color2: 'grey',
+            color3: '#008FD3',
+            color4: 'white',
         }
     }
 
+    openRoomIDView() {
+        this.setState({ createRoomVisible: false, color1: '#008FD3', color2: 'grey', color3: '#008FD3', color4: 'white' })
+    }
 
-    toggleSwitch() {
-        this.setState({ createRoomVisible: !this.state.createRoomVisible })
+    openAddRoomWindow() {
+        this.setState({ createRoomVisible: true, color1: 'grey', color2: '#008FD3', color3: 'white', color4: '#008FD3' })
     }
 
     closeWindow() {
@@ -30,7 +38,7 @@ export default class AddRoomWindow extends React.Component {
         this.state.showPasswordView = false
         this.state.showActivityIndicator = false
         this.state.showResultView = false
-        this.setState({ waitForPasswordResult: true })
+        this.setState({ waitForPasswordResult: true, color1: '#008FD3', color2: 'grey', color3: '#008FD3', color4: 'white' })
         this.props.onSetVisibility()
     }
 
@@ -61,23 +69,18 @@ export default class AddRoomWindow extends React.Component {
                     <TouchableOpacity style={styles.cancelButton} onPress={() => this.closeWindow()}>
                         <AntDesign name="closecircleo" size={24} color="grey" />
                     </TouchableOpacity>
+                    <View style={styles.auswahlLeiste}>
+                        <TouchableOpacity style={[styles.auswahlKnopf, { borderColor: this.state.color1 }]} onPress={() => this.openRoomIDView()}>
+                            <Text style={[styles.auswahlText, { color: this.state.color3 }]}>Beitreten</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.auswahlKnopf, { borderColor: this.state.color2 }]} onPress={() => this.openAddRoomWindow()}>
+                            <Text style={[styles.auswahlText, { color: this.state.color4 }]} >Erstellen</Text>
+                        </TouchableOpacity>
+                    </View>
                     <View style={styles.window}>
                         {this.renderWindow()}
                     </View >
-                    <View style={styles.switchView}>
-                        {createRoomVisible ? <Text style={[styles.switchText, { position: 'absolute', left: 50 }]}>beitreten</Text> : null}
-                        <Switch
-                            style={{ alignSelf: 'center' }}
-                            trackColor={{
-                                false: "grey", true: "grey"
-                            }}
-                            thumbColor='#008FD3'
-                            ios_backgroundColor="#3e3e3e"
-                            onValueChange={() => this.toggleSwitch()}
-                            value={createRoomVisible}
-                        />
-                        {createRoomVisible ? null : <Text style={[styles.switchText, { position: 'absolute', right: 50 }]} >erstellen</Text>}
-                    </View>
+
                 </View>
             </Modal >
         )
@@ -96,7 +99,7 @@ const styles = StyleSheet.create({
     },
     window: {
         width: '100%',
-        height: '30%',
+        //height: '30%',
         alignItems: 'center',
 
     },
@@ -150,19 +153,20 @@ const styles = StyleSheet.create({
         marginTop: 40,
         marginHorizontal: 7
     },
-    switchView: {
+    auswahlLeiste: {
         width: '90%',
         flexDirection: 'row',
-        marginTop: 50,
-        justifyContent: 'center',
-        borderColor: 'grey',
-        borderBottomWidth: 1,
-        paddingBottom: 10,
-        marginBottom: 50
+        marginTop: 40,
+        marginBottom: 30
     },
-    switchText: {
-        color: 'white',
+    auswahlKnopf: {
+        width: '50%',
+        alignItems: 'center',
+        borderBottomWidth: 0.7,
+        paddingBottom: 20
+    },
+    auswahlText: {
         marginTop: 5,
-        fontSize: 20
+        fontSize: 20,
     },
 });

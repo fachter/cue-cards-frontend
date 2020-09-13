@@ -32,7 +32,7 @@ export default class NewCardWindow extends React.Component {
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.windowButtons, { marginTop: 10 }]} onPress={() => onNavigateToCardCreator("FT")}>
                             <Icon name="card-text-outline" size={30} color='#008FD3' />
-                            <Text style={styles.buttonText}>    Freitext</Text>
+                            <Text style={styles.buttonText}>    Freetext</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

@@ -3,6 +3,7 @@ import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, StyleSheet 
 import logo from '../../assets/Logo.png'
 import axios from 'axios';
 import { UserContext } from './UserProvider';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -78,62 +79,66 @@ export default function RegistrationScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Image source={logo} style={styles.logo} />
-            <View>
-                <TextInput
-                    style={styles.input}
-                    placeholder={'Benutzername'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    onChangeText={text => setUsername(text)}
-                />
-            </View>
-            <View>
-                <TextInput
-                    style={styles.input}
-                    placeholder={'Passwort'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    secureTextEntry={true}
-                    onChangeText={text => setPassword1(text)}
-                />
-            </View>
-            <View>
-                <TextInput
-                    style={styles.input}
-                    placeholder={'Passwort wiederholen'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    secureTextEntry={true}
-                    onChangeText={text => setPassword2(text)}
-                />
-            </View>
-            <View>
-                <TextInput
-                    style={styles.input}
-                    placeholder={'E-Mail'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    secureTextEntry={true}
-                    onChangeText={text => setEmail(text)}
-                />
-            </View>
-            <View>
-                <TextInput
-                    style={styles.input}
-                    placeholder={'Profilname'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    secureTextEntry={true}
-                    onChangeText={text => setFullname(text)}
-                />
-            </View>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => _regNewAcc()}
-            >
-                <Text style={styles.text}>Registrieren</Text>
-            </TouchableOpacity>
+            <ScrollView >
+                <Image source={logo} style={styles.logo} />
+                <View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Benutzername'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        onChangeText={text => setUsername(text)}
+                    />
+                </View>
+                <View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Nickname'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        secureTextEntry={true}
+                        onChangeText={text => setFullname(text)}
+                    />
+                </View>
+                <View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'E-Mail'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        secureTextEntry={true}
+                        onChangeText={text => setEmail(text)}
+                    />
+                </View>
+                <View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Passwort'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        secureTextEntry={true}
+                        onChangeText={text => setPassword1(text)}
+                    />
+                </View>
+                <View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Passwort wiederholen'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        secureTextEntry={true}
+                        onChangeText={text => setPassword2(text)}
+                    />
+                </View>
+
+
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => _regNewAcc()}
+                >
+                    <Text style={styles.text}>Registrieren</Text>
+                </TouchableOpacity>
+            </ScrollView>
         </View>
     )
 }
@@ -143,38 +148,41 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#111111',
-        paddingTop: 25
+        backgroundColor: '#202225',
     },
     logo: {
-        width: 200,
-        height: 80,
-        marginBottom: 50
+        alignSelf: 'center',
+        width: 250,
+        height: 100,
     },
     input: {
         width: WidTH - 55,
         height: 45,
         borderRadius: 25,
         fontSize: 16,
-        backgroundColor: 'black',
+        backgroundColor: '#2f3136',
         marginHorizontal: 25,
-        marginVertical: 15,
+        marginVertical: 10,
         paddingLeft: 10,
         color: 'white'
 
     },
     button: {
-        width: 100,
-        height: 45,
-        borderRadius: 25,
-        backgroundColor: 'white',
-        justifyContent: 'center',
+        borderWidth: 0.7,
+        borderColor: '#008FD3',
+        height: 40,
+        width: 130,
+        borderRadius: 30,
+        alignSelf: 'center',
         alignItems: 'center',
-        margin: 5,
+        justifyContent: 'center',
+        marginTop: 20,
+        marginHorizontal: 7
     },
     text: {
-        color: 'black',
-        fontSize: 16,
-        textAlign: 'center'
+        color: 'white',
+        fontSize: 17,
+        textAlign: 'center',
+        fontStyle: "italic"
     }
 })

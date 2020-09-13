@@ -107,12 +107,12 @@ export default function CreateRoomView({ updateRooms }) {
                         onChangeText={text => setRoomName(text)}>
                     </TextInput>
                     <View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ color: 'white' }}>Password hinzufügen</Text>
+                        <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                            <Text style={{ color: 'white', marginTop: 5, paddingRight: 5 }}>Password hinzufügen</Text>
                             <Switch
                                 style={{ alignSelf: 'center' }}
                                 trackColor={{
-                                    false: "grey", true: "grey"
+                                    false: "grey", true: "#008FD3"
                                 }}
                                 thumbColor='#008FD3'
                                 ios_backgroundColor="#3e3e3e"
@@ -135,7 +135,7 @@ export default function CreateRoomView({ updateRooms }) {
                     </View>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity style={styles.saveButton} onPress={() => createNewRoom()}>
-                            <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
+                            <MaterialCommunityIcons name="home-plus" size={20} color="white" />
                             <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Erstellen</Text>
                         </TouchableOpacity>
                     </View >
@@ -158,7 +158,7 @@ export default function CreateRoomView({ updateRooms }) {
 const styles = StyleSheet.create({
     window: {
         width: '100%',
-        alignItems: 'center',
+        alignItems: 'center'
 
     },
     headingText: {
@@ -167,14 +167,15 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     friendName: {
-        width: '85%',
-        borderRadius: 5,
-        fontSize: 20,
-        fontStyle: 'italic',
-        color: 'white',
-        backgroundColor: '#202225',
-        padding: 10,
-        margin: 5,
+        width: 300,
+        height: 45,
+        borderRadius: 25,
+        fontSize: 16,
+        backgroundColor: '#2f3136',
+        marginHorizontal: 25,
+        marginVertical: 10,
+        paddingLeft: 10,
+        color: 'white'
 
     },
     saveButton: {

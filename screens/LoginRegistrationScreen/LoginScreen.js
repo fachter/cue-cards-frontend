@@ -74,7 +74,7 @@ export default function LoginScreen({ navigation }) {
                     onChangeText={text => setPassword(text)}
                 />
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 7 }}>
                 <Switch
                     style={{ alignSelf: 'center' }}
                     trackColor={{
@@ -87,13 +87,15 @@ export default function LoginScreen({ navigation }) {
                 />
                 <Text style={{ color: 'white', marginLeft: 5 }}>eingeloggt bleiben</Text>
             </View>
-            <TouchableOpacity style={[styles.button, { marginTop: 30 }]} onPress={() => userLogin()}>
-                <Text style={styles.text}>Login</Text>
-            </TouchableOpacity>
+            <View style={styles.knöpfe}>
+                <TouchableOpacity style={styles.button} onPress={() => userLogin()}>
+                    <Text style={styles.text}>Login</Text>
+                </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, { marginTop: 10 }]} onPress={() => navigation.navigate('Registration')}>
-                <Text style={styles.text}>Registrieren</Text>
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Registration')}>
+                    <Text style={styles.text}>Registrieren</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 
@@ -106,21 +108,22 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#111111',
-        paddingTop: 25
+        backgroundColor: '#202225',
+        justifyContent: 'center',
+        marginTop: -50
     },
     logo: {
-        width: 200,
-        height: 80,
-        marginBottom: 50,
-        alignSelf: 'center'
+        width: 300,
+        height: 120,
+        marginBottom: 30,
+        alignSelf: 'center',
     },
     input: {
         width: WidTH - 55,
         height: 45,
         borderRadius: 25,
         fontSize: 16,
-        backgroundColor: 'black',
+        backgroundColor: '#2f3136',
         marginHorizontal: 25,
         marginVertical: 10,
         paddingLeft: 10,
@@ -128,21 +131,30 @@ const styles = StyleSheet.create({
 
     },
     button: {
-        width: 100,
-        height: 45,
-        borderRadius: 25,
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        alignItems: 'center',
+        borderWidth: 0.7,
+        borderColor: '#008FD3',
+        height: 40,
+        width: 130,
+        borderRadius: 30,
         alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
+        marginHorizontal: 7
 
 
     },
     text: {
-        color: 'black',
-        fontSize: 16,
+        color: 'white',
+        fontSize: 17,
         fontStyle: 'italic',
         textAlign: 'center'
+    },
+    knöpfe: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 40,
+
     },
 
 })

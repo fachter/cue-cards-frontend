@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
 import Axios from 'axios'
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import ResultView from './ResultView'
 import PasswordView from './PasswordView'
 import ActicityIndicatorView from './ActivityIndicatorView'
@@ -67,7 +67,7 @@ export default function RoomIDView() {
                             {isConnected ?
                                 <View style={styles.window}>
                                     <Text
-                                        style={styles.headingText}>Geb die ID des Raumes ein</Text>
+                                        style={styles.headingText}>Gib die ID des Raumes ein</Text>
                                     <TextInput
                                         style={styles.friendName}
                                         placeholder="z.B. {Beispiel nach ID anpassen}"
@@ -76,7 +76,7 @@ export default function RoomIDView() {
                                     </TextInput>
                                     <View style={styles.buttonContainer}>
                                         <TouchableOpacity style={styles.saveButton} onPress={() => askingForRoom()}>
-                                            <MaterialCommunityIcons name="plus-box-outline" size={23} color="white" />
+                                            <MaterialCommunityIcons name="home-import-outline" size={20} color="white" />
                                             <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Beitreten</Text>
                                         </TouchableOpacity>
                                     </View >
@@ -134,14 +134,15 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     friendName: {
-        width: '100%',
-        borderRadius: 5,
-        fontSize: 20,
-        fontStyle: 'italic',
-        color: 'white',
-        backgroundColor: '#202225',
-        padding: 10,
-        margin: 5,
+        width: 300,
+        height: 45,
+        borderRadius: 25,
+        fontSize: 16,
+        backgroundColor: '#2f3136',
+        marginHorizontal: 25,
+        marginVertical: 10,
+        paddingLeft: 10,
+        color: 'white'
 
     },
     saveButton: {
