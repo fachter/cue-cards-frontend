@@ -164,7 +164,7 @@ export default function RoomScreen() {
         <View style={styles.container}>
             <ScrollView>
                 <TouchableOpacity onPress={() => _navigateToFolderScreen('myRoom')}>
-                    <Image source={home} style={[styles.home, { marginTop: -10 }]} />
+                    <Image source={home} style={styles.home} />
                     <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>Mein Raum</Text>
                 </TouchableOpacity>
                 <FlatList

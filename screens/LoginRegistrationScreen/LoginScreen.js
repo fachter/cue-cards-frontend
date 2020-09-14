@@ -54,14 +54,11 @@ export default function LoginScreen({ navigation }) {
 
 
     return (
-        // <View style={styles.container}>
         <ImageBackground
             source={require('../../assets/LoginHintergrund.png')}
             style={styles.container}
-        // imageStyle={{ borderRadius: 80 }}
         >
             <Image source={logo} style={styles.logo} />
-            {/* <Image source={LoginHintergrund} style={styles.loginHintergrund} /> */}
             <View>
                 <TextInput
                     style={styles.input}
@@ -104,7 +101,6 @@ export default function LoginScreen({ navigation }) {
                 </TouchableOpacity>
             </View>
         </ImageBackground>
-        // </View>
     )
 
 }
@@ -116,9 +112,7 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        // backgroundColor: '#202225',
         justifyContent: 'center',
-        //marginTop: -50
         height: '100%',
         width: '100%',
         resizeMode: 'contain'
