@@ -21,7 +21,6 @@ export default class SettingsProvider extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log("update")
         this.storeSettingOnDevice()
     }
 
@@ -44,7 +43,6 @@ export default class SettingsProvider extends React.Component {
             const settings = await AsyncStorage.getItem('settings')
             if (settings != null) {
                 let data = JSON.parse(settings)
-                console.log(data)
                 this.state.maxCardLevel = data.maxCardLevel
                 this.state.maxCardLevelIncluded = data.maxCardLevelIncluded
                 this.state.shuffleCards = data.shuffleCards

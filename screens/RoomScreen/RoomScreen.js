@@ -81,12 +81,6 @@ export default function RoomScreen() {
     }
 
 
-    ////////////////////////////////////////////////////////////////////
-
-
-
-
-
     function _setRoomAddWindowVisibility() {
         if (addRoomWindowVisibility == true) {
             setAddRoomWindowVisibility(false)
@@ -107,7 +101,6 @@ export default function RoomScreen() {
 
         navigation.navigate('Room')
     }
-
 
 
 
@@ -138,7 +131,6 @@ export default function RoomScreen() {
 
         if (serverData.data.lastModified > localData.data.lastModified) {
             return true
-            //return serverData.data.folders
         }
         return false
     }
@@ -205,6 +197,7 @@ export default function RoomScreen() {
                     onSetVisibility={SetleaveRoomWindowVisibility}
                     onLeaveRoom={showLeaveRoomWindow}
                     item={clickedRoom.current}
+                    updateRooms={updateRooms}
                 /> : null}
 
             <Image source={logo} style={styles.logo} />

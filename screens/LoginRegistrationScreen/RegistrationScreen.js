@@ -24,20 +24,29 @@ export default function RegistrationScreen({ navigation }) {
 
 
     function _regNewAcc() {
-        axios.post('https://cue-cards-app.herokuapp.com/api/register', {
-            username: 'xx',
-            password: 'xx',
-            email: 'xx@bla.de',
-            fullName: 'xx'
-        })
-            .then((resp) => {
-                console.log(resp.data.jwt)
-                setUserToken(resp.data.jwt)
-                login()
-            }).catch((error) => {
-                console.log(error)
+        console.log(username)
+        console.log(password1)
+        console.log(email)
+        console.log(fullName)
+        _checkValidityOfAllValues()
+            .then(() => {
+                axios.post('https://cue-cards-app.herokuapp.com/api/register', {
+                    username: username,
+                    password: password1,
+                    email: email,
+                    fullName: fullName
+                })
+                    .then((resp) => {
+                        console.log("Registrierung erfolgreich")
+                        setUserToken(resp.data.jwt)
+                        login()
+                    }).catch((error) => {
+                        console.log("Registrierung fehlgeschlagen " + error)
+                    })
             })
+
     }
+
 
     function _comparePasswords() {
         return new Promise((resolve, reject) => {
@@ -60,23 +69,53 @@ export default function RegistrationScreen({ navigation }) {
     }
 
     function _checkValidityOfAllValues() {
-        _checkIfNull(username).then(() => {
-            _checkIfNull(password1).then(() => {
-                _checkIfNull(password2).then(() => {
-                    _comparePasswords().then(() => {
-                        _checkIfNull(email).then(() => {
-                            _checkIfNull(firstName).then(() => {
-                                _checkIfNull(lastName).then(() => {
-                                    this.props.navigation.navigate('Login')
 
-                                }).catch(error => console.log('Lastname ungültig: ' + error))
-                            }).catch(error => console.log('Firstname ungültig: ' + error))
-                        }).catch(error => console.log('Email ungültig: ' + error))
-                    }).catch(() => console.log('Passwörter stimmen nicht überein'))
-                }).catch(error => console.log('Password 2 ungültig: ' + error))
-            }).catch(error => console.log('Password 1 ungültig: ' + error))
-        }).catch(error => console.log('Username ungültig: ' + error))
+        return new Promise((resolve, reject) => {
+
+            _checkIfNull(username).then(() => {
+                _checkIfNull(password1).then(() => {
+                    _checkIfNull(password2).then(() => {
+                        _comparePasswords().then(() => {
+                            _checkIfNull(email).then(() => {
+                                _checkIfNull(fullName).then(() => {
+
+                                    resolve()
+
+                                }).catch(error => {
+                                    reject()
+                                    alert('Nickname ungültig')
+                                    console.log('FullName ungültig: ' + error)
+                                })
+                            }).catch(error => {
+                                reject()
+                                alert('Email ungültig')
+                                console.log('Email ungültig: ' + error)
+                            })
+                        }).catch(() => {
+                            reject()
+                            alert('Passwörter stimmen nicht überein')
+                            console.log('Passwörter stimmen nicht überein')
+                        })
+                    }).catch(error => {
+                        reject()
+                        alert('Password 2 ungültig')
+                        console.log('Password 2 ungültig: ' + error)
+                    })
+                }).catch(error => {
+                    reject()
+                    alert('Password 1 ungültig')
+                    console.log('Password 1 ungültig: ' + error)
+                })
+            }).catch(error => {
+                reject()
+                alert('Username ungültig')
+                console.log('Username ungültig: ' + error)
+            })
+
+        })
     }
+
+
 
     return (
         <ImageBackground
@@ -89,67 +128,63 @@ export default function RegistrationScreen({ navigation }) {
             >
                 <Icon name="ios-arrow-back" size={25} color="white" />
             </TouchableOpacity>
-            <ScrollView >
-
-                <Image source={logo} style={styles.logo} />
-                <View>
-                    <TextInput
-                        style={styles.input}
-                        placeholder={'Benutzername'}
-                        placeholderTextColor={'white'}
-                        underlineColorAndroid={'transparent'}
-                        onChangeText={text => setUsername(text)}
-                    />
-                </View>
-                <View>
-                    <TextInput
-                        style={styles.input}
-                        placeholder={'Nickname'}
-                        placeholderTextColor={'white'}
-                        underlineColorAndroid={'transparent'}
-                        secureTextEntry={true}
-                        onChangeText={text => setFullname(text)}
-                    />
-                </View>
-                <View>
-                    <TextInput
-                        style={styles.input}
-                        placeholder={'E-Mail'}
-                        placeholderTextColor={'white'}
-                        underlineColorAndroid={'transparent'}
-                        secureTextEntry={true}
-                        onChangeText={text => setEmail(text)}
-                    />
-                </View>
-                <View>
-                    <TextInput
-                        style={styles.input}
-                        placeholder={'Passwort'}
-                        placeholderTextColor={'white'}
-                        underlineColorAndroid={'transparent'}
-                        secureTextEntry={true}
-                        onChangeText={text => setPassword1(text)}
-                    />
-                </View>
-                <View>
-                    <TextInput
-                        style={styles.input}
-                        placeholder={'Passwort wiederholen'}
-                        placeholderTextColor={'white'}
-                        underlineColorAndroid={'transparent'}
-                        secureTextEntry={true}
-                        onChangeText={text => setPassword2(text)}
-                    />
-                </View>
+            <Image source={logo} style={styles.logo} />
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Benutzername'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    onChangeText={text => setUsername(text)}
+                />
+            </View>
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Nickname'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    onChangeText={text => setFullname(text)}
+                />
+            </View>
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'E-Mail'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    onChangeText={text => setEmail(text)}
+                />
+            </View>
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Passwort'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    secureTextEntry={true}
+                    onChangeText={text => setPassword1(text)}
+                />
+            </View>
+            <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Passwort wiederholen'}
+                    placeholderTextColor={'white'}
+                    underlineColorAndroid={'transparent'}
+                    secureTextEntry={true}
+                    onChangeText={text => setPassword2(text)}
+                />
+            </View>
 
 
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => _regNewAcc()}
-                >
-                    <Text style={styles.text}>Registrieren</Text>
-                </TouchableOpacity>
-            </ScrollView>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => _regNewAcc()}
+            >
+                <Text style={styles.text}>Registrieren</Text>
+            </TouchableOpacity>
+
         </ImageBackground>
     )
 }

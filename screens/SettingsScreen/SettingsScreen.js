@@ -1,7 +1,6 @@
 
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { View, Image, Text, StyleSheet, TextInput, Switch } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { AntDesign, MaterialCommunityIcons, Entypo, FontAwesome } from '@expo/vector-icons';
 import { SettingsContext } from './SettingsProvider';

@@ -60,6 +60,9 @@ const HomeScreen = () => {
         if (currentRoomInfo) {
             if (currentRoomInfo === 'myRoom') {
                 navigation.setOptions({ title: 'Mein Raum' })
+                navigation.setOptions({
+                    headerLeft: () => (headerLeftButton()),
+                })
             } else {
                 navigation.setOptions({ title: currentRoomInfo.name })
             }
@@ -69,13 +72,28 @@ const HomeScreen = () => {
 
     useEffect(() => {
         renderHeaderTitle()
-        BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
+        BackHandler.addEventListener('hardwareBackPress', hardwareBackButtonPressed)
     }, []);
 
 
-    function _backButtonPressed() {
-        //Holt sich die state "isFolder" der Vorherigen Ordnerstruktur
+    const headerLeftButton = () => {
+        if (listHistoryArray.length > 0) {
+            return (
+                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" onPress={() => {
+                    var lastFolderStructure = _getLastFolderStructure()
+                    setCurrentListStructure(lastFolderStructure, false)
+                    setIsFolder(true)
+                }} />
+            )
+        } else {
+            return (
+                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" onPress={() => { navigation.goBack() }} />
+            )
+        }
+    }
 
+    function hardwareBackButtonPressed() {
+        //Holt sich die state "isFolder" der Vorherigen Ordnerstruktur
         if (listHistoryArray.length > 0) {
             var lastFolderStructure = _getLastFolderStructure()
             setCurrentListStructure(lastFolderStructure, false)
@@ -299,7 +317,7 @@ const HomeScreen = () => {
                 </View>
                 :
                 null}
-            <SwipeView swipeRight={_backButtonPressed}
+            <SwipeView
             >
                 <Image source={Raumbild2} style={styles.obenRechts} />
                 <Image source={Raumbild1} style={styles.untenLinks} />

@@ -59,7 +59,6 @@ const headerOptionsFirstPage = ({ route, navigation }) => ({
 
 
 function RoomStackScreen({ navigation, route }) {
-
     return (
         <RoomStack.Navigator initialRouteName="Rooms" screenOptions={{
             headerStyle: {
@@ -125,9 +124,6 @@ const SettingsStackScreen = ({ navigation }) => (
             headerRight: () => (
                 <Icon.Button name="ios-menu" size={25} backgroundColor="#202225" onPress={() => { navigation.openDrawer() }} />
             ),
-            headerLeft: () => (
-                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" />
-            )
         }} />
     </SettingsStack.Navigator>
 );
