@@ -26,6 +26,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import EditProfileScreen from '../screens/ProfileScreen/EditProfileScreen';
 
+
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -38,7 +39,7 @@ const RoomStack = createStackNavigator();
 
 
 const headerOptions = ({ route, navigation }) => ({
-    headerTitle: getHeaderTitle(route),
+
     headerRight: () => (
         <Icon.Button name="ios-menu" size={25} backgroundColor="#202225" onPress={() => { navigation.openDrawer() }} />
     ),
@@ -48,7 +49,7 @@ const headerOptions = ({ route, navigation }) => ({
 })
 
 const headerOptionsFirstPage = ({ route, navigation }) => ({
-    headerTitle: getHeaderTitle(route),
+
     headerRight: () => (
         <Icon.Button name="ios-menu" size={25} backgroundColor="#202225" onPress={() => { navigation.openDrawer() }} />
     ),
@@ -56,22 +57,8 @@ const headerOptionsFirstPage = ({ route, navigation }) => ({
 })
 
 
-function getHeaderTitle(route) {
-    switch (route.name) {
-        case undefined:
-            return ''
-        case 'Rooms':
-            return 'House of CueCards'
-        case 'Room':
-            return 'Mein Raum'
-        case 'CardScreen':
-            return "Befragung"
-    }
-}
 
 function RoomStackScreen({ navigation, route }) {
-
-
 
     return (
         <RoomStack.Navigator initialRouteName="Rooms" screenOptions={{

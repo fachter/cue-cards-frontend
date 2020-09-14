@@ -18,16 +18,20 @@ export default function CardScreen({ route, navigation }) {
 
     const { storeDataOnDevice, listHistoryArray, currentListStructure, currentRoomInfo, setCurrentListStructure } = useContext(ListStructureContext)
     const { userToken } = useContext(UserContext)
-    const { maxCardLevel, shuffleCards } = useContext(SettingsContext)
+    const { maxCardLevel, maxCardLevelIncluded } = useContext(SettingsContext)
 
     const [sessionCards, setSessionCards] = useState(route.params.sessionCards)
     const [currentCard, setCurrentCard] = useState(route.params.card)
     const [currentCardindex, setCurrendCardIndex] = useState(0)
     const [answers, setAnswers] = useState(_createRandomAnswers(0))
     const [mode, setMode] = useState(route.params.mode)
-    const [maxLevelIncluded, setMaxLevelIncluded] = useState(true)
 
     const minCardLevel = 0
+
+
+    useEffect(() => {
+        navigation.setOptions({ title: 'Befragung' })
+    })
 
     function _getArrayOfTrueAnswers() {
         let trueAnswers = []
@@ -43,29 +47,38 @@ export default function CardScreen({ route, navigation }) {
 
     function _createRandomAnswers(cardIndex) {
 
+
+        let dependency = []
+
+        if (route.params.mode === "soloCard") {
+            dependency = currentCard
+        } else if (route.params.mode === "sessionMode") {
+            dependency = sessionCards[cardIndex]
+        }
+
+
+
         let answerPool = _getAllAnswersOfSameTopic(cardIndex)
         let maximalAnswers = 4
         let generatedAnswers = []
 
-        if (sessionCards
-        [cardIndex].cardType === "MC" || sessionCards
-        [cardIndex].cardType === "SC") {
+
+
+        if (dependency.cardType === "MC" || dependency.cardType === "SC") {
             //fügt die richtigen Antworten der Karte hinzu
-            for (let i = 0; i < sessionCards
-            [cardIndex].answers.length; i++) {
+            for (let i = 0; i < dependency.answers.length; i++) {
                 let rightAnswer = {
-                    answerValues: sessionCards
-                    [cardIndex].answers[i],
+                    answerValues: dependency.answers[i],
                     isTrue: true,
                     checkState: false
                 }
+
                 generatedAnswers.push(rightAnswer)
             }
 
 
             //füllt die Antwortmöglichkeiten bis zur Zahl 4 auf mit zufällig Antworten aus dem Antwortenpool heraus
-            for (let i = sessionCards
-            [cardIndex].answers.length; i < maximalAnswers; i++) {
+            for (let i = dependency.answers.length; i < maximalAnswers; i++) {
 
                 let trys = 0
                 let randomAnswer
@@ -96,6 +109,7 @@ export default function CardScreen({ route, navigation }) {
                             isTrue: false,
                             checkState: false
                         }
+
                         generatedAnswers.push(wrongAnswer) // setate der copy nicht den hauptarray
                         trys = 3
                     } else {
@@ -105,16 +119,26 @@ export default function CardScreen({ route, navigation }) {
             }
         }
 
-        return generatedAnswers
+        let shuffleAnswers = _shuffleArray(generatedAnswers, true)
+
+        return shuffleAnswers
     }
 
 
 
     function _getAllAnswersOfSameTopic(cardIndex) {
+        let dependency = []
+
+        if (route.params.mode === "soloCard") {
+            dependency = currentCard
+        } else if (route.params.mode === "sessionMode") {
+            dependency = sessionCards[cardIndex]
+        }
+
+
         let answerPool = []
         for (let i = 0; i < sessionCards.length; i++) {    //Druchlaufe alle Karten
-            if (sessionCards[i].id == sessionCards
-            [cardIndex].id) {   //Überspringt eigenen Antworten der Karte
+            if (sessionCards[i].id == dependency.id) {   //Überspringt eigenen Antworten der Karte
                 continue;
             } else {
                 if ((sessionCards[i].cardType === "MC" || sessionCards[i].cardType === "SC") && sessionCards[i].cardTopic == sessionCards[currentCardindex].cardTopic) {  //Filtere nach MultipleChoice Karte und dem Topic
@@ -124,6 +148,8 @@ export default function CardScreen({ route, navigation }) {
                 }
             }
         }
+
+
         return answerPool
     }
 
@@ -139,22 +165,19 @@ export default function CardScreen({ route, navigation }) {
 
 
     function _updateCardValues(result) {
+
+
         for (let i = 0; i < sessionCards.length; i++) {
-            if (currentCard.id == sessionCards
-            [i].id) {  //Sucht aktuelle im Set nach id
+            if (currentCard.id == sessionCards[i].id) {  //Sucht aktuelle im Set nach id
 
                 //Je nach richtiger oder falscher Antwort wird die Karte Level auf bzw. abgestuft
                 if (result === true) {
-                    if (sessionCards
-                    [i].cardLevel < maxCardLevel) {
-                        sessionCards
-                        [i].cardLevel += +1
+                    if (sessionCards[i].cardLevel < maxCardLevel) {
+                        sessionCards[i].cardLevel += 1
                     }
                 } else {
-                    if (sessionCards
-                    [i].cardLevel > minCardLevel) {
-                        sessionCards
-                        [i].cardLevel += -1
+                    if (sessionCards[i].cardLevel > minCardLevel) {
+                        sessionCards[i].cardLevel -= 1
                     }
                 }
                 if (mode === "soloCard") {
@@ -197,9 +220,6 @@ export default function CardScreen({ route, navigation }) {
 
 
 
-
-
-
     function _renderTheRightCard() {
         if (currentCard.cardType == 'MC' || currentCard.cardType == 'SC') {
             return (
@@ -225,20 +245,20 @@ export default function CardScreen({ route, navigation }) {
 
 
     function _nextCard() {
-        if (currentCardindex < sessionCards
-            .length - 1) {
+        if (currentCardindex < sessionCards.length - 1) {
             let nextIndex = 1
-            while (sessionCards
-            [currentCardindex + nextIndex].cardLevel === maxCardLevel) {
-                nextIndex = nextIndex + 1
+            if (maxCardLevelIncluded === false) {
+                while (sessionCards[currentCardindex + nextIndex].cardLevel >= maxCardLevel) {
+                    nextIndex = nextIndex + 1
+                }
             }
             setCurrendCardIndex(currentCardindex + nextIndex)
             setCurrentCard(sessionCards
             [currentCardindex + nextIndex])
 
             let newAnswers = _createRandomAnswers(currentCardindex + nextIndex)
-            let shuffleAnswers = _shuffleArray(newAnswers, true)
-            setAnswers(shuffleAnswers)
+
+            setAnswers(newAnswers)
 
         } else {
             alert("Dies war die letzte Karte, hier einen Endscreen einfügen!")

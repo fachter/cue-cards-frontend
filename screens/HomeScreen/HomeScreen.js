@@ -29,15 +29,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 const { width: WidTH } = Dimensions.get('window')
 
 
-function HomeScreen() {
-    return (
-        <DataList />
-    )
-}
+const HomeScreen = () => {
 
-
-const DataList = () => {
     const {
+        currentRoomInfo,
         updateFolderHistory,
         listHistoryArray,
         _getLastFolderStructure,
@@ -60,9 +55,20 @@ const DataList = () => {
     const [onDeleteItem, setOnDeleteItem] = useState(null)
 
 
+    const renderHeaderTitle = () => {
+
+        if (currentRoomInfo) {
+            if (currentRoomInfo === 'myRoom') {
+                navigation.setOptions({ title: 'Mein Raum' })
+            } else {
+                navigation.setOptions({ title: currentRoomInfo.name })
+            }
+        }
+    }
 
 
     useEffect(() => {
+        renderHeaderTitle()
         BackHandler.addEventListener('hardwareBackPress', _backButtonPressed)
     }, []);
 
@@ -79,11 +85,6 @@ const DataList = () => {
             return false
         }
     }
-
-
-
-
-
 
 
     function _getClickedItem(item) {
@@ -150,6 +151,7 @@ const DataList = () => {
 
 
     function _navigateToCardScreen(item) {
+
         navigation.navigate('CardScreen', { card: item, mode: "soloCard", sessionCards: currentListStructure })
     }
 
@@ -306,7 +308,7 @@ const DataList = () => {
                     <FlatList
                         //ListHeaderComponent={renderHeader}
                         data={currentListStructure}
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => `${item.id}`}
                         renderItem={({ item }) => (
                             <FolderListItem
                                 item={item}

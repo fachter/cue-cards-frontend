@@ -2,6 +2,13 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import { YellowBox } from 'react-native'
+
+YellowBox.ignoreWarnings([
+    'VirtualizedLists should never be nested',
+])
+// Warnung vorerst ignorieren, ist ein Problem seitens React-Native
+
 
 
 import logo from '../../assets/Logo_grau.png';
@@ -40,6 +47,9 @@ export default function RoomScreen() {
 
 
     useEffect(() => {
+
+        navigation.setOptions({ title: 'House Of CueCards' })
+
         if (roomDataMounted.current === false) {
             updateRooms()
         }
@@ -275,13 +285,4 @@ const styles = StyleSheet.create({
     },
 });
 
-
-
-import { YellowBox } from 'react-native'
-
-
-
-YellowBox.ignoreWarnings([
-    'VirtualizedLists should never be nested', // TODO: Remove when fixed
-])
 

@@ -19,8 +19,6 @@ function storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken) 
     }
 
 
-    console.log(updatedData)
-
     Axios.post('https://cue-cards-app.herokuapp.com/api/save-users-data', updatedData, {
         headers: {
             'Authorization': "Bearer " + userToken

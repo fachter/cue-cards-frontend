@@ -53,17 +53,17 @@ class App extends React.Component {
   render() {
 
     return (
-    <ProfileProvider>
-      <UserProvider>
-        <CopyPasteProvider>
-          <ListStructureProvider>
-            <SettingsProvider>
-              <StartScreen />
-            </SettingsProvider>
-          </ListStructureProvider>
-        </CopyPasteProvider>
-      </UserProvider >
-    </ProfileProvider>
+      <ProfileProvider>
+        <UserProvider>
+          <CopyPasteProvider>
+            <ListStructureProvider>
+              <SettingsProvider>
+                <StartScreen />
+              </SettingsProvider>
+            </ListStructureProvider>
+          </CopyPasteProvider>
+        </UserProvider >
+      </ProfileProvider>
     )
   }
 }
@@ -72,12 +72,3 @@ class App extends React.Component {
 
 export default (App)
 
-
-
-
-
-import { YellowBox } from 'react-native'
-
-YellowBox.ignoreWarnings([
-  'VirtualizedLists should never be nested', // Gibt derzeit keine Lösung laut Community
-])

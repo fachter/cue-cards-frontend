@@ -21,11 +21,11 @@ export default class SettingsProvider extends React.Component {
     }
 
     componentDidUpdate() {
+        console.log("update")
         this.storeSettingOnDevice()
     }
 
     setMaxCardLevel(level) {
-
         this.setState({ maxCardlevel: level })
     }
 
@@ -44,6 +44,7 @@ export default class SettingsProvider extends React.Component {
             const settings = await AsyncStorage.getItem('settings')
             if (settings != null) {
                 let data = JSON.parse(settings)
+                console.log(data)
                 this.state.maxCardLevel = data.maxCardLevel
                 this.state.maxCardLevelIncluded = data.maxCardLevelIncluded
                 this.state.shuffleCards = data.shuffleCards
@@ -69,6 +70,7 @@ export default class SettingsProvider extends React.Component {
                 })
 
             );
+            console.log("Einstellungen wurden auf dem Gerät gespeichert")
         } catch (error) {
             console.log("Fehler beim speichern der Einstellungen :" + error)
         }
