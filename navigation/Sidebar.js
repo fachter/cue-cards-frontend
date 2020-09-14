@@ -18,8 +18,6 @@ import Freetext from '../screens/CardCreatorScreen/Freetext';
 import FriendsScreen from '../screens/FriendsScreen/FriendsScreen';
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
 import SettingsScreen from '../screens/SettingsScreen/SettingsScreen';
-import StatisticsScreen from '../screens/StatisticsScreen/StatisticsScreen';
-import SendCardsScreen from '../screens/SendCardsScreen/SendCardsScreen';
 import LoginScreen from '../screens/LoginRegistrationScreen/LoginScreen'
 import RegistrationScreen from '../screens/LoginRegistrationScreen/RegistrationScreen'
 import RoomScreen from '../screens/RoomScreen/RoomScreen';
@@ -33,8 +31,6 @@ const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const FriendsStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
-const StatisticsStack = createStackNavigator();
-const SendCardsStack = createStackNavigator();
 const LoginRegistrationStack = createStackNavigator();
 const RoomStack = createStackNavigator();
 
@@ -149,52 +145,12 @@ const SettingsStackScreen = ({ navigation }) => (
     </SettingsStack.Navigator>
 );
 
-const StatisticsStackScreen = ({ navigation }) => (
-    <StatisticsStack.Navigator screenOptions={{
-        headerStyle: {
-            backgroundColor: "#202225"
 
-        },
-        headerTintColor: "white"
-    }}>
-        <StatisticsStack.Screen name="Statistiken" component={StatisticsScreen} options={{
-            headerRight: () => (
-                <Icon.Button name="ios-menu" size={25} backgroundColor="#202225" onPress={() => { navigation.openDrawer() }} />
-            ),
-            headerLeft: () => (
-                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" />
-            )
-        }} />
-    </StatisticsStack.Navigator>
-);
 
-const SendCardsStackScreen = ({ navigation }) => (
-    <SendCardsStack.Navigator screenOptions={{
-        headerStyle: {
-            backgroundColor: "#202225"
-
-        },
-        headerTintColor: "white"
-    }}>
-        <SendCardsStack.Screen name="Karten senden" component={SendCardsScreen} options={{
-            headerRight: () => (
-                <Icon.Button name="ios-menu" size={25} backgroundColor="#202225" onPress={() => { navigation.openDrawer() }} />
-            ),
-            headerLeft: () => (
-                <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" />
-
-            )
-
-        }} />
-    </SendCardsStack.Navigator>
-);
 
 export const LoginRegistrationStackScreen = ({ navigation }) => (
     <LoginRegistrationStack.Navigator screenOptions={{
-        headerStyle: {
-            backgroundColor: "#202225"
-        },
-        headerTintColor: "#202225"
+        headerShown: false,
     }}>
         <LoginRegistrationStack.Screen name="Login" component={LoginScreen} />
         <LoginRegistrationStack.Screen name="Registration" component={RegistrationScreen} options={{
@@ -242,23 +198,6 @@ export default class Sidebar extends React.Component {
                         title: "Freunde",
                         drawerIcon: () => (
                             <Icon name="ios-people" color="white" size={25} />
-                        )
-                    }}
-                />
-
-                <Drawer.Screen name="SendCardsStack" component={SendCardsStackScreen}
-                    options={{
-                        title: "Karten senden",
-                        drawerIcon: () => (
-                            <Icon name="ios-share" color="white" size={25} />
-                        )
-                    }}
-                />
-                <Drawer.Screen name="StatisticStack" component={StatisticsStackScreen}
-                    options={{
-                        title: "Statistiken",
-                        drawerIcon: () => (
-                            <Icon name="ios-stats" color="white" size={25} />
                         )
                     }}
                 />

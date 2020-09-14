@@ -16,7 +16,7 @@ export default function CardScreen({ route, navigation }) {
 
 
 
-    const { storeDataOnDevice, listHistoryArray, currentListStructure } = useContext(ListStructureContext)
+    const { storeDataOnDevice, listHistoryArray, currentListStructure, currentRoomInfo, setCurrentListStructure } = useContext(ListStructureContext)
     const { userToken } = useContext(UserContext)
     const { maxCardLevel, shuffleCards } = useContext(SettingsContext)
 
@@ -163,8 +163,10 @@ export default function CardScreen({ route, navigation }) {
                     _nextCard()
 
                 }
-                storeDataOnDevice()
-                storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken)
+
+                setCurrentListStructure(currentListStructure, true)
+                // storeDataOnDevice()
+                // storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken)
                 // statt currentListstrucutre evtl. Sessioncards . wsl geht aber beides
             }
         }

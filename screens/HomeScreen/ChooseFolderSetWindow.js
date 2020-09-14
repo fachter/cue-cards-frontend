@@ -37,7 +37,7 @@ export default function ChooseFolderSetWindow() {
     function _addNewItemToList(newListItem) {
         let copy = currentListStructure
         copy.push(newListItem)
-        setCurrentListStructure(copy)
+        setCurrentListStructure(copy, true)
     }
 
 

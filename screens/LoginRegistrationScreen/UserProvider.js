@@ -74,7 +74,6 @@ class UserProvider extends React.Component {
     }
 
     saveUserOnDevice = (stayLoggedin, username, password) => {
-        console.log(stayLoggedin + username + password)
         try {
             AsyncStorage.setItem(
                 'loginData',

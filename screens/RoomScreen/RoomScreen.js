@@ -40,14 +40,13 @@ export default function RoomScreen() {
 
 
     useEffect(() => {
-        console.log(serverProblems)
         if (roomDataMounted.current === false) {
             updateRooms()
         }
 
     })
 
-    async function updateRooms() {
+    function updateRooms() {
         checkIfConnected()
             .then(() => {
                 asyncAxiosGet('https://cue-cards-app.herokuapp.com/api/get-available-rooms', 'RoomScreen', userToken)
@@ -89,7 +88,7 @@ export default function RoomScreen() {
 
 
     async function _navigateToFolderScreen(roomInfo) {
-        setCurrentRoomInfo(roomInfo)
+        await setCurrentRoomInfo(roomInfo)
         if (roomInfo === 'myRoom') {
             await loadMyRoomData()
         } else {
@@ -108,29 +107,36 @@ export default function RoomScreen() {
                 'Authorization': "Bearer " + userToken
             }
         }).then(async (res) => {
-            console.log(res.data.folders)
+
             let serverData = await res
             let localData = await retrieveDataFromDevice()
-            let newListStructure = await compareDates(serverData, localData)
 
-            setCurrentListStructure(newListStructure)
+
+            let check = await ifServerDataTheLatest(serverData, localData)
+
+            if (check === true) {
+
+                setCurrentListStructure(serverData.data.folders, false)
+            } else {
+                setCurrentListStructure(localData.data.folders, true)
+            }
+
         })
     }
 
-    function compareDates(serverData, localData) {
+    function ifServerDataTheLatest(serverData, localData) {
 
         if (serverData.data.lastModified > localData.data.lastModified) {
-            return serverData.data.folders
+            return true
+            //return serverData.data.folders
         }
-        return localData.data.folders
+        return false
     }
 
 
     function loadNetworkRoomData(folders) {
-        setCurrentListStructure(folders)
+        setCurrentListStructure(folders, false)
     }
-
-
 
 
     function renderErrorMessageView() {

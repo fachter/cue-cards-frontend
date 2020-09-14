@@ -60,6 +60,7 @@ class ListStructureProvider extends React.Component {
             const value = await AsyncStorage.getItem('myRoomData');
             if (value != null) {
                 let data = JSON.parse(value)
+
                 console.log("Daten wurden vom gerät geladen")
                 return data
             }
@@ -71,31 +72,35 @@ class ListStructureProvider extends React.Component {
 
 
 
-    setCurrentListStructure = (newListStructure) => {
+    setCurrentListStructure = (newListStructure, saveOnDB) => {
         this.setState({ currentListStructure: newListStructure })
-
+        //console.log(this.state.currentRoomInfo)
         if (this.state.currentRoomInfo === 'myRoom') {
-            this.saveMyData(newListStructure)
+            this.saveMyData(newListStructure, saveOnDB)
 
         } else {
-            this.saveRoomData(newListStructure)
+            if (saveOnDB !== false) {
+                this.saveRoomData(newListStructure)
+            }
         }
     }
 
 
-    saveMyData(newListStructure) {
+    saveMyData(newListStructure, saveOnDB) {
         const { listHistoryArray } = this.state
         const user = this.context
         this.storeDataOnDevice(newListStructure)
-        user.checkIfConnected()
-            .then(res => {
-                console.log('Verbindung zum Netzwerk ' + res)
-                storeMyRoomDataOnDB(listHistoryArray, newListStructure, user.userToken)
-            })
-            .catch(res => {
-                console.log('Verbindung zum Server ' + res)
-                alert("Verbindung zum Netzwerk fehlgeschlagen, Daten konnten nicht auf dem Server gespeichert werden")
-            })
+        if (saveOnDB !== false) {
+            user.checkIfConnected()
+                .then(res => {
+                    console.log('Verbindung zum Netzwerk ' + res)
+                    storeMyRoomDataOnDB(listHistoryArray, newListStructure, user.userToken)
+                })
+                .catch(res => {
+                    console.log('Verbindung zum Server ' + res)
+                    alert("Verbindung zum Netzwerk fehlgeschlagen, Daten konnten nicht auf dem Server gespeichert werden")
+                })
+        }
     }
 
 
@@ -118,7 +123,7 @@ class ListStructureProvider extends React.Component {
             .then(res => {
                 syncAxiosPost(`https://cue-cards-app.herokuapp.com/api/room`, 'ListStructureProvider', updatedRoom, user.userToken)
                     .then(mes => {
-                        console.log(console.log('Verbindung zum Server ' + mes + '. Daten wurde gespeichert'))
+                        console.log('Verbindung zum Server ' + mes + '. Daten wurde gespeichert')
                     }).catch(mes => {
                         console.log('Verbindung zum Server' + mes)
                         alert("Verbindung zum Sever fehlgeschlagen. Probleme beim speichern/laden der Daten")

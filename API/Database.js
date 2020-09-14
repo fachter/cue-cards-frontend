@@ -18,14 +18,17 @@ function storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken) 
         }
     }
 
+
+    console.log(updatedData)
+
     Axios.post('https://cue-cards-app.herokuapp.com/api/save-users-data', updatedData, {
         headers: {
             'Authorization': "Bearer " + userToken
         }
     }).then(result => {
-        console.log("Die Daten wurden erfolgreich auf dem Server gespeichert:")
+        console.log("'MyRoom' Daten wurden erfolgreich auf dem Server gespeichert")
     }).catch(error => {
-        console.log("Fehler beim speichern der Daten auf dem Server: " + error)
+        console.log("Fehler beim speichern der Daten 'MyRoom' auf dem Server: " + error)
     })
 }
 
@@ -37,7 +40,7 @@ function syncAxiosPost(link, sourceName, data, userToken) {
             headers: {
                 'Authorization': "Bearer " + userToken
             }
-        }).then(() => {
+        }).then(res => {
             resolve('erfolgreich')
             console.log(`Axios Post, Quelldatei: ${sourceName} - erfolgreich:`)
         }).catch(error => {

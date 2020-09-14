@@ -72,7 +72,7 @@ const DataList = () => {
 
         if (listHistoryArray.length > 0) {
             var lastFolderStructure = _getLastFolderStructure()
-            setCurrentListStructure(lastFolderStructure)
+            setCurrentListStructure(lastFolderStructure, false)
             setIsFolder(true)
             return true
         } else {
@@ -93,12 +93,12 @@ const DataList = () => {
             //durchsucht das Array nach dem Item und ruft die OrdnerStruktur auf
             let indexOfItem = currentListStructure.indexOf(item)
             let subStructure = currentListStructure[indexOfItem].subFolders
-            setCurrentListStructure(subStructure)
+            setCurrentListStructure(subStructure, false)
         } else {
             //durchsucht das Array nach dem Item und ruft die OrdnerStruktur auf
             let indexOfItem = currentListStructure.indexOf(item)
             let subStructure = currentListStructure[indexOfItem].cards
-            setCurrentListStructure(subStructure)
+            setCurrentListStructure(subStructure, false)
         }
 
         if (item.isFolder == undefined) {
@@ -209,7 +209,7 @@ const DataList = () => {
                 index = i
         }
         copy.splice(index, 1)  //schmeißt das Item mit dem Index raus
-        setCurrentListStructure(copy)
+        setCurrentListStructure(copy, true)
         SetDeleteWindowVisible(false)
 
     }
@@ -249,8 +249,22 @@ const DataList = () => {
     function pasteTheCopiedData() {
         let copy = currentListStructure
         copy.push(copyData)
-        setCurrentListStructure(copy)
+        setCurrentListStructure(copy, true)
     }
+
+
+    const renderRoomIsEmptyScreen = () => {
+
+        if (listHistoryArray.length === 0 && currentListStructure.length === 0) {
+            return (
+                <View style={styles.bildcontainer}>
+                    <Image source={LeererRaum} style={styles.leererRaum} />
+                </View>
+            )
+        }
+        return null
+    }
+
 
 
     return (
@@ -287,10 +301,7 @@ const DataList = () => {
             >
                 <Image source={Raumbild2} style={styles.obenRechts} />
                 <Image source={Raumbild1} style={styles.untenLinks} />
-                {/* Das ist das Bild, dass erscheinen soll, wenn der Paum noch leer ist */}
-                {/* <View style={styles.bildcontainer}>
-                    <Image source={LeererRaum} style={styles.leererRaum} />
-                </View> */}
+                {renderRoomIsEmptyScreen()}
                 <ScrollView>
                     <FlatList
                         //ListHeaderComponent={renderHeader}
@@ -332,7 +343,6 @@ const DataList = () => {
                     onDelete={_deleteItemById} /> : null}
         </View>
     );
-
 }
 
 

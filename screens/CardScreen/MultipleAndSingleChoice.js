@@ -77,7 +77,6 @@ export default function MulitpleChoiceCard() {
 
 
     function _updateCheckState(checkState, item) {
-        console.log(checkState)
         let copy = [...answers]
         if (currentCard.cardType === "SC") {
 
@@ -91,7 +90,6 @@ export default function MulitpleChoiceCard() {
         } else {
             for (let i = 0; i < answers.length; i++) {
                 if (item.answerValues.id === answers[i].answerValues.id) {
-                    console.log("yep")
                     copy[i].checkState = checkState
                 }
             } setAnswers(copy)
