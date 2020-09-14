@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Switch, StyleSheet } from 'react-native';
+import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Switch, StyleSheet, ImageBackground } from 'react-native';
 import { UserContext } from './UserProvider'
 import { SettingsContext } from '../SettingsScreen/SettingsProvider'
 import logo from '../../assets/Logo.png';
+import LoginHintergrund from '../../assets/LoginHintergrund.png';
 
 
 
@@ -53,8 +54,14 @@ export default function LoginScreen({ navigation }) {
 
 
     return (
-        <View style={styles.container}>
+        // <View style={styles.container}>
+        <ImageBackground
+            source={require('../../assets/LoginHintergrund.png')}
+            style={styles.container}
+        // imageStyle={{ borderRadius: 80 }}
+        >
             <Image source={logo} style={styles.logo} />
+            {/* <Image source={LoginHintergrund} style={styles.loginHintergrund} /> */}
             <View>
                 <TextInput
                     style={styles.input}
@@ -96,7 +103,8 @@ export default function LoginScreen({ navigation }) {
                     <Text style={styles.text}>Registrieren</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </ImageBackground>
+        // </View>
     )
 
 }
@@ -108,9 +116,12 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#202225',
+        // backgroundColor: '#202225',
         justifyContent: 'center',
-        marginTop: -50
+        //marginTop: -50
+        height: '100%',
+        width: '100%',
+        resizeMode: 'contain'
     },
     logo: {
         width: 300,
@@ -127,7 +138,8 @@ const styles = StyleSheet.create({
         marginHorizontal: 25,
         marginVertical: 10,
         paddingLeft: 10,
-        color: 'white'
+        color: 'white',
+        opacity: 0.7
 
     },
     button: {
