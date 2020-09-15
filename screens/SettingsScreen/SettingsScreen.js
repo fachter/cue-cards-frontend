@@ -9,11 +9,13 @@ import logo from '../../assets/Logo.png';
 
 function SettingsScreen() {
 
+    const { saveUserOnDevice } = useContext(UserContext)
     const { maxCardLevel, setMaxCardLevel, maxCardLevelIncluded, setMaxCardLevelIncluded, shuffleCards, setShuffleCards } = useContext(SettingsContext)
     const { logout } = useContext(UserContext)
 
 
     function userLogout() {
+        saveUserOnDevice(false, null, null)
         logout()
     }
 

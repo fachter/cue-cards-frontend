@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, FlatList, Dimensions, Text, Button, StyleSheet, TouchableOpacity, BackHandler, Image } from 'react-native';
+import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, BackHandler, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -9,7 +9,6 @@ import ChooseFolderSetWindow from './ChooseFolderSetWindow'
 import FolderListItem from './FolderListItem';
 import DeleteWindow from './DeleteWindow'
 import NewCardWindow from './NewCardWindow'
-import SwipeView from '../../components/SwipeView'
 
 import { ListStructureContext } from './ListStructureProvider'
 import { CopyPasteContext } from './CopyPasteProvider'
@@ -317,44 +316,41 @@ const HomeScreen = () => {
                 </View>
                 :
                 null}
-            <SwipeView
-            >
-                <Image source={Raumbild2} style={styles.obenRechts} />
-                <Image source={Raumbild1} style={styles.untenLinks} />
-                {renderRoomIsEmptyScreen()}
-                <ScrollView>
-                    <FlatList
-                        //ListHeaderComponent={renderHeader}
-                        data={currentListStructure}
-                        keyExtractor={item => `${item.id}`}
-                        renderItem={({ item }) => (
-                            <FolderListItem
-                                item={item}
-                                callBackItem={_getClickedItem}
-                                onDeleteWindow={_showDeleteWindow.bind(this)}
-                                onNavigateToCardScreen={_navigateToCardScreen}
-                                onNavigateToSession={_navigateToSession}
-                            />
-                        )}
-                        ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
-                    />
-                    <View style={styles.platzhalter}></View>
-                </ScrollView>
-                <View>
-                    <ChooseFolderSetWindow
-                        visible={CreateFileWindowVisible}
-                    />
-                    <NewCardWindow
-                        visible={CreateNewCardWindowVisible}
-                        onNavigateToCardCreator={createNewCard}
-                        onSetVisibility={setCreateNewCardWindowVisible}
-                    />
-                </View>
-                <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
-                    <Entypo name="plus" size={45} color="#008FD3" />
-                </TouchableOpacity>
-                <Image source={logo} style={styles.logo} />
-            </SwipeView>
+            <Image source={Raumbild2} style={styles.obenRechts} />
+            <Image source={Raumbild1} style={styles.untenLinks} />
+            {renderRoomIsEmptyScreen()}
+            <ScrollView>
+                <FlatList
+                    //ListHeaderComponent={renderHeader}
+                    data={currentListStructure}
+                    keyExtractor={item => `${item.id}`}
+                    renderItem={({ item }) => (
+                        <FolderListItem
+                            item={item}
+                            callBackItem={_getClickedItem}
+                            onDeleteWindow={_showDeleteWindow.bind(this)}
+                            onNavigateToCardScreen={_navigateToCardScreen}
+                            onNavigateToSession={_navigateToSession}
+                        />
+                    )}
+                    ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
+                />
+                <View style={styles.platzhalter}></View>
+            </ScrollView>
+            <View>
+                <ChooseFolderSetWindow
+                    visible={CreateFileWindowVisible}
+                />
+                <NewCardWindow
+                    visible={CreateNewCardWindowVisible}
+                    onNavigateToCardCreator={createNewCard}
+                    onSetVisibility={setCreateNewCardWindowVisible}
+                />
+            </View>
+            <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
+                <Entypo name="plus" size={45} color="#008FD3" />
+            </TouchableOpacity>
+            <Image source={logo} style={styles.logo} />
             {deleteWindowVisible ?
                 <DeleteWindow
                     onDeleteWindow={() => SetDeleteWindowVisible(false)}

@@ -6,7 +6,6 @@ import { AntDesign } from '@expo/vector-icons';
 
 import RoomIDView from './RoomIDView'
 import CreateRoomView from './CreateRoomView';
-import { TextInput } from 'react-native-paper';
 
 
 
@@ -58,7 +57,7 @@ export default class AddRoomWindow extends React.Component {
     }
 
     render() {
-        const { createRoomVisible } = this.state
+
         return (
             <Modal
                 animationType="fade"

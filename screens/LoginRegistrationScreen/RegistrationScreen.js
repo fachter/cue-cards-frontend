@@ -3,7 +3,6 @@ import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, StyleSheet,
 import logo from '../../assets/Logo.png'
 import axios from 'axios';
 import { UserContext } from './UserProvider';
-import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 
@@ -23,11 +22,10 @@ export default function RegistrationScreen({ navigation }) {
 
 
 
+
+
     function _regNewAcc() {
-        console.log(username)
-        console.log(password1)
-        console.log(email)
-        console.log(fullName)
+
         _checkValidityOfAllValues()
             .then(() => {
                 axios.post('https://cue-cards-app.herokuapp.com/api/register', {
@@ -41,10 +39,10 @@ export default function RegistrationScreen({ navigation }) {
                         setUserToken(resp.data.jwt)
                         login()
                     }).catch((error) => {
+                        alert('Benutzername schon vorhanden')
                         console.log("Registrierung fehlgeschlagen " + error)
                     })
             })
-
     }
 
 
@@ -68,6 +66,28 @@ export default function RegistrationScreen({ navigation }) {
         })
     }
 
+
+    function checkEmailValidity() {
+
+        return new Promise((resolve, reject) => {
+            if (email.includes('@')) {
+                let splitedEmail = email.split('@')
+                console.log(splitedEmail)
+                if (splitedEmail.length === 2) {
+                    if (splitedEmail[0].toString().length >= 2 && splitedEmail[1].toString().length >= 2) {
+                        resolve()
+                    } else {
+                        reject('Muss mehr Zeichen enthalten')
+                    }
+                } else {
+                    reject('zu kurz')
+                }
+            } else {
+                reject('Enthält kein "@"')
+            }
+        })
+    }
+
     function _checkValidityOfAllValues() {
 
         return new Promise((resolve, reject) => {
@@ -77,14 +97,20 @@ export default function RegistrationScreen({ navigation }) {
                     _checkIfNull(password2).then(() => {
                         _comparePasswords().then(() => {
                             _checkIfNull(email).then(() => {
-                                _checkIfNull(fullName).then(() => {
+                                checkEmailValidity().then(() => {
+                                    _checkIfNull(fullName).then(() => {
 
-                                    resolve()
+                                        resolve()
 
+                                    }).catch(error => {
+                                        reject()
+                                        alert('Nickname ungültig')
+                                        console.log('FullName ungültig: ' + error)
+                                    })
                                 }).catch(error => {
                                     reject()
-                                    alert('Nickname ungültig')
-                                    console.log('FullName ungültig: ' + error)
+                                    alert('Email ungültig')
+                                    console.log('Email ungültig: ' + error)
                                 })
                             }).catch(error => {
                                 reject()
@@ -190,7 +216,6 @@ export default function RegistrationScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-
     container: {
         flex: 1,
         justifyContent: 'center',

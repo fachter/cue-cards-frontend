@@ -36,12 +36,12 @@ class SwipeView extends Component {
             case SWIPE_UP:
                 break;
             case SWIPE_DOWN:
+                this.props.onUpdateRooms()
                 break;
             case SWIPE_LEFT:
-
                 break;
             case SWIPE_RIGHT:
-                this.props.swipeRight()
+
                 break;
         }
     }

@@ -18,6 +18,7 @@ import newRoom from '../../assets/newRoom.png';
 import AddRoomWindow from './AddRoomWindow/AddRoomWindow';
 import RoomListItem from './RoomListItem';
 import LeaveRoomWindow from './LeaveRoomWindow';
+import SwipeView from './../../components/SwipeView'
 
 import { UserContext } from '../LoginRegistrationScreen/UserProvider'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
@@ -29,6 +30,7 @@ export default function RoomScreen() {
 
     const { checkIfConnected, isConnected, userToken } = useContext(UserContext)
     const {
+        setIsFolder,
         setCurrentRoomInfo,
         setCurrentListStructure,
         retrieveDataFromDevice } = useContext(ListStructureContext)
@@ -98,6 +100,7 @@ export default function RoomScreen() {
         } else {
             await loadNetworkRoomData(roomInfo.data.folders)
         }
+        await setIsFolder(true)
 
         navigation.navigate('Room')
     }
@@ -164,43 +167,45 @@ export default function RoomScreen() {
 
     return (
         <View style={styles.container}>
-            <ScrollView>
-                <TouchableOpacity onPress={() => _navigateToFolderScreen('myRoom')}>
-                    <Image source={home} style={styles.home} />
-                    <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>Mein Raum</Text>
-                </TouchableOpacity>
-                <FlatList
-                    data={serverRooms}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item }) => (
-                        <RoomListItem
-                            item={item}
-                            onLeaveRoomWindowVisibility={showLeaveRoomWindow}
-                            onNavigate={_navigateToFolderScreen}
-                        />
-                    )}
-                />
-                <TouchableOpacity onPress={() => setAddRoomWindowVisibility(true)}>
-                    <Image source={newRoom} style={styles.home} />
-                    <Text style={styles.fontStyle}>+ Raum hinzufügen</Text>
-                </TouchableOpacity>
-                <View style={styles.platzhalter}></View>
-            </ScrollView>
-            {renderErrorMessageView()}
-            <AddRoomWindow
-                onSetVisibility={_setRoomAddWindowVisibility}
-                addRoomWindowVisibility={addRoomWindowVisibility}
-                updateRooms={updateRooms}
-            />
-            {leaveRoomWindowVisibility ?
-                <LeaveRoomWindow
-                    onSetVisibility={SetleaveRoomWindowVisibility}
-                    onLeaveRoom={showLeaveRoomWindow}
-                    item={clickedRoom.current}
+            <SwipeView onUpdateRooms={updateRooms}>
+                <ScrollView>
+                    <TouchableOpacity onPress={() => _navigateToFolderScreen('myRoom')}>
+                        <Image source={home} style={styles.home} />
+                        <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>Mein Raum</Text>
+                    </TouchableOpacity>
+                    <FlatList
+                        data={serverRooms}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item }) => (
+                            <RoomListItem
+                                item={item}
+                                onLeaveRoomWindowVisibility={showLeaveRoomWindow}
+                                onNavigate={_navigateToFolderScreen}
+                            />
+                        )}
+                    />
+                    <TouchableOpacity onPress={() => setAddRoomWindowVisibility(true)}>
+                        <Image source={newRoom} style={styles.home} />
+                        <Text style={styles.fontStyle}>+ Raum hinzufügen</Text>
+                    </TouchableOpacity>
+                    <View style={styles.platzhalter}></View>
+                </ScrollView>
+                {renderErrorMessageView()}
+                <AddRoomWindow
+                    onSetVisibility={_setRoomAddWindowVisibility}
+                    addRoomWindowVisibility={addRoomWindowVisibility}
                     updateRooms={updateRooms}
-                /> : null}
+                />
+                {leaveRoomWindowVisibility ?
+                    <LeaveRoomWindow
+                        onSetVisibility={SetleaveRoomWindowVisibility}
+                        onLeaveRoom={showLeaveRoomWindow}
+                        item={clickedRoom.current}
+                        updateRooms={updateRooms}
+                    /> : null}
 
-            <Image source={logo} style={styles.logo} />
+                <Image source={logo} style={styles.logo} />
+            </SwipeView>
         </View>
     )
 }

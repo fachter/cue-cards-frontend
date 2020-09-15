@@ -9,7 +9,7 @@ import { UserContext } from '../../LoginRegistrationScreen/UserProvider';
 
 
 
-export default function RoomIDView() {
+export default function RoomIDView({ updateRooms }) {
 
 
     const [componentIsMounted, setComponentIsMounted] = useState(false)
@@ -43,6 +43,7 @@ export default function RoomIDView() {
                 resultMessage.current = `Du bist dem Raum erfolgreich beigetreten`
                 //showActivityIndicator.current = false
                 setShowResultView(true)
+                updateRooms()
                 console.log(`Beitreten des Raumes mit der ID ${roomID.urrent} ` + res)
             } else if (res.status === 202) {
                 setShowPasswordView(true)
@@ -91,7 +92,7 @@ export default function RoomIDView() {
                 } else {
                     if (showActivityIndicator === false) {
                         return (
-                            <PasswordView roomID={roomID.current} userToken={userToken} />
+                            <PasswordView roomID={roomID.current} userToken={userToken} updateRooms={this.props.updateRooms} />
                         )
                     } else {
                         return (

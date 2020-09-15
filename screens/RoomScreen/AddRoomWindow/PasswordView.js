@@ -19,15 +19,11 @@ export default class PasswordView extends React.Component {
     askingServerForRightPassword() {
         this.setState({ showActivityIndicator: true })
 
-
         let postObject = {
             password: this.state.password,
             id: this.props.roomID
 
         }
-
-        console.log(postObject)
-
 
         Axios.post(`https://cue-cards-app.herokuapp.com/api/join-room/authenticate`, postObject, {
             headers: {
@@ -38,6 +34,7 @@ export default class PasswordView extends React.Component {
             this.state.PasswordView = false
             this.state.JoinSucces = true
             this.setState({ showResultView: true })
+            this.props.updateRooms()
 
         }).catch(err => {
             console.log(err)

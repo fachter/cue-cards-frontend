@@ -24,10 +24,9 @@ export default function LoginScreen({ navigation }) {
     useEffect(() => {
         if (screenIsMounted === false) {
             checkIfUserStayedLoggedin()
-                .then(res => {
+                .then(userData => {
                     setStayLoggedin(true)
-                    saveUserOnDevice(true, password, username)
-                    userLogin()
+                    userLogin(userData.stayLoggedin, userData.username, userData.password)
                     console.log("Logindaten wurden zuvor gespeichert. Login " + res)
                 })
             setScreenIsMounted(true)
@@ -35,18 +34,27 @@ export default function LoginScreen({ navigation }) {
     })
 
     function toggleSwitch() {
-        setStayLoggedin(!stayLoggedin)
 
+        if (stayLoggedin === true) {
+            saveUserOnDevice(false, null, null)
+        }
+
+        setStayLoggedin(!stayLoggedin)
     }
 
 
-    function userLogin() {
-        _authenticateAcc(stayLoggedin, username, password)
+
+    function userLogin(loginstate, user, pw) {
+        _authenticateAcc(loginstate, user, pw)
             .then(res => {
+                if (stayLoggedin === true) {
+                    saveUserOnDevice(true, pw, user)
+                }
                 login()
                 retrieveSettignsfromDevice()
                 console.log("Authentifizierung " + res)
             }).catch(err => {
+                alert("Da ist wohl etwas schief gelaufen. Prüfe dein Nutzername oder Passwort")
                 console.log('Authentifizierung ' + err)
 
             })
@@ -92,7 +100,7 @@ export default function LoginScreen({ navigation }) {
                 <Text style={{ color: 'white', marginLeft: 5 }}>eingeloggt bleiben</Text>
             </View>
             <View style={styles.knöpfe}>
-                <TouchableOpacity style={styles.button} onPress={() => userLogin()}>
+                <TouchableOpacity style={styles.button} onPress={() => userLogin(stayLoggedin, username, password)}>
                     <Text style={styles.text}>Login</Text>
                 </TouchableOpacity>
 

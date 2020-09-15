@@ -17,6 +17,7 @@ class UserProvider extends React.Component {
         this.checkIfConnected = this.checkIfConnected.bind(this)
 
         this.state = {
+            username: null,
             isLoggedin: false,
             userToken: null,
             isConnected: false,
@@ -73,7 +74,7 @@ class UserProvider extends React.Component {
         this.setState({ dataIsLoading: value })
     }
 
-    saveUserOnDevice = (stayLoggedin, username, password) => {
+    saveUserOnDevice = (stayLoggedin, password, username) => {
         try {
             AsyncStorage.setItem(
                 'loginData',
@@ -95,9 +96,10 @@ class UserProvider extends React.Component {
                 const loginData = await AsyncStorage.getItem('loginData')
                 if (loginData != null) {
                     let data = JSON.parse(loginData)
+                    console.log(data)
                     if (data.stayLoggedin === true) {
                         console.log("Nutzerdaten sind für Login gespeichert worden ... logge ein..")
-                        resolve('erfolgreich')
+                        resolve(data)
                     }
                 }
             } catch (error) {
@@ -110,13 +112,13 @@ class UserProvider extends React.Component {
 
     _authenticateAcc(stayLoggedin, username, password) {
 
-
         return new Promise((resolve, reject) => {
             axios.post('https://cue-cards-app.herokuapp.com/api/authenticate', {
-                username: 'xx',
-                password: 'xx',
+                username: username,
+                password: password,
             }).then(res => {
-                this.setState({ userToken: res.data.jwt })
+                this.state.userToken = res.data.jwt
+                this.state.username = username
                 resolve('erfolgreich')
                 if (stayLoggedin === true) {
                     user.saveUserOnDevice(stayLoggedin, username, password)

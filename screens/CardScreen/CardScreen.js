@@ -188,9 +188,7 @@ export default function CardScreen({ route, navigation }) {
                 }
 
                 setCurrentListStructure(currentListStructure, true)
-                // storeDataOnDevice()
-                // storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken)
-                // statt currentListstrucutre evtl. Sessioncards . wsl geht aber beides
+
             }
         }
     }
