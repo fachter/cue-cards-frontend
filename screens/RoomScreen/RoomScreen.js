@@ -117,11 +117,9 @@ export default function RoomScreen() {
             let serverData = await res
             let localData = await retrieveDataFromDevice()
 
-
             let check = await ifServerDataTheLatest(serverData, localData)
 
             if (check === true) {
-
                 setCurrentListStructure(serverData.data.folders, false)
             } else {
                 setCurrentListStructure(localData.data.folders, true)

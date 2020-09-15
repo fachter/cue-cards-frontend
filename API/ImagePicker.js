@@ -1,33 +1,13 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { TouchableOpacity, Image, View, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 
 
-export default class ImagePickerButton extends React.Component {
-    state = {
-        image: null,
-    };
+export default async function pickImage() {
 
-    render() {
-        let { image } = this.state;
-
-        return (
-            <View>
-                <TouchableOpacity style={{ alignSelf: 'center' }} onPress={this._pickImage}>
-                    <Text style={{ color: "white" }}>+ Bild hinzufügen</Text>
-                </TouchableOpacity>
-                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-            </View>
-        );
-    }
-
-    componentDidMount() {
-        this.getPermissionAsync();
-    }
-
-    getPermissionAsync = async () => {
+    const getPermissionAsync = async () => {
         if (Constants.platform.ios) {
             const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
             if (status !== 'granted') {
@@ -36,7 +16,10 @@ export default class ImagePickerButton extends React.Component {
         }
     };
 
-    _pickImage = async () => {
+
+    await getPermissionAsync()
+
+    return new Promise(async (resolve, reject) => {
         try {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -45,12 +28,13 @@ export default class ImagePickerButton extends React.Component {
                 quality: 1,
             });
             if (!result.cancelled) {
-                this.setState({ image: result.uri });
+                resolve(result)
             }
-
             console.log(result);
         } catch (E) {
+            reject(E)
             console.log(E);
         }
-    };
-}
+    })
+
+}  // {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}

@@ -10,22 +10,16 @@ import {
     Dimensions
 } from 'react-native';
 
-import { useTheme } from 'react-native-paper';
-import { AntDesign } from '@expo/vector-icons';
-
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import IonIcons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Feather from 'react-native-vector-icons/Feather';
 
-import BottomSheet from 'reanimated-bottom-sheet';
-import Animated from 'react-native-reanimated';
 import { ProfileContext } from './ProfileProvider'
+import { UserContext } from '../LoginRegistrationScreen/UserProvider'
 
 
-import ImagePicker from 'react-native-image-crop-picker';
+import { syncAxiosPost } from '../../API/Database'
 import AddImage from './AddImage';
-import { ScrollView } from 'react-native-gesture-handler';
+import pickImage from './../../API/ImagePicker';
 
 
 
@@ -36,15 +30,52 @@ export default function EditProfileScreen() {
     //const [showAddImage, setShowAddImage] = useState(null);
 
     const {
-        image,
         setImage,
         showAddImage,
         setShowAddImage
     } = useContext(ProfileContext)
 
+    const { username, userToken, setUserImage } = useContext(UserContext)
 
     function _closeAddImage() {
         setShowAddImage(false);
+    }
+
+
+    const updateImage = async () => {
+        pickImage().then(async (image) => {
+
+            const uri = image.uri
+            const type = 'image/jpeg'
+            const name = username
+            const source = { uri, type, name }
+
+            const data = new FormData()
+            data.append('file', source)
+            data.append('upload_preset', 'CueCards')
+            data.append('cloud_name', 'dilnshj2a')
+
+            fetch('https://api.cloudinary.com/v1_1/dilnshj2a/image/upload', {
+                method: 'POST',
+                body: data,
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(res => {
+                res.json()
+                    .then(cloudData => {
+                        setUserImage(cloudData.url)
+                        syncAxiosPost('link', 'EditProfilScreen', 'data', userToken)
+                            .catch(err => {
+                                console.log('Fehler beim Imageupload. Probleme mit der Datenbank ' + err)
+                            })
+
+                    }).catch(err => {
+                        console.log('Fehler beim Imageupload. Probleme mit der Cloud ' + err)
+                    })
+            })
+        })
     }
 
     return (
@@ -57,7 +88,7 @@ export default function EditProfileScreen() {
             >
                 <TouchableOpacity
                     style={styles.bildBearbeitenKnopf}
-                    onPress={() => this.setState({ showAddImage: true })}>
+                    onPress={() => updateImage()}>
                     <Icon
                         name="camera"
                         size={27}

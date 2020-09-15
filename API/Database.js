@@ -33,14 +33,13 @@ function storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken) 
 
 function syncAxiosPost(link, sourceName, data, userToken) {
 
-    console.log(data)
     return new Promise((resolve, reject) => {
         Axios.post(link, data, {
             headers: {
                 'Authorization': "Bearer " + userToken
             }
         }).then(res => {
-            console.log(res.config.data)
+
             resolve('erfolgreich')
             console.log(`Axios Post, Quelldatei: ${sourceName} - erfolgreich:`)
         }).catch(error => {

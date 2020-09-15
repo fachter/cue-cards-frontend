@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, BackHandler, Image } from 'react-native';
+import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, Button, BackHandler, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Entypo } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-
-
+import Drawer from 'react-native-drawer';
 import ChooseFolderSetWindow from './ChooseFolderSetWindow'
 import FolderListItem from './FolderListItem';
 import DeleteWindow from './DeleteWindow'
@@ -27,6 +27,25 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 const { width: WidTH } = Dimensions.get('window')
 
+const initialFriendState = [
+    {
+        id: '1',
+        title: 'Philip',
+        picture: '../../assets/Passbild.jpg'
+    },
+    {
+        id: '2',
+        title: 'Matze',
+        picture: '../../assets/Passbild.jpg'
+
+    },
+    {
+        id: '3',
+        title: 'Darius',
+        picture: '../../assets/Passbild.jpg'
+
+    }
+]
 
 const HomeScreen = () => {
 
@@ -52,6 +71,7 @@ const HomeScreen = () => {
     const navigation = useNavigation()
     const [deleteWindowVisible, SetDeleteWindowVisible] = useState(false)
     const [onDeleteItem, setOnDeleteItem] = useState(null)
+    const [sideBarOpen, setSideBarOpen] = useState(false)
 
 
     const renderHeaderTitle = () => {
@@ -285,6 +305,41 @@ const HomeScreen = () => {
     }
 
 
+    const renderDrawer = () => {
+        //SlideMenu
+        return (
+            <View style={styles.menuContainer}>
+                <FlatList
+                    data={initialFriendState}
+                    //extraData={state}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <TouchableOpacity style={styles.menuTitleContainer}>
+                                <Image style={{ width: 30, height: 30, borderRadius: 40, borderWidth: 1, borderColor: 'white', marginLeft: 5 }}
+                                    source={require('../../assets/Passbild.jpg')}>
+
+                                </Image>
+                                <Text style={styles.menuTitle}
+                                    key={index}>
+                                    {item.title}
+                                </Text>
+                                <MaterialCommunityIcons
+                                    name="account-plus"
+                                    size={25}
+                                    color='white'
+                                />
+                            </TouchableOpacity>
+                        )
+                    }} />
+                <Button onPress={() => setSideBarOpen(false)}
+                    title='Schließen'
+                ></Button>
+            </View>
+        )
+    }
+
+
+
 
     return (
         <View style={styles.container}>
@@ -312,12 +367,25 @@ const HomeScreen = () => {
                                 size={23} color="black"
                                 backgroundColor="white"
                                 onPress={() => setSomeThingIsCopied(false)} />
-                        </View>}
+                        </View>
+                    }
                 </View>
                 :
                 null}
             <Image source={Raumbild2} style={styles.obenRechts} />
             <Image source={Raumbild1} style={styles.untenLinks} />
+
+            <Drawer
+                // ref={(ref) => { this.drawer = ref }}
+                open={sideBarOpen}
+                type="overlay"
+                tapToClose={true}
+                openDrawerOffset={0.35}
+                content={renderDrawer()}
+                style={styles.drawer}
+                side="right"
+            />
+
             {renderRoomIsEmptyScreen()}
             <ScrollView>
                 <FlatList
@@ -350,14 +418,19 @@ const HomeScreen = () => {
             <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
                 <Entypo name="plus" size={45} color="#008FD3" />
             </TouchableOpacity>
+            <TouchableOpacity style={styles.freundeButton} onPress={() => setSideBarOpen(true)} >
+                <Entypo name="users" size={30} color="#008FD3" />
+            </TouchableOpacity>
             <Image source={logo} style={styles.logo} />
-            {deleteWindowVisible ?
-                <DeleteWindow
-                    onDeleteWindow={() => SetDeleteWindowVisible(false)}
-                    onNavigateToCardCreator={editCard}
-                    item={onDeleteItem}
-                    onDelete={_deleteItemById} /> : null}
-        </View>
+            {
+                deleteWindowVisible ?
+                    <DeleteWindow
+                        onDeleteWindow={() => SetDeleteWindowVisible(false)}
+                        onNavigateToCardCreator={editCard}
+                        item={onDeleteItem}
+                        onDelete={_deleteItemById} /> : null
+            }
+        </View >
     );
 }
 
@@ -450,6 +523,38 @@ const styles = StyleSheet.create({
         maxWidth: 600,
         maxHeight: 300,
         resizeMode: 'contain',
+    },
+    freundeButton: {
+        borderRadius: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 0.5,
+        borderColor: 'grey',
+        position: 'absolute',
+        bottom: 20,
+        left: 20,
+        backgroundColor: "#2f3136",
+    },
+    menuContainer: {
+        flex: 1.0,
+        backgroundColor: 'black',
+    },
+
+    menuTitle: {
+        width: '100%',
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 17,
+        alignSelf: 'center',
+    },
+    menuTitleContainer: {
+        flexDirection: "row",
+        paddingVertical: 5
+    },
+    drawer: {
+        shadowColor: '#000000',
+        shadowOpacity: 0.8,
+        shadowRadius: 3
     }
 })
 

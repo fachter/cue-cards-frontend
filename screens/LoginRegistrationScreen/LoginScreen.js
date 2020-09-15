@@ -27,7 +27,7 @@ export default function LoginScreen({ navigation }) {
                 .then(userData => {
                     setStayLoggedin(true)
                     userLogin(userData.stayLoggedin, userData.username, userData.password)
-                    console.log("Logindaten wurden zuvor gespeichert. Login " + res)
+                    console.log("Logindaten wurden zuvor gespeichert. Login erfolgreich")
                 })
             setScreenIsMounted(true)
         }

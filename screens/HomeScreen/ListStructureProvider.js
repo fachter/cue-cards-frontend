@@ -60,7 +60,6 @@ class ListStructureProvider extends React.Component {
             const value = await AsyncStorage.getItem('myRoomData');
             if (value != null) {
                 let data = JSON.parse(value)
-
                 console.log("Daten wurden vom gerät geladen")
                 return data
             }

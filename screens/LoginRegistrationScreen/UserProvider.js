@@ -18,6 +18,7 @@ class UserProvider extends React.Component {
 
         this.state = {
             username: null,
+            userImage: null,
             isLoggedin: false,
             userToken: null,
             isConnected: false,
@@ -74,6 +75,10 @@ class UserProvider extends React.Component {
         this.setState({ dataIsLoading: value })
     }
 
+    setUserImage(url) {
+        this.setState({ userImage: url })
+    }
+
     saveUserOnDevice = (stayLoggedin, password, username) => {
         try {
             AsyncStorage.setItem(
@@ -96,7 +101,6 @@ class UserProvider extends React.Component {
                 const loginData = await AsyncStorage.getItem('loginData')
                 if (loginData != null) {
                     let data = JSON.parse(loginData)
-                    console.log(data)
                     if (data.stayLoggedin === true) {
                         console.log("Nutzerdaten sind für Login gespeichert worden ... logge ein..")
                         resolve(data)
@@ -148,6 +152,9 @@ class UserProvider extends React.Component {
     render() {
         return (
             <UserContext.Provider value={{
+                username: this.state.username,
+                userImage: this.state.userImage,
+                setUserImage: this.setUserImage,
                 isConnected: this.state.isConnected,
                 checkIfConnected: this.checkIfConnected,
                 isLoggedin: this.state.isLoggedin,
