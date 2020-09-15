@@ -10,6 +10,7 @@ class ProfileProvider extends React.Component {
 
         this.state = {
             image: null,
+            profileImage: null,
             showAddImage: null,
 
         }
@@ -17,6 +18,10 @@ class ProfileProvider extends React.Component {
 
     setImage = (image) => {
         this.setState({image})
+    }
+
+    setProfileImage = (profileImage) => {
+        this.setState({ profileImage })
     }
 
     setShowAddImage = (showAddImage) => {
@@ -28,6 +33,8 @@ class ProfileProvider extends React.Component {
             <ProfileContext.Provider value={{
                 image: this.state.image,
                 setImage: this.setImage,
+                profileImage: this.state.profileImage,
+                setProfileImage: this.setProfileImage,
                 showAddImage: this.state.showAddImage,
                 setShowAddImage: this.setShowAddImage
             }}>

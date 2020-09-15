@@ -11,6 +11,7 @@ import {
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ProfileContext } from './ProfileProvider'
+import { UserContext } from '../LoginRegistrationScreen/UserProvider';
 
 
 
@@ -19,10 +20,13 @@ const ProfileScreen = () => {
 
     const {
         image,
-        setImage,
+        profileImage,
         showAddImage,
         setShowAddImage
     } = useContext(ProfileContext)
+
+    const { login, setUserToken, email, setEmail } = useContext(UserContext)
+
     
 
     return (
@@ -30,12 +34,17 @@ const ProfileScreen = () => {
 
             <View style={styles.userInfoSection}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
+                    {image != null ? 
                     <Avatar.Image
                         source={
-                            image
+                            {uri: profileImage}
                         }
                         size={80}
                     />
+                    :
+                        <Text>Bitte Bild hochladen</Text>
+}
+                   
                     <View style={{ marginLeft: 20 }}>
                         <Title style={[styles.title, {
                             marginTop: 15,
@@ -52,7 +61,7 @@ const ProfileScreen = () => {
             <View style={styles.userInfoSection}>
                 <View style={styles.row}>
                     <Icon name="email" color="#777777" size={20} />
-                    <Text style={{ color: "#777777", marginLeft: 20 }}>matze96@email.com</Text>
+                    <Text style={{ color: "#777777", marginLeft: 20 }}>matze@web.de</Text>
                 </View>
             </View>
 

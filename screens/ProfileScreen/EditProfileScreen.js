@@ -27,7 +27,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import AddImage from './AddImage';
 import { ScrollView } from 'react-native-gesture-handler';
 
-
+import { useNavigation } from '@react-navigation/native';
 
 export default function EditProfileScreen() {
 
@@ -37,27 +37,35 @@ export default function EditProfileScreen() {
 
     const {
         image,
-        setImage,
+        setProfileImage,
         showAddImage,
         setShowAddImage
     } = useContext(ProfileContext)
+
+    const navigation = useNavigation()
 
 
     function _closeAddImage() {
         setShowAddImage(false);
     }
 
+    function _saveButtonClicked(){
+        setProfileImage(image);
+        navigation.navigate('Profil')
+    }
+
+
     return (
 
         <View style={styles.container}>
-            <ImageBackground
-                source={require('../../assets/Passbild.jpg')}
+            {image != null ? <ImageBackground
+                source={{uri: image}}
                 style={styles.profilbild}
                 imageStyle={{ borderRadius: 80 }}
-            >
+            > 
                 <TouchableOpacity
                     style={styles.bildBearbeitenKnopf}
-                    onPress={() => this.setState({ showAddImage: true })}>
+                    onPress={() => setShowAddImage(true)}>
                     <Icon
                         name="camera"
                         size={27}
@@ -65,6 +73,23 @@ export default function EditProfileScreen() {
                     />
                 </TouchableOpacity>
             </ImageBackground>
+            : 
+            <ImageBackground
+                    source={require('../../assets/Passbild.jpg')}
+                style={styles.profilbild}
+                imageStyle={{ borderRadius: 80 }}
+            > 
+                <TouchableOpacity
+                    style={styles.bildBearbeitenKnopf}
+                    onPress={() => setShowAddImage(true)}>
+                    <Icon
+                        name="camera"
+                        size={27}
+                        color="white"
+                    />
+                </TouchableOpacity>
+            </ImageBackground>
+                }
             <View style={styles.action}>
                 <FontAwesome
                     name="user-o"
@@ -121,7 +146,7 @@ export default function EditProfileScreen() {
                 close={_closeAddImage}
             />
 
-            <TouchableOpacity style={styles.saveButton} >
+            <TouchableOpacity style={styles.saveButton}   onPress={()=> _saveButtonClicked()} >
                 <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
             </TouchableOpacity>
         </View >
