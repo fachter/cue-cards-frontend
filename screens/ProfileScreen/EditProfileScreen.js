@@ -21,7 +21,7 @@ import { syncAxiosPost } from '../../API/Database'
 import AddImage from './AddImage';
 import pickImage from './../../API/ImagePicker';
 
-
+import { useNavigation } from '@react-navigation/native';
 
 export default function EditProfileScreen() {
 
@@ -31,11 +31,15 @@ export default function EditProfileScreen() {
 
     const {
         setImage,
+        image,
+        setProfileImage,
         showAddImage,
         setShowAddImage
     } = useContext(ProfileContext)
 
     const { username, userToken, setUserImage } = useContext(UserContext)
+    const navigation = useNavigation()
+
 
     function _closeAddImage() {
         setShowAddImage(false);
@@ -43,9 +47,9 @@ export default function EditProfileScreen() {
 
 
     const updateImage = async () => {
-        pickImage().then(async (image) => {
+        pickImage().then(async (img) => {
 
-            const uri = image.uri
+            const uri = img.uri
             const type = 'image/jpeg'
             const name = username
             const source = { uri, type, name }
@@ -78,17 +82,23 @@ export default function EditProfileScreen() {
         })
     }
 
+    function _saveButtonClicked() {
+        setProfileImage(image);
+        navigation.navigate('Profil')
+    }
+
+
     return (
 
         <View style={styles.container}>
-            <ImageBackground
-                source={require('../../assets/Passbild.jpg')}
+            {image != null ? <ImageBackground
+                source={{ uri: image }}
                 style={styles.profilbild}
                 imageStyle={{ borderRadius: 80 }}
             >
                 <TouchableOpacity
                     style={styles.bildBearbeitenKnopf}
-                    onPress={() => updateImage()}>
+                    onPress={() => setShowAddImage(true)}>
                     <Icon
                         name="camera"
                         size={27}
@@ -96,6 +106,24 @@ export default function EditProfileScreen() {
                     />
                 </TouchableOpacity>
             </ImageBackground>
+                :
+                <ImageBackground
+                    source={require('../../assets/Passbild.jpg')}
+                    style={styles.profilbild}
+                    imageStyle={{ borderRadius: 80 }}
+                >
+                    <TouchableOpacity
+                        style={styles.bildBearbeitenKnopf}
+                        //onPress={() => updateImage()}>
+                        onPress={() => setShowAddImage(true)}>
+                        <Icon
+                            name="camera"
+                            size={27}
+                            color="white"
+                        />
+                    </TouchableOpacity>
+                </ImageBackground>
+            }
             <View style={styles.action}>
                 <FontAwesome
                     name="user-o"
@@ -152,7 +180,7 @@ export default function EditProfileScreen() {
                 close={_closeAddImage}
             />
 
-            <TouchableOpacity style={styles.saveButton} >
+            <TouchableOpacity style={styles.saveButton} onPress={() => _saveButtonClicked()} >
                 <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
             </TouchableOpacity>
         </View >

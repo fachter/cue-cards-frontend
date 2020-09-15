@@ -18,6 +18,7 @@ export default function AddImage(){
     const {
         image,
         setImage,
+        setProfileImage,
         showAddImage,
         setShowAddImage
     } = useContext(ProfileContext)
@@ -45,6 +46,7 @@ export default function AddImage(){
             });
             if (!result.cancelled) {
                 setImage(result.uri);
+                setShowAddImage(false);
             }
 
             console.log(result);
@@ -53,6 +55,7 @@ export default function AddImage(){
         }
     };
 
+   
 
 
         return (
