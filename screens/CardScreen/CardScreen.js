@@ -7,7 +7,6 @@ import FreetextCard from './FreetextCard'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import { SettingsContext } from '../SettingsScreen/SettingsProvider'
 import { UserContext } from '../LoginRegistrationScreen/UserProvider'
-import { storeMyRoomDataOnDB } from '../../API/Database'
 
 const CardScreenContext = React.createContext()
 
@@ -16,7 +15,7 @@ export default function CardScreen({ route, navigation }) {
 
 
 
-    const { storeDataOnDevice, listHistoryArray, currentListStructure, currentRoomInfo, setCurrentListStructure } = useContext(ListStructureContext)
+    const { currentListStructure, setCurrentListStructure } = useContext(ListStructureContext)
     const { userToken } = useContext(UserContext)
     const { maxCardLevel, maxCardLevelIncluded } = useContext(SettingsContext)
 

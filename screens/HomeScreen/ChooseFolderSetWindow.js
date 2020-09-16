@@ -13,7 +13,7 @@ const FileContext = createContext()
 
 
 export default function ChooseFolderSetWindow() {
-    const { currentListStructure, setCurrentListStructure, isFolder, setCreateFileWindowVisible, CreateFileWindowVisible, storeDataOnDevice } = useContext(ListStructureContext)
+    const { currentListStructure, setCurrentListStructure, isFolder, setCreateFileWindowVisible, CreateFileWindowVisible } = useContext(ListStructureContext)
 
     const [newFileName, setNewFileName] = useState(null)
     const [isNewFileFolder, setIsNewFileFolder] = useState(null)

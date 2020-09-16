@@ -36,9 +36,7 @@ export default class MultipleChoice extends React.Component {
     }
 
     _saveAndGoBack() {
-        const updateCards = this.context
         this._save()
-        updateCards.storeDataOnDevice()
         this.props.navigation.goBack()
     }
 
@@ -52,6 +50,7 @@ export default class MultipleChoice extends React.Component {
 
     _save() {
         const { id, cardType, questionText, cardTopic, answers } = this.state
+        const folders = this.context
 
         let newCard = {
             id: id,
@@ -62,20 +61,23 @@ export default class MultipleChoice extends React.Component {
             answers: answers
         }
 
-        let copy = this.props.route.params.onSave
+        let updatedCards = folders.currentListStructure
+
         if (this.props.route.params.mode == "createMode") { // neue Karte erstellen
-            copy.push(newCard)
-            this.props.route.params.onSetSave(copy)
+            updatedCards.push(newCard)
 
         } else if (this.props.route.params.mode == "editMode") {   //alte Karte aktualisieren
             var index
-            for (var i = 0; i < copy.length; i++) {
-                if (copy[i].id === id) {
+            for (var i = 0; i < updatedCards.length; i++) {
+                if (updatedCards[i].id === id) {
                     index = i
                 }
                 copy[index] = newCard
             }
         }
+
+        folders.setCurrentListStructure(updatedCards, true)
+
     }
 
 
