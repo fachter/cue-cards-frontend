@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
-import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { YellowBox } from 'react-native'
@@ -40,10 +40,9 @@ export default function RoomScreen() {
     const [leaveRoomWindowVisibility, SetleaveRoomWindowVisibility] = useState(false);
     const [serverRooms, setServerRooms] = useState([])
     const clickedRoom = useRef(null)
-
-    ///////////////////////////////////////////////////
     const roomDataMounted = useRef(false)
     const [serverProblems, setServerProblems] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     const navigation = useNavigation()
 
@@ -51,20 +50,20 @@ export default function RoomScreen() {
     useEffect(() => {
 
         navigation.setOptions({ title: 'House Of CueCards' })
-
         if (roomDataMounted.current === false) {
             updateRooms()
+            roomDataMounted.current = true
         }
-
     })
 
     function updateRooms() {
+        setIsLoading(true)
         checkIfConnected()
             .then(() => {
                 asyncAxiosGet('https://cue-cards-app.herokuapp.com/api/get-available-rooms', 'RoomScreen', userToken)
                     .then(res => {
                         setServerRooms(res.data)
-                        roomDataMounted.current = true
+                        setIsLoading(false)
                     }).catch(error => {
                         setServerProblems(true)
                         console.log("Fehler beim Laden der Räume " + error)
@@ -73,7 +72,6 @@ export default function RoomScreen() {
             }).catch(err => {
                 console.log("Prüfe Netzwerkverbindung: " + err)
             })
-
     }
 
     function showLeaveRoomWindow(item) {
@@ -114,17 +112,25 @@ export default function RoomScreen() {
             }
         }).then(async (res) => {
 
-            let serverData = await res
+            let serverData = res
             let localData = await retrieveDataFromDevice()
 
-            let check = await ifServerDataTheLatest(serverData, localData)
-
-            if (check === true) {
+            if (localData === undefined) {
                 setCurrentListStructure(serverData.data.folders, false)
             } else {
-                setCurrentListStructure(localData.data.folders, true)
-            }
 
+                let serverDataLatest = ifServerDataTheLatest(serverData, localData)
+
+                if (serverDataLatest === true) {
+                    console.log('###LOAD MY ROOM SERVER DATA####')
+                    console.log(serverData.data.folders)
+                    setCurrentListStructure(serverData.data.folders, false)
+                } else {
+                    console.log('###LOAD  MY ROOM LOCAL DATA####')
+                    console.log(localData.data.folders)
+                    setCurrentListStructure(localData.data.folders, true)
+                }
+            }
         })
     }
 
@@ -138,15 +144,18 @@ export default function RoomScreen() {
 
 
     function loadNetworkRoomData(folders) {
+        console.log('LOAD EXTERN ROOM DATA')
+        console.log(folders)
         setCurrentListStructure(folders, false)
     }
 
 
-    function renderErrorMessageView() {
+
+    const renderListFooterComponent = () => {
+
         if (isConnected === true && serverProblems === true) {
             return (
                 <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-
                     <Text style={{ fontSize: 15, fontStyle: 'italic', color: 'white', margin: 8, textAlign: 'center' }}>Es gibt ein Problem beim Verbinden mit dem Server.</Text>
                     <Text style={{ fontSize: 15, fontStyle: 'italic', color: 'white', margin: 8 }}>Bitte probiere es später erneut.</Text>
                 </View>
@@ -160,20 +169,33 @@ export default function RoomScreen() {
                     <ActivityIndicator size="large" color="white" />
                 </View>
             )
+        } else {
+            return (
+                <View>
+                    {isLoading ? <ActivityIndicator style={{ margin: 30 }} size="large" color="#008FD3" /> : null}
+                    <TouchableOpacity onPress={() => setAddRoomWindowVisibility(true)}>
+                        <Image source={newRoom} style={styles.home} />
+                        <Text style={styles.fontStyle}>+ Raum hinzufügen</Text>
+                    </TouchableOpacity>
+                </View>
+            )
         }
     }
+
+
 
     return (
         <View style={styles.container}>
             <SwipeView onUpdateRooms={updateRooms}>
-                <ScrollView>
+                <SafeAreaView style={{ flex: 1 }}>
                     <TouchableOpacity onPress={() => _navigateToFolderScreen('myRoom')}>
                         <Image source={home} style={styles.home} />
                         <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>Mein Raum</Text>
                     </TouchableOpacity>
                     <FlatList
+                        ListFooterComponent={renderListFooterComponent()}
                         data={serverRooms}
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => `${item.id}`}
                         renderItem={({ item }) => (
                             <RoomListItem
                                 item={item}
@@ -181,14 +203,10 @@ export default function RoomScreen() {
                                 onNavigate={_navigateToFolderScreen}
                             />
                         )}
+
                     />
-                    <TouchableOpacity onPress={() => setAddRoomWindowVisibility(true)}>
-                        <Image source={newRoom} style={styles.home} />
-                        <Text style={styles.fontStyle}>+ Raum hinzufügen</Text>
-                    </TouchableOpacity>
                     <View style={styles.platzhalter}></View>
-                </ScrollView>
-                {renderErrorMessageView()}
+                </SafeAreaView>
                 <AddRoomWindow
                     onSetVisibility={_setRoomAddWindowVisibility}
                     addRoomWindowVisibility={addRoomWindowVisibility}

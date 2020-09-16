@@ -46,12 +46,13 @@ export default function LoginScreen({ navigation }) {
 
     function userLogin(loginstate, user, pw) {
         _authenticateAcc(loginstate, user, pw)
-            .then(res => {
+            .then(async (res) => {
                 if (stayLoggedin === true) {
                     saveUserOnDevice(true, pw, user)
                 }
+                await retrieveSettignsfromDevice()
                 login()
-                retrieveSettignsfromDevice()
+
                 console.log("Authentifizierung " + res)
             }).catch(err => {
                 alert("Da ist wohl etwas schief gelaufen. Prüfe dein Nutzername oder Passwort")

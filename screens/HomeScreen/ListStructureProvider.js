@@ -28,10 +28,11 @@ class ListStructureProvider extends React.Component {
 
 
     storeDataOnDevice(newListStructure) {
+        const user = this.context
         try {
             if (this.state.listHistoryArray.length > 0) {
                 AsyncStorage.setItem(
-                    'myRoomData', JSON.stringify({
+                    `${user.username}-data`, JSON.stringify({
                         data: {
                             folders: this.state.listHistoryArray[0],
                             lastModified: new Date
@@ -40,7 +41,7 @@ class ListStructureProvider extends React.Component {
                 )
             } else {
                 AsyncStorage.setItem(
-                    'myRoomData', JSON.stringify({
+                    `${user.username}-data`, JSON.stringify({
                         data: {
                             folders: newListStructure,
                             lastModified: new Date
@@ -56,8 +57,9 @@ class ListStructureProvider extends React.Component {
 
 
     retrieveDataFromDevice = async () => {
+        const user = this.context
         try {
-            const value = await AsyncStorage.getItem('myRoomData');
+            const value = await AsyncStorage.getItem(`${user.username}-data`);
             if (value != null) {
                 let data = JSON.parse(value)
                 console.log("Daten wurden vom gerät geladen")
@@ -73,7 +75,7 @@ class ListStructureProvider extends React.Component {
 
     setCurrentListStructure = (newListStructure, saveOnDB) => {
         this.setState({ currentListStructure: newListStructure })
-        //console.log(this.state.currentRoomInfo)
+
         if (this.state.currentRoomInfo === 'myRoom') {
             this.saveMyData(newListStructure, saveOnDB)
 
@@ -119,7 +121,7 @@ class ListStructureProvider extends React.Component {
         }
 
         user.checkIfConnected()
-            .then(res => {
+            .then(() => {
                 syncAxiosPost(`https://cue-cards-app.herokuapp.com/api/room`, 'ListStructureProvider', updatedRoom, user.userToken)
                     .then(mes => {
                         console.log('Verbindung zum Server ' + mes + '. Daten wurde gespeichert')

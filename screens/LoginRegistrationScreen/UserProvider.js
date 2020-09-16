@@ -122,6 +122,7 @@ class UserProvider extends React.Component {
                 password: password,
             }).then(res => {
                 this.state.userToken = res.data.jwt
+                // this.state.userImage = res.data.userImage
                 this.state.username = username
                 resolve('erfolgreich')
                 if (stayLoggedin === true) {
@@ -133,20 +134,6 @@ class UserProvider extends React.Component {
         })
     }
 
-
-
-
-
-    async loadingDataAndSettings() {
-        // return new Promise(async (resolve, reject) => {
-        //     let response = await ListStructureProvider.retrieveDataFromDevice()
-        //     if (response === true) {
-        //         resolve()
-        //     } else {
-        //         reject()
-        //     }
-        // }).catch(error => console.log(error))
-    }
 
 
     render() {

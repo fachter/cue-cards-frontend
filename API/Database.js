@@ -18,6 +18,9 @@ function storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken) 
         }
     }
 
+    console.log('####STORE ON MY DATA')
+    console.log(updatedData)
+
 
     Axios.post('https://cue-cards-app.herokuapp.com/api/save-users-data', updatedData, {
         headers: {
@@ -32,6 +35,8 @@ function storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken) 
 
 
 function syncAxiosPost(link, sourceName, data, userToken) {
+    console.log('###STORE ROOM DATA')
+    console.log(data)
 
     return new Promise((resolve, reject) => {
         Axios.post(link, data, {
