@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import { View, StyleSheet, TextInput, Dimensions, TouchableOpacity, Text, Image } from 'react-native'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
-import ImagePickerButton from '../../API/ImagePicker'
 import logo from '../../assets/Logo_grau.png';
 
 import uuid from 'react-native-uuid'
@@ -101,7 +100,6 @@ export default class Vocable extends React.Component {
                     onChangeText={text => this.setState({ solution: text })}>
                     {this.state.solution}
                 </TextInput>
-                <ImagePickerButton />
                 <View style={styles.bottomView} >
                     <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
                         <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>

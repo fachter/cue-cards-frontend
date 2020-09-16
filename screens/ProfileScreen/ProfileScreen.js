@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import { View, SafeAreaView, StyleSheet } from 'react-native';
 import {
     Avatar,
@@ -25,49 +25,41 @@ const ProfileScreen = () => {
         setShowAddImage
     } = useContext(ProfileContext)
 
-    const { login, setUserToken, email, setEmail } = useContext(UserContext)
+    const { userImage, email, nickName } = useContext(UserContext)
 
-    
+
 
     return (
         <SafeAreaView style={styles.container}>
 
             <View style={styles.userInfoSection}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
-                    {image != null ? 
-                    <Avatar.Image
-                        source={
-                            {uri: profileImage}
-                        }
-                        size={80}
+                    <Avatar.Image source={{ uri: userImage }} size={80}
                     />
-                    :
-                        <Text>Bitte Bild hochladen</Text>
-}
-                   
+
                     <View style={{ marginLeft: 20 }}>
                         <Title style={[styles.title, {
                             marginTop: 15,
                             marginBottom: 5,
-                        }]}>Matthias Meyer</Title>
+                        }]}>{nickName}</Title>
                         <Caption style={styles.caption}>@matze96</Caption>
                         <Caption style={styles.caption}>CueCarder seit 2020</Caption>
 
                     </View>
-                    
+
                 </View>
             </View>
 
             <View style={styles.userInfoSection}>
                 <View style={styles.row}>
                     <Icon name="email" color="#777777" size={20} />
-                    <Text style={{ color: "#777777", marginLeft: 20 }}>matze@web.de</Text>
+                    <Text style={{ color: "#777777", marginLeft: 20 }}>{email}</Text>
                 </View>
             </View>
 
-                <Button
+            <Button
                 title="Profilbild bearbeiten"
-                />
+            />
 
 
         </SafeAreaView>
@@ -101,5 +93,5 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 10,
     },
-    
+
 });

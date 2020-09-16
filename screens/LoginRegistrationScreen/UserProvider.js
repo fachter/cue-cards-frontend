@@ -18,7 +18,9 @@ class UserProvider extends React.Component {
 
         this.state = {
             username: null,
-            userImage: null,
+            nickName: '###',
+            email: '###',
+            userImage: 'https://image.shutterstock.com/z/stock-vector-empty-background-in-the-style-of-png-blank-background-676832590.jpg',
             isLoggedin: false,
             userToken: null,
             isConnected: false,
@@ -79,6 +81,14 @@ class UserProvider extends React.Component {
         this.setState({ userImage: url })
     }
 
+    setEmail(email) {
+        this.setState({ email })
+    }
+
+    setNickName(nickName) {
+        this.setState({ nickName })
+    }
+
     saveUserOnDevice = (stayLoggedin, password, username) => {
         try {
             AsyncStorage.setItem(
@@ -121,8 +131,11 @@ class UserProvider extends React.Component {
                 username: username,
                 password: password,
             }).then(res => {
+                console.log(res)
                 this.state.userToken = res.data.jwt
+                // this.state.email = res.data.email
                 // this.state.userImage = res.data.userImage
+                // this.state.nickName  = res.data.nickname
                 this.state.username = username
                 resolve('erfolgreich')
                 if (stayLoggedin === true) {
@@ -140,6 +153,10 @@ class UserProvider extends React.Component {
         return (
             <UserContext.Provider value={{
                 username: this.state.username,
+                nickName: this.state.nickName,
+                setNickName: this.state.nickName,
+                email: this.state.email,
+                setEmail: this.setEmail,
                 userImage: this.state.userImage,
                 setUserImage: this.setUserImage,
                 isConnected: this.state.isConnected,

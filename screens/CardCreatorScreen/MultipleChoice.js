@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react'
 import { StyleSheet, Image, View, TextInput, FlatList, TouchableOpacity, Dimensions, Text, ScrollView } from 'react-native'
-import ImagePickerButton from '../../API/ImagePicker'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import Icon from 'react-native-vector-icons/Ionicons';
 import logo from '../../assets/Logo_grau.png';

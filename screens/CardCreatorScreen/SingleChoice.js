@@ -3,7 +3,6 @@ import uuid from 'react-native-uuid'
 
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, Image } from 'react-native'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
-import ImagePickerButton from '../../API/ImagePicker'
 import logo from '../../assets/Logo_grau.png';
 
 

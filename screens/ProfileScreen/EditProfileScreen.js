@@ -37,7 +37,7 @@ export default function EditProfileScreen() {
         setShowAddImage
     } = useContext(ProfileContext)
 
-    const { username, userToken, setUserImage } = useContext(UserContext)
+    const { username, userToken, setUserImage, userImage, nickName, setNickName, email, setEmail } = useContext(UserContext)
     const navigation = useNavigation()
 
 
@@ -109,6 +109,7 @@ export default function EditProfileScreen() {
                 :
                 <ImageBackground
                     source={require('../../assets/Passbild.jpg')}
+                    //source={require(userImage)}
                     style={styles.profilbild}
                     imageStyle={{ borderRadius: 80 }}
                 >
