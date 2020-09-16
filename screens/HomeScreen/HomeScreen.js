@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, Button, BackHandler, Image, SafeAreaView } from 'react-native';
+import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, Button, BackHandler, ActivityIndicator, Image, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -74,6 +74,7 @@ const HomeScreen = () => {
     const [sideBarOpen, setSideBarOpen] = useState(false)
 
 
+
     const renderHeaderTitle = () => {
 
         if (currentRoomInfo) {
@@ -90,18 +91,17 @@ const HomeScreen = () => {
 
 
     useEffect(() => {
-        renderHeaderTitle()
         BackHandler.addEventListener('hardwareBackPress', hardwareBackButtonPressed)
     }, []);
 
 
     const headerLeftButton = () => {
+        console.log(listHistoryArray.length)
         if (listHistoryArray.length > 0) {
             return (
                 <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" onPress={() => {
-                    var lastFolderStructure = _getLastFolderStructure()
-                    setCurrentListStructure(lastFolderStructure, false)
-                    setIsFolder(true)
+                    _getLastFolderStructure()
+
                 }} />
             )
         } else {
@@ -111,11 +111,12 @@ const HomeScreen = () => {
         }
     }
 
+
+
     function hardwareBackButtonPressed() {
         //Holt sich die state "isFolder" der Vorherigen Ordnerstruktur
         if (listHistoryArray.length > 0) {
-            var lastFolderStructure = _getLastFolderStructure()
-            setCurrentListStructure(lastFolderStructure, false)
+            _getLastFolderStructure()
             setIsFolder(true)
             return true
         } else {
@@ -271,8 +272,6 @@ const HomeScreen = () => {
 
         const params = {
             mode: "createMode",
-            onSave: currentListStructure,
-            onSetSave: setCurrentListStructure,
         }
 
         if (cardType === "MC") {
@@ -294,13 +293,13 @@ const HomeScreen = () => {
 
     const renderRoomIsEmptyScreen = () => {
 
-        if (listHistoryArray.length === 0 && currentListStructure.length === 0) {
-            return (
-                <View style={styles.bildcontainer}>
-                    <Image source={LeererRaum} style={styles.leererRaum} />
-                </View>
-            )
-        }
+        // if (listHistoryArray.length === 0 && currentListStructure.length === 0) {
+        //     return (
+        //         <View style={styles.bildcontainer}>
+        //             <Image source={LeererRaum} style={styles.leererRaum} />
+        //         </View>
+        //     )
+        // }
         return null
     }
 
@@ -346,6 +345,11 @@ const HomeScreen = () => {
         }
         return false
     }
+
+
+
+    // ################ Auszuführende Methoden vor dem Return: #########################
+    renderHeaderTitle()
 
 
     return (
@@ -443,6 +447,7 @@ const HomeScreen = () => {
             }
         </View >
     );
+
 }
 
 

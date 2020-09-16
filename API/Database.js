@@ -2,27 +2,23 @@ import Axios from 'axios'
 
 
 
-function storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken) {
+function storeMyRoomDataOnDB(listHistoryArray, newListStructure, userToken) {
 
-    let updatedData = null
-
-    if (listHistoryArray.length > 0) {
-        updatedData = {
-            folders: listHistoryArray[0],
-            lastModified: new Date
-        }
-    } else {
-        updatedData = {
-            folders: currentListStructure,
-            lastModified: new Date
-        }
+    let updatedRoom = {
+        folders: null,
+        lastModified: new Date
     }
 
-    console.log('####STORE ON MY DATA')
-    console.log(updatedData)
+    if (listHistoryArray.length > 0) {
+        updatedRoom.folders = listHistoryArray[0]
+    } else {
+        updatedRoom.folders = newListStructure
+    }
 
+    console.log('######## SAVE MY ROOOM DATA')
+    console.log(updatedRoom)
 
-    Axios.post('https://cue-cards-app.herokuapp.com/api/save-users-data', updatedData, {
+    Axios.post('https://cue-cards-app.herokuapp.com/api/save-users-data', updatedRoom, {
         headers: {
             'Authorization': "Bearer " + userToken
         }
@@ -34,9 +30,46 @@ function storeMyRoomDataOnDB(listHistoryArray, currentListStructure, userToken) 
 }
 
 
+function storyExternRoomDataOnDB(listHistoryArray, newListStructure, currentRoomInfo, userToken) {
+
+
+
+    let updatedRoom = {
+        data: {
+            folders: null,
+            lastModified: new Date
+        },
+        id: currentRoomInfo.id,
+        name: currentRoomInfo.name,
+        pictureNumber: currentRoomInfo.pictureNumber
+
+    }
+
+    if (listHistoryArray.length > 0) {
+        updatedRoom.data.folders = listHistoryArray[0]
+    } else {
+        updatedRoom.data.folders = newListStructure
+    }
+
+    console.log('######## SAVE EXTERN ROOOM DATA')
+    console.log(updatedRoom)
+
+
+    Axios.post(`https://cue-cards-app.herokuapp.com/api/room`, updatedRoom, {
+        headers: {
+            'Authorization': "Bearer " + userToken
+        }
+    }).then(mes => {
+        console.log('Verbindung zum Server erfolgreich. Daten wurde gespeichert')
+    }).catch(mes => {
+        console.log('Verbindung zum Server' + mes)
+        alert("Verbindung zum Sever fehlgeschlagen. Probleme beim speichern/laden der Daten")
+    })
+}
+
+
 function syncAxiosPost(link, sourceName, data, userToken) {
-    console.log('###STORE ROOM DATA')
-    console.log(data)
+
 
     return new Promise((resolve, reject) => {
         Axios.post(link, data, {
@@ -114,7 +147,7 @@ function syncAxiosGet(link, sourceName, userToken) {
 
 
 
-export { storeMyRoomDataOnDB, syncAxiosPost, asyncAxiosPost, asyncAxiosGet, syncAxiosGet }
+export { storeMyRoomDataOnDB, storyExternRoomDataOnDB, syncAxiosPost, asyncAxiosPost, asyncAxiosGet, syncAxiosGet }
 
 
 

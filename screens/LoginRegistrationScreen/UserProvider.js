@@ -131,7 +131,6 @@ class UserProvider extends React.Component {
                 username: username,
                 password: password,
             }).then(res => {
-                console.log(res)
                 this.state.userToken = res.data.jwt
                 // this.state.email = res.data.email
                 // this.state.userImage = res.data.userImage

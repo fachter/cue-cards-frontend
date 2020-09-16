@@ -31,6 +31,7 @@ export default function RoomScreen() {
     const { checkIfConnected, isConnected, userToken } = useContext(UserContext)
     const {
         setIsFolder,
+        clearFolders,
         setCurrentRoomInfo,
         setCurrentListStructure,
         retrieveDataFromDevice } = useContext(ListStructureContext)
@@ -93,16 +94,16 @@ export default function RoomScreen() {
 
     async function _navigateToFolderScreen(roomInfo) {
         await setCurrentRoomInfo(roomInfo)
+        await setIsFolder(true) //this.state evlt. nicht benötgit
+        await clearFolders()
         if (roomInfo === 'myRoom') {
-            await loadMyRoomData()
+            loadMyRoomData()
         } else {
-            await loadNetworkRoomData(roomInfo.data.folders)
+            loadNetworkRoomData(roomInfo.data.folders)
         }
-        await setIsFolder(true)
 
         navigation.navigate('Room')
     }
-
 
 
     function loadMyRoomData() {
@@ -115,24 +116,28 @@ export default function RoomScreen() {
             let serverData = res
             let localData = await retrieveDataFromDevice()
 
-            if (localData === undefined) {
+            if (localData.data.folders === undefined) {
                 setCurrentListStructure(serverData.data.folders, false)
             } else {
 
                 let serverDataLatest = ifServerDataTheLatest(serverData, localData)
 
                 if (serverDataLatest === true) {
-                    console.log('###LOAD MY ROOM SERVER DATA####')
+                    console.log('######### LOAD MY SERVER DATA')
                     console.log(serverData.data.folders)
                     setCurrentListStructure(serverData.data.folders, false)
                 } else {
-                    console.log('###LOAD  MY ROOM LOCAL DATA####')
+                    console.log('######### LOAD MY LOCAL DATA')
                     console.log(localData.data.folders)
+
+
                     setCurrentListStructure(localData.data.folders, true)
                 }
             }
         })
     }
+
+
 
     function ifServerDataTheLatest(serverData, localData) {
 
@@ -144,9 +149,10 @@ export default function RoomScreen() {
 
 
     function loadNetworkRoomData(folders) {
-        console.log('LOAD EXTERN ROOM DATA')
+        console.log('######### LOAD MY NETWORK DATA')
         console.log(folders)
         setCurrentListStructure(folders, false)
+
     }
 
 
