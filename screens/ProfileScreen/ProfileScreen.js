@@ -25,7 +25,8 @@ const ProfileScreen = () => {
         setShowAddImage
     } = useContext(ProfileContext)
 
-    const { userImage, email, nickName } = useContext(UserContext)
+    const { userImage, email, nickName, username } = useContext(UserContext)
+
 
 
 
@@ -41,7 +42,6 @@ const ProfileScreen = () => {
                             marginTop: 15,
                             marginBottom: 5,
                         }]}>{nickName}</Title>
-                        <Caption style={styles.caption}>@matze96</Caption>
                         <Caption style={styles.caption}>CueCarder seit 2020</Caption>
 
                     </View>
