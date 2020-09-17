@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from 'react';
 import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, Button, BackHandler, Image, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Entypo } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Drawer from 'react-native-drawer';
 import ChooseFolderSetWindow from './ChooseFolderSetWindow'
@@ -24,7 +23,6 @@ import LeererRaum from '../../assets/LeererRaum.png';
 
 
 import { YellowBox } from 'react-native';
-import FriendListItem from '../FriendsScreen/FriendListItem';
 YellowBox.ignoreWarnings(['componentWillReceiveProps'], ['componentWillMount']);
 
 
@@ -33,19 +31,19 @@ const { width: WidTH } = Dimensions.get('window')
 const initialFriendState = [
     {
         id: '1',
-        title: 'Philip',
-        picture: '../../assets/Passbild.jpg'
+        nickName: 'Philip',
+        userImage: '../../assets/Passbild.jpg'
     },
     {
         id: '2',
-        title: 'Matze',
-        picture: '../../assets/Passbild.jpg'
+        nickName: 'Matze',
+        userImage: '../../assets/Passbild.jpg'
 
     },
     {
         id: '3',
-        title: 'Darius',
-        picture: '../../assets/Passbild.jpg'
+        nickName: 'Darius',
+        userImage: '../../assets/Passbild.jpg'
 
     }
 ]
@@ -457,32 +455,12 @@ const styles = StyleSheet.create({
         right: 20,
         backgroundColor: "#2f3136",
     },
-    startSessionButton: {
-        height: 45,
-        width: 45,
-        borderRadius: 30,
-        justifyContent: 'center',
-        alignItems: 'center',
-
-        backgroundColor: 'white',
-        position: 'absolute',
-        bottom: 75,
-        right: 20
-    },
     listSeperator: {
         height: StyleSheet.hairlineWidth,
         backgroundColor: 'grey',
         marginVertical: 5,
         width: '96%',
         alignSelf: 'center'
-    },
-    btnNew: {
-        width: WidTH - 55,
-        height: 45,
-        borderRadius: 25,
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        marginHorizontal: 25
     },
     copyPasteView: {
         justifyContent: 'center',
@@ -541,18 +519,6 @@ const styles = StyleSheet.create({
     menuContainer: {
         //flex: 1.0,
         backgroundColor: 'black',
-    },
-
-    menuTitle: {
-        width: '100%',
-        color: 'white',
-        textAlign: 'center',
-        fontSize: 17,
-        alignSelf: 'center',
-    },
-    menuTitleContainer: {
-        flexDirection: "row",
-        paddingVertical: 5
     },
     drawer: {
         //flex: 1.0,
