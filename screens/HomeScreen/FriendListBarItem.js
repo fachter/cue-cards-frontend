@@ -13,18 +13,13 @@ export default class FriendListBarItem extends React.Component {
 
         return (
             <TouchableOpacity style={styles.menuTitleContainer}>
-                <Image style={{ width: 30, height: 30, borderRadius: 40, borderWidth: 1, borderColor: 'white', marginLeft: 5 }}
+                <Image style={{ width: 35, height: 35, borderRadius: 40, borderWidth: 0.2, borderColor: 'white', marginLeft: 20 }}
                     source={this.props.item.userImage}>
 
                 </Image>
                 <Text style={styles.menuTitle}>
                     {this.props.item.nickName}
                 </Text>
-                <MaterialCommunityIcons
-                    name="account-plus"
-                    size={25}
-                    color='white'
-                />
             </TouchableOpacity>
         )
     }
@@ -35,13 +30,15 @@ export default class FriendListBarItem extends React.Component {
 const styles = StyleSheet.create({
     menuTitleContainer: {
         flexDirection: "row",
-        paddingVertical: 5
+        paddingVertical: 5,
+        alignItems: 'center'
     },
     menuTitle: {
         width: '100%',
         color: 'white',
-        textAlign: 'center',
-        fontSize: 17,
+        fontSize: 20,
         alignSelf: 'center',
+        marginLeft: 20,
+        maxWidth: '65%',
     }
 })

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, Button, BackHandler, Image, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Entypo } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Drawer from 'react-native-drawer';
 import ChooseFolderSetWindow from './ChooseFolderSetWindow'
@@ -33,7 +33,7 @@ const { width: WidTH } = Dimensions.get('window')
 const initialFriendState = [
     {
         id: '1',
-        nickName: 'Philip',
+        nickName: 'Annalena Jessica Liebstückl',
         userImage: '../../assets/Passbild.jpg'
     },
     {
@@ -310,19 +310,17 @@ const HomeScreen = () => {
         //SlideMenu
         return (
             <View style={styles.menuContainer}>
-                <Text style={styles.header}>RaumId</Text>
+                <Text style={styles.header}>Raum-ID:    #1234</Text>
                 <FlatList
                     data={initialFriendState}
                     renderItem={({ item }) => (
                         <FriendListBarItem
                             item={item}
                         />
-
-
                     )} />
-                <Button onPress={() => setSideBarOpen(false)}
-                    title='Schließen'
-                ></Button>
+                <TouchableOpacity style={styles.schliesenButton} onPress={() => setSideBarOpen(false)}>
+                    <Text style={styles.text}>Schließen</Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -350,7 +348,6 @@ const HomeScreen = () => {
             tapToClose={false}
             openDrawerOffset={0.35}
             content={renderDrawer()}
-            style={styles.drawer}
             side="right"
         >
             <View style={styles.container}>
@@ -419,7 +416,7 @@ const HomeScreen = () => {
                 </TouchableOpacity>
                 {checkIfCurrentRoomIsMyRoom() ? null :
                     <TouchableOpacity style={styles.freundeButton} onPress={() => setSideBarOpen(true)} >
-                        <Entypo name="users" size={30} color="#008FD3" />
+                        <FontAwesome5 name="users" size={18} color="#008FD3" />
                     </TouchableOpacity>
                 }
                 <Image source={logo} style={styles.logo} />
@@ -453,8 +450,8 @@ const styles = StyleSheet.create({
         borderWidth: 0.5,
         borderColor: 'grey',
         position: 'absolute',
-        bottom: 20,
-        right: 20,
+        bottom: 25,
+        right: 25,
         backgroundColor: "#2f3136",
     },
     startSessionButton: {
@@ -528,19 +525,23 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     freundeButton: {
+        height: 40,
+        width: 40,
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 0.5,
         borderColor: 'grey',
         position: 'absolute',
-        bottom: 20,
-        left: 20,
+        bottom: 25,
+        right: 90,
         backgroundColor: "#2f3136",
     },
     menuContainer: {
-        //flex: 1.0,
-        backgroundColor: 'black',
+        flex: 1,
+        backgroundColor: '#202225',
+        opacity: 0.9,
+
     },
 
     menuTitle: {
@@ -554,13 +555,33 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         paddingVertical: 5
     },
-    drawer: {
-        //flex: 1.0,
-        backgroundColor: 'black'
-    },
     header: {
-        color: 'white'
-    }
+        color: 'white',
+        borderWidth: 0.5,
+        borderBottomColor: 'grey',
+        padding: 15,
+        paddingLeft: 20,
+        marginBottom: 20,
+        fontSize: 20
+    },
+    schliesenButton: {
+        borderWidth: 0.7,
+        borderColor: '#008FD3',
+        height: 40,
+        width: 130,
+        borderRadius: 30,
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 20,
+        marginHorizontal: 7
+    },
+    text: {
+        color: 'white',
+        fontSize: 17,
+        fontStyle: 'italic',
+        textAlign: 'center'
+    },
 })
 
 
