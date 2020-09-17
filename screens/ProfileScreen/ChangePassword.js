@@ -4,15 +4,42 @@ import { View, Modal, StyleSheet, Text, TextInput, TouchableOpacity} from 'react
 import { ProfileContext } from './ProfileProvider'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import axios from 'axios';
 
 
 export default function ChangePassword() {
 
     const {
-        
         showChangePassword,
         setShowChangePassword
     } = useContext(ProfileContext)
+
+    /* function _comparePasswords() {
+        return new Promise((resolve, reject) => {
+            if (password1 === password2) {
+                resolve()
+            } else {
+                reject('Passwörter stimmen nicht überein')
+            }
+        })
+    }
+
+    function _changePassword(){
+        setShowChangePassword(false)
+        _comparePasswords()
+        .then(() => {
+            axios.post('Link', {
+                password: password1
+            })
+            .then((resp) => {
+                console.log("Passwortänderung erfolgreich")
+                setUserToken(resp.data.jwt)
+                logout()
+            })
+        })
+        } */
+    
+
 return(
 <Modal
 animationType="fade"
@@ -20,7 +47,7 @@ transparent={true}
 visible={showChangePassword}
 >
 <View style={styles.background}>
-            <TouchableOpacity style={styles.cancelButton} onPress={() => setShowChangePassword(false)}>
+            <TouchableOpacity style={styles.cancelButton} onPress={() => _changePassword()}>
                 <AntDesign name="closecircleo" size={24} color="grey" />
             </TouchableOpacity>
 <View style={styles.window}>
@@ -31,7 +58,7 @@ visible={showChangePassword}
         maxLength={20}
         placeholder="Passwort eingeben"
         placeholderTextColor="grey"
-        //onChangeText={text => setRoomName(text)}
+        //onChangeText={text => setPassword1(text)}
         >
     </TextInput>
     <TextInput
@@ -39,7 +66,7 @@ visible={showChangePassword}
         maxLength={20}
         placeholder="Passwort erneut eingeben"
         placeholderTextColor="grey"
-        //onChangeText={text => setRoomName(text)}
+        //onChangeText={text => setPassword2(text)}
         >
     </TextInput>
     <View style={styles.buttonContainer}>
