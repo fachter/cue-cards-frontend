@@ -9,6 +9,7 @@ import ChooseFolderSetWindow from './ChooseFolderSetWindow'
 import FolderListItem from './FolderListItem';
 import DeleteWindow from './DeleteWindow'
 import NewCardWindow from './NewCardWindow'
+import FriendListBarItem from './FriendListBarItem'
 
 
 import { ListStructureContext } from './ListStructureProvider'
@@ -23,6 +24,7 @@ import LeererRaum from '../../assets/LeererRaum.png';
 
 
 import { YellowBox } from 'react-native';
+import FriendListItem from '../FriendsScreen/FriendListItem';
 YellowBox.ignoreWarnings(['componentWillReceiveProps'], ['componentWillMount']);
 
 
@@ -313,24 +315,12 @@ const HomeScreen = () => {
                 <FlatList
                     data={initialFriendState}
                     //extraData={state}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <TouchableOpacity style={styles.menuTitleContainer}>
-                                <Image style={{ width: 30, height: 30, borderRadius: 40, borderWidth: 1, borderColor: 'white', marginLeft: 5 }}
-                                    source={require('../../assets/Passbild.jpg')}>
-
-                                </Image>
-                                <Text style={styles.menuTitle}
-                                    key={index}>
-                                    {item.title}
-                                </Text>
-                                <MaterialCommunityIcons
-                                    name="account-plus"
-                                    size={25}
-                                    color='white'
-                                />
-                            </TouchableOpacity>
-                        )
+                    renderItem={({ item}) => {
+                        <FriendListBarItem
+                        item={item}
+                        />
+                            
+                        
                     }} />
                 <Button onPress={() => setSideBarOpen(false)}
                     title='Schließen'
@@ -393,7 +383,7 @@ const HomeScreen = () => {
                     // ref={(ref) => { this.drawer = ref }}
                     open={sideBarOpen}
                     type="overlay"
-                    tapToClose={true}
+                    tapToClose={false}
                     openDrawerOffset={0.35}
                     content={renderDrawer()}
                     style={styles.drawer}

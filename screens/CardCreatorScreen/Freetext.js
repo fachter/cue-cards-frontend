@@ -1,3 +1,4 @@
+import React from 'react'
 import { View, StyleSheet, TextInput, TouchableOpacity, Text, Image } from 'react-native'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import logo from '../../assets/Logo_grau.png';
