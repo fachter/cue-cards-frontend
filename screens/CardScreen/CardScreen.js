@@ -6,7 +6,6 @@ import MultipleChoiceCard from './MultipleAndSingleChoice'
 import FreetextCard from './FreetextCard'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import { SettingsContext } from '../SettingsScreen/SettingsProvider'
-import { UserContext } from '../LoginRegistrationScreen/UserProvider'
 
 const CardScreenContext = React.createContext()
 
@@ -16,14 +15,13 @@ export default function CardScreen({ route, navigation }) {
 
 
     const { currentListStructure, setCurrentListStructure } = useContext(ListStructureContext)
-    const { userToken } = useContext(UserContext)
     const { maxCardLevel, maxCardLevelIncluded } = useContext(SettingsContext)
 
-    const [sessionCards, setSessionCards] = useState(route.params.sessionCards)
+    const [sessionCards] = useState(route.params.sessionCards)
     const [currentCard, setCurrentCard] = useState(route.params.card)
     const [currentCardindex, setCurrendCardIndex] = useState(0)
     const [answers, setAnswers] = useState(_createRandomAnswers(0))
-    const [mode, setMode] = useState(route.params.mode)
+    const [mode] = useState(route.params.mode)
 
     const minCardLevel = 0
 
@@ -324,15 +322,6 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         width: 30,
         height: 30,
-        margin: 5,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    topic: {
-        borderWidth: 2,
-        borderColor: 'white',
-        borderRadius: 15,
-        width: 80,
         margin: 5,
         justifyContent: 'center',
         alignItems: 'center'
