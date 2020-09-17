@@ -45,7 +45,8 @@ const initialFriendState = [
     {
         id: '3',
         nickName: 'Darius',
-        userImage: '../../assets/Passbild.jpg'
+        userImage: '../../assets/Passbild.jpg',
+        isOnline: true
 
     }
 ]
