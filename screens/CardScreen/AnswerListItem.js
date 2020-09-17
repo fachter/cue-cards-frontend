@@ -17,7 +17,7 @@ export default class AnswerListItem extends React.Component {
     render() {
         return (
             <TouchableOpacity onPress={() => this._checkedUnchecked()}>
-                <View style={[styles.container, { backgroundColor: (this.props.item.checkState == true ? '#008FD3' : this.props.backgroundColor) }]}>
+                <View style={[styles.container, { borderColor: (this.props.item.checkState == true ? '#008FD3' : this.props.backgroundColor), borderWidth: (this.props.item.checkState == true ? 1.7 : 0) }]}>
                     <Text style={{ fontSize: 20, color: 'white' }}>{this.props.item.answerValues.text}</Text>
                 </View>
             </TouchableOpacity>

@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import { View, SafeAreaView, StyleSheet } from 'react-native';
 import {
     Avatar,
@@ -27,34 +27,34 @@ const ProfileScreen = () => {
 
     const { login, setUserToken, email, setEmail } = useContext(UserContext)
 
-    
+
 
     return (
         <SafeAreaView style={styles.container}>
 
             <View style={styles.userInfoSection}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
-                    {image != null ? 
-                    <Avatar.Image
-                        source={
-                            {uri: profileImage}
-                        }
-                        size={80}
-                    />
-                    :
+                    {image != null ?
+                        <Avatar.Image
+                            source={
+                                { uri: profileImage }
+                            }
+                            size={80}
+                        />
+                        :
                         <Text>Bitte Bild hochladen</Text>
-}
-                   
+                    }
+
                     <View style={{ marginLeft: 20 }}>
                         <Title style={[styles.title, {
                             marginTop: 15,
                             marginBottom: 5,
-                        }]}>Matthias Meyer</Title>
-                        <Caption style={styles.caption}>@matze96</Caption>
+                        }]}>Frodo Baggins</Title>
+                        <Caption style={styles.caption}>@Ringbearer96</Caption>
                         <Caption style={styles.caption}>CueCarder seit 2020</Caption>
 
                     </View>
-                    
+
                 </View>
             </View>
 
@@ -65,9 +65,9 @@ const ProfileScreen = () => {
                 </View>
             </View>
 
-                <Button
+            <Button
                 title="Profilbild bearbeiten"
-                />
+            />
 
 
         </SafeAreaView>
@@ -101,5 +101,5 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 10,
     },
-    
+
 });
