@@ -1,6 +1,5 @@
-import React, { useContext } from 'react'
-import { StyleSheet, View, Modal, TouchableOpacity, Text } from 'react-native'
-import { AntDesign } from '@expo/vector-icons';
+import React from 'react'
+import { StyleSheet, View, Modal } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CopyPasteContext } from './CopyPasteProvider'
 
@@ -72,20 +71,6 @@ export default class DeleteWindow extends React.Component {
                         onPress={() => onDeleteWindow()}
                     />
                 </View>
-
-                {/* <View style={styles.background}>
-                    <View style={styles.window}>
-                        <TouchableOpacity style={styles.cancelButton} onPress={() => onDeleteWindow()}>
-                            <AntDesign name="closecircleo" size={24} color="white" />
-                        </TouchableOpacity>
-                        {this._checkIfItemIsFolderOrSet() ? null : <TouchableOpacity style={styles.button} onPress={() => onNavigateToCardCreator(item)} >
-                            <Text style={styles.buttonText}>bearbeiten</Text>
-                        </TouchableOpacity>}
-                        <TouchableOpacity style={styles.button} onPress={() => onDelete(item.id)}>
-                            <Text style={styles.buttonText}>löschen</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View> */}
             </Modal>
 
         )

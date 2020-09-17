@@ -26,30 +26,30 @@ export default function EditProfileScreen() {
 
 
 
-    //const [showAddImage, setShowAddImage] = useState(null);
+    const [showAddImage, setShowAddImage] = useState(null);
 
-    const {
-        setImage,
-        image,
-        setProfileImage,
-        showAddImage,
-        setShowAddImage,
-        showChangePassword,
-        setShowChangePassword
-    } = useContext(ProfileContext)
+    // const {
+    //     setImage,
+    //     image,
+    //     setProfileImage,
+    //     showAddImage,
+    //     setShowAddImage,
+    //     showChangePassword,
+    //     setShowChangePassword
+    // } = useContext(ProfileContext)
 
-    const { username, setUserName, userToken, setUserImage, userImage, nickName, setNickName, email, setEmail, } = useContext(UserContext)
+    const { username, setUserName, userToken, setUserImage, userImage, nickName, setNickName, email, setEmail, password } = useContext(UserContext)
     const [showChangePasswordView, setShowChangePaswordView] = useState(false)
-    const navigation = useNavigation()
 
-    const [passwordStorage, setPasswordStorage] = useState(null)
-    const [userImageStorage, setUserImageStorage] = useState(null)
-    const [usernameStorage, setUserNameStorage] = useState(null)
-    const [emailStorage, setEmailStorage] = useState(null)
+    const [nicknameStorage, setNicknameStorage] = useState(nickName)
+    const [passwordStorage, setPasswordStorage] = useState(password)
+    const [userImageStorage, setUserImageStorage] = useState(userImage)
+    const [emailStorage, setEmailStorage] = useState(email)
 
     function _closeAddImage() {
         setShowAddImage(false);
     }
+
 
 
     const updateImage = async () => {
@@ -86,24 +86,41 @@ export default function EditProfileScreen() {
 
 
 
-    function sendNewProfileDataToDB() {
+    const updateProfilDataLocal = () => {
+        setNickName(nicknameStorage)
+        setEmail(emailStorage)
+        setUserImage(userImageStorage)
+        setPasswordStorage(passwordStorage)
+
+    }
+
+
+    const sendNewProfileDataToDB = () => {
 
         let newProfileData = {
-            username: username,
-            nickName: nickName,
-            userImage: userImage,
-            email: email
+            nickName: nicknameStorage,
+            userImage: userImageStorage,
+            email: emailStorage,
+            password: passwordStorage
         }
 
 
+        console.log(newProfileData)
+
         asyncAxiosPost(`https://cue-cards-app.herokuapp.com/api/user/change-profile-data`, 'EditProfilScreen', newProfileData, userToken)
-            .then(() => {
+            .then(res => {
+                console.log(res)
+                console.log('Profildaten wurden erfolgreich geändert')
+                updateProfilDataLocal()
 
             }).catch(err => {
-                console.log('Fehler beim Imageupload. Probleme mit der Datenbank ' + err)
+                console.log('Fehler beim speichern der Profildaten  in der DB ' + err)
             })
 
     }
+
+
+
 
 
 
@@ -111,7 +128,7 @@ export default function EditProfileScreen() {
 
         <View style={styles.container}>
             <ImageBackground
-                source={{ uri: userImage }}
+                source={{ uri: userImageStorage }}
                 style={styles.profilbild}
                 imageStyle={{ borderRadius: 80 }}
             >
@@ -133,14 +150,14 @@ export default function EditProfileScreen() {
                     size={21}
                     style={styles.feldIcon}
                 />
-                <Text style={styles.feldbezeichner}>Name</Text>
+                <Text style={styles.feldbezeichner}>Nickname</Text>
                 <TextInput
-                    placeholder="Mathias Meyer"
+                    placeholder='Gebe deinen Nickname ein'
                     placeholderTextColor="white"
                     autoCorrect={false}
                     style={styles.textInput}
-                    onChangeText={text => setUserImageStorage(text)}
-                />
+                    onChangeText={text => setNicknameStorage(text)}
+                >{nickName}</TextInput>
             </View>
             <View style={styles.action}>
                 <FontAwesome
@@ -151,13 +168,13 @@ export default function EditProfileScreen() {
                 />
                 <Text style={styles.feldbezeichner}>Email</Text>
                 <TextInput
-                    placeholder="Matze.stinkt@DariusIstAwsome.de"
+                    placeholder='you@example.de'
                     placeholderTextColor="white"
                     keyboardType="email-address"
                     autoCorrect={false}
                     style={styles.textInput}
                     onChangeText={text => setEmailStorage(text)}
-                />
+                >{email}</TextInput>
             </View>
 
             <View style={styles.action}>
@@ -169,7 +186,7 @@ export default function EditProfileScreen() {
                 />
                 <Text style={styles.feldbezeichner}>Passwort</Text>
                 <Text style={[styles.textInput, { marginTop: 9 }]}>°°°°°°°°°°°°°°</Text>
-                <TouchableOpacity style={styles.bearbeitenKnopf} onPress={() => setShowChangePassword(true)}>
+                <TouchableOpacity style={styles.bearbeitenKnopf} onPress={() => setShowChangePaswordView(true)}>
                     <Icon
                         name="pencil"
                         color="#008FD3"

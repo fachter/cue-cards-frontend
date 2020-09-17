@@ -8,12 +8,8 @@ import { UserContext } from '../LoginRegistrationScreen/UserProvider'
 import axios from 'axios';
 
 
-export default function ChangePassword() {
+export default function ChangePassword({ showChangePasswordView, onSetVisibility, onSetPasswordStorage }) {
 
-    const {
-        showChangePassword,
-        setShowChangePassword
-    } = useContext(ProfileContext)
 
 
     const [password1, setPassword1] = useState(null)
@@ -21,9 +17,12 @@ export default function ChangePassword() {
 
 
     const save = () => {
-        checkPasswordValitiy(password1, password2).then(newPassword => {
-            this.props.onSetPasswordStorage(newPassword)
-        })
+        checkPasswordValitiy(password1, password2)
+            .then(newPassword => {
+                onSetPasswordStorage(newPassword)
+                onSetVisibility(false)
+            })
+
     }
 
 
@@ -34,7 +33,7 @@ export default function ChangePassword() {
                 alert('Du hast vergessen dein neues Passwort einzugeben.')
                 reject()
             } else {
-                if (p1 === p2) {
+                if (pw1 === pw2) {
                     resolve(pw1)
                 } else {
                     reject()
@@ -50,10 +49,10 @@ export default function ChangePassword() {
         <Modal
             animationType="fade"
             transparent={true}
-            visible={showChangePassword}
+            visible={showChangePasswordView}
         >
             <View style={styles.background}>
-                <TouchableOpacity style={styles.cancelButton} onPress={() => this.props.showChangePasswordView(false)}>
+                <TouchableOpacity style={styles.cancelButton} onPress={() => onSetVisibility(false)}>
                     <AntDesign name="closecircleo" size={24} color="grey" />
                 </TouchableOpacity>
                 <View style={styles.window}>

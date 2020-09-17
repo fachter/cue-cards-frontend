@@ -24,7 +24,6 @@ import LeererRaum from '../../assets/LeererRaum.png';
 
 
 import { YellowBox } from 'react-native';
-import FriendListItem from '../FriendsScreen/FriendListItem';
 YellowBox.ignoreWarnings(['componentWillReceiveProps'], ['componentWillMount']);
 
 
@@ -454,32 +453,12 @@ const styles = StyleSheet.create({
         right: 25,
         backgroundColor: "#2f3136",
     },
-    startSessionButton: {
-        height: 45,
-        width: 45,
-        borderRadius: 30,
-        justifyContent: 'center',
-        alignItems: 'center',
-
-        backgroundColor: 'white',
-        position: 'absolute',
-        bottom: 75,
-        right: 20
-    },
     listSeperator: {
         height: StyleSheet.hairlineWidth,
         backgroundColor: 'grey',
         marginVertical: 5,
         width: '96%',
         alignSelf: 'center'
-    },
-    btnNew: {
-        width: WidTH - 55,
-        height: 45,
-        borderRadius: 25,
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        marginHorizontal: 25
     },
     copyPasteView: {
         justifyContent: 'center',

@@ -17,23 +17,45 @@ class UserProvider extends React.Component {
         this.checkIfConnected = this.checkIfConnected.bind(this)
         this.setUserImage = this.setUserImage.bind(this)
         this.setUserName = this.setUserName.bind(this)
+        this.setNickName = this.setNickName.bind(this)
         this.setEmail = this.setEmail.bind(this)
         this.setPassword = this.setPassword.bind(this)
 
         this.state = {
-            username: null,
+            username: '###',
             nickName: '###',
             email: '###',
-            userImage: 'https://image.shutterstock.com/z/stock-vector-empty-background-in-the-style-of-png-blank-background-676832590.jpg',
+            userImage: '',
             isLoggedin: false,
             userToken: null,
             isConnected: false,
         }
     }
 
-    static getUserToken() {
-        return this.state.userToken
+
+    _authenticateAcc(stayLoggedin, username, password) {
+
+        return new Promise((resolve, reject) => {
+            axios.post('https://cue-cards-app.herokuapp.com/api/authenticate', {
+                username: username,
+                password: password,
+            }).then(res => {
+                this.state.userToken = res.data.jwt
+                this.state.email = res.data.userData.email
+                this.state.userImage = res.data.userData.userImage
+                this.state.nickName = res.data.userData.nickName
+                this.state.password = password
+                this.state.username = username
+                resolve('erfolgreich')
+                if (stayLoggedin === true) {
+                    user.saveUserOnDevice(stayLoggedin, username, password)
+                }
+            }).catch((err) => {
+                reject('fehlgeschlagen' + err)
+            })
+        })
     }
+
 
 
     checkIfConnected() {
@@ -81,6 +103,9 @@ class UserProvider extends React.Component {
         this.setState({ dataIsLoading: value })
     }
 
+    static getUserToken() {
+        return this.state.userToken
+    }
 
     setUserName(username) {
         this.setState({ username })
@@ -137,37 +162,16 @@ class UserProvider extends React.Component {
     }
 
 
-    _authenticateAcc(stayLoggedin, username, password) {
-
-        return new Promise((resolve, reject) => {
-            axios.post('https://cue-cards-app.herokuapp.com/api/authenticate', {
-                username: username,
-                password: password,
-            }).then(res => {
-                this.state.userToken = res.data.jwt
-                this.state.email = res.data.email
-                this.state.userImage = res.data.userImage
-                this.state.nickName = res.data.nickName
-                this.state.username = username
-                resolve('erfolgreich')
-                if (stayLoggedin === true) {
-                    user.saveUserOnDevice(stayLoggedin, username, password)
-                }
-            }).catch((err) => {
-                reject('fehlgeschlagen' + err)
-            })
-        })
-    }
-
-
 
     render() {
         return (
             <UserContext.Provider value={{
                 username: this.state.username,
                 setUserName: this.setUserName,
+                password: this.state.password,
+                setPassword: this.setPassword,
                 nickName: this.state.nickName,
-                setNickName: this.state.nickName,
+                setNickName: this.state.setNickName,
                 email: this.state.email,
                 setEmail: this.setEmail,
                 userImage: this.state.userImage,
