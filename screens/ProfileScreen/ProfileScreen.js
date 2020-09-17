@@ -36,7 +36,6 @@ const ProfileScreen = () => {
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
                     <Avatar.Image source={{ uri: userImage }} size={80}
                     />
-
                     <View style={{ marginLeft: 20 }}>
                         <Title style={[styles.title, {
                             marginTop: 15,
@@ -60,8 +59,6 @@ const ProfileScreen = () => {
             <Button
                 title="Profilbild bearbeiten"
             />
-
-
         </SafeAreaView>
     );
 };

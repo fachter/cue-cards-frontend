@@ -6,8 +6,6 @@ import {
     ImageBackground,
     TextInput,
     StyleSheet,
-    Modal,
-    Dimensions
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -17,11 +15,11 @@ import { ProfileContext } from './ProfileProvider'
 import { UserContext } from '../LoginRegistrationScreen/UserProvider'
 
 
-import { syncAxiosPost } from '../../API/Database'
+import { asyncAxiosPost } from '../../API/Database'
 import AddImage from './AddImage';
 import pickImage from './../../API/ImagePicker';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useTheme } from '@react-navigation/native';
 import ChangePassword from './ChangePassword';
 
 export default function EditProfileScreen() {
@@ -40,9 +38,14 @@ export default function EditProfileScreen() {
         setShowChangePassword
     } = useContext(ProfileContext)
 
-    const { username, userToken, setUserImage, userImage, nickName, setNickName, email, setEmail } = useContext(UserContext)
+    const { username, setUserName, userToken, setUserImage, userImage, nickName, setNickName, email, setEmail, } = useContext(UserContext)
+    const [showChangePasswordView, setShowChangePaswordView] = useState(false)
     const navigation = useNavigation()
 
+    const [passwordStorage, setPasswordStorage] = useState(null)
+    const [userImageStorage, setUserImageStorage] = useState(null)
+    const [usernameStorage, setUserNameStorage] = useState(null)
+    const [emailStorage, setEmailStorage] = useState(null)
 
     function _closeAddImage() {
         setShowAddImage(false);
@@ -72,36 +75,49 @@ export default function EditProfileScreen() {
             }).then(res => {
                 res.json()
                     .then(cloudData => {
-                        setUserImage(cloudData.url)
-                        syncAxiosPost('link', 'EditProfilScreen', 'data', userToken)
-                            .catch(err => {
-                                console.log('Fehler beim Imageupload. Probleme mit der Datenbank ' + err)
-                            })
+                        setUserImageStorage(cloudData.url)
 
-                    }).catch(err => {
-                        console.log('Fehler beim Imageupload. Probleme mit der Cloud ' + err)
                     })
+            }).catch(err => {
+                console.log('Fehler beim Imageupload. Probleme mit der Cloud ' + err)
             })
         })
     }
 
-    function _saveButtonClicked() {
-        setProfileImage(image);
-        navigation.navigate('Profil')
+
+
+    function sendNewProfileDataToDB() {
+
+        let newProfileData = {
+            username: username,
+            nickName: nickName,
+            userImage: userImage,
+            email: email
+        }
+
+
+        asyncAxiosPost(`https://cue-cards-app.herokuapp.com/api/user/change-profile-data`, 'EditProfilScreen', newProfileData, userToken)
+            .then(() => {
+
+            }).catch(err => {
+                console.log('Fehler beim Imageupload. Probleme mit der Datenbank ' + err)
+            })
+
     }
+
 
 
     return (
 
         <View style={styles.container}>
-            {image != null ? <ImageBackground
-                source={{ uri: image }}
+            <ImageBackground
+                source={{ uri: userImage }}
                 style={styles.profilbild}
                 imageStyle={{ borderRadius: 80 }}
             >
                 <TouchableOpacity
                     style={styles.bildBearbeitenKnopf}
-                    onPress={() => setShowAddImage(true)}>
+                    onPress={() => updateImage()}>
                     <Icon
                         name="camera"
                         size={27}
@@ -109,25 +125,7 @@ export default function EditProfileScreen() {
                     />
                 </TouchableOpacity>
             </ImageBackground>
-                :
-                <ImageBackground
-                    source={require('../../assets/Passbild.jpg')}
-                    //source={require(userImage)}
-                    style={styles.profilbild}
-                    imageStyle={{ borderRadius: 80 }}
-                >
-                    <TouchableOpacity
-                        style={styles.bildBearbeitenKnopf}
-                        //onPress={() => updateImage()}>
-                        onPress={() => setShowAddImage(true)}>
-                        <Icon
-                            name="camera"
-                            size={27}
-                            color="white"
-                        />
-                    </TouchableOpacity>
-                </ImageBackground>
-            }
+
             <View style={styles.action}>
                 <FontAwesome
                     name="user-o"
@@ -141,6 +139,7 @@ export default function EditProfileScreen() {
                     placeholderTextColor="white"
                     autoCorrect={false}
                     style={styles.textInput}
+                    onChangeText={text => setUserImageStorage(text)}
                 />
             </View>
             <View style={styles.action}>
@@ -157,6 +156,7 @@ export default function EditProfileScreen() {
                     keyboardType="email-address"
                     autoCorrect={false}
                     style={styles.textInput}
+                    onChangeText={text => setEmailStorage(text)}
                 />
             </View>
 
@@ -169,7 +169,7 @@ export default function EditProfileScreen() {
                 />
                 <Text style={styles.feldbezeichner}>Passwort</Text>
                 <Text style={[styles.textInput, { marginTop: 9 }]}>°°°°°°°°°°°°°°</Text>
-                <TouchableOpacity style={styles.bearbeitenKnopf} onPress={()=>setShowChangePassword(true)}>
+                <TouchableOpacity style={styles.bearbeitenKnopf} onPress={() => setShowChangePassword(true)}>
                     <Icon
                         name="pencil"
                         color="#008FD3"
@@ -184,9 +184,11 @@ export default function EditProfileScreen() {
                 close={_closeAddImage}
             />
             <ChangePassword
-            showChangePassword={showChangePassword}
+                showChangePasswordView={showChangePasswordView}
+                onSetVisibility={setShowChangePaswordView}
+                onSetPasswordStorage={setPasswordStorage}
             />
-            <TouchableOpacity style={styles.saveButton} onPress={() => _saveButtonClicked()} >
+            <TouchableOpacity style={styles.saveButton} onPress={() => sendNewProfileDataToDB()} >
                 <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
             </TouchableOpacity>
         </View >
@@ -226,61 +228,6 @@ const styles = StyleSheet.create({
         right: 2,
         bottom: 2
     },
-
-    // panel: {
-    //     padding: 20,
-    //     backgroundColor: '#FFFFFF',
-    //     paddingTop: 20,
-    //     // borderTopLeftRadius: 20,
-    //     // borderTopRightRadius: 20,
-    //     // shadowColor: '#000000',
-    //     // shadowOffset: {width: 0, height: 0},
-    //     // shadowRadius: 5,
-    //     // shadowOpacity: 0.4,
-    // },
-    // header: {
-    //     backgroundColor: '#FFFFFF',
-    //     shadowColor: '#333333',
-    //     shadowOffset: { width: -1, height: -3 },
-    //     shadowRadius: 2,
-    //     shadowOpacity: 0.4,
-    //     // elevation: 5,
-    //     paddingTop: 20,
-    //     borderTopLeftRadius: 20,
-    //     borderTopRightRadius: 20,
-    // },
-    // panelHeader: {
-    //     alignItems: 'center',
-    // },
-    // panelHandle: {
-    //     width: 40,
-    //     height: 8,
-    //     borderRadius: 4,
-    //     backgroundColor: '#00000040',
-    //     marginBottom: 10,
-    // },
-    // panelTitle: {
-    //     fontSize: 27,
-    //     height: 35,
-    // },
-    // panelSubtitle: {
-    //     fontSize: 14,
-    //     color: 'gray',
-    //     height: 30,
-    //     marginBottom: 10,
-    // },
-    // panelButton: {
-    //     padding: 13,
-    //     borderRadius: 10,
-    //     backgroundColor: '#FF6347',
-    //     alignItems: 'center',
-    //     marginVertical: 7,
-    // },
-    // panelButtonTitle: {
-    //     fontSize: 17,
-    //     fontWeight: 'bold',
-    //     color: 'white',
-    // },
     action: {
         marginTop: 10,
         marginBottom: 10,

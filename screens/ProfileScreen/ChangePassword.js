@@ -1,9 +1,10 @@
 
-import React, {useContext} from 'react'
-import { View, Modal, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native'
+import React, { useContext, useState } from 'react'
+import { View, Modal, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native'
 import { ProfileContext } from './ProfileProvider'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import { UserContext } from '../LoginRegistrationScreen/UserProvider'
 import axios from 'axios';
 
 
@@ -14,71 +15,76 @@ export default function ChangePassword() {
         setShowChangePassword
     } = useContext(ProfileContext)
 
-    /* function _comparePasswords() {
-        return new Promise((resolve, reject) => {
-            if (password1 === password2) {
-                resolve()
-            } else {
-                reject('Passwörter stimmen nicht überein')
-            }
+
+    const [password1, setPassword1] = useState(null)
+    const [password2, setPassword2] = useState(null)
+
+
+    const save = () => {
+        checkPasswordValitiy(password1, password2).then(newPassword => {
+            this.props.onSetPasswordStorage(newPassword)
         })
     }
 
-    function _changePassword(){
-        setShowChangePassword(false)
-        _comparePasswords()
-        .then(() => {
-            axios.post('Link', {
-                password: password1
-            })
-            .then((resp) => {
-                console.log("Passwortänderung erfolgreich")
-                setUserToken(resp.data.jwt)
-                logout()
-            })
-        })
-        } */
-    
 
-return(
-<Modal
-animationType="fade"
-transparent={true}
-visible={showChangePassword}
->
-<View style={styles.background}>
-            <TouchableOpacity style={styles.cancelButton} onPress={() => _changePassword()}>
-                <AntDesign name="closecircleo" size={24} color="grey" />
-            </TouchableOpacity>
-<View style={styles.window}>
-    <Text
-        style={styles.headingText}>Passwort ändern</Text>
-    <TextInput
-        style={styles.friendName}
-        maxLength={20}
-        placeholder="Passwort eingeben"
-        placeholderTextColor="grey"
-        //onChangeText={text => setPassword1(text)}
+    const checkPasswordValitiy = (pw1, pw2) => {
+
+        return new Promise((resolve, reject) => {
+            if (pw1 === null || pw2 === null) {
+                alert('Du hast vergessen dein neues Passwort einzugeben.')
+                reject()
+            } else {
+                if (p1 === p2) {
+                    resolve(pw1)
+                } else {
+                    reject()
+                    alert('Die Passwörter stimmen nicht überein')
+                }
+            }
+        })
+
+    }
+
+
+    return (
+        <Modal
+            animationType="fade"
+            transparent={true}
+            visible={showChangePassword}
         >
-    </TextInput>
-    <TextInput
-        style={styles.friendName}
-        maxLength={20}
-        placeholder="Passwort erneut eingeben"
-        placeholderTextColor="grey"
-        //onChangeText={text => setPassword2(text)}
-        >
-    </TextInput>
-    <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.saveButton}  onPress={() => setShowChangePassword(false)} >
-            <MaterialCommunityIcons name="home-plus" size={20} color="white" />
-            <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Ändern</Text>
-        </TouchableOpacity>
-    </View >
-</View>
-</View>
-</Modal>
-);
+            <View style={styles.background}>
+                <TouchableOpacity style={styles.cancelButton} onPress={() => this.props.showChangePasswordView(false)}>
+                    <AntDesign name="closecircleo" size={24} color="grey" />
+                </TouchableOpacity>
+                <View style={styles.window}>
+                    <Text
+                        style={styles.headingText}>Passwort ändern</Text>
+                    <TextInput
+                        style={styles.friendName}
+                        maxLength={20}
+                        placeholder="Passwort eingeben"
+                        placeholderTextColor="grey"
+                        onChangeText={text => setPassword1(text)}
+                    >
+                    </TextInput>
+                    <TextInput
+                        style={styles.friendName}
+                        maxLength={20}
+                        placeholder="Passwort erneut eingeben"
+                        placeholderTextColor="grey"
+                        onChangeText={text => setPassword2(text)}
+                    >
+                    </TextInput>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style={styles.saveButton} onPress={() => save()} >
+                            <MaterialCommunityIcons name="home-plus" size={20} color="white" />
+                            <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Ändern</Text>
+                        </TouchableOpacity>
+                    </View >
+                </View>
+            </View>
+        </Modal>
+    );
 }
 
 

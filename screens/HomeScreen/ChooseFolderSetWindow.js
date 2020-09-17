@@ -128,7 +128,7 @@ function FileNameWindow() {
 
     const navigation = useNavigation()
     const { setCreateFileWindowVisible, isFolder } = useContext(ListStructureContext)
-    const { newFileName, setNewFileName, isNewFileFolder, _save } = useContext(FileContext)
+    const { setNewFileName, _save } = useContext(FileContext)
     const [save, setSave] = useState(false)
 
     useEffect(() => {

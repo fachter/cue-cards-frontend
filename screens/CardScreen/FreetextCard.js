@@ -1,7 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image } from 'react-native'
 import * as Icon from '@expo/vector-icons'
-import { Entypo } from '@expo/vector-icons';
 import logo from '../../assets/Logo_grau.png';
 
 

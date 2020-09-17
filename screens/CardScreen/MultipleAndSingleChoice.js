@@ -13,7 +13,7 @@ export default function MulitpleChoiceCard() {
 
     const { currentCard, _updateCardValues, _getArrayOfTrueAnswers, answers, setAnswers } = useContext(CardScreenContext)
     const [backgroundColor, setBackgroundColor] = useState("#2f3136")
-    const [borderColor, setBorderColor] = useState("#2f3136")
+    const [setBorderColor] = useState("#2f3136")
     const [showNextButton, setShowNextButton] = useState(false)
 
 
