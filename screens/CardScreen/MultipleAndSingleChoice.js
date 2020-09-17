@@ -13,6 +13,7 @@ export default function MulitpleChoiceCard() {
 
     const { currentCard, _updateCardValues, _getArrayOfTrueAnswers, answers, setAnswers } = useContext(CardScreenContext)
     const [backgroundColor, setBackgroundColor] = useState("#2f3136")
+    const [borderColor, setBorderColor] = useState("#2f3136")
     const [showNextButton, setShowNextButton] = useState(false)
 
 
@@ -34,7 +35,7 @@ export default function MulitpleChoiceCard() {
 
         if (numberOfRightSelection === currentCard.answers.length && currentCard.answers.length === numberOfChoosenAnswers) {
 
-            setBackgroundColor("green")
+            setBorderColor("green")
             setTimeout(() => {
                 _nextCardAndUpdateValues(true)
                 setBackgroundColor("#2f3136")
@@ -44,10 +45,6 @@ export default function MulitpleChoiceCard() {
             _showTrueAnswers()
             setBackgroundColor("red")
             setShowNextButton(true)
-            setTimeout(() => {
-                setBackgroundColor("#2f3136")
-            }, 1000)
-
         }
     }
 
@@ -73,6 +70,7 @@ export default function MulitpleChoiceCard() {
     function _nextCardAndUpdateValues(result) {
         _updateCardValues(result)
         setShowNextButton(false)
+        setBackgroundColor("#2f3136")
     }
 
 
@@ -151,7 +149,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         marginTop: 10,
-        bottom: 35,
+        bottom: 55,
     },
     listSeperator: {
         height: StyleSheet.hairlineWidth,
