@@ -13,12 +13,12 @@ import { ProfileProvider } from './screens/ProfileScreen/ProfileProvider'
 import Sidebar from './navigation/Sidebar'
 import { LoginRegistrationStackScreen } from './navigation/Sidebar';
 
-// import { Provider } from 'react-redux'
-// import { configureStore } from './API/redux/store/store'
 
-// const store = configureStore
+import { YellowBox } from 'react-native'
 
-
+YellowBox.ignoreWarnings([
+  'Require cycle', '[SECURITY] node-uuid'
+])
 
 
 

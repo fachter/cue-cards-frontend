@@ -2,12 +2,6 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import { YellowBox } from 'react-native'
-
-YellowBox.ignoreWarnings([
-    'VirtualizedLists should never be nested',
-])
-// Warnung vorerst ignorieren, ist ein Problem seitens React-Native
 
 
 
@@ -63,6 +57,7 @@ export default function RoomScreen() {
             .then(() => {
                 asyncAxiosGet('https://cue-cards-app.herokuapp.com/api/get-available-rooms', 'RoomScreen', userToken)
                     .then(res => {
+                        console.log(res.data)
                         setServerRooms(res.data)
                         setIsLoading(false)
                     }).catch(error => {
