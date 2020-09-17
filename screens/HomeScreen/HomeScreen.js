@@ -343,99 +343,96 @@ const HomeScreen = () => {
 
 
     return (
-        <View style={styles.container}>
-            {someThingIsCopied ?
-                <View >
-                    {(copiedItemIsCard === true && isFolder === false) || (copiedItemIsCard === false) ?
-                        <View style={styles.copyPasteView}>
-                            <Icon.Button
-                                name="ios-copy"
-                                size={23} color="black"
-                                backgroundColor="white"
-                                onPress={() => pasteTheCopiedData()} />
-                            <Icon.Button
-                                style={{ alignSelf: 'flex-start' }}
-                                name="ios-close"
-                                size={23} color="black"
-                                backgroundColor="white"
-                                onPress={() => setSomeThingIsCopied(false)} />
-                        </View> :
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text>kopierte Datei kann hier nicht eingefügt werden</Text>
-                            <Icon.Button
-                                style={{ alignSelf: 'flex-start' }}
-                                name="ios-close"
-                                size={23} color="black"
-                                backgroundColor="white"
-                                onPress={() => setSomeThingIsCopied(false)} />
-                        </View>
-                    }
+        <Drawer
+            // ref={(ref) => { this.drawer = ref }}
+            open={sideBarOpen}
+            type="overlay"
+            tapToClose={false}
+            openDrawerOffset={0.35}
+            content={renderDrawer()}
+            style={styles.drawer}
+            side="right"
+        >
+            <View style={styles.container}>
+                {someThingIsCopied ?
+                    <View >
+                        {(copiedItemIsCard === true && isFolder === false) || (copiedItemIsCard === false) ?
+                            <View style={styles.copyPasteView}>
+                                <Icon.Button
+                                    name="ios-copy"
+                                    size={23} color="black"
+                                    backgroundColor="white"
+                                    onPress={() => pasteTheCopiedData()} />
+                                <Icon.Button
+                                    style={{ alignSelf: 'flex-start' }}
+                                    name="ios-close"
+                                    size={23} color="black"
+                                    backgroundColor="white"
+                                    onPress={() => setSomeThingIsCopied(false)} />
+                            </View> :
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text>kopierte Datei kann hier nicht eingefügt werden</Text>
+                                <Icon.Button
+                                    style={{ alignSelf: 'flex-start' }}
+                                    name="ios-close"
+                                    size={23} color="black"
+                                    backgroundColor="white"
+                                    onPress={() => setSomeThingIsCopied(false)} />
+                            </View>
+                        }
+                    </View>
+                    :
+                    null}
+                <Image source={Raumbild2} style={styles.obenRechts} />
+                <Image source={Raumbild1} style={styles.untenLinks} />
+                {renderRoomIsEmptyScreen()}
+                <SafeAreaView style={{ flex: 1 }}>
+                    <FlatList
+                        // ListFooterComponent={<Text>UNTEN</Text>}
+                        data={currentListStructure}
+                        keyExtractor={item => `${item.id}`}
+                        renderItem={({ item }) => (
+                            <FolderListItem
+                                item={item}
+                                callBackItem={_getClickedItem}
+                                onDeleteWindow={_showDeleteWindow.bind(this)}
+                                onNavigateToCardScreen={_navigateToCardScreen}
+                                onNavigateToSession={_navigateToSession}
+                            />
+                        )}
+                        ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
+                    />
+                    <View style={styles.platzhalter}></View>
+                </SafeAreaView>
+                <View>
+                    <ChooseFolderSetWindow
+                        visible={CreateFileWindowVisible}
+                    />
+                    <NewCardWindow
+                        visible={CreateNewCardWindowVisible}
+                        onNavigateToCardCreator={createNewCard}
+                        onSetVisibility={setCreateNewCardWindowVisible}
+                    />
                 </View>
-                :
-                null}
-            <Image source={Raumbild2} style={styles.obenRechts} />
-            <Image source={Raumbild1} style={styles.untenLinks} />
-
-            {checkIfCurrentRoomIsMyRoom() ? null :
-                <Drawer
-                    // ref={(ref) => { this.drawer = ref }}
-                    open={sideBarOpen}
-                    type="overlay"
-                    tapToClose={false}
-                    openDrawerOffset={0.35}
-                    content={renderDrawer()}
-                    style={styles.drawer}
-                    side="right"
-                />
-            }
-
-            {renderRoomIsEmptyScreen()}
-            <SafeAreaView style={{ flex: 1 }}>
-                <FlatList
-                    // ListFooterComponent={<Text>UNTEN</Text>}
-                    data={currentListStructure}
-                    keyExtractor={item => `${item.id}`}
-                    renderItem={({ item }) => (
-                        <FolderListItem
-                            item={item}
-                            callBackItem={_getClickedItem}
-                            onDeleteWindow={_showDeleteWindow.bind(this)}
-                            onNavigateToCardScreen={_navigateToCardScreen}
-                            onNavigateToSession={_navigateToSession}
-                        />
-                    )}
-                    ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
-                />
-                <View style={styles.platzhalter}></View>
-            </SafeAreaView>
-            <View>
-                <ChooseFolderSetWindow
-                    visible={CreateFileWindowVisible}
-                />
-                <NewCardWindow
-                    visible={CreateNewCardWindowVisible}
-                    onNavigateToCardCreator={createNewCard}
-                    onSetVisibility={setCreateNewCardWindowVisible}
-                />
-            </View>
-            <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
-                <Entypo name="plus" size={45} color="#008FD3" />
-            </TouchableOpacity>
-            {checkIfCurrentRoomIsMyRoom() ? null :
-                <TouchableOpacity style={styles.freundeButton} onPress={() => setSideBarOpen(true)} >
-                    <Entypo name="users" size={30} color="#008FD3" />
+                <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
+                    <Entypo name="plus" size={45} color="#008FD3" />
                 </TouchableOpacity>
-            }
-            <Image source={logo} style={styles.logo} />
-            {
-                deleteWindowVisible ?
-                    <DeleteWindow
-                        onDeleteWindow={() => SetDeleteWindowVisible(false)}
-                        onNavigateToCardCreator={editCard}
-                        item={onDeleteItem}
-                        onDelete={_deleteItemById} /> : null
-            }
-        </View >
+                {checkIfCurrentRoomIsMyRoom() ? null :
+                    <TouchableOpacity style={styles.freundeButton} onPress={() => setSideBarOpen(true)} >
+                        <Entypo name="users" size={30} color="#008FD3" />
+                    </TouchableOpacity>
+                }
+                <Image source={logo} style={styles.logo} />
+                {
+                    deleteWindowVisible ?
+                        <DeleteWindow
+                            onDeleteWindow={() => SetDeleteWindowVisible(false)}
+                            onNavigateToCardCreator={editCard}
+                            item={onDeleteItem}
+                            onDelete={_deleteItemById} /> : null
+                }
+            </View >
+        </Drawer>
     );
 
 }
