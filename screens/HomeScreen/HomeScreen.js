@@ -34,19 +34,19 @@ const { width: WidTH } = Dimensions.get('window')
 const initialFriendState = [
     {
         id: '1',
-        title: 'Philip',
-        picture: '../../assets/Passbild.jpg'
+        nickName: 'Philip',
+        userImage: '../../assets/Passbild.jpg'
     },
     {
         id: '2',
-        title: 'Matze',
-        picture: '../../assets/Passbild.jpg'
+        nickName: 'Matze',
+        userImage: '../../assets/Passbild.jpg'
 
     },
     {
         id: '3',
-        title: 'Darius',
-        picture: '../../assets/Passbild.jpg'
+        nickName: 'Darius',
+        userImage: '../../assets/Passbild.jpg'
 
     }
 ]
@@ -315,12 +315,12 @@ const HomeScreen = () => {
                 <FlatList
                     data={initialFriendState}
                     //extraData={state}
-                    renderItem={({ item}) => {
+                    renderItem={({ item }) => {
                         <FriendListBarItem
-                        item={item}
+                            item={item}
                         />
-                            
-                        
+
+
                     }} />
                 <Button onPress={() => setSideBarOpen(false)}
                     title='Schließen'
