@@ -22,6 +22,7 @@ import AddImage from './AddImage';
 import pickImage from './../../API/ImagePicker';
 
 import { useNavigation } from '@react-navigation/native';
+import ChangePassword from './ChangePassword';
 
 export default function EditProfileScreen() {
 
@@ -34,10 +35,12 @@ export default function EditProfileScreen() {
         image,
         setProfileImage,
         showAddImage,
-        setShowAddImage
+        setShowAddImage,
+        showChangePassword,
+        setShowChangePassword
     } = useContext(ProfileContext)
 
-    const { username, userToken, setUserImage } = useContext(UserContext)
+    const { username, userToken, setUserImage, userImage, nickName, setNickName, email, setEmail } = useContext(UserContext)
     const navigation = useNavigation()
 
 
@@ -109,6 +112,7 @@ export default function EditProfileScreen() {
                 :
                 <ImageBackground
                     source={require('../../assets/Passbild.jpg')}
+                    //source={require(userImage)}
                     style={styles.profilbild}
                     imageStyle={{ borderRadius: 80 }}
                 >
@@ -165,7 +169,7 @@ export default function EditProfileScreen() {
                 />
                 <Text style={styles.feldbezeichner}>Passwort</Text>
                 <Text style={[styles.textInput, { marginTop: 9 }]}>°°°°°°°°°°°°°°</Text>
-                <TouchableOpacity style={styles.bearbeitenKnopf}>
+                <TouchableOpacity style={styles.bearbeitenKnopf} onPress={()=>setShowChangePassword(true)}>
                     <Icon
                         name="pencil"
                         color="#008FD3"
@@ -179,7 +183,9 @@ export default function EditProfileScreen() {
                 showAddImage={showAddImage}
                 close={_closeAddImage}
             />
-
+            <ChangePassword
+            showChangePassword={showChangePassword}
+            />
             <TouchableOpacity style={styles.saveButton} onPress={() => _saveButtonClicked()} >
                 <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
             </TouchableOpacity>

@@ -2,7 +2,7 @@ import React from 'react'
 import { AsyncStorage } from 'react-native'
 import { UserContext } from '../LoginRegistrationScreen/UserProvider'
 
-import { storeMyRoomDataOnDB, syncAxiosPost } from '../../API/Database'
+import { storeMyRoomDataOnDB, storyExternRoomDataOnDB } from '../../API/Database'
 
 const ListStructureContext = React.createContext()
 
@@ -24,23 +24,24 @@ class ListStructureProvider extends React.Component {
         this.storeDataOnDevice = this.storeDataOnDevice.bind(this)
         this.setCurrentRoomInfo = this.setCurrentRoomInfo.bind(this)
         this.saveRoomData = this.saveRoomData.bind(this)
+        this.clearFolders = this.clearFolders.bind(this)
     }
 
-
     storeDataOnDevice(newListStructure) {
+        const user = this.context
         try {
             if (this.state.listHistoryArray.length > 0) {
                 AsyncStorage.setItem(
-                    'myRoomData', JSON.stringify({
+                    `${user.username}-folders`, JSON.stringify({
                         data: {
                             folders: this.state.listHistoryArray[0],
                             lastModified: new Date
                         }
-                    }),
+                    })
                 )
             } else {
                 AsyncStorage.setItem(
-                    'myRoomData', JSON.stringify({
+                    `${user.username}-folders`, JSON.stringify({
                         data: {
                             folders: newListStructure,
                             lastModified: new Date
@@ -56,8 +57,9 @@ class ListStructureProvider extends React.Component {
 
 
     retrieveDataFromDevice = async () => {
+        const user = this.context
         try {
-            const value = await AsyncStorage.getItem('myRoomData');
+            const value = await AsyncStorage.getItem(`${user.username}-folders`);
             if (value != null) {
                 let data = JSON.parse(value)
                 console.log("Daten wurden vom gerät geladen")
@@ -72,13 +74,14 @@ class ListStructureProvider extends React.Component {
 
 
     setCurrentListStructure = (newListStructure, saveOnDB) => {
+
         this.setState({ currentListStructure: newListStructure })
-        //console.log(this.state.currentRoomInfo)
+
         if (this.state.currentRoomInfo === 'myRoom') {
             this.saveMyData(newListStructure, saveOnDB)
 
         } else {
-            if (saveOnDB !== false) {
+            if (saveOnDB === true) {
                 this.saveRoomData(newListStructure)
             }
         }
@@ -89,7 +92,8 @@ class ListStructureProvider extends React.Component {
         const { listHistoryArray } = this.state
         const user = this.context
         this.storeDataOnDevice(newListStructure)
-        if (saveOnDB !== false) {
+        if (saveOnDB === true) {
+            console.log('')
             user.checkIfConnected()
                 .then(res => {
                     console.log('Verbindung zum Netzwerk ' + res)
@@ -103,30 +107,14 @@ class ListStructureProvider extends React.Component {
     }
 
 
+
     saveRoomData(newListStructure) {
-        const { currentRoomInfo } = this.state
         const user = this.context
 
-        let updatedRoom = {
-            data: {
-                folders: newListStructure,
-                lastModified: new Date
-            },
-            id: currentRoomInfo.id,
-            name: currentRoomInfo.name,
-            pictureNumber: currentRoomInfo.pictureNumber
-
-        }
-
         user.checkIfConnected()
-            .then(res => {
-                syncAxiosPost(`https://cue-cards-app.herokuapp.com/api/room`, 'ListStructureProvider', updatedRoom, user.userToken)
-                    .then(mes => {
-                        console.log('Verbindung zum Server ' + mes + '. Daten wurde gespeichert')
-                    }).catch(mes => {
-                        console.log('Verbindung zum Server' + mes)
-                        alert("Verbindung zum Sever fehlgeschlagen. Probleme beim speichern/laden der Daten")
-                    })
+            .then(() => {
+                storyExternRoomDataOnDB(this.state.listHistoryArray, newListStructure, this.state.currentRoomInfo, user.userToken)
+
             }).catch(res => {
                 console.log('Verbindung zum Netzwerk ' + res)
                 alert("Verbindung zum Sever fehlgeschlagen. Probleme beim speichern/laden der Daten")
@@ -136,15 +124,31 @@ class ListStructureProvider extends React.Component {
 
 
     updateFolderHistory = () => {
-        this.state.listHistoryArray.push(this.state.currentListStructure)
+        let copy = this.state.listHistoryArray
+        copy.push(this.state.currentListStructure)
+        this.setState({ listHistoryArray: copy })
     }
 
     _getLastFolderStructure = () => {
-        return this.state.listHistoryArray.pop()
+        const { listHistoryArray } = this.state
+
+        if (listHistoryArray.length > 0) {
+            this.setCurrentListStructure(listHistoryArray[listHistoryArray.length - 1], false)
+            listHistoryArray.pop()
+
+
+        }
+
+
+    }
+
+    clearFolders() {
+        this.state.listHistoryArray = []
+        this.state.currentListStructure = []
     }
 
     setIsFolder = (isFolder) => {
-        this.setState({ isFolder })
+        this.setState({ isFolder })  //this.state evlt. nicht benötgit
     }
 
     setCreateFileWindowVisible = (CreateFileWindowVisible) => {
@@ -167,6 +171,7 @@ class ListStructureProvider extends React.Component {
     render() {
         return (
             <ListStructureContext.Provider value={{
+                clearFolders: this.clearFolders,
                 mainlistStructure: this.state.mainlistStructure,
                 setMainListStructure: this.setMainListStructure,
                 listHistoryArray: this.state.listHistoryArray,

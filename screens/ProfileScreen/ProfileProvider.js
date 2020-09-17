@@ -12,7 +12,7 @@ class ProfileProvider extends React.Component {
             image: null,
             profileImage: null,
             showAddImage: null,
-
+            showChangePassword: null
         }
     }
 
@@ -28,6 +28,10 @@ class ProfileProvider extends React.Component {
         this.setState({showAddImage})
     }
 
+    setShowChangePassword = (showChangePassword) => {
+        this.setState({showChangePassword})
+    }
+
     render() {
         return(
             <ProfileContext.Provider value={{
@@ -36,7 +40,9 @@ class ProfileProvider extends React.Component {
                 profileImage: this.state.profileImage,
                 setProfileImage: this.setProfileImage,
                 showAddImage: this.state.showAddImage,
-                setShowAddImage: this.setShowAddImage
+                setShowAddImage: this.setShowAddImage,
+                showChangePassword: this.state.showChangePassword,
+                setShowChangePassword: this.setShowChangePassword
             }}>
                 {this.props.children}
             </ProfileContext.Provider>

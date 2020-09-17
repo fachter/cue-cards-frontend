@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import { View, StyleSheet, TextInput, Dimensions, TouchableOpacity, Text, Image } from 'react-native'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
-import ImagePickerButton from '../../API/ImagePicker'
 import logo from '../../assets/Logo_grau.png';
 
 import uuid from 'react-native-uuid'
@@ -33,9 +32,7 @@ export default class Vocable extends React.Component {
 
 
     _saveAndGoBack() {
-        const updateCards = this.context
         this._save()
-        updateCards.storeDataOnDevice()
         this.props.navigation.goBack()
     }
 
@@ -52,6 +49,7 @@ export default class Vocable extends React.Component {
     _save() {
 
         const { id, cardType, questionText, solution } = this.state
+        const folders = this.context
 
         let newCard = {
             id: id,
@@ -61,21 +59,23 @@ export default class Vocable extends React.Component {
             solution: solution
         }
 
-        let copy = this.props.route.params.onSave
+        let updatedCards = folders.currentListStructure
 
         if (this.props.route.params.mode == "createMode") { // neue Karte erstellen
-            copy.push(newCard)
-            this.props.route.params.onSetSave(copy)
+            updatedCards.push(newCard)
+
 
         } else if (this.props.route.params.mode == "editMode") {   //alte Karte aktualisieren
             var index
-            for (var i = 0; i < copy.length; i++) {
-                if (copy[i].id === id) {
+            for (var i = 0; i < updatedCards.length; i++) {
+                if (updatedCards[i].id === id) {
                     index = i
                 }
-                copy[index] = newCard
+                updatedCards[index] = newCard
             }
         }
+        folders.setCurrentListStructure(updatedCards, true)
+
     }
 
 
@@ -101,7 +101,6 @@ export default class Vocable extends React.Component {
                     onChangeText={text => this.setState({ solution: text })}>
                     {this.state.solution}
                 </TextInput>
-                <ImagePickerButton />
                 <View style={styles.bottomView} >
                     <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
                         <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>

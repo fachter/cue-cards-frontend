@@ -25,7 +25,7 @@ const ProfileScreen = () => {
         setShowAddImage
     } = useContext(ProfileContext)
 
-    const { login, setUserToken, email, setEmail } = useContext(UserContext)
+    const { userImage, email, nickName } = useContext(UserContext)
 
 
 
@@ -34,23 +34,15 @@ const ProfileScreen = () => {
 
             <View style={styles.userInfoSection}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
-                    {image != null ?
-                        <Avatar.Image
-                            source={
-                                { uri: profileImage }
-                            }
-                            size={80}
-                        />
-                        :
-                        <Text>Bitte Bild hochladen</Text>
-                    }
+                    <Avatar.Image source={{ uri: userImage }} size={80}
+                    />
 
                     <View style={{ marginLeft: 20 }}>
                         <Title style={[styles.title, {
                             marginTop: 15,
                             marginBottom: 5,
-                        }]}>Frodo Baggins</Title>
-                        <Caption style={styles.caption}>@Ringbearer96</Caption>
+                        }]}>{nickName}</Title>
+                        <Caption style={styles.caption}>@matze96</Caption>
                         <Caption style={styles.caption}>CueCarder seit 2020</Caption>
 
                     </View>
@@ -61,7 +53,7 @@ const ProfileScreen = () => {
             <View style={styles.userInfoSection}>
                 <View style={styles.row}>
                     <Icon name="email" color="#777777" size={20} />
-                    <Text style={{ color: "#777777", marginLeft: 20 }}>matze@web.de</Text>
+                    <Text style={{ color: "#777777", marginLeft: 20 }}>{email}</Text>
                 </View>
             </View>
 

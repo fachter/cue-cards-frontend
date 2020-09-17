@@ -1,9 +1,11 @@
 import React from 'react'
 import { AsyncStorage } from 'react-native'
+import { UserContext } from '../LoginRegistrationScreen/UserProvider'
 
 const SettingsContext = React.createContext()
 
 export default class SettingsProvider extends React.Component {
+    static contextType = UserContext
     constructor(props) {
         super(props)
 
@@ -39,8 +41,9 @@ export default class SettingsProvider extends React.Component {
 
 
     async retrieveSettignsfromDevice() {
+        const user = this.context
         try {
-            const settings = await AsyncStorage.getItem('settings')
+            const settings = await AsyncStorage.getItem(`${user.username}-settings`)
             if (settings != null) {
                 let data = JSON.parse(settings)
                 this.state.maxCardLevel = data.maxCardLevel
@@ -58,9 +61,10 @@ export default class SettingsProvider extends React.Component {
 
 
     storeSettingOnDevice() {
+        const user = this.context
         try {
             AsyncStorage.setItem(
-                'settings',
+                `${user.username}-settings`,
                 JSON.stringify({
                     maxCardLevel: this.state.maxCardlevel,
                     maxCardLevelIncluded: this.state.maxCardLevelIncluded,

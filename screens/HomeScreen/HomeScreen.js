@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, Button, BackHandler, Image } from 'react-native';
+import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, Button, BackHandler, ActivityIndicator, Image, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -15,13 +15,13 @@ import { CopyPasteContext } from './CopyPasteProvider'
 import { SettingsContext } from '../SettingsScreen/SettingsProvider'
 
 
-
-
 import logo from '../../assets/Logo_grau.png';
 import Raumbild1 from '../../assets/Raumbild1.png';
 import Raumbild2 from '../../assets/Raumbild2.png';
 import LeererRaum from '../../assets/LeererRaum.png';
-import { ScrollView } from 'react-native-gesture-handler';
+
+import { YellowBox } from 'react-native';
+YellowBox.ignoreWarnings(['componentWillReceiveProps'], ['componentWillMount']);
 
 
 
@@ -74,6 +74,7 @@ const HomeScreen = () => {
     const [sideBarOpen, setSideBarOpen] = useState(false)
 
 
+
     const renderHeaderTitle = () => {
 
         if (currentRoomInfo) {
@@ -90,18 +91,17 @@ const HomeScreen = () => {
 
 
     useEffect(() => {
-        renderHeaderTitle()
         BackHandler.addEventListener('hardwareBackPress', hardwareBackButtonPressed)
     }, []);
 
 
     const headerLeftButton = () => {
+        console.log(listHistoryArray.length)
         if (listHistoryArray.length > 0) {
             return (
                 <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" onPress={() => {
-                    var lastFolderStructure = _getLastFolderStructure()
-                    setCurrentListStructure(lastFolderStructure, false)
-                    setIsFolder(true)
+                    _getLastFolderStructure()
+
                 }} />
             )
         } else {
@@ -111,11 +111,12 @@ const HomeScreen = () => {
         }
     }
 
+
+
     function hardwareBackButtonPressed() {
         //Holt sich die state "isFolder" der Vorherigen Ordnerstruktur
         if (listHistoryArray.length > 0) {
-            var lastFolderStructure = _getLastFolderStructure()
-            setCurrentListStructure(lastFolderStructure, false)
+            _getLastFolderStructure()
             setIsFolder(true)
             return true
         } else {
@@ -271,8 +272,6 @@ const HomeScreen = () => {
 
         const params = {
             mode: "createMode",
-            onSave: currentListStructure,
-            onSetSave: setCurrentListStructure,
         }
 
         if (cardType === "MC") {
@@ -294,13 +293,13 @@ const HomeScreen = () => {
 
     const renderRoomIsEmptyScreen = () => {
 
-        if (listHistoryArray.length === 0 && currentListStructure.length === 0) {
-            return (
-                <View style={styles.bildcontainer}>
-                    <Image source={LeererRaum} style={styles.leererRaum} />
-                </View>
-            )
-        }
+        // if (listHistoryArray.length === 0 && currentListStructure.length === 0) {
+        //     return (
+        //         <View style={styles.bildcontainer}>
+        //             <Image source={LeererRaum} style={styles.leererRaum} />
+        //         </View>
+        //     )
+        // }
         return null
     }
 
@@ -340,6 +339,18 @@ const HomeScreen = () => {
 
 
 
+    const checkIfCurrentRoomIsMyRoom = () => {
+        if (currentRoomInfo === 'myRoom') {
+            return true
+        }
+        return false
+    }
+
+
+
+    // ################ Auszuführende Methoden vor dem Return: #########################
+    renderHeaderTitle()
+
 
     return (
         <View style={styles.container}>
@@ -375,21 +386,23 @@ const HomeScreen = () => {
             <Image source={Raumbild2} style={styles.obenRechts} />
             <Image source={Raumbild1} style={styles.untenLinks} />
 
-            <Drawer
-                // ref={(ref) => { this.drawer = ref }}
-                open={sideBarOpen}
-                type="overlay"
-                tapToClose={true}
-                openDrawerOffset={0.35}
-                content={renderDrawer()}
-                style={styles.drawer}
-                side="right"
-            />
+            {checkIfCurrentRoomIsMyRoom() ? null :
+                <Drawer
+                    // ref={(ref) => { this.drawer = ref }}
+                    open={sideBarOpen}
+                    type="overlay"
+                    tapToClose={true}
+                    openDrawerOffset={0.35}
+                    content={renderDrawer()}
+                    style={styles.drawer}
+                    side="right"
+                />
+            }
 
             {renderRoomIsEmptyScreen()}
-            <ScrollView>
+            <SafeAreaView style={{ flex: 1 }}>
                 <FlatList
-                    //ListHeaderComponent={renderHeader}
+                    // ListFooterComponent={<Text>UNTEN</Text>}
                     data={currentListStructure}
                     keyExtractor={item => `${item.id}`}
                     renderItem={({ item }) => (
@@ -404,7 +417,7 @@ const HomeScreen = () => {
                     ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
                 />
                 <View style={styles.platzhalter}></View>
-            </ScrollView>
+            </SafeAreaView>
             <View>
                 <ChooseFolderSetWindow
                     visible={CreateFileWindowVisible}
@@ -418,9 +431,11 @@ const HomeScreen = () => {
             <TouchableOpacity style={styles.plusButton} onPress={() => plusButtonClicked()} >
                 <Entypo name="plus" size={45} color="#008FD3" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.freundeButton} onPress={() => setSideBarOpen(true)} >
-                <Entypo name="users" size={30} color="#008FD3" />
-            </TouchableOpacity>
+            {checkIfCurrentRoomIsMyRoom() ? null :
+                <TouchableOpacity style={styles.freundeButton} onPress={() => setSideBarOpen(true)} >
+                    <Entypo name="users" size={30} color="#008FD3" />
+                </TouchableOpacity>
+            }
             <Image source={logo} style={styles.logo} />
             {
                 deleteWindowVisible ?
@@ -432,6 +447,7 @@ const HomeScreen = () => {
             }
         </View >
     );
+
 }
 
 
