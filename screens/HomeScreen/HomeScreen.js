@@ -10,6 +10,7 @@ import FolderListItem from './FolderListItem';
 import DeleteWindow from './DeleteWindow'
 import NewCardWindow from './NewCardWindow'
 
+
 import { ListStructureContext } from './ListStructureProvider'
 import { CopyPasteContext } from './CopyPasteProvider'
 import { SettingsContext } from '../SettingsScreen/SettingsProvider'
@@ -19,6 +20,7 @@ import logo from '../../assets/Logo_grau.png';
 import Raumbild1 from '../../assets/Raumbild1.png';
 import Raumbild2 from '../../assets/Raumbild2.png';
 import LeererRaum from '../../assets/LeererRaum.png';
+
 
 import { YellowBox } from 'react-native';
 YellowBox.ignoreWarnings(['componentWillReceiveProps'], ['componentWillMount']);
@@ -293,13 +295,13 @@ const HomeScreen = () => {
 
     const renderRoomIsEmptyScreen = () => {
 
-        // if (listHistoryArray.length === 0 && currentListStructure.length === 0) {
-        //     return (
-        //         <View style={styles.bildcontainer}>
-        //             <Image source={LeererRaum} style={styles.leererRaum} />
-        //         </View>
-        //     )
-        // }
+        if (listHistoryArray.length === 0 && currentListStructure.length === 0) {
+            return (
+                <View style={styles.bildcontainer}>
+                    <Image source={LeererRaum} style={styles.leererRaum} />
+                </View>
+            )
+        }
         return null
     }
 

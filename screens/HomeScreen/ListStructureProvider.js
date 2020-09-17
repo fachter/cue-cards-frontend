@@ -21,11 +21,14 @@ class ListStructureProvider extends React.Component {
             CreateNewCardWindowVisible: false,
             dataIsLoading: true,
         }
+
         this.storeDataOnDevice = this.storeDataOnDevice.bind(this)
         this.setCurrentRoomInfo = this.setCurrentRoomInfo.bind(this)
         this.saveRoomData = this.saveRoomData.bind(this)
         this.clearFolders = this.clearFolders.bind(this)
     }
+
+
 
     storeDataOnDevice(newListStructure) {
         const user = this.context
@@ -71,8 +74,6 @@ class ListStructureProvider extends React.Component {
         }
     }
 
-
-
     setCurrentListStructure = (newListStructure, saveOnDB) => {
 
         this.setState({ currentListStructure: newListStructure })
@@ -86,7 +87,6 @@ class ListStructureProvider extends React.Component {
             }
         }
     }
-
 
     saveMyData(newListStructure, saveOnDB) {
         const { listHistoryArray } = this.state
@@ -106,8 +106,6 @@ class ListStructureProvider extends React.Component {
         }
     }
 
-
-
     saveRoomData(newListStructure) {
         const user = this.context
 
@@ -122,7 +120,6 @@ class ListStructureProvider extends React.Component {
     }
 
 
-
     updateFolderHistory = () => {
         let copy = this.state.listHistoryArray
         copy.push(this.state.currentListStructure)
@@ -135,11 +132,7 @@ class ListStructureProvider extends React.Component {
         if (listHistoryArray.length > 0) {
             this.setCurrentListStructure(listHistoryArray[listHistoryArray.length - 1], false)
             listHistoryArray.pop()
-
-
         }
-
-
     }
 
     clearFolders() {

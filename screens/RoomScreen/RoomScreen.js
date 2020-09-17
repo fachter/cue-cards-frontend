@@ -106,7 +106,10 @@ export default function RoomScreen() {
     }
 
 
-    function loadMyRoomData() {
+    async function loadMyRoomData() {
+
+        let localData = await retrieveDataFromDevice()
+
         axios.get("https://cue-cards-app.herokuapp.com/api/get-users-data", {
             headers: {
                 'Authorization': "Bearer " + userToken
@@ -114,7 +117,6 @@ export default function RoomScreen() {
         }).then(async (res) => {
 
             let serverData = res
-            let localData = await retrieveDataFromDevice()
 
             if (localData.data.folders === undefined) {
                 setCurrentListStructure(serverData.data.folders, false)
@@ -133,6 +135,10 @@ export default function RoomScreen() {
 
                     setCurrentListStructure(localData.data.folders, true)
                 }
+            }
+        }).catch(() => {
+            if (localData.data.folders === undefined) {
+                setCurrentListStructure(localData.data.folders)
             }
         })
     }
