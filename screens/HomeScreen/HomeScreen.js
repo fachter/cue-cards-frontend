@@ -9,6 +9,7 @@ import ChooseFolderSetWindow from './ChooseFolderSetWindow'
 import FolderListItem from './FolderListItem';
 import DeleteWindow from './DeleteWindow'
 import NewCardWindow from './NewCardWindow'
+import FriendListBarItem from './FriendListBarItem'
 
 
 import { ListStructureContext } from './ListStructureProvider'
@@ -23,6 +24,7 @@ import LeererRaum from '../../assets/LeererRaum.png';
 
 
 import { YellowBox } from 'react-native';
+import FriendListItem from '../FriendsScreen/FriendListItem';
 YellowBox.ignoreWarnings(['componentWillReceiveProps'], ['componentWillMount']);
 
 
@@ -304,33 +306,20 @@ const HomeScreen = () => {
         return null
     }
 
-
     const renderDrawer = () => {
         //SlideMenu
         return (
             <View style={styles.menuContainer}>
+                <Text style={styles.header}>RaumId</Text>
                 <FlatList
                     data={initialFriendState}
-                    //extraData={state}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <TouchableOpacity style={styles.menuTitleContainer}>
-                                <Image style={{ width: 30, height: 30, borderRadius: 40, borderWidth: 1, borderColor: 'white', marginLeft: 5 }}
-                                    source={require('../../assets/Passbild.jpg')}>
+                    renderItem={({ item }) => (
+                        <FriendListBarItem
+                            item={item}
+                        />
 
-                                </Image>
-                                <Text style={styles.menuTitle}
-                                    key={index}>
-                                    {item.title}
-                                </Text>
-                                <MaterialCommunityIcons
-                                    name="account-plus"
-                                    size={25}
-                                    color='white'
-                                />
-                            </TouchableOpacity>
-                        )
-                    }} />
+
+                    )} />
                 <Button onPress={() => setSideBarOpen(false)}
                     title='Schließen'
                 ></Button>
@@ -392,13 +381,12 @@ const HomeScreen = () => {
                     // ref={(ref) => { this.drawer = ref }}
                     open={sideBarOpen}
                     type="overlay"
-                    tapToClose={true}
+                    tapToClose={false}
                     openDrawerOffset={0.35}
                     content={renderDrawer()}
                     style={styles.drawer}
                     side="right"
                 />
-
             }
 
             {renderRoomIsEmptyScreen()}
@@ -554,7 +542,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#2f3136",
     },
     menuContainer: {
-        flex: 1.0,
+        //flex: 1.0,
         backgroundColor: 'black',
     },
 
@@ -570,9 +558,11 @@ const styles = StyleSheet.create({
         paddingVertical: 5
     },
     drawer: {
-        shadowColor: '#000000',
-        shadowOpacity: 0.8,
-        shadowRadius: 3
+        //flex: 1.0,
+        backgroundColor: 'black'
+    },
+    header: {
+        color: 'white'
     }
 })
 

@@ -1,11 +1,10 @@
-import React, { useContext } from 'react'
-import { View, StyleSheet, TextInput, Dimensions, TouchableOpacity, Text, Image } from 'react-native'
+import React from 'react'
+import { View, StyleSheet, TextInput, TouchableOpacity, Text, Image } from 'react-native'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import logo from '../../assets/Logo_grau.png';
 
 import uuid from 'react-native-uuid'
 
-const windowWidth = Dimensions.get('window').width;
 
 export default class Vocable extends React.Component {
 
@@ -134,12 +133,6 @@ const styles = StyleSheet.create({
         marginTop: 40,
         marginHorizontal: 7
 
-    },
-    questionInput: {
-        padding: 5,
-        borderColor: 'black',
-        justifyContent: 'center',
-        marginTop: 30
     },
     textInput: {
         paddingLeft: 15,

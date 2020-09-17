@@ -5,12 +5,12 @@ import { ProfileContext } from './ProfileProvider'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { UserContext } from '../LoginRegistrationScreen/UserProvider'
+import axios from 'axios';
 
 
 export default function ChangePassword() {
 
     const {
-
         showChangePassword,
         setShowChangePassword
     } = useContext(ProfileContext)

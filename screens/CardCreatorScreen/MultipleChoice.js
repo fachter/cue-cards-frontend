@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react'
-import { StyleSheet, Image, View, TextInput, FlatList, TouchableOpacity, Dimensions, Text, ScrollView } from 'react-native'
+import React from 'react'
+import { StyleSheet, Image, View, TextInput, FlatList, TouchableOpacity, Text, ScrollView } from 'react-native'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import Icon from 'react-native-vector-icons/Ionicons';
 import logo from '../../assets/Logo_grau.png';
@@ -8,9 +8,7 @@ import uuid from 'react-native-uuid'
 
 
 
-const windowWidth = Dimensions.get('window').width;
-const data = [
-]
+
 
 export default class MultipleChoice extends React.Component {
 
