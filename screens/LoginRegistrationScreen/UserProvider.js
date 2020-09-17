@@ -15,6 +15,10 @@ class UserProvider extends React.Component {
         this._authenticateAcc = this._authenticateAcc.bind(this)
         this.setUserToken = this.setUserToken.bind(this)
         this.checkIfConnected = this.checkIfConnected.bind(this)
+        this.setUserImage = this.setUserImage.bind(this)
+        this.setUserName = this.setUserName.bind(this)
+        this.setEmail = this.setEmail.bind(this)
+        this.setPassword = this.setPassword.bind(this)
 
         this.state = {
             username: null,
@@ -77,6 +81,15 @@ class UserProvider extends React.Component {
         this.setState({ dataIsLoading: value })
     }
 
+
+    setUserName(username) {
+        this.setState({ username })
+    }
+
+    setPassword(password) {
+        this.setState({ password })
+    }
+
     setUserImage(url) {
         this.setState({ userImage: url })
     }
@@ -132,9 +145,9 @@ class UserProvider extends React.Component {
                 password: password,
             }).then(res => {
                 this.state.userToken = res.data.jwt
-                // this.state.email = res.data.email
-                // this.state.userImage = res.data.userImage
-                // this.state.nickName  = res.data.nickname
+                this.state.email = res.data.email
+                this.state.userImage = res.data.userImage
+                this.state.nickName = res.data.nickName
                 this.state.username = username
                 resolve('erfolgreich')
                 if (stayLoggedin === true) {
@@ -152,6 +165,7 @@ class UserProvider extends React.Component {
         return (
             <UserContext.Provider value={{
                 username: this.state.username,
+                setUserName: this.setUserName,
                 nickName: this.state.nickName,
                 setNickName: this.state.nickName,
                 email: this.state.email,

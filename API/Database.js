@@ -32,8 +32,6 @@ function storeMyRoomDataOnDB(listHistoryArray, newListStructure, userToken) {
 
 function storyExternRoomDataOnDB(listHistoryArray, newListStructure, currentRoomInfo, userToken) {
 
-
-
     let updatedRoom = {
         data: {
             folders: null,
@@ -42,7 +40,6 @@ function storyExternRoomDataOnDB(listHistoryArray, newListStructure, currentRoom
         id: currentRoomInfo.id,
         name: currentRoomInfo.name,
         pictureNumber: currentRoomInfo.pictureNumber
-
     }
 
     if (listHistoryArray.length > 0) {

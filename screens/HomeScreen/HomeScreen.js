@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, Button, BackHandler, ActivityIndicator, Image, SafeAreaView } from 'react-native';
+import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, Button, BackHandler, Image, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -24,7 +24,6 @@ import LeererRaum from '../../assets/LeererRaum.png';
 
 import { YellowBox } from 'react-native';
 YellowBox.ignoreWarnings(['componentWillReceiveProps'], ['componentWillMount']);
-
 
 
 const { width: WidTH } = Dimensions.get('window')
@@ -399,6 +398,7 @@ const HomeScreen = () => {
                     style={styles.drawer}
                     side="right"
                 />
+
             }
 
             {renderRoomIsEmptyScreen()}
