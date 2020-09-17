@@ -306,22 +306,21 @@ const HomeScreen = () => {
         }
         return null
     }
-
-
+ 
     const renderDrawer = () => {
         //SlideMenu
         return (
             <View style={styles.menuContainer}>
+                <Text style = {styles.header}>RaumId</Text>
                 <FlatList
                     data={initialFriendState}
-                    //extraData={state}
-                    renderItem={({ item}) => {
+                    renderItem={({ item}) => (
                         <FriendListBarItem
                         item={item}
                         />
                             
                         
-                    }} />
+                    )} />
                 <Button onPress={() => setSideBarOpen(false)}
                     title='Schließen'
                 ></Button>
@@ -378,7 +377,7 @@ const HomeScreen = () => {
             <Image source={Raumbild2} style={styles.obenRechts} />
             <Image source={Raumbild1} style={styles.untenLinks} />
 
-            {checkIfCurrentRoomIsMyRoom() ? null :
+             {checkIfCurrentRoomIsMyRoom() ? null :
                 <Drawer
                     // ref={(ref) => { this.drawer = ref }}
                     open={sideBarOpen}
@@ -389,7 +388,7 @@ const HomeScreen = () => {
                     style={styles.drawer}
                     side="right"
                 />
-            }
+            } 
 
             {renderRoomIsEmptyScreen()}
             <SafeAreaView style={{ flex: 1 }}>
@@ -544,7 +543,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#2f3136",
     },
     menuContainer: {
-        flex: 1.0,
+        //flex: 1.0,
         backgroundColor: 'black',
     },
 
@@ -560,9 +559,11 @@ const styles = StyleSheet.create({
         paddingVertical: 5
     },
     drawer: {
-        shadowColor: '#000000',
-        shadowOpacity: 0.8,
-        shadowRadius: 3
+        //flex: 1.0,
+        backgroundColor: 'black'
+    },
+    header: {
+        color: 'white'
     }
 })
 
