@@ -21,7 +21,7 @@ export default class FriendListBarItem extends React.Component {
         return (
             <TouchableOpacity style={styles.menuTitleContainer}>
                 <Image style={{ width: 35, height: 35, borderRadius: 40, borderWidth: 0.2, borderColor: 'white', marginLeft: 20 }}
-                    source={this.props.item.userImage}>
+                    source={{ uri: this.props.item.userImage }}>
 
                 </Image>
                 <FontAwesome name="circle-o-notch" style={styles.onlineState} size={15} color={this._OnlineOffline()} />

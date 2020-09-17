@@ -24,7 +24,7 @@ import LeererRaum from '../../assets/LeererRaum.png';
 
 
 import { YellowBox } from 'react-native';
-YellowBox.ignoreWarnings(['componentWillReceiveProps'], ['componentWillMount']);
+YellowBox.ignoreWarnings(['componentWillReceiveProps has been renamed, and is not recommended for use', 'componentWillMount']);
 
 
 const { width: WidTH } = Dimensions.get('window')
@@ -312,9 +312,10 @@ const HomeScreen = () => {
         //SlideMenu
         return (
             <View style={styles.menuContainer}>
-                <Text style={styles.header}>Raum-ID:    #1234</Text>
+                <Text style={styles.header}>{`Raum-ID: ${currentRoomInfo.id}`}</Text>
                 <FlatList
-                    data={initialFriendState}
+                    data={currentRoomInfo.user}
+                    keyExtractor={item => `${currentRoomInfo.id}`}
                     renderItem={({ item }) => (
                         <FriendListBarItem
                             item={item}

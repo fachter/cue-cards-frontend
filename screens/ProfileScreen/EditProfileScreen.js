@@ -28,17 +28,8 @@ export default function EditProfileScreen() {
 
     const [showAddImage, setShowAddImage] = useState(null);
 
-    // const {
-    //     setImage,
-    //     image,
-    //     setProfileImage,
-    //     showAddImage,
-    //     setShowAddImage,
-    //     showChangePassword,
-    //     setShowChangePassword
-    // } = useContext(ProfileContext)
 
-    const { username, setUserName, userToken, setUserImage, userImage, nickName, setNickName, email, setEmail, password } = useContext(UserContext)
+    const { username, userToken, setUserImage, userImage, nickName, setNickName, email, setEmail, password } = useContext(UserContext)
     const [showChangePasswordView, setShowChangePaswordView] = useState(false)
 
     const [nicknameStorage, setNicknameStorage] = useState(nickName)
@@ -118,10 +109,6 @@ export default function EditProfileScreen() {
             })
 
     }
-
-
-
-
 
 
     return (
