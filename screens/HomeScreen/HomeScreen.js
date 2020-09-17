@@ -33,7 +33,8 @@ const initialFriendState = [
     {
         id: '1',
         nickName: 'Annalena Jessica Liebstückl',
-        userImage: '../../assets/Passbild.jpg'
+        userImage: '../../assets/Passbild.jpg',
+        isOnline: true
     },
     {
         id: '2',
@@ -95,6 +96,7 @@ const HomeScreen = () => {
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', hardwareBackButtonPressed)
     }, []);
+
 
 
     const headerLeftButton = () => {

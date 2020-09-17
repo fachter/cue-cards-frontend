@@ -1,10 +1,18 @@
 import React from 'react'
-import { Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet, Image, View } from 'react-native';
 
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+import { Left } from 'native-base';
 
 
 export default class FriendListBarItem extends React.Component {
+
+    _OnlineOffline() {
+        if (this.props.item.isOnline === true) {
+            return '#3CB371'
+        }
+        return 'gray'
+    }
 
     render() {
 
@@ -16,6 +24,7 @@ export default class FriendListBarItem extends React.Component {
                     source={this.props.item.userImage}>
 
                 </Image>
+                <FontAwesome name="circle-o-notch" style={styles.onlineState} size={15} color={this._OnlineOffline()} />
                 <Text style={styles.menuTitle}>
                     {this.props.item.nickName}
                 </Text>
@@ -39,5 +48,15 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginLeft: 20,
         maxWidth: '65%',
-    }
+    },
+    onlineState: {
+        marginLeft: -13,
+        marginBottom: -24,
+        // height: 17,
+        // width: 17,
+        // borderRadius: 10,
+        // alignSelf: 'center',
+        // alignItems: 'center',
+    },
+
 })
