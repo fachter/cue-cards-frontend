@@ -29,26 +29,7 @@ YellowBox.ignoreWarnings(['componentWillReceiveProps has been renamed, and is no
 
 const { width: WidTH } = Dimensions.get('window')
 
-const initialFriendState = [
-    {
-        id: '1',
-        nickName: 'Annalena Jessica Liebstückl',
-        userImage: '../../assets/Passbild.jpg',
-        isOnline: true
-    },
-    {
-        id: '2',
-        nickName: 'Matze',
-        userImage: '../../assets/Passbild.jpg'
 
-    },
-    {
-        id: '3',
-        nickName: 'Darius',
-        userImage: '../../assets/Passbild.jpg'
-
-    }
-]
 
 const HomeScreen = () => {
 
@@ -309,12 +290,13 @@ const HomeScreen = () => {
 
     const renderDrawer = () => {
         //SlideMenu
+        console.log(currentRoomInfo.user)
         return (
             <View style={styles.menuContainer}>
                 <Text style={styles.header}>{`Raum-ID: ${currentRoomInfo.id}`}</Text>
                 <FlatList
                     data={currentRoomInfo.user}
-                    keyExtractor={item => `${currentRoomInfo.id}`}
+                    keyExtractor={item => `${item.id}`}
                     renderItem={({ item }) => (
                         <FriendListBarItem
                             item={item}
