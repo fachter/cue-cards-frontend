@@ -113,7 +113,7 @@ export default function RoomScreen() {
 
             let serverData = res
 
-            if (localData.data.folders === undefined) {
+            if (localData === undefined) {
                 setCurrentListStructure(serverData.data.folders, false)
             } else {
 
@@ -132,7 +132,9 @@ export default function RoomScreen() {
                 }
             }
         }).catch(() => {
-            if (localData.data.folders === undefined) {
+            if (localData.data.folders !== undefined) {
+                console.log('######### LOAD MY LOCAL DATA')
+                console.log(localData.data.folders)
                 setCurrentListStructure(localData.data.folders)
             }
         })

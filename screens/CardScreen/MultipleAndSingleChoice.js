@@ -12,13 +12,12 @@ export default function MulitpleChoiceCard() {
 
 
     const { currentCard, _updateCardValues, _getArrayOfTrueAnswers, answers, setAnswers } = useContext(CardScreenContext)
-    const [backgroundColor, setBackgroundColor] = useState("#2f3136")
-    const [setBorderColor] = useState("#2f3136")
+    const [mode, setMode] = useState('answer')
     const [showNextButton, setShowNextButton] = useState(false)
 
 
-
     function _checkTheChoice() {
+
         let numberOfRightSelection = 0
         for (let i = 0; i < answers.length; i++) {
             if (answers[i].checkState === true && answers[i].isTrue === true) {
@@ -34,17 +33,23 @@ export default function MulitpleChoiceCard() {
         }
 
         if (numberOfRightSelection === currentCard.answers.length && currentCard.answers.length === numberOfChoosenAnswers) {
+            //ANTWORT RICHTIG
+            //setBorderColor("green")
+            setMode('solutionTrue')
 
-            setBorderColor("green")
             setTimeout(() => {
                 _nextCardAndUpdateValues(true)
-                setBackgroundColor("#2f3136")
             }, 1000)
 
         } else {
+            //ANTWORT FALSCH
             _showTrueAnswers()
-            setBackgroundColor("red")
-            setShowNextButton(true)
+            setMode('solutionFalse')
+
+            setTimeout(() => {
+                setShowNextButton(true)
+
+            }, 1000)
         }
     }
 
@@ -70,7 +75,7 @@ export default function MulitpleChoiceCard() {
     function _nextCardAndUpdateValues(result) {
         _updateCardValues(result)
         setShowNextButton(false)
-        setBackgroundColor("#2f3136")
+        setMode('answer')
     }
 
 
@@ -98,7 +103,7 @@ export default function MulitpleChoiceCard() {
 
     return (
 
-        <View style={[styles.container, { backgroundColor: backgroundColor }]}>
+        <View style={[styles.container]}>
             <View style={styles.trennlinie}></View>
             <FlatList
                 extraData={answers}
@@ -106,6 +111,7 @@ export default function MulitpleChoiceCard() {
                 keyExtractor={item => item.answerValues.id}
                 renderItem={({ item }) => (
                     <AnswerListItem
+                        mode={mode}
                         item={item}
                         getCardState={_updateCheckState}
 

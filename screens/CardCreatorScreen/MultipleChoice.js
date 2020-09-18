@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Image, View, TextInput, FlatList, TouchableOpacity, Text, ScrollView } from 'react-native'
+import { StyleSheet, Image, View, TextInput, FlatList, TouchableOpacity, Text, SafeAreaView } from 'react-native'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import Icon from 'react-native-vector-icons/Ionicons';
 import logo from '../../assets/Logo_grau.png';
@@ -135,20 +135,21 @@ export default class MultipleChoice extends React.Component {
                     </View>
                 </TouchableOpacity>
                 <View>
-                    <ScrollView>
+                    <SafeAreaView style={{ flex: 1 }}>
                         <FlatList
                             data={this.state.answers}
                             renderItem={({ item }) => (
                                 <AnswerItem
                                     item={item}
+
                                     getText={this._updateAnswerText.bind(this)}
                                     deleteCallback={this._deleteItemById.bind(this)}
                                 />
                             )}
-                            keyExtractor={item => item.answerid}
+                            keyExtractor={item => item.id}
                             ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
                         />
-                    </ScrollView>
+                    </SafeAreaView>
 
                 </View>
                 <Image source={logo} style={styles.logo} />
