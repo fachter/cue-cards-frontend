@@ -61,7 +61,7 @@ export default function ChangePassword({ showChangePasswordView, onSetVisibility
                     <TextInput
                         style={styles.friendName}
                         maxLength={20}
-                        placeholder="Passwort eingeben"
+                        placeholder="Neues Passwort eingeben"
                         placeholderTextColor="grey"
                         onChangeText={text => setPassword1(text)}
                     >
@@ -76,7 +76,7 @@ export default function ChangePassword({ showChangePasswordView, onSetVisibility
                     </TextInput>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity style={styles.saveButton} onPress={() => save()} >
-                            <MaterialCommunityIcons name="home-plus" size={20} color="white" />
+                            <MaterialCommunityIcons name="key" size={20} color="#008FD3" />
                             <Text style={{ marginLeft: 10, fontStyle: 'italic', fontSize: 17, color: 'white' }}>Ändern</Text>
                         </TouchableOpacity>
                     </View >
