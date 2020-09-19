@@ -1,9 +1,12 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+import SetVorlage from '../../assets/SetVorlage.png';
+import OrdnerVorlage from '../../assets/OrdnerVorlage.png';
+import KartenVorlage from '../../assets/KartenVorlage.png';
 
 
 
@@ -36,10 +39,7 @@ export default class FolderListItem extends React.Component {
                         onPress={() => onNavigateToCardScreen(item)}
                         onLongPress={() => onDeleteWindow(item)}>
                         <View style={styles.container}>
-                            <MaterialCommunityIcons
-                                style={styles.folderButton}
-                                name="credit-card-multiple-outline"
-                                size={25} color="white" />
+                            <Image source={KartenVorlage} style={styles.stackButton} />
                             <Text style={styles.fontStyle}
                                 numberOfLines={1}
                                 ellipsizeMode="clip"
@@ -51,12 +51,7 @@ export default class FolderListItem extends React.Component {
                         onPress={() => callBackItem(item)}
                         onLongPress={() => onDeleteWindow(item)}>
                         <View style={styles.container}>
-                            <Icon.Button
-                                style={styles.folderButton}
-                                name="ios-folder"
-                                size={25} color="white"
-                                backgroundColor="#2f3136"
-                            />
+                            <Image source={OrdnerVorlage} style={styles.stackButton} />
                             <Text style={styles.fontStyle}
                                 numberOfLines={1}
                                 ellipsizeMode="clip">{item.name}
@@ -71,10 +66,7 @@ export default class FolderListItem extends React.Component {
                                 onPress={() => callBackItem(item)}
                                 onLongPress={() => onDeleteWindow(item)}>
                                 <View style={styles.container}>
-                                    <MaterialCommunityIcons
-                                        style={styles.stackButton}
-                                        name="cards-outline"
-                                        size={25} color="white" />
+                                    <Image source={SetVorlage} style={styles.stackButton} />
                                     <Text style={styles.fontStyle}
                                         numberOfLines={1}
                                         ellipsizeMode="clip">{item.name}</Text>
@@ -110,7 +102,10 @@ const styles = StyleSheet.create({
     stackButton: {
         marginRight: 17,
         marginLeft: 10,
-        paddingVertical: 8
+        paddingVertical: 8,
+        width: 30,
+        height: 40,
+        resizeMode: 'contain',
     },
     fontStyle: {
         fontWeight: "bold",

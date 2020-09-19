@@ -1,12 +1,13 @@
 import React, { useState, createContext, useContext, useEffect } from 'react'
-import { View, Modal, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native'
+import { View, Modal, StyleSheet, Text, TouchableOpacity, TextInput, Image } from 'react-native'
 import * as Icon from '@expo/vector-icons'
 import { AntDesign } from '@expo/vector-icons';
 import { ListStructureContext } from './ListStructureProvider'
 import { useNavigation } from '@react-navigation/native';
 import uuid from 'react-native-uuid'
 
-
+import SetVorlage from '../../assets/SetVorlage.png';
+import OrdnerVorlage from '../../assets/OrdnerVorlage.png';
 
 
 const FileContext = createContext()
@@ -104,11 +105,11 @@ function CreateFolderOrSet() {
                 <Text style={styles.headingText}>Was möchtest du erstellen?</Text>
                 <View style={styles.window}>
                     <TouchableOpacity style={styles.windowButtons} onPress={() => _setFileType(true)}>
-                        <Icon.AntDesign name="addfolder" size={35} color='#008FD3' />
+                        <Image source={OrdnerVorlage} style={styles.icon} />
                         <Text style={styles.buttonText}>Ordner</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.windowButtons]} onPress={() => _setFileType(false)}>
-                        <Icon.MaterialCommunityIcons name="cards-variant" size={35} color='#008FD3' />
+                        <Image source={SetVorlage} style={styles.icon} />
                         <Text style={styles.buttonText}>Set</Text>
                     </TouchableOpacity>
                 </View>
@@ -215,6 +216,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#202225',
         padding: 10,
         margin: 5
+    },
+    icon: {
+        width: 40,
+        height: 50,
+        resizeMode: 'contain',
     },
     saveButton: {
         height: 50,
