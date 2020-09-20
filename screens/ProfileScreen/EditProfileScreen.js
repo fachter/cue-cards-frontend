@@ -105,6 +105,16 @@ export default function EditProfileScreen() {
                 updateProfilDataLocal()
 
             }).catch(err => {
+
+                //if (.status === 406) {
+                //     alert('Email bereits vorhanden')
+                // } else if (res.status === 409) {
+                //     alert('Username bereits vorhanden')
+                // } else if( === 500) {
+                //     alert('Verbindung fehlgeschlagen, bitte versuches es erneut')
+                // }
+
+
                 console.log('Fehler beim speichern der Profildaten  in der DB ' + err)
             })
 

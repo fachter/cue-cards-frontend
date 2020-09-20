@@ -18,12 +18,22 @@ export default class DeleteWindow extends React.Component {
     copy(item) {
         const copy = this.context
         copy.copyTheData(item)
-        this.props.onDeleteWindow()
+        this.props.onSetVisibility(false)
+    }
+
+    editItem() {
+        const { item } = this.props
+        if (item.isFolder == true || item.isFolder == false) {
+            this.props.onSetVisibility(false)
+            this.props.onSetEditItemNameWindowVisiblity(true)
+        } else {
+            this.props.onNavigateToCardCreator(item, "editMode")
+        }
     }
 
 
     render() {
-        const { item, onDeleteWindow, onDelete, onNavigateToCardCreator } = this.props
+        const { item, onSetVisibility, onDelete } = this.props
 
         return (
             <Modal
@@ -43,7 +53,7 @@ export default class DeleteWindow extends React.Component {
                         name="ios-copy"
                         size={23} color="white"
                         backgroundColor="#202225"
-                        onPress={() => this.copy(item.id)}
+                        onPress={() => this.copy(item)}
                     />
                     {/*Ausschneiden*/}
                     <Icon.Button
@@ -54,21 +64,21 @@ export default class DeleteWindow extends React.Component {
                         onPress={() => onDelete(item.id)}
                     />
                     {/*Bearbeiten*/}
-                    {this._checkIfItemIsFolderOrSet() ? null :
-                        <Icon.Button
-                            style={styles.normalButton}
-                            name="ios-brush"
-                            size={25} color="white"
-                            backgroundColor="#202225"
-                            onPress={() => onNavigateToCardCreator(item, "editMode")}
-                        />}
+
+                    <Icon.Button
+                        style={styles.normalButton}
+                        name="ios-brush"
+                        size={25} color="white"
+                        backgroundColor="#202225"
+                        onPress={() => this.editItem()}
+                    />
                     {/*Schließen*/}
                     <Icon.Button
                         style={styles.closeButton}
                         name="ios-close"
                         size={35} color="white"
                         backgroundColor="#202225"
-                        onPress={() => onDeleteWindow()}
+                        onPress={() => onSetVisibility(false)}
                     />
                 </View>
             </Modal>

@@ -46,12 +46,12 @@ export default class AddRoomWindow extends React.Component {
 
         if (createRoomVisible === true) {
             return (
-                <CreateRoomView updateRooms={this.props.updateRooms} />
+                <CreateRoomView onSetVisibility={this.props.onSetVisibility} updateRooms={this.props.updateRooms} />
             )
 
         } else {
             return (
-                <RoomIDView updateRooms={this.props.updateRooms} />
+                <RoomIDView updateRooms={this.props.updateRooms} onSetVisibility={this.props.onSetVisibility} />
             )
         }
     }

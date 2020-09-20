@@ -3,6 +3,7 @@ import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, StyleSheet,
 import logo from '../../assets/Logo.png'
 import axios from 'axios';
 import { UserContext } from './UserProvider';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 
 
@@ -12,17 +13,13 @@ const { width: WidTH } = Dimensions.get('window')
 
 export default function RegistrationScreen({ navigation }) {
 
-    const { login, setUserToken } = useContext(UserContext)
+    const { login, setUserToken, setUserImage, setNickName, setEmail } = useContext(UserContext)
 
     const [username, setUsername] = useState(null)
     const [password1, setPassword1] = useState(null)
     const [password2, setPassword2] = useState(null)
-    const [email, setEmail] = useState(null)
+    const [emailThis, setEmailThis] = useState(null)
     const [fullName, setFullname] = useState(null)
-
-
-
-
 
     function _regNewAcc() {
 
@@ -31,22 +28,28 @@ export default function RegistrationScreen({ navigation }) {
                 axios.post('https://cue-cards-app.herokuapp.com/api/register', {
                     username: username,
                     password: password1,
-                    email: email,
+                    email: emailThis,
                     fullName: fullName
                 })
-                    .then((resp) => {
-                        if (resp.status === 200) {
-                            console.log("Registrierung erfolgreich")
-                            setUserToken(resp.data.jwt)
-                            login()
-                        } else if (resp.status === '????') {
-                            alert('Email bereits vorhanden')
-                        } else if (resp.status === '???') {
-                            alert('Username bereits vorhanden')
+                    .then((res) => {
 
-                        }
+                        setUserToken(res.data.jwt)
+                        setEmail(res.data.userData.email)
+                        setNickName(res.data.userData.nickName)
+                        setUserImage(res.data.userData.userImage)
+
+                        console.log("Registrierung erfolgreich")
+                        login()
+
                     }).catch((error) => {
-                        alert('Verbindung fehlgeschlagen, bitte versuches es erneut')
+
+                        //if (.status === 406) {
+                        //     alert('Email bereits vorhanden')
+                        // } else if (res.status === 409) {
+                        //     alert('Username bereits vorhanden')
+                        // } else if( === 500) {
+                        //     alert('Verbindung fehlgeschlagen, bitte versuches es erneut')
+                        // }
                         console.log("Registrierung fehlgeschlagen " + error)
                     })
             })
@@ -77,9 +80,8 @@ export default function RegistrationScreen({ navigation }) {
     function checkEmailValidity() {
 
         return new Promise((resolve, reject) => {
-            if (email.includes('@')) {
-                let splitedEmail = email.split('@')
-                console.log(splitedEmail)
+            if (emailThis.includes('@')) {
+                let splitedEmail = emailThis.split('@')
                 if (splitedEmail.length === 2) {
                     if (splitedEmail[0].toString().length >= 2 && splitedEmail[1].toString().length >= 2) {
                         resolve()
@@ -103,7 +105,7 @@ export default function RegistrationScreen({ navigation }) {
                 _checkIfNull(password1).then(() => {
                     _checkIfNull(password2).then(() => {
                         _comparePasswords().then(() => {
-                            _checkIfNull(email).then(() => {
+                            _checkIfNull(emailThis).then(() => {
                                 checkEmailValidity().then(() => {
                                     _checkIfNull(fullName).then(() => {
 
@@ -186,7 +188,7 @@ export default function RegistrationScreen({ navigation }) {
                     placeholder={'E-Mail'}
                     placeholderTextColor={'white'}
                     underlineColorAndroid={'transparent'}
-                    onChangeText={text => setEmail(text)}
+                    onChangeText={text => setEmailThis(text)}
                 />
             </View>
             <View>

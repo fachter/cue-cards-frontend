@@ -9,7 +9,7 @@ import { UserContext } from '../../LoginRegistrationScreen/UserProvider';
 
 
 
-export default function RoomIDView({ updateRooms }) {
+export default function RoomIDView({ updateRooms, onSetVisibility }) {
 
 
     const [componentIsMounted, setComponentIsMounted] = useState(false)
@@ -21,6 +21,7 @@ export default function RoomIDView({ updateRooms }) {
     const roomID = useRef(null)
 
     const { userToken, checkIfConnected, isConnected } = useContext(UserContext)
+
 
     useEffect(() => {
         if (componentIsMounted === false) {
@@ -39,11 +40,9 @@ export default function RoomIDView({ updateRooms }) {
         }).then(res => {
             console.log(res)
             if (res.status === 200) {
-                resultSucces.current = true
-                resultMessage.current = `Du bist dem Raum erfolgreich beigetreten`
                 //showActivityIndicator.current = false
-                setShowResultView(true)
                 updateRooms()
+                onSetVisibility(false)
                 console.log(`Beitreten des Raumes mit der ID ${roomID.urrent} ` + res)
             } else if (res.status === 202) {
                 setShowPasswordView(true)
@@ -92,7 +91,7 @@ export default function RoomIDView({ updateRooms }) {
                 } else {
                     if (showActivityIndicator === false) {
                         return (
-                            <PasswordView roomID={roomID.current} userToken={userToken} updateRooms={this.props.updateRooms} />
+                            <PasswordView roomID={roomID.current} userToken={userToken} updateRooms={this.props.updateRooms} onSetVisibility={onSetVisibility} />
                         )
                     } else {
                         return (

@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { UserContext } from '../../LoginRegistrationScreen/UserProvider'
 
-export default function CreateRoomView({ updateRooms }) {
+export default function CreateRoomView({ updateRooms, onSetVisibility }) {
 
     const [roomName, setRoomName] = useState(null)
     const [passwordToggle, setPasswordToggle] = useState(false)
@@ -38,8 +38,8 @@ export default function CreateRoomView({ updateRooms }) {
                     .then(() => {
                         resultSucces.current = true
                         resultMessage.current = 'Raum wurde erstellt'
-                        setShowResultView(true)
                         updateRooms()
+                        onSetVisibility()
                     })
                     .catch(() => {
                         resultSucces.current = false
@@ -75,7 +75,6 @@ export default function CreateRoomView({ updateRooms }) {
                     sendRoomToServer(newRoom)
                 } else {
                     alert("Geb deinen Raum einen Namen")
-
                 }
             } else {
                 alert("Dein Password muss mindestens sechs Zeichen enthalten")

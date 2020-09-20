@@ -57,7 +57,6 @@ export default function RoomScreen() {
             .then(() => {
                 asyncAxiosGet('https://cue-cards-app.herokuapp.com/api/get-available-rooms', 'RoomScreen', userToken)
                     .then(res => {
-                        console.log(res.data)
                         setServerRooms(res.data)
                         setIsLoading(false)
                     }).catch(error => {

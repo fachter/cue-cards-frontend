@@ -34,7 +34,9 @@ export default class PasswordView extends React.Component {
             this.state.PasswordView = false
             this.state.JoinSucces = true
             this.setState({ showResultView: true })
+            this.props.onSetVisibility(false)
             this.props.updateRooms()
+
 
         }).catch(err => {
             console.log(err)
