@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, StyleSheet, ImageBackground, KeyboardAvoidingView, Platform } from 'react-native';
 import logo from '../../assets/Logo.png'
 import axios from 'axios';
 import { UserContext } from './UserProvider';
@@ -159,58 +159,64 @@ export default function RegistrationScreen({ navigation }) {
             source={require('../../assets/LoginHintergrund.png')}
             style={styles.container}
         >
-            <TouchableOpacity
+            {/* <TouchableOpacity
                 style={styles.backButton}
                 onPress={() => navigation.goBack()}
             >
                 <Icon name="ios-arrow-back" size={25} color="white" />
-            </TouchableOpacity>
-            <ScrollView>
-                <Image source={logo} style={styles.logo} />
-                <TextInput
-                    style={styles.input}
-                    placeholder={'Benutzername'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    onChangeText={text => setUsername(text)}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder={'Nickname'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    onChangeText={text => setFullname(text)}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder={'E-Mail'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    onChangeText={text => setEmailThis(text)}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder={'Passwort'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    secureTextEntry={true}
-                    onChangeText={text => setPassword1(text)}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder={'Passwort wiederholen'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    secureTextEntry={true}
-                    onChangeText={text => setPassword2(text)}
-                />
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => _regNewAcc()}
-                >
-                    <Text style={styles.text}>Registrieren</Text>
-                </TouchableOpacity>
-            </ScrollView>
+            </TouchableOpacity> */}
+            <KeyboardAvoidingView
+                style={styles.scrollView}
+                behavior={Platform.OS == "ios" ? "padding" : "height"}
+            >
+                <ScrollView>
+                    <Image source={logo} style={styles.logo} />
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Benutzername'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        onChangeText={text => setUsername(text)}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Nickname'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        onChangeText={text => setFullname(text)}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'E-Mail'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        onChangeText={text => setEmail(text)}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Passwort'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        secureTextEntry={true}
+                        onChangeText={text => setPassword1(text)}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Passwort wiederholen'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        secureTextEntry={true}
+                        onChangeText={text => setPassword2(text)}
+                    />
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => _regNewAcc()}
+                    >
+                        <Text style={styles.text}>Registrieren</Text>
+                    </TouchableOpacity>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </ImageBackground>
     )
 }
@@ -218,16 +224,19 @@ export default function RegistrationScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        height: '100%',
-        width: '100%',
-        resizeMode: 'contain',
+        alignItems: 'center',
+        justifyContent: 'center'
+
+    },
+    scrollView: {
+
     },
     logo: {
         alignSelf: 'center',
         width: 250,
         height: 100,
-        marginTop: 200
+        marginTop: '25%'
+
     },
     backButton: {
         position: 'absolute',
