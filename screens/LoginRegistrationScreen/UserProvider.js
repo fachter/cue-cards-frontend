@@ -40,8 +40,6 @@ class UserProvider extends React.Component {
                 username: username,
                 password: password,
             }).then(res => {
-
-                console.log(res.data.userData.userImage)
                 this.state.userToken = res.data.jwt
                 this.state.email = res.data.userData.email
                 this.state.userImage = res.data.userData.userImage
@@ -173,7 +171,7 @@ class UserProvider extends React.Component {
                 password: this.state.password,
                 setPassword: this.setPassword,
                 nickName: this.state.nickName,
-                setNickName: this.state.setNickName,
+                setNickName: this.setNickName,
                 email: this.state.email,
                 setEmail: this.setEmail,
                 userImage: this.state.userImage,

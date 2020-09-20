@@ -9,6 +9,7 @@ import ChooseFolderSetWindow from './ChooseFolderSetWindow'
 import FolderListItem from './FolderListItem';
 import DeleteWindow from './DeleteWindow'
 import NewCardWindow from './NewCardWindow'
+import EditRoomWindow from './EditRoomWindow'
 import FriendListBarItem from './FriendListBarItem'
 
 
@@ -54,7 +55,8 @@ const HomeScreen = () => {
 
     const navigation = useNavigation()
     const [deleteWindowVisible, SetDeleteWindowVisible] = useState(false)
-    const [onDeleteItem, setOnDeleteItem] = useState(null)
+    const [editItemNameWindowVisibility, setEditItemNameWindowVisiblity] = useState(false)
+    const [clickedItem, setClickedItem] = useState(null)
     const [sideBarOpen, setSideBarOpen] = useState(false)
 
 
@@ -218,7 +220,7 @@ const HomeScreen = () => {
     }
 
     function _showDeleteWindow(item) {
-        setOnDeleteItem(item)
+        setClickedItem(item)
         SetDeleteWindowVisible(true)
 
     }
@@ -272,6 +274,7 @@ const HomeScreen = () => {
         let copy = currentListStructure
         copy.push(copyData)
         setCurrentListStructure(copy, true)
+        setSomeThingIsCopied(false)
     }
 
 
@@ -317,11 +320,26 @@ const HomeScreen = () => {
     }
 
 
+    const editItemName = (item, newItemName) => {
+
+        var copy = currentListStructure
+        var index
+
+        for (var i = 0; i < copy.length; i++) {  //Sucht den Index des Items im Array nach id
+            if (copy[i].id === item.id)
+                index = i
+        }
+        currentListStructure[index].name = newItemName //aktualisert den Namen
+        setCurrentListStructure(copy, true)
+        setEditItemNameWindowVisiblity(false)
+    }
 
     // ################ Auszuführende Methoden vor dem Return: #########################
     renderHeaderTitle()
 
 
+    console.log(copiedItemIsCard)
+    console.log(isFolder)
     return (
         <Drawer
             // ref={(ref) => { this.drawer = ref }}
@@ -335,7 +353,7 @@ const HomeScreen = () => {
             <View style={styles.container}>
                 {someThingIsCopied ?
                     <View >
-                        {(copiedItemIsCard === true && isFolder === false) || (copiedItemIsCard === false) ?
+                        {(copiedItemIsCard === true && isFolder === false) || copiedItemIsCard === false && isFolder === true ?
                             <View style={styles.copyPasteView}>
                                 <Icon.Button
                                     name="ios-copy"
@@ -350,7 +368,7 @@ const HomeScreen = () => {
                                     onPress={() => setSomeThingIsCopied(false)} />
                             </View> :
                             <View style={{ flexDirection: 'row' }}>
-                                <Text>kopierte Datei kann hier nicht eingefügt werden</Text>
+                                <Text>Dieses Element kann hier nicht eingefügt werden</Text>
                                 <Icon.Button
                                     style={{ alignSelf: 'flex-start' }}
                                     name="ios-close"
@@ -405,11 +423,18 @@ const HomeScreen = () => {
                 {
                     deleteWindowVisible ?
                         <DeleteWindow
-                            onDeleteWindow={() => SetDeleteWindowVisible(false)}
+                            onSetEditItemNameWindowVisiblity={setEditItemNameWindowVisiblity}
+                            onSetVisibility={SetDeleteWindowVisible}
                             onNavigateToCardCreator={editCard}
-                            item={onDeleteItem}
+                            item={clickedItem}
                             onDelete={_deleteItemById} /> : null
                 }
+                <EditRoomWindow
+                    onSetVisibility={setEditItemNameWindowVisiblity}
+                    visibility={editItemNameWindowVisibility}
+                    onEditItemName={editItemName}
+                    item={clickedItem}
+                />
             </View >
         </Drawer>
     );

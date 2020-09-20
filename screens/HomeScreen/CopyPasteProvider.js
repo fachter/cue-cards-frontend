@@ -32,6 +32,11 @@ class CopyPasteProvider extends React.Component {
     }
 
     copyTheData(data) {
+        console.log(data)
+        if (data.isFolder === undefined || data.isFolder === null) {
+            this.state.copiedItemIsCard = true
+        }
+
         this.setState({ copyData: this.updateAllids({ ...data }) })
         if (data.isFolder == undefined) {
             this.setState({ copiedItemIsCard: true })
@@ -39,10 +44,6 @@ class CopyPasteProvider extends React.Component {
         this.setState({ someThingIsCopied: true })
     }
 
-    setCopiedItemIsCard(value) {
-        this.setState({ copiedItemIsCard: value })
-
-    }
 
     updateAllids(data) {
 
@@ -75,7 +76,6 @@ class CopyPasteProvider extends React.Component {
                 pasteTheData: this.pasteTheData,
                 setSomeThingIsCopied: this.setSomeThingIsCopied,
                 copiedItemIsCard: this.state.copiedItemIsCard,
-                setCopiedItemIsCard: this.setCopiedItemIsCard
 
             }}>
                 {this.props.children}

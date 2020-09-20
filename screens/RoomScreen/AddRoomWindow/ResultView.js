@@ -3,6 +3,8 @@ import { View, Text } from 'react-native'
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 
+
+
 export default class SuccesView extends React.Component {
 
 

@@ -176,14 +176,14 @@ export default class Sidebar extends React.Component {
                         )
                     }}
                 />
-                <Drawer.Screen name="FriendsStack" component={FriendsStackScreen}
+                {/* <Drawer.Screen name="FriendsStack" component={FriendsStackScreen}
                     options={{
                         title: "Freunde",
                         drawerIcon: () => (
                             <Icon name="ios-people" color="white" size={25} />
                         )
                     }}
-                />
+                /> */}
                 <Drawer.Screen name="SettingsStack" component={SettingsStackScreen}
                     options={{
                         title: "Einstellungen",

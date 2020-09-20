@@ -25,7 +25,7 @@ const ProfileScreen = () => {
         setShowAddImage
     } = useContext(ProfileContext)
 
-    const { userImage, email, nickName, username } = useContext(UserContext)
+    const { userImage, email, nickName } = useContext(UserContext)
 
 
 

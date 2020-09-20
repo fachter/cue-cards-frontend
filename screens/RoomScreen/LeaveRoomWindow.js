@@ -28,7 +28,7 @@ export default class LeaveRoomWindow extends React.Component {
                         this.state.resultSucces = true
                         this.state.resultMessage = 'Du hast den raum verlassen'
                         this.state.showActicityIndicator = false
-                        this.setState({ showResultView: true })
+                        this.props.onSetVisibility()
                         this.props.updateRooms()
                     })
                     .catch(() => {
