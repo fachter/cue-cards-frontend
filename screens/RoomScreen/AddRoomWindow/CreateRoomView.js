@@ -157,7 +157,9 @@ export default function CreateRoomView({ updateRooms, onSetVisibility }) {
 const styles = StyleSheet.create({
     window: {
         width: '100%',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: 'red'
 
     },
     headingText: {

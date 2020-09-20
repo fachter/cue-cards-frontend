@@ -5,6 +5,7 @@ import axios from 'axios';
 import { UserContext } from './UserProvider';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -31,6 +32,7 @@ export default function RegistrationScreen({ navigation }) {
                     email: emailThis,
                     fullName: fullName
                 })
+<<<<<<< HEAD
                     .then((res) => {
 
                         setUserToken(res.data.jwt)
@@ -41,6 +43,18 @@ export default function RegistrationScreen({ navigation }) {
                         console.log("Registrierung erfolgreich")
                         login()
 
+=======
+                    .then((resp) => {
+                        // if (resp.status === 200) {
+                        console.log("Registrierung erfolgreich")
+                        setUserToken(resp.data.jwt)
+                        login()
+                        // } else if (resp.status === '????') {
+                        //alert('Email bereits vorhanden')
+                        //} else if (resp.status === '???') {
+                        //alert('Username bereits vorhanden')
+                        //}
+>>>>>>> c27db8109215dd4b420831c8673cf4b7a710b916
                     }).catch((error) => {
 
                         //if (.status === 406) {
@@ -163,8 +177,8 @@ export default function RegistrationScreen({ navigation }) {
             >
                 <Icon name="ios-arrow-back" size={25} color="white" />
             </TouchableOpacity>
-            <Image source={logo} style={styles.logo} />
-            <View>
+            <ScrollView>
+                <Image source={logo} style={styles.logo} />
                 <TextInput
                     style={styles.input}
                     placeholder={'Benutzername'}
@@ -172,8 +186,6 @@ export default function RegistrationScreen({ navigation }) {
                     underlineColorAndroid={'transparent'}
                     onChangeText={text => setUsername(text)}
                 />
-            </View>
-            <View>
                 <TextInput
                     style={styles.input}
                     placeholder={'Nickname'}
@@ -181,8 +193,6 @@ export default function RegistrationScreen({ navigation }) {
                     underlineColorAndroid={'transparent'}
                     onChangeText={text => setFullname(text)}
                 />
-            </View>
-            <View>
                 <TextInput
                     style={styles.input}
                     placeholder={'E-Mail'}
@@ -190,8 +200,6 @@ export default function RegistrationScreen({ navigation }) {
                     underlineColorAndroid={'transparent'}
                     onChangeText={text => setEmailThis(text)}
                 />
-            </View>
-            <View>
                 <TextInput
                     style={styles.input}
                     placeholder={'Passwort'}
@@ -200,8 +208,6 @@ export default function RegistrationScreen({ navigation }) {
                     secureTextEntry={true}
                     onChangeText={text => setPassword1(text)}
                 />
-            </View>
-            <View>
                 <TextInput
                     style={styles.input}
                     placeholder={'Passwort wiederholen'}
@@ -210,16 +216,13 @@ export default function RegistrationScreen({ navigation }) {
                     secureTextEntry={true}
                     onChangeText={text => setPassword2(text)}
                 />
-            </View>
-
-
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => _regNewAcc()}
-            >
-                <Text style={styles.text}>Registrieren</Text>
-            </TouchableOpacity>
-
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => _regNewAcc()}
+                >
+                    <Text style={styles.text}>Registrieren</Text>
+                </TouchableOpacity>
+            </ScrollView>
         </ImageBackground>
     )
 }

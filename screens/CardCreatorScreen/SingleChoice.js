@@ -1,7 +1,7 @@
 import React from 'react'
 import uuid from 'react-native-uuid'
 
-import { View, TextInput, StyleSheet, TouchableOpacity, Text, Image } from 'react-native'
+import { View, TextInput, StyleSheet, TouchableOpacity, Text, Image, ScrollView } from 'react-native'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import logo from '../../assets/Logo_grau.png';
 
@@ -95,32 +95,34 @@ export default class SingleChoice extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <TextInput
-                    style={styles.textInput}
-                    multiline={true}
-                    placeholder="Frage eingeben"
-                    placeholderTextColor="grey"
-                    onContentSizeChange={(event) => this.setState({ questionInputHeight: event.nativeEvent.contentSize.height })}
-                    onChangeText={text => this.setState({ questionText: text })}>
-                    {this.state.questionText}
-                </TextInput>
-                <TextInput
-                    style={styles.textInput}
-                    multiline={true}
-                    placeholder="Antwort eingeben"
-                    placeholderTextColor="grey"
-                    onContentSizeChange={(event) => this.setState({ answerInputHeight: event.nativeEvent.contentSize.height })}
-                    onChangeText={text => this.updateAnswers(text)}>
-                    {this.state.answers[0].text}
-                </TextInput>
-                <View style={styles.bottomView} >
-                    <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
-                        <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
-                        <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern und Neu</Text>
-                    </TouchableOpacity>
-                </View>
+                <ScrollView>
+                    <TextInput
+                        style={styles.textInput}
+                        multiline={true}
+                        placeholder="Frage eingeben"
+                        placeholderTextColor="grey"
+                        onContentSizeChange={(event) => this.setState({ questionInputHeight: event.nativeEvent.contentSize.height })}
+                        onChangeText={text => this.setState({ questionText: text })}>
+                        {this.state.questionText}
+                    </TextInput>
+                    <TextInput
+                        style={styles.textInput}
+                        multiline={true}
+                        placeholder="Antwort eingeben"
+                        placeholderTextColor="grey"
+                        onContentSizeChange={(event) => this.setState({ answerInputHeight: event.nativeEvent.contentSize.height })}
+                        onChangeText={text => this.updateAnswers(text)}>
+                        {this.state.answers[0].text}
+                    </TextInput>
+                    <View style={styles.bottomView} >
+                        <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
+                            <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
+                            <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern und Neu</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
                 <Image source={logo} style={styles.logo} />
             </View>
         )
@@ -158,7 +160,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 7
     },
     logo: {
-        position: 'absolute',
         width: 110,
         height: 42,
         bottom: -5,

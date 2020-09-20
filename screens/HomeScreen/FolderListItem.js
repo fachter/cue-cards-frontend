@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "white",
         marginLeft: 10,
+        width: '70%'
     },
     setItemView: {
         flexDirection: 'row',
