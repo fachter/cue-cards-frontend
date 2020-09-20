@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, TextInput, TouchableOpacity, Text, Image } from 'react-native'
+import { View, StyleSheet, TextInput, TouchableOpacity, Text, Image, ScrollView } from 'react-native'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import logo from '../../assets/Logo_grau.png';
 
@@ -81,34 +81,37 @@ export default class Vocable extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <TextInput
-                    style={[styles.textInput]}
-                    multiline={true}
-                    placeholder="Frage eingeben"
-                    placeholderTextColor="grey"
-                    onContentSizeChange={(event) => this.setState({ questionInputHeight: event.nativeEvent.contentSize.height })}
+                <ScrollView>
+                    <TextInput
+                        style={[styles.textInput]}
+                        multiline={true}
+                        placeholder="Frage eingeben"
+                        placeholderTextColor="grey"
+                        onContentSizeChange={(event) => this.setState({ questionInputHeight: event.nativeEvent.contentSize.height })}
 
-                    onChangeText={text => this.setState({ questionText: text })}>
-                    {this.state.questionText}
-                </TextInput>
-                <TextInput
-                    style={styles.textInput}
-                    multiline={true}
-                    placeholder="Antwort eingeben"
-                    placeholderTextColor="grey"
-                    onContentSizeChange={(event) => this.setState({ answerInputHeight: event.nativeEvent.contentSize.height })}
-                    onChangeText={text => this.setState({ solution: text })}>
-                    {this.state.solution}
-                </TextInput>
-                <View style={styles.bottomView} >
-                    <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
-                        <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
-                        <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern und Neu</Text>
-                    </TouchableOpacity>
-                </View>
+                        onChangeText={text => this.setState({ questionText: text })}>
+                        {this.state.questionText}
+                    </TextInput>
+                    <TextInput
+                        style={styles.textInput}
+                        multiline={true}
+                        placeholder="Antwort eingeben"
+                        placeholderTextColor="grey"
+                        onContentSizeChange={(event) => this.setState({ answerInputHeight: event.nativeEvent.contentSize.height })}
+                        onChangeText={text => this.setState({ solution: text })}>
+                        {this.state.solution}
+                    </TextInput>
+                    <View style={styles.bottomView} >
+                        <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
+                            <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
+                            <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern und Neu</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
                 <Image source={logo} style={styles.logo} />
+
             </View >
 
         )
@@ -152,7 +155,6 @@ const styles = StyleSheet.create({
 
     },
     logo: {
-        position: 'absolute',
         width: 110,
         height: 42,
         bottom: -5,

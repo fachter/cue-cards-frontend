@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import logo from '../../assets/Logo_grau.png';
 
 import uuid from 'react-native-uuid'
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -121,47 +122,49 @@ export default class MultipleChoice extends React.Component {
     render() {
         return (
             <View style={styles.container} >
-                <TextInput
-                    style={[styles.textInput, { marginBottom: 25 }]}
-                    multiline={true}
-                    placeholder="Frage eingeben"
-                    placeholderTextColor="grey"
-                    onContentSizeChange={(event) => this.setState({ questionInputHeight: event.nativeEvent.contentSize.height })}
-                    onChangeText={text => this.setState({ questionText: text })}>
-                    {this.state.questionText}
-                </TextInput>
-                <TouchableOpacity onPress={() => this._addItem()}>
-                    <View style={styles.addButton}>
-                        <Text style={styles.addButtonText}>+  Antwort hinzufügen</Text>
+                <ScrollView>
+                    <TextInput
+                        style={[styles.textInput, { marginBottom: 25 }]}
+                        multiline={true}
+                        placeholder="Frage eingeben"
+                        placeholderTextColor="grey"
+                        onContentSizeChange={(event) => this.setState({ questionInputHeight: event.nativeEvent.contentSize.height })}
+                        onChangeText={text => this.setState({ questionText: text })}>
+                        {this.state.questionText}
+                    </TextInput>
+                    <TouchableOpacity onPress={() => this._addItem()}>
+                        <View style={styles.addButton}>
+                            <Text style={styles.addButtonText}>+  Antwort hinzufügen</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <View>
+                        <SafeAreaView >
+                            <FlatList
+                                data={this.state.answers}
+                                renderItem={({ item }) => (
+                                    <AnswerItem
+                                        item={item}
+
+                                        getText={this._updateAnswerText.bind(this)}
+                                        deleteCallback={this._deleteItemById.bind(this)}
+                                    />
+                                )}
+                                keyExtractor={item => item.id}
+                                ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
+                            />
+                        </SafeAreaView>
+
                     </View>
-                </TouchableOpacity>
-                <View>
-                    <SafeAreaView >
-                        <FlatList
-                            data={this.state.answers}
-                            renderItem={({ item }) => (
-                                <AnswerItem
-                                    item={item}
-
-                                    getText={this._updateAnswerText.bind(this)}
-                                    deleteCallback={this._deleteItemById.bind(this)}
-                                />
-                            )}
-                            keyExtractor={item => item.id}
-                            ItemSeparatorComponent={() => <View style={styles.listSeperator} />}
-                        />
-                    </SafeAreaView>
-
-                </View>
+                    <View style={styles.bottomView} >
+                        <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
+                            <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
+                            <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern und Neu</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
                 <Image source={logo} style={styles.logo} />
-                <View style={styles.bottomView} >
-                    <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
-                        <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
-                        <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern und Neu</Text>
-                    </TouchableOpacity>
-                </View>
             </View>
         )
     }
@@ -249,7 +252,6 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
     logo: {
-        position: 'absolute',
         width: 110,
         height: 42,
         bottom: -5,

@@ -51,12 +51,12 @@ export default function LoginScreen({ navigation }) {
                     saveUserOnDevice(true, pw, user)
                 }
 
-                if (res.status === '???') {
-                    await retrieveSettignsfromDevice()
-                    login()
-                } else if (res.status === '??') {
-                    alert('Benutzername und Passwort stimmen nicht überein')
-                }
+                //if (res.status === '???') {
+                await retrieveSettignsfromDevice()
+                login()
+                //} else if (res.status === '??') {
+                //alert('Benutzername und Passwort stimmen nicht überein')
+                //}
 
                 console.log("Authentifizierung " + res)
             }).catch(err => {
