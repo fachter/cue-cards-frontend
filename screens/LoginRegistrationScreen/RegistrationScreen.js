@@ -32,7 +32,6 @@ export default function RegistrationScreen({ navigation }) {
                     email: emailThis,
                     fullName: fullName
                 })
-<<<<<<< HEAD
                     .then((res) => {
 
                         setUserToken(res.data.jwt)
@@ -43,18 +42,6 @@ export default function RegistrationScreen({ navigation }) {
                         console.log("Registrierung erfolgreich")
                         login()
 
-=======
-                    .then((resp) => {
-                        // if (resp.status === 200) {
-                        console.log("Registrierung erfolgreich")
-                        setUserToken(resp.data.jwt)
-                        login()
-                        // } else if (resp.status === '????') {
-                        //alert('Email bereits vorhanden')
-                        //} else if (resp.status === '???') {
-                        //alert('Username bereits vorhanden')
-                        //}
->>>>>>> c27db8109215dd4b420831c8673cf4b7a710b916
                     }).catch((error) => {
 
                         //if (.status === 406) {
