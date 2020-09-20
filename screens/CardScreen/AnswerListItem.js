@@ -96,6 +96,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: 80,
-        marginHorizontal
     },
 });
