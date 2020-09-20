@@ -129,10 +129,14 @@ class ListStructureProvider extends React.Component {
     _getLastFolderStructure = () => {
         const { listHistoryArray } = this.state
 
+        this.state.isFolder = true
+
         if (listHistoryArray.length > 0) {
             this.setCurrentListStructure(listHistoryArray[listHistoryArray.length - 1], false)
             listHistoryArray.pop()
         }
+
+
     }
 
     clearFolders() {

@@ -25,7 +25,7 @@ class UserProvider extends React.Component {
             username: '###',
             nickName: '###',
             email: '###',
-            userImage: '',
+            userImage: null,
             isLoggedin: false,
             userToken: null,
             isConnected: false,
@@ -40,6 +40,8 @@ class UserProvider extends React.Component {
                 username: username,
                 password: password,
             }).then(res => {
+
+                console.log(res.data.userData.userImage)
                 this.state.userToken = res.data.jwt
                 this.state.email = res.data.userData.email
                 this.state.userImage = res.data.userData.userImage

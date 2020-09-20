@@ -74,8 +74,7 @@ export default class AnswerListItem extends React.Component {
 
         const { borderColors, borderWidth } = this.state
         const { item } = this.props
-        // console.log(borderColors)
-        // console.log(this.props.mode)
+
         return (
             <TouchableOpacity onPress={() => this._checkedUnchecked()}>
                 <View style={[styles.container,

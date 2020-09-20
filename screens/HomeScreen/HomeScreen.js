@@ -81,7 +81,6 @@ const HomeScreen = () => {
 
 
     const headerLeftButton = () => {
-        console.log(listHistoryArray.length)
         if (listHistoryArray.length > 0) {
             return (
                 <Icon.Button name="ios-arrow-back" size={25} backgroundColor="#202225" onPress={() => {
@@ -290,7 +289,6 @@ const HomeScreen = () => {
 
     const renderDrawer = () => {
         //SlideMenu
-        console.log(currentRoomInfo.user)
         return (
             <View style={styles.menuContainer}>
                 <Text style={styles.header}>{`Raum-ID: ${currentRoomInfo.id}`}</Text>

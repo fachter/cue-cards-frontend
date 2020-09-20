@@ -35,11 +35,18 @@ export default function RegistrationScreen({ navigation }) {
                     fullName: fullName
                 })
                     .then((resp) => {
-                        console.log("Registrierung erfolgreich")
-                        setUserToken(resp.data.jwt)
-                        login()
+                        if (resp.status === 200) {
+                            console.log("Registrierung erfolgreich")
+                            setUserToken(resp.data.jwt)
+                            login()
+                        } else if (resp.status === '????') {
+                            alert('Email bereits vorhanden')
+                        } else if (resp.status === '???') {
+                            alert('Username bereits vorhanden')
+
+                        }
                     }).catch((error) => {
-                        alert('Benutzername schon vorhanden')
+                        alert('Verbindung fehlgeschlagen, bitte versuches es erneut')
                         console.log("Registrierung fehlgeschlagen " + error)
                     })
             })

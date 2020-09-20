@@ -34,7 +34,7 @@ export default function MulitpleChoiceCard() {
 
         if (numberOfRightSelection === currentCard.answers.length && currentCard.answers.length === numberOfChoosenAnswers) {
             //ANTWORT RICHTIG
-            //setBorderColor("green")
+
             setMode('solutionTrue')
 
             setTimeout(() => {

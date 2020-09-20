@@ -86,6 +86,7 @@ export default class MultipleChoice extends React.Component {
             text: '',
         })
 
+        console.log(copy)
         this.setState({ answers: copy })
     }
 
@@ -135,7 +136,7 @@ export default class MultipleChoice extends React.Component {
                     </View>
                 </TouchableOpacity>
                 <View>
-                    <SafeAreaView style={{ flex: 1 }}>
+                    <SafeAreaView >
                         <FlatList
                             data={this.state.answers}
                             renderItem={({ item }) => (

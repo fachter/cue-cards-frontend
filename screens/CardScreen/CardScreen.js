@@ -23,6 +23,8 @@ export default function CardScreen({ route, navigation }) {
     const [answers, setAnswers] = useState(_createRandomAnswers(0))
     const [mode] = useState(route.params.mode)
 
+    const [resultStorage, setResultStorage] = useState([])
+
     const minCardLevel = 0
 
 
@@ -169,10 +171,12 @@ export default function CardScreen({ route, navigation }) {
 
                 //Je nach richtiger oder falscher Antwort wird die Karte Level auf bzw. abgestuft
                 if (result === true) {
+                    resultStorage.push(true)
                     if (sessionCards[i].cardLevel < maxCardLevel) {
                         sessionCards[i].cardLevel += 1
                     }
                 } else {
+                    resultStorage.push(false)
                     if (sessionCards[i].cardLevel > minCardLevel) {
                         sessionCards[i].cardLevel -= 1
                     }
@@ -256,7 +260,6 @@ export default function CardScreen({ route, navigation }) {
             setAnswers(newAnswers)
 
         } else {
-            alert("Dies war die letzte Karte, hier einen Endscreen einfügen!")
             navigation.goBack()
         }
     }

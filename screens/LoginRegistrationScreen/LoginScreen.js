@@ -50,12 +50,17 @@ export default function LoginScreen({ navigation }) {
                 if (stayLoggedin === true) {
                     saveUserOnDevice(true, pw, user)
                 }
-                await retrieveSettignsfromDevice()
-                login()
+
+                if (res.status === '???') {
+                    await retrieveSettignsfromDevice()
+                    login()
+                } else if (res.status === '??') {
+                    alert('Benutzername und Passwort stimmen nicht überein')
+                }
 
                 console.log("Authentifizierung " + res)
             }).catch(err => {
-                alert("Da ist wohl etwas schief gelaufen. Prüfe dein Nutzername oder Passwort")
+                alert('Verbindung fehlgeschlagen, bitte versuches es erneut')
                 console.log('Authentifizierung ' + err)
 
             })
