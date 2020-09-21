@@ -25,6 +25,7 @@ class UserProvider extends React.Component {
             username: '###',
             nickName: '###',
             email: '###',
+            rememberPassword: null,
             userImage: null,
             isLoggedin: false,
             userToken: null,
@@ -44,7 +45,7 @@ class UserProvider extends React.Component {
                 this.state.email = res.data.userData.email
                 this.state.userImage = res.data.userData.userImage
                 this.state.nickName = res.data.userData.nickName
-                this.state.password = password
+                this.state.rememberPassword = password
                 this.state.username = username
                 resolve(res)
                 if (stayLoggedin === true) {
@@ -112,8 +113,8 @@ class UserProvider extends React.Component {
         this.setState({ username })
     }
 
-    setPassword(password) {
-        this.setState({ password })
+    setPassword(rememberPassword) {
+        this.setState({ rememberPassword })
     }
 
     setUserImage(url) {
@@ -169,7 +170,7 @@ class UserProvider extends React.Component {
             <UserContext.Provider value={{
                 username: this.state.username,
                 setUserName: this.setUserName,
-                password: this.state.password,
+                rememberPassword: this.state.rememberPassword,
                 setPassword: this.setPassword,
                 nickName: this.state.nickName,
                 setNickName: this.setNickName,

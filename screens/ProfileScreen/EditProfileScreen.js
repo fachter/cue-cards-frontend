@@ -29,11 +29,11 @@ export default function EditProfileScreen() {
     const [showAddImage, setShowAddImage] = useState(null);
 
 
-    const { username, userToken, setUserToken, setUserImage, userImage, nickName, setNickName, email, setEmail, password } = useContext(UserContext)
+    const { username, userToken, setUserToken, setUserImage, userImage, nickName, setNickName, email, setEmail, rememberPassword } = useContext(UserContext)
     const [showChangePasswordView, setShowChangePaswordView] = useState(false)
 
     const [nicknameStorage, setNicknameStorage] = useState(nickName)
-    const [passwordStorage, setPasswordStorage] = useState(password)
+    const [passwordStorage, setPasswordStorage] = useState(rememberPassword)
     const [userImageStorage, setUserImageStorage] = useState(userImage)
     const [emailStorage, setEmailStorage] = useState(email)
 
