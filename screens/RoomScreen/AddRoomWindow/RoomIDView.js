@@ -72,7 +72,7 @@ export default function RoomIDView({ updateRooms, onSetVisibility }) {
                                         style={styles.headingText}>Gib die ID des Raumes ein</Text>
                                     <TextInput
                                         style={styles.friendName}
-                                        placeholder="z.B. {Beispiel nach ID anpassen}"
+                                        placeholder="z.B. 12"
                                         placeholderTextColor="grey"
                                         onChangeText={text => roomID.current = text}>
                                     </TextInput>

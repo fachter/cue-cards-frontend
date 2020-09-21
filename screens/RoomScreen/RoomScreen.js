@@ -17,6 +17,7 @@ import SwipeView from './../../components/SwipeView'
 import { UserContext } from '../LoginRegistrationScreen/UserProvider'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import { asyncAxiosGet } from '../../API/Database'
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -195,8 +196,9 @@ export default function RoomScreen() {
 
     return (
         <View style={styles.container}>
-            <SwipeView onUpdateRooms={updateRooms}>
-                <SafeAreaView style={{ flex: 1 }}>
+            {/* <SwipeView onUpdateRooms={updateRooms}> */}
+            <SafeAreaView style={{ flex: 1 }}>
+                <ScrollView canCancelContentTouches='true'>
                     <TouchableOpacity onPress={() => _navigateToFolderScreen('myRoom')}>
                         <Image source={home} style={styles.home} />
                         <Text style={[styles.fontStyle, { color: 'white', top: 25 }]}>Mein Raum</Text>
@@ -215,22 +217,23 @@ export default function RoomScreen() {
 
                     />
                     <View style={styles.platzhalter}></View>
-                </SafeAreaView>
-                <AddRoomWindow
-                    onSetVisibility={_setRoomAddWindowVisibility}
-                    addRoomWindowVisibility={addRoomWindowVisibility}
+                </ScrollView>
+            </SafeAreaView>
+            <AddRoomWindow
+                onSetVisibility={_setRoomAddWindowVisibility}
+                addRoomWindowVisibility={addRoomWindowVisibility}
+                updateRooms={updateRooms}
+            />
+            {leaveRoomWindowVisibility ?
+                <LeaveRoomWindow
+                    onSetVisibility={SetleaveRoomWindowVisibility}
+                    onLeaveRoom={showLeaveRoomWindow}
+                    item={clickedRoom.current}
                     updateRooms={updateRooms}
-                />
-                {leaveRoomWindowVisibility ?
-                    <LeaveRoomWindow
-                        onSetVisibility={SetleaveRoomWindowVisibility}
-                        onLeaveRoom={showLeaveRoomWindow}
-                        item={clickedRoom.current}
-                        updateRooms={updateRooms}
-                    /> : null}
+                /> : null}
 
-                <Image source={logo} style={styles.logo} />
-            </SwipeView>
+            <Image source={logo} style={styles.logo} />
+            {/* </SwipeView> */}
         </View>
     )
 }
