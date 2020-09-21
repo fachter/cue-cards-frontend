@@ -53,15 +53,14 @@ export default function LoginScreen({ navigation }) {
                 await retrieveSettignsfromDevice()
                 login()
 
-                console.log("Authentifizierung " + res)
-            }).catch(err => {
-                // if(status === ) {
-                // alert('Benutzername und Passwort stimmen nicht überein')
-                // } else if(status === ){
-                // alert('Verbindung fehlgeschlagen, bitte versuches es erneut')
-                // }
-                console.log('Authentifizierung ' + err)
-
+                console.log("Authentifizierung erfolgreich")
+            }).catch(errorstatus => {
+                if (errorstatus === 400) {
+                    alert('Benutzername und Passwort stimmen nicht überein')
+                } else if (errorstatus === 500) {
+                    alert('Verbindung fehlgeschlagen, bitte versuches es erneut')
+                }
+                console.log('Authentifizierung fehlgeschlagen ' + errorstatus)
             })
     }
 

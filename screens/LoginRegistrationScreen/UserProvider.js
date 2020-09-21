@@ -46,12 +46,12 @@ class UserProvider extends React.Component {
                 this.state.nickName = res.data.userData.nickName
                 this.state.password = password
                 this.state.username = username
-                resolve('erfolgreich')
+                resolve(res)
                 if (stayLoggedin === true) {
                     user.saveUserOnDevice(stayLoggedin, username, password)
                 }
             }).catch((err) => {
-                reject('fehlgeschlagen' + err)
+                reject(err.response.status)
             })
         })
     }

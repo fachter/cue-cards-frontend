@@ -29,7 +29,7 @@ export default function EditProfileScreen() {
     const [showAddImage, setShowAddImage] = useState(null);
 
 
-    const { username, userToken, setUserImage, userImage, nickName, setNickName, email, setEmail, password } = useContext(UserContext)
+    const { username, userToken, setUserToken, setUserImage, userImage, nickName, setNickName, email, setEmail, password } = useContext(UserContext)
     const [showChangePasswordView, setShowChangePaswordView] = useState(false)
 
     const [nicknameStorage, setNicknameStorage] = useState(nickName)
@@ -96,26 +96,29 @@ export default function EditProfileScreen() {
         }
 
 
-        console.log(newProfileData)
+
+
 
         asyncAxiosPost(`https://cue-cards-app.herokuapp.com/api/user/change-profile-data`, 'EditProfilScreen', newProfileData, userToken)
             .then(res => {
-                console.log(res)
+
+                setUserToken(res.data.jwt)
                 console.log('Profildaten wurden erfolgreich geändert')
+
                 updateProfilDataLocal()
 
-            }).catch(err => {
+            }).catch(error => {
 
-                //if (.status === 406) {
-                //     alert('Email bereits vorhanden')
-                // } else if (res.status === 409) {
-                //     alert('Username bereits vorhanden')
-                // } else if( === 500) {
-                //     alert('Verbindung fehlgeschlagen, bitte versuches es erneut')
-                // }
+                if (error.response.status === 406) {
+                    alert('Email bereits vorhanden')
+                } else if (error.response.status === 409) {
+                    alert('Username bereits vorhanden')
+                } else if (error.response.status === 500) {
+                    alert('Verbindung fehlgeschlagen, bitte versuches es erneut')
+                }
 
 
-                console.log('Fehler beim speichern der Profildaten  in der DB ' + err)
+                console.log('Fehler beim speichern der Profildaten  in der DB ' + error)
             })
 
     }

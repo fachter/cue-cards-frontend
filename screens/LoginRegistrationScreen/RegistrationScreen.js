@@ -43,14 +43,15 @@ export default function RegistrationScreen({ navigation }) {
                         login()
 
                     }).catch((error) => {
-
-                        //if (.status === 406) {
-                        //     alert('Email bereits vorhanden')
-                        // } else if (res.status === 409) {
-                        //     alert('Username bereits vorhanden')
-                        // } else if( === 500) {
-                        //     alert('Verbindung fehlgeschlagen, bitte versuches es erneut')
-                        // }
+                        if (error.response.status === 400) {
+                            alert('Email und Username bereits vorhanden')
+                        } else if (error.response.status === 406) {
+                            alert('Email bereits vorhanden')
+                        } else if (error.response.status === 409) {
+                            alert('Username bereits vorhanden')
+                        } else if (error.response.status === 500) {
+                            alert('Verbindung fehlgeschlagen, bitte versuches es erneut')
+                        }
                         console.log("Registrierung fehlgeschlagen " + error)
                     })
             })
