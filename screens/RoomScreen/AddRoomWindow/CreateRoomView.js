@@ -158,9 +158,6 @@ const styles = StyleSheet.create({
     window: {
         width: '100%',
         alignItems: 'center',
-        borderWidth: 2,
-        borderColor: 'red'
-
     },
     headingText: {
         color: 'white',

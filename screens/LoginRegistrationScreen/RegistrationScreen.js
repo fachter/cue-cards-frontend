@@ -165,8 +165,7 @@ export default function RegistrationScreen({ navigation }) {
                 <Icon name="ios-arrow-back" size={25} color="white" />
             </TouchableOpacity> */}
             <KeyboardAvoidingView
-                style={styles.scrollView}
-                behavior={Platform.OS == "ios" ? "padding" : "height"}
+                behavior={Platform.OS == "ios" ? "padding" : ""}
             >
                 <ScrollView>
                     <Image source={logo} style={styles.logo} />
@@ -225,10 +224,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
-
-    },
-    scrollView: {
-
     },
     logo: {
         alignSelf: 'center',

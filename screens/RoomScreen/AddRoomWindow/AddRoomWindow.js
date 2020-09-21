@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Modal, StyleSheet, Text, TouchableOpacity, Switch } from 'react-native'
+import { View, Modal, StyleSheet, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 
 
@@ -65,21 +65,29 @@ export default class AddRoomWindow extends React.Component {
                 visible={this.props.addRoomWindowVisibility}
                 onRequestClose={() => this.closeWindow()}>
                 <View style={styles.background}>
-                    <TouchableOpacity style={styles.cancelButton} onPress={() => this.closeWindow()}>
-                        <AntDesign name="closecircleo" size={24} color="grey" />
-                    </TouchableOpacity>
-                    <View style={styles.auswahlLeiste}>
-                        <TouchableOpacity style={[styles.auswahlKnopf, { borderColor: this.state.color1 }]} onPress={() => this.openRoomIDView()}>
-                            <Text style={[styles.auswahlText, { color: this.state.color3 }]}>Beitreten</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.auswahlKnopf, { borderColor: this.state.color2 }]} onPress={() => this.openAddRoomWindow()}>
-                            <Text style={[styles.auswahlText, { color: this.state.color4 }]} >Erstellen</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.window}>
-                        {this.renderWindow()}
-                    </View >
-
+                    <KeyboardAvoidingView
+                        // style={{ borderColor: 'red', borderWidth: 1, }}
+                        behavior={Platform.OS == "ios" ? "padding" : ""}
+                    >
+                        <ScrollView>
+                            <View style={{ marginTop: '40%' }}>
+                                <TouchableOpacity style={styles.cancelButton} onPress={() => this.closeWindow()}>
+                                    <AntDesign name="closecircleo" size={24} color="grey" />
+                                </TouchableOpacity>
+                                <View style={styles.auswahlLeiste}>
+                                    <TouchableOpacity style={[styles.auswahlKnopf, { borderColor: this.state.color1 }]} onPress={() => this.openRoomIDView()}>
+                                        <Text style={[styles.auswahlText, { color: this.state.color3 }]}>Beitreten</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={[styles.auswahlKnopf, { borderColor: this.state.color2 }]} onPress={() => this.openAddRoomWindow()}>
+                                        <Text style={[styles.auswahlText, { color: this.state.color4 }]} >Erstellen</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={styles.window}>
+                                    {this.renderWindow()}
+                                </View >
+                            </View>
+                        </ScrollView>
+                    </KeyboardAvoidingView>
                 </View>
             </Modal >
         )
@@ -105,12 +113,10 @@ const styles = StyleSheet.create({
     cancelButton: {
         width: 30,
         height: 30,
-        borderRadius: 5,
         alignSelf: 'flex-end',
         margin: 5,
         justifyContent: 'center',
-        alignItems: 'center'
-
+        alignItems: 'center',
     },
     headingText: {
         color: 'white',
@@ -150,7 +156,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 40,
-        marginHorizontal: 7
+        marginHorizontal: 7,
+        marginBottom: 20
     },
     auswahlLeiste: {
         width: '90%',

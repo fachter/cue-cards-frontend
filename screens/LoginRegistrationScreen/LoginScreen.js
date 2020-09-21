@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Switch, StyleSheet, ImageBackground } from 'react-native';
+import { View, Image, TextInput, Dimensions, TouchableOpacity, Text, Switch, StyleSheet, ImageBackground, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { UserContext } from './UserProvider'
 import { SettingsContext } from '../SettingsScreen/SettingsProvider'
 import logo from '../../assets/Logo.png';
@@ -71,48 +71,50 @@ export default function LoginScreen({ navigation }) {
             source={require('../../assets/LoginHintergrund.png')}
             style={styles.container}
         >
-            <Image source={logo} style={styles.logo} />
-            <View>
-                <TextInput
-                    style={styles.input}
-                    placeholder={'Benutzername'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    onChangeText={text => setUnsername(text)}
-                />
-            </View>
-            <View>
-                <TextInput
-                    style={styles.input}
-                    placeholder={'Passwort'}
-                    placeholderTextColor={'white'}
-                    underlineColorAndroid={'transparent'}
-                    secureTextEntry={true}
-                    onChangeText={text => setPassword(text)}
-                />
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 7 }}>
-                <Switch
-                    style={{ alignSelf: 'center' }}
-                    trackColor={{
-                        false: "grey", true: "#008FD3"
-                    }}
-                    thumbColor='#008FD3'
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={() => toggleSwitch()}
-                    value={stayLoggedin}
-                />
-                <Text style={{ color: 'white', marginLeft: 5 }}>eingeloggt bleiben</Text>
-            </View>
-            <View style={styles.knöpfe}>
-                <TouchableOpacity style={styles.button} onPress={() => userLogin(stayLoggedin, username, password)}>
-                    <Text style={styles.text}>Login</Text>
-                </TouchableOpacity>
+            <KeyboardAvoidingView
+                behavior={Platform.OS == "ios" ? "padding" : ""}
+            >
+                <ScrollView>
+                    <Image source={logo} style={styles.logo} />
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Benutzername'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        onChangeText={text => setUnsername(text)}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Passwort'}
+                        placeholderTextColor={'white'}
+                        underlineColorAndroid={'transparent'}
+                        secureTextEntry={true}
+                        onChangeText={text => setPassword(text)}
+                    />
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 7 }}>
+                        <Switch
+                            style={{ alignSelf: 'center' }}
+                            trackColor={{
+                                false: "grey", true: "#008FD3"
+                            }}
+                            thumbColor='#008FD3'
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={() => toggleSwitch()}
+                            value={stayLoggedin}
+                        />
+                        <Text style={{ color: 'white', marginLeft: 5 }}>eingeloggt bleiben</Text>
+                    </View>
+                    <View style={styles.knöpfe}>
+                        <TouchableOpacity style={styles.button} onPress={() => userLogin(stayLoggedin, username, password)}>
+                            <Text style={styles.text}>Login</Text>
+                        </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Registration')}>
-                    <Text style={styles.text}>Registrieren</Text>
-                </TouchableOpacity>
-            </View>
+                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Registration')}>
+                            <Text style={styles.text}>Registrieren</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </ImageBackground>
     )
 
@@ -158,8 +160,9 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 20,
+        marginVertical: 20,
         marginHorizontal: 7
+
 
 
     },
