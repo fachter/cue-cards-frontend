@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
 import Axios from 'axios'
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import ResultView from './ResultView'
 import PasswordView from './PasswordView'
 import ActicityIndicatorView from './ActivityIndicatorView'
@@ -23,6 +22,7 @@ export default function RoomIDView({ updateRooms, onSetVisibility }) {
     const { userToken, checkIfConnected, isConnected } = useContext(UserContext)
 
 
+
     useEffect(() => {
         if (componentIsMounted === false) {
             checkIfConnected()
@@ -30,9 +30,11 @@ export default function RoomIDView({ updateRooms, onSetVisibility }) {
         }
     })
 
+
+
+
     const askingForRoom = () => {
         //this.setState({ showActivityIndicator: true })
-
         Axios.get(`https://cue-cards-app.herokuapp.com/api/join-room/${roomID.current}`, {
             headers: {
                 'Authorization': "Bearer " + userToken
@@ -91,7 +93,7 @@ export default function RoomIDView({ updateRooms, onSetVisibility }) {
                 } else {
                     if (showActivityIndicator === false) {
                         return (
-                            <PasswordView roomID={roomID.current} userToken={userToken} updateRooms={this.props.updateRooms} onSetVisibility={onSetVisibility} />
+                            <PasswordView roomID={roomID.current} userToken={userToken} updateRooms={updateRooms} onSetVisibility={onSetVisibility} />
                         )
                     } else {
                         return (

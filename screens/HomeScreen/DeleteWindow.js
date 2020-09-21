@@ -55,16 +55,7 @@ export default class DeleteWindow extends React.Component {
                         backgroundColor="#202225"
                         onPress={() => this.copy(item)}
                     />
-                    {/*Ausschneiden*/}
-                    <Icon.Button
-                        style={styles.normalButton}
-                        name="ios-cut"
-                        size={23} color="white"
-                        backgroundColor="#202225"
-                        onPress={() => onDelete(item.id)}
-                    />
                     {/*Bearbeiten*/}
-
                     <Icon.Button
                         style={styles.normalButton}
                         name="ios-brush"

@@ -40,12 +40,12 @@ function SettingsScreen() {
     return (
         <View style={styles.container}>
             <View style={styles.settingView}>
-                <FontAwesome name="level-up" size={25} color="grey" style={styles.icons, { marginLeft: 6 }} />
+                {/* <FontAwesome name="level-up" size={25} color="grey" style={styles.icons, { marginLeft: 6 }} />
                 <Text style={styles.text}>Maximales Kartenlevel:</Text>
                 <TextInput
                     style={styles.textInput}
                     onChangeText={level => checkCardLevelValidity(level)}
-                >{maxCardLevel}</TextInput>
+                >{maxCardLevel}</TextInput> */}
             </View>
             <View style={styles.settingView}>
                 <Entypo name="align-top" size={25} color="grey" style={styles.icons} />

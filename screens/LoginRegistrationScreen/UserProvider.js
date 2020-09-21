@@ -51,6 +51,7 @@ class UserProvider extends React.Component {
                     user.saveUserOnDevice(stayLoggedin, username, password)
                 }
             }).catch((err) => {
+                console.log(err)
                 reject(err.response.status)
             })
         })

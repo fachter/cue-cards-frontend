@@ -40,15 +40,17 @@ export default class SettingsProvider extends React.Component {
 
 
 
-    async retrieveSettignsfromDevice() {
-        const user = this.context
+    async retrieveSettignsfromDevice(username) {
+
         try {
-            const settings = await AsyncStorage.getItem(`${user.username}-settings`)
+            const settings = await AsyncStorage.getItem(`${username}-settings`)
             if (settings != null) {
+
                 let data = JSON.parse(settings)
-                this.state.maxCardLevel = data.maxCardLevel
+                console.log(data.maxCardLevel)
                 this.state.maxCardLevelIncluded = data.maxCardLevelIncluded
                 this.state.shuffleCards = data.shuffleCards
+                this.state.maxCardLevel = data.maxCardLevel
                 console.log("Gespeicherte Einstellungen wurden wiederhergestellt")
 
                 return true

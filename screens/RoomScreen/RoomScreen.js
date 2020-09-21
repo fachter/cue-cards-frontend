@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
+import { EvilIcons } from '@expo/vector-icons'; import axios from 'axios';
 
 
 
@@ -40,16 +40,17 @@ export default function RoomScreen() {
     const [isLoading, setIsLoading] = useState(false)
 
     const navigation = useNavigation()
-
-
-    useEffect(() => {
-
-        navigation.setOptions({ title: 'House Of CueCards' })
-        if (roomDataMounted.current === false) {
-            updateRooms()
-            roomDataMounted.current = true
-        }
+    navigation.setOptions({
+        title: 'House Of CueCards',
+        headerLeft: () => <EvilIcons name="refresh" size={30} color="white" onPress={() => updateRooms()} />
     })
+
+    //Auszuführende Methoden:
+    if (roomDataMounted.current === false) {
+        updateRooms()
+        roomDataMounted.current = true
+    }
+
 
     function updateRooms() {
         setIsLoading(true)

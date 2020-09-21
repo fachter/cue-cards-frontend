@@ -190,7 +190,7 @@ export default function RegistrationScreen({ navigation }) {
                         placeholder={'E-Mail'}
                         placeholderTextColor={'white'}
                         underlineColorAndroid={'transparent'}
-                        onChangeText={text => setEmail(text)}
+                        onChangeText={text => setEmailThis(text)}
                     />
                     <TextInput
                         style={styles.input}

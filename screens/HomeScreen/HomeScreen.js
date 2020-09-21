@@ -3,6 +3,8 @@ import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, Button,
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import { useNavigation } from '@react-navigation/native';
 import Drawer from 'react-native-drawer';
 import ChooseFolderSetWindow from './ChooseFolderSetWindow'
@@ -49,9 +51,9 @@ const HomeScreen = () => {
         setCreateNewCardWindowVisible,
     } = useContext(ListStructureContext)
 
+
     const { someThingIsCopied, copyData, setSomeThingIsCopied, copiedItemIsCard } = useContext(CopyPasteContext)
     const { shuffleCards } = useContext(SettingsContext)
-
 
     const navigation = useNavigation()
     const [deleteWindowVisible, SetDeleteWindowVisible] = useState(false)
@@ -103,7 +105,6 @@ const HomeScreen = () => {
         //Holt sich die state "isFolder" der Vorherigen Ordnerstruktur
         if (listHistoryArray.length > 0) {
             _getLastFolderStructure()
-            setIsFolder(true)
             return true
         } else {
             return false

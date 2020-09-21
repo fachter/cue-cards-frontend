@@ -19,6 +19,9 @@ export default function CreateRoomView({ updateRooms, onSetVisibility }) {
     const { userToken, checkIfConnected } = useContext(UserContext)
 
     function toggleSwitch() {
+        if (passwordToggle === true) {
+            setPassword(null)
+        }
         setPasswordToggle(!passwordToggle)
     }
 
@@ -36,8 +39,6 @@ export default function CreateRoomView({ updateRooms, onSetVisibility }) {
             .then(() => {
                 asyncAxiosPost('https://cue-cards-app.herokuapp.com/api/room', 'CreateRoomView', newRoom, userToken)
                     .then(() => {
-                        resultSucces.current = true
-                        resultMessage.current = 'Raum wurde erstellt'
                         updateRooms()
                         onSetVisibility()
                     })

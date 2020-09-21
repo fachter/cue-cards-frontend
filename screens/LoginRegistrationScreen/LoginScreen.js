@@ -7,8 +7,6 @@ import LoginHintergrund from '../../assets/LoginHintergrund.png';
 
 
 
-
-
 const { width: WidTH } = Dimensions.get('window')
 
 export default function LoginScreen({ navigation }) {
@@ -50,11 +48,11 @@ export default function LoginScreen({ navigation }) {
                 if (stayLoggedin === true) {
                     saveUserOnDevice(true, pw, user)
                 }
-                await retrieveSettignsfromDevice()
+                await retrieveSettignsfromDevice(user)
                 login()
-
                 console.log("Authentifizierung erfolgreich")
             }).catch(errorstatus => {
+                console.log(errorstatus)
                 if (errorstatus === 400) {
                     alert('Benutzername und Passwort stimmen nicht überein')
                 } else if (errorstatus === 500) {
