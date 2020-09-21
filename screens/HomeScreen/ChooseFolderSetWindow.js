@@ -150,6 +150,9 @@ function FileNameWindow() {
 
     return (
         <View style={styles.background}>
+            <TouchableOpacity style={styles.cancelButton} onPress={() => setCreateFileWindowVisible(false)}>
+                <AntDesign name="closecircleo" size={24} color="grey" />
+            </TouchableOpacity>
             <Text
                 style={styles.headingText}>Name:</Text>
             <TextInput
