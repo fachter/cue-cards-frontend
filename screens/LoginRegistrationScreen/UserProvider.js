@@ -48,7 +48,7 @@ class UserProvider extends React.Component {
                 this.state.username = username
                 resolve(res)
                 if (stayLoggedin === true) {
-                    user.saveUserOnDevice(stayLoggedin, username, password)
+                    saveUserOnDevice(stayLoggedin, username, password)
                 }
             }).catch((err) => {
                 console.log(err)

@@ -6,6 +6,10 @@ import PasswordView from './PasswordView'
 import ActicityIndicatorView from './ActivityIndicatorView'
 import { UserContext } from '../../LoginRegistrationScreen/UserProvider';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+<<<<<<< HEAD
+=======
+
+>>>>>>> e76b2eb5c6b8642ec5876e150c8eaa77000146dc
 
 
 
