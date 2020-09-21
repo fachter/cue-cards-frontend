@@ -62,6 +62,7 @@ export default class PasswordView extends React.Component {
                             <TextInput
                                 style={styles.friendName}
                                 placeholderTextColor="grey"
+                                placeholder='Passwort'
                                 onChangeText={text => this.setState({ password: text })}>
                             </TextInput>
                             <View style={styles.buttonContainer}>
@@ -83,7 +84,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '30%',
         alignItems: 'center',
-
     },
     headingText: {
         color: 'white',
@@ -91,14 +91,15 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     friendName: {
-        width: '85%',
-        borderRadius: 5,
-        fontSize: 20,
-        fontStyle: 'italic',
-        color: 'white',
-        backgroundColor: '#202225',
-        padding: 10,
-        margin: 5,
+        width: 300,
+        height: 45,
+        borderRadius: 25,
+        fontSize: 16,
+        backgroundColor: '#2f3136',
+        marginHorizontal: 25,
+        marginVertical: 10,
+        paddingLeft: 10,
+        color: 'white'
 
     },
     saveButton: {

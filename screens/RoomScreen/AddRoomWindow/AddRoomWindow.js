@@ -65,27 +65,22 @@ export default class AddRoomWindow extends React.Component {
                 visible={this.props.addRoomWindowVisibility}
                 onRequestClose={() => this.closeWindow()}>
                 <View style={styles.background}>
-                    <KeyboardAvoidingView
-                        // style={{ borderColor: 'red', borderWidth: 1, }}
-                        behavior={Platform.OS == "ios" ? "padding" : ""}
-                    >
-                        <ScrollView>
-                            <View style={{ marginTop: '40%' }}>
-                                <TouchableOpacity style={styles.cancelButton} onPress={() => this.closeWindow()}>
-                                    <AntDesign name="closecircleo" size={24} color="grey" />
+                    <KeyboardAvoidingView>
+                        <ScrollView contentContainerStyle={{ flexGrow: 1, marginTop: Platform.OS == "ios" ? 30 : 0, justifyContent: Platform.OS == "ios" ? "" : "center", borderColor: 'red', borderWidth: 1 }}>
+                            <TouchableOpacity style={styles.cancelButton} onPress={() => this.closeWindow()}>
+                                <AntDesign name="closecircleo" size={24} color="grey" />
+                            </TouchableOpacity>
+                            <View style={styles.auswahlLeiste}>
+                                <TouchableOpacity style={[styles.auswahlKnopf, { borderColor: this.state.color1 }]} onPress={() => this.openRoomIDView()}>
+                                    <Text style={[styles.auswahlText, { color: this.state.color3 }]}>Beitreten</Text>
                                 </TouchableOpacity>
-                                <View style={styles.auswahlLeiste}>
-                                    <TouchableOpacity style={[styles.auswahlKnopf, { borderColor: this.state.color1 }]} onPress={() => this.openRoomIDView()}>
-                                        <Text style={[styles.auswahlText, { color: this.state.color3 }]}>Beitreten</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={[styles.auswahlKnopf, { borderColor: this.state.color2 }]} onPress={() => this.openAddRoomWindow()}>
-                                        <Text style={[styles.auswahlText, { color: this.state.color4 }]} >Erstellen</Text>
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={styles.window}>
-                                    {this.renderWindow()}
-                                </View >
+                                <TouchableOpacity style={[styles.auswahlKnopf, { borderColor: this.state.color2 }]} onPress={() => this.openAddRoomWindow()}>
+                                    <Text style={[styles.auswahlText, { color: this.state.color4 }]} >Erstellen</Text>
+                                </TouchableOpacity>
                             </View>
+                            <View style={styles.window}>
+                                {this.renderWindow()}
+                            </View >
                         </ScrollView>
                     </KeyboardAvoidingView>
                 </View>
@@ -102,13 +97,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'black',
         opacity: 0.85
-
     },
     window: {
         width: '100%',
-        //height: '30%',
+        height: '30%',
         alignItems: 'center',
-
     },
     cancelButton: {
         width: 30,
@@ -160,10 +153,11 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     auswahlLeiste: {
-        width: '90%',
+        width: '95%',
         flexDirection: 'row',
         marginTop: 40,
-        marginBottom: 30
+        marginBottom: 30,
+        alignSelf: 'center'
     },
     auswahlKnopf: {
         width: '50%',
