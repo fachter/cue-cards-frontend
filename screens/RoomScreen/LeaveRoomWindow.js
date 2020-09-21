@@ -99,17 +99,22 @@ const styles = StyleSheet.create({
         height: '20%',
     },
     button: {
-        flexDirection: 'row',
-        backgroundColor: 'grey',
-        borderRadius: 5,
-        justifyContent: 'center',
+        borderWidth: 0.7,
+        borderColor: '#008FD3',
+        height: 40,
+        width: 180,
+        borderRadius: 30,
+        alignSelf: 'center',
         alignItems: 'center',
-        margin: 5,
+        justifyContent: 'center',
+        marginVertical: 20,
+        marginHorizontal: 7
     },
     buttonText: {
         fontSize: 20,
         fontStyle: 'italic',
-        margin: 10
+        margin: 10,
+        color: 'white'
     },
     cancelButton: {
         width: 30,

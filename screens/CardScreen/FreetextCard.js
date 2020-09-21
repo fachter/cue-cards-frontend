@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image } from 'react-native'
 import * as Icon from '@expo/vector-icons'
 import logo from '../../assets/Logo_grau.png';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -41,10 +42,11 @@ export default class Freetext extends React.Component {
             this.setState({
                 backgroundColor: '#2f3136',
                 solution: 'Tippe für die Lösung',
-                color: 'white'
+                color: 'white',
+                solutionShown: false,
             })
 
-        }, 1500);
+        }, 500);
     }
 
 
@@ -57,10 +59,12 @@ export default class Freetext extends React.Component {
         return (
             <View style={[styles.container, { backgroundColor: this.state.backgroundColor }]}>
                 <View style={styles.trennlinie}></View>
-                <TouchableOpacity style={styles.solution} onPress={() => this._showSolution()}>
-                    <Text style={[styles.solutionText, { color: this.state.color }]}>{this.state.solution}</Text>
-                </TouchableOpacity>
-
+                <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+                    <TouchableOpacity style={styles.solution} onPress={() => this._showSolution()}>
+                        <Text style={[styles.solutionText, { color: this.state.color }]}>{this.state.solution}</Text>
+                    </TouchableOpacity>
+                    <View style={{ height: 110 }}></View>
+                </ScrollView>
                 {this.state.solutionShown ? <View style={styles.buttonView}>
                     <TouchableOpacity style={styles.saveButton} onPress={() => this._saveChoice(false)} >
                         <Icon.Feather name="x" size={40} color='#008FD3' />
@@ -88,12 +92,16 @@ const styles = StyleSheet.create({
     solution: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignSelf: 'center',
+        margin: 15,
+        width: '95%'
     },
     solutionText: {
-        fontSize: 23,
+        fontSize: 18,
         fontStyle: 'italic',
-        color: 'grey'
+        color: 'grey',
+
     },
     buttonView: {
         position: 'absolute',

@@ -36,7 +36,7 @@ export default class AnswerListItem extends React.Component {
         } else {
             this.state.borderWidth = {
                 checked: 2,
-                unchecked: 2
+                unchecked: 1
             }
         }
     }
@@ -45,18 +45,18 @@ export default class AnswerListItem extends React.Component {
 
         if (this.props.mode === 'answer') {
             this.state.borderColors = {
-                checked: 'blue',
+                checked: '#008FD3',
                 unchecked: 'gray'
             }
         } else if (this.props.mode === 'solutionTrue') {
             this.state.borderColors = {
-                checked: 'green',
+                checked: '#008000',
                 unchecked: 'gray'
             }
         } else if (this.props.mode === 'solutionFalse') {
             this.state.borderColors = {
-                checked: 'green',
-                unchecked: 'red'
+                checked: '#008000',
+                unchecked: '#8a0000'
             }
         }
     }
@@ -83,7 +83,7 @@ export default class AnswerListItem extends React.Component {
                     borderColor: item.checkState == true ? borderColors.checked : borderColors.unchecked,
                     borderWidth: (item.checkState == true ? borderWidth.checked : borderWidth.unchecked)
                 }]}>
-                    <Text style={{ fontSize: 20, color: 'white' }}>{this.props.item.answerValues.text}</Text>
+                    <Text style={{ fontSize: 12, color: 'black' }}>{this.props.item.answerValues.text}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -96,5 +96,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: 80,
+        width: '90%',
+
     },
 });

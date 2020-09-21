@@ -355,17 +355,13 @@ const HomeScreen = () => {
                     <View >
                         {(copiedItemIsCard === true && isFolder === false) || copiedItemIsCard === false && isFolder === true ?
                             <View style={styles.copyPasteView}>
-                                <Icon.Button
-                                    name="ios-copy"
-                                    size={23} color="black"
-                                    backgroundColor="white"
-                                    onPress={() => pasteTheCopiedData()} />
-                                <Icon.Button
-                                    style={{ alignSelf: 'flex-start' }}
-                                    name="ios-close"
-                                    size={23} color="black"
-                                    backgroundColor="white"
-                                    onPress={() => setSomeThingIsCopied(false)} />
+                                <TouchableOpacity style={styles.einfügeButton} onPress={() => pasteTheCopiedData()} >
+                                    <Text style={{ color: '#008FD3', fontStyle: 'italic', fontSize: 17, marginRight: 10 }}>Hier einfügen</Text>
+                                    <Icon name="ios-copy" size={23} color="#008FD3" />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.einfügeButton} onPress={() => setSomeThingIsCopied(false)} >
+                                    <Icon name="ios-close" size={30} color="#008FD3" />
+                                </TouchableOpacity>
                             </View> :
                             <View style={{ flexDirection: 'row' }}>
                                 <Text>Dieses Element kann hier nicht eingefügt werden</Text>
@@ -569,6 +565,16 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
         textAlign: 'center'
     },
+    einfügeButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 0.7,
+        borderColor: '#008FD3',
+        height: 40,
+        borderRadius: 30,
+        paddingHorizontal: 20,
+        margin: 10
+    }
 })
 
 
