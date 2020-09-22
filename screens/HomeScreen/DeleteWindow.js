@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Modal } from 'react-native'
+import { StyleSheet, View, Modal, Platform } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CopyPasteContext } from './CopyPasteProvider'
 
@@ -85,10 +85,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        marginTop: 0,
+        marginTop: Platform.OS == "ios" ? 10 : 0,
         width: '100%',
         height: 56,
-        //borderRadius: 5,
         backgroundColor: '#202225'
     },
     normalbutton: {

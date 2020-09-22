@@ -364,14 +364,15 @@ const HomeScreen = () => {
                                     <Icon name="ios-close" size={30} color="#008FD3" />
                                 </TouchableOpacity>
                             </View> :
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text>Dieses Element kann hier nicht eingefügt werden</Text>
-                                <Icon.Button
-                                    style={{ alignSelf: 'flex-start' }}
-                                    name="ios-close"
-                                    size={23} color="black"
-                                    backgroundColor="white"
-                                    onPress={() => setSomeThingIsCopied(false)} />
+                            <View style={[styles.einfügeButton, { borderColor: '#8a0000', marginRight: 30, paddingLeft: 10 }]}>
+                                <Text style={{ color: 'white', fontStyle: 'italic' }}>Dieses Element kann hier nicht eingefügt werden</Text>
+                                <TouchableOpacity style={{ marginLeft: 20 }} onPress={() => setSomeThingIsCopied(false)}>
+                                    <Icon
+
+                                        name="ios-close"
+                                        size={23} color="#8a0000"
+                                    />
+                                </TouchableOpacity>
                             </View>
                         }
                     </View>
@@ -433,7 +434,7 @@ const HomeScreen = () => {
                     item={clickedItem}
                 />
             </View >
-        </Drawer>
+        </Drawer >
     );
 
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, TextInput, TouchableOpacity, Text, Image, ScrollView } from 'react-native'
+import { View, StyleSheet, TextInput, TouchableOpacity, Text, Image, ScrollView, KeyboardAvoidingView } from 'react-native'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import logo from '../../assets/Logo_grau.png';
 
@@ -80,7 +80,7 @@ export default class Vocable extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <KeyboardAvoidingView style={styles.container} behavior={Platform.OS == "ios" ? "padding" : ""}>
                 <ScrollView>
                     <TextInput
                         style={[styles.textInput]}
@@ -111,8 +111,7 @@ export default class Vocable extends React.Component {
                     </View>
                 </ScrollView>
                 <Image source={logo} style={styles.logo} />
-
-            </View >
+            </KeyboardAvoidingView>
 
         )
     }
@@ -123,7 +122,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#2f3136",
-        paddingTop: 25
+        //paddingTop: 25
     },
     saveButton: {
         backgroundColor: '#008FD3',
@@ -134,7 +133,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 40,
-        marginHorizontal: 7
+        marginHorizontal: 7,
+        marginBottom: 40
 
     },
     textInput: {
@@ -146,7 +146,8 @@ const styles = StyleSheet.create({
         margin: 20,
         fontSize: 15,
         fontStyle: 'italic',
-        backgroundColor: '#C7C7C7'
+        backgroundColor: '#C7C7C7',
+        minHeight: 35
     },
     bottomView: {
         flexDirection: 'row',

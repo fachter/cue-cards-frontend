@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Image, View, TextInput, FlatList, TouchableOpacity, Text, SafeAreaView } from 'react-native'
+import { StyleSheet, Image, View, TextInput, FlatList, TouchableOpacity, Text, SafeAreaView, KeyboardAvoidingView } from 'react-native'
 import { ListStructureContext } from '../HomeScreen/ListStructureProvider'
 import Icon from 'react-native-vector-icons/Ionicons';
 import logo from '../../assets/Logo_grau.png';
@@ -121,7 +121,7 @@ export default class MultipleChoice extends React.Component {
 
     render() {
         return (
-            <View style={styles.container} >
+            <KeyboardAvoidingView style={styles.container} behavior={Platform.OS == "ios" ? "padding" : ""}>
                 <ScrollView>
                     <TextInput
                         style={[styles.textInput, { marginBottom: 25 }]}
@@ -132,9 +132,10 @@ export default class MultipleChoice extends React.Component {
                         onChangeText={text => this.setState({ questionText: text })}>
                         {this.state.questionText}
                     </TextInput>
+                    <Text style={styles.erklärtext}>Bitte nur korrekte Antworten eingeben. Die Falschen werden automatisch vom System ergänzt!</Text>
                     <TouchableOpacity onPress={() => this._addItem()}>
                         <View style={styles.addButton}>
-                            <Text style={styles.addButtonText}>+  Antwort hinzufügen</Text>
+                            <Text style={styles.addButtonText}>+  Richtige Antwort hinzufügen</Text>
                         </View>
                     </TouchableOpacity>
                     <View>
@@ -165,7 +166,7 @@ export default class MultipleChoice extends React.Component {
                     </View>
                 </ScrollView>
                 <Image source={logo} style={styles.logo} />
-            </View>
+            </KeyboardAvoidingView>
         )
     }
 }
@@ -181,7 +182,8 @@ class AnswerItem extends React.Component {
         return (
             <View style={styles.answeritem}>
                 <TextInput
-                    style={[styles.textInput, { width: "75%", height: this.state.answerInputHeight }]}
+                    style={[styles.textInput, { width: "80%", height: this.state.answerInputHeight }]}
+                    multiline={true}
                     placeholder="Antwort"
                     placeholderTextColor="grey"
                     onContentSizeChange={(event) => this.setState({ answerInputHeight: event.nativeEvent.contentSize.height })}
@@ -219,7 +221,14 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     addButtonText: {
-        color: 'white'
+        color: '#008FD3',
+        fontStyle: 'italic'
+    },
+    erklärtext: {
+        marginBottom: 10,
+        marginHorizontal: 10,
+        color: 'grey',
+        alignSelf: 'center'
     },
     bottomView: {
         flexDirection: 'row',
@@ -241,15 +250,17 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         padding: 7,
         color: 'black',
-        margin: 20,
+        marginLeft: 20,
+        marginRight: 10,
         borderRadius: 10,
         fontSize: 15,
         fontStyle: 'italic',
         backgroundColor: '#C7C7C7',
+        minHeight: 35
     },
     deleteButton: {
         marginRight: 20,
-        marginLeft: 10
+        marginLeft: 0
     },
     logo: {
         width: 110,

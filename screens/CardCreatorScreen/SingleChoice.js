@@ -94,41 +94,41 @@ export default class SingleChoice extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <KeyboardAvoidingView
-                    behavior={Platform.OS == "ios" ? "padding" : ""}
-                >
-                    <ScrollView>
-                        <TextInput
-                            style={styles.textInput}
-                            multiline={true}
-                            placeholder="Frage eingeben"
-                            placeholderTextColor="grey"
-                            onContentSizeChange={(event) => this.setState({ questionInputHeight: event.nativeEvent.contentSize.height })}
-                            onChangeText={text => this.setState({ questionText: text })}>
-                            {this.state.questionText}
-                        </TextInput>
-                        <TextInput
-                            style={styles.textInput}
-                            multiline={true}
-                            placeholder="Antwort eingeben"
-                            placeholderTextColor="grey"
-                            onContentSizeChange={(event) => this.setState({ answerInputHeight: event.nativeEvent.contentSize.height })}
-                            onChangeText={text => this.updateAnswers(text)}>
-                            {this.state.answers[0].text}
-                        </TextInput>
-                        <View style={styles.bottomView} >
-                            <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
-                                <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
-                                <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern und Neu</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </ScrollView>
-                </KeyboardAvoidingView>
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior={Platform.OS == "ios" ? "padding" : ""}
+            >
+                <ScrollView>
+                    <TextInput
+                        style={styles.textInput}
+                        multiline={true}
+                        placeholder="Frage eingeben"
+                        placeholderTextColor="grey"
+                        onContentSizeChange={(event) => this.setState({ questionInputHeight: event.nativeEvent.contentSize.height })}
+                        onChangeText={text => this.setState({ questionText: text })}>
+                        {this.state.questionText}
+                    </TextInput>
+                    <TextInput
+                        style={[styles.textInput, { marginBottom: 5 }]}
+                        multiline={true}
+                        placeholder="Antwort eingeben"
+                        placeholderTextColor="grey"
+                        onContentSizeChange={(event) => this.setState({ answerInputHeight: event.nativeEvent.contentSize.height })}
+                        onChangeText={text => this.updateAnswers(text)}>
+                        {this.state.answers[0].text}
+                    </TextInput>
+                    <Text style={styles.erklärtext}>Bitte nur korrekte Antworten eingeben. Die Falschen werden automatisch vom System ergänzt!</Text>
+                    <View style={styles.bottomView} >
+                        <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndGoBack()}>
+                            <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.saveButton} onPress={() => this._saveAndNew()}>
+                            <Text style={{ fontStyle: 'italic', fontSize: 13, color: 'white' }}>Speichern und Neu</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
                 <Image source={logo} style={styles.logo} />
-            </View>
+            </KeyboardAvoidingView>
         )
     }
 }
@@ -147,7 +147,14 @@ const styles = StyleSheet.create({
         margin: 20,
         fontSize: 15,
         fontStyle: 'italic',
-        backgroundColor: '#C7C7C7'
+        backgroundColor: '#C7C7C7',
+        minHeight: 35
+    },
+    erklärtext: {
+        marginBottom: 30,
+        marginHorizontal: 20,
+        color: 'grey',
+        alignSelf: 'center'
     },
     bottomView: {
         flexDirection: 'row',
@@ -161,7 +168,8 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         alignItems: 'center',
         justifyContent: 'center',
-        marginHorizontal: 7
+        marginHorizontal: 7,
+        marginBottom: 30
     },
     logo: {
         width: 110,

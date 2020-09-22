@@ -43,7 +43,7 @@ export default function RoomScreen() {
     const navigation = useNavigation()
     navigation.setOptions({
         title: 'House Of CueCards',
-        headerLeft: () => <EvilIcons name="refresh" size={30} color="white" onPress={() => updateRooms()} />
+        headerLeft: () => <EvilIcons name="refresh" size={30} color="#008FD3" style={{ marginLeft: 10 }} onPress={() => updateRooms()} />
     })
 
     //Auszuführende Methoden:

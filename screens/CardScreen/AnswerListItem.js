@@ -51,7 +51,7 @@ export default class AnswerListItem extends React.Component {
         } else if (this.props.mode === 'solutionTrue') {
             this.state.borderColors = {
                 checked: '#008000',
-                unchecked: 'gray'
+                unchecked: '#2f3136'
             }
         } else if (this.props.mode === 'solutionFalse') {
             this.state.borderColors = {
@@ -83,7 +83,7 @@ export default class AnswerListItem extends React.Component {
                     borderColor: item.checkState == true ? borderColors.checked : borderColors.unchecked,
                     borderWidth: (item.checkState == true ? borderWidth.checked : borderWidth.unchecked)
                 }]}>
-                    <Text style={{ fontSize: 12, color: 'black' }}>{this.props.item.answerValues.text}</Text>
+                    <Text style={{ fontSize: 17, color: 'white' }}>{this.props.item.answerValues.text}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -95,8 +95,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        height: 80,
-        width: '90%',
-
+        minHeight: 80,
+        paddingVertical: 7,
     },
 });

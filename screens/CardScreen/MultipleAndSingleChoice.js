@@ -139,6 +139,8 @@ export default function MulitpleChoiceCard() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#2f3136',
+        paddingHorizontal: 5
     },
     trennlinie: {
         height: 0.5,

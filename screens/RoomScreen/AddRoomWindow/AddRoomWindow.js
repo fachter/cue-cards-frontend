@@ -65,8 +65,8 @@ export default class AddRoomWindow extends React.Component {
                 visible={this.props.addRoomWindowVisibility}
                 onRequestClose={() => this.closeWindow()}>
                 <View style={styles.background}>
-                    <KeyboardAvoidingView>
-                        <ScrollView contentContainerStyle={{ flexGrow: 1, marginTop: Platform.OS == "ios" ? 30 : 0, justifyContent: Platform.OS == "ios" ? "" : "center", borderColor: 'red', borderWidth: 1 }}>
+                    <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""}>
+                        <ScrollView contentContainerStyle={{ flexGrow: 1, marginTop: Platform.OS == "ios" ? 30 : 0, justifyContent: Platform.OS == "ios" ? "" : "center" }}>
                             <TouchableOpacity style={styles.cancelButton} onPress={() => this.closeWindow()}>
                                 <AntDesign name="closecircleo" size={24} color="grey" />
                             </TouchableOpacity>
@@ -102,6 +102,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '30%',
         alignItems: 'center',
+        marginBottom: 40
+
     },
     cancelButton: {
         width: 30,
